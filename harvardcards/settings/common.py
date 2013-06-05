@@ -133,8 +133,8 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-	'harvardcards.apps.lab',
-	'harvardcards.apps.jasmine',
+	'harvardcards.apps.collection',
+	#'harvardcards.apps.jasmine',
 )
 
 # A sample logging configuration. The only tangible logging
