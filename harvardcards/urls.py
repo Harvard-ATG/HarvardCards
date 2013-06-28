@@ -6,13 +6,14 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$', 'harvardcards.apps.collection.views.index', name='index'),
-    url(r'^login/$', 'django_openid_auth.views.login_begin', name='openid-login'),
-	url(r'^login-complete/$', 'django_openid_auth.views.login_complete', name='openid-complete'),
-	url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/',}, name='logout'),
-	#url(r'^static/(?P<path>.*)$', 'django.views.static.serve', 
-	#	{'document_root': '/Applications/MAMP/htdocs/HarvardCards/harvardcards/static'}),
+    url(r'^$', 'harvardcards.apps.collection.views.splash', name='splash'),
+    url(r'^index/$', 'harvardcards.apps.collection.views.index', name='index'),
+    url(r'^collection/create/$', 'harvardcards.apps.collection.views.create', name='create'),
     
+    #url(r'^login/$', 'django_openid_auth.views.login_begin', name='openid-login'),
+	#url(r'^login-complete/$', 'django_openid_auth.views.login_complete', name='openid-complete'),
+	#url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/',}, name='logout'),
+	
 	# url(r'^$', 'HarvardCards.views.home', name='home'),
     # url(r'^HarvardCards/', include('harvardcards.foo.urls')),
 
