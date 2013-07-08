@@ -6,9 +6,9 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$', 'harvardcards.apps.collection.views.splash', name='splash'),
-    url(r'^index/$', 'harvardcards.apps.collection.views.index', name='index'),
-    url(r'^collection/create/$', 'harvardcards.apps.collection.views.create', name='create'),
+    url(r'^$', 'harvardcards.apps.flash.views.splash', name='splash'),
+    url(r'^index/$', 'harvardcards.apps.flash.views.index', name='index'),
+    url(r'^collection/create/$', 'harvardcards.apps.flash.views.create', name='create'),
     
     #url(r'^login/$', 'django_openid_auth.views.login_begin', name='openid-login'),
 	#url(r'^login-complete/$', 'django_openid_auth.views.login_complete', name='openid-complete'),
