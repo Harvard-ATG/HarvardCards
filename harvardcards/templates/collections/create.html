@@ -29,16 +29,16 @@ section.well-dark {
 		</form>		
 	</section>
 </div>
-<div class="row-fluid">
-	<section id="wizarddd" class="well-dark span8 offset2">
+<div id="wizarddd" class="row-fluid">
+	<section class="well-dark span8 offset2">
 		<div class="row-fluid">
-			<div class="template-btn well span4">
+			<div id="template1_btn" class="template-btn well span4">
 				Template 1
 			</div>
-			<div class="template-btn well span4">
+			<div id="template2_btn" class="template-btn well span4">
 				Template 2
 			</div>
-			<div class="template-btn well span4">
+			<div id="template3_btn" class="template-btn well span4">
 				Template 3
 			</div>
 		</div>
@@ -53,7 +53,10 @@ $(document).ready(function(){
 		tooltip   : 'Click to edit...',
 		cssclass: 'editable',
 		style: 'inherit',
-		onblur: 'submit'
+		onblur: 'submit',
+		callback: function(value, settings){
+			// TODO save
+		}
 	});
 	$('#inputDescription').editable(function(value, settings){
 		return value.replace(/\n/gi, "<br/>");
@@ -67,8 +70,22 @@ $(document).ready(function(){
 	});
 	
 	$('.template-btn').click(function(){
-		var template_url = '/collection/wizarddd';
-		$('#wizarddd').load(template_url);
+		//var template_url = '/collection/wizarddd';
+		//$('#wizarddd').load(template_url);
+		// hide the options
+		$('#wizarddd').addClass('hide');
+		//show the selected..
+		if($(this).attr("id") == 'template1_btn'){
+			$('#template1').removeClass('hide');
+		}
+		if($(this).attr("id") == 'template2_btn'){
+			$('#template2').removeClass('hide');
+		}
+		if($(this).attr("id") == 'template3_btn'){
+			$('#template3').removeClass('hide');
+		}
+		$('#save_zone').removeClass('hide');
+//		console.log(this);
 	});
 	
 
@@ -91,7 +108,7 @@ $(document).ready(function(){
 }
 </style>
 
-<div class="well">
+<div id="template1" class="well hide">
 	<ul class="inline options">
 		<li id="draggableText" class="draggable ui-state-highlight textDrag">Text</li>
 		<li id="draggableSound" class="draggable ui-state-highlight textDrag">Sound</li>
@@ -119,6 +136,71 @@ $(document).ready(function(){
 		</li>
 	</ul>
 	
+</div>
+
+<div id="template2" class="well hide">
+	<ul class="inline options">
+		<li id="draggableText" class="draggable ui-state-highlight textDrag">Text</li>
+		<li id="draggableSound" class="draggable ui-state-highlight textDrag">Sound</li>
+		<li id="draggableImage" class="draggable ui-state-highlight imgDrag">Image</li>
+		<li id="draggableVideo" class="draggable ui-state-highlight textDrag">Video</li>
+	</ul>
+	<ul id="sortable" class="unstyled">
+		<li class="mysortable">
+			<span class="mylabel">+label</span>
+			<input type="text"/>
+			<i class="icon-align-justify"></i>
+			<i class="icon-remove-sign"></i>
+		</li>
+		<li class="mysortable">
+			<div class="mylabel">+label</div>
+			<img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRd-pVDClrxvD-0hOaXVw2gDkHLy2Vi7rGulqTtNyg29_4shOoF"/>
+			<i class="icon-align-justify"></i>
+			<i class="icon-remove-sign"></i>
+		</li>
+		<li class="mysortable">
+			<span class="mylabel"></span>
+			<input type="text"/>
+			<i class="icon-align-justify"></i>
+			<i class="icon-remove-sign"></i>
+		</li>
+	</ul>
+	
+</div>
+
+<div id="template3" class="well hide">
+	<ul class="inline options">
+		<li id="draggableText" class="draggable ui-state-highlight textDrag">Text</li>
+		<li id="draggableSound" class="draggable ui-state-highlight textDrag">Sound</li>
+		<li id="draggableImage" class="draggable ui-state-highlight imgDrag">Image</li>
+		<li id="draggableVideo" class="draggable ui-state-highlight textDrag">Video</li>
+	</ul>
+	<ul id="sortable" class="unstyled">
+		<li class="mysortable">
+			<span class="mylabel">+label</span>
+			<input type="text"/>
+			<i class="icon-align-justify"></i>
+			<i class="icon-remove-sign"></i>
+		</li>
+		<li class="mysortable">
+			<div class="mylabel">+label</div>
+			<img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRd-pVDClrxvD-0hOaXVw2gDkHLy2Vi7rGulqTtNyg29_4shOoF"/>
+			<i class="icon-align-justify"></i>
+			<i class="icon-remove-sign"></i>
+		</li>
+		<li class="mysortable">
+			<span class="mylabel"></span>
+			<input type="text"/>
+			<i class="icon-align-justify"></i>
+			<i class="icon-remove-sign"></i>
+		</li>
+	</ul>
+	
+</div>
+
+<div id="save_zone" class="well hide">
+	<button id="save_btn" class='btn btn-success'>Save</button>
+	<button id="cancel_btn" class='btn'>Cancel</button>
 </div>
 
 <script>
@@ -171,8 +253,11 @@ $(document).ready(function(){
         revert: "invalid"
 	});
 	
-
 	setEditables();
+
+	$('#save_btn').click(function(){
+		
+	});
 	
 });
 </script>
