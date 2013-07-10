@@ -2,7 +2,7 @@ from django.db import models
 
 class Collection(models.Model):
     title = models.CharField(max_length=200)
-    decription = models.CharField(max_length=4000)
+    description = models.CharField(max_length=4000)
     #users = models.ManyToManyField(User, through='UserCollection')
 
 class Field(models.Model):
