@@ -16,17 +16,26 @@ section.well-dark {
 	font-size: 35px;
 }
 </style>
+<form method="POST">{% csrf_token %}
 <div class="row-fluid">
 	<section class="well-dark span8 offset2">
-		<form class="form-horizontal row-fluid" method="POST">
+		<div class="form-horizontal row-fluid" method="POST">
 			<div class="span6" style="height: 100%">
+				{% if True %}
+				<input type="text" name="title" value="" placeholder="Course name"/>
+				{% else %}
 				<div type="text" id="inputTitle" name="title" style="font-size: 35px">Title</div>
+				{% endif %}
 			</div>
 			<div class="span6" style="height: 100%">
-				<div id="inputDescription" name="desc">Description</div>
+				{% if True %}
+				<textarea name="description" placeholder="Description"></textarea>
+				{% else %}
+				<div id="inputDescription" name="description">Description</div>
+				{% endif %}
 			</div>
 
-		</form>		
+		</div>		
 	</section>
 </div>
 <div id="wizarddd" class="row-fluid">
@@ -181,6 +190,7 @@ $(document).ready(function(){
 			<input type="text"/>
 			<i class="icon-align-justify"></i>
 			<i class="icon-remove-sign"></i>
+			<input type="hidden" name="asdf" value=""/>
 		</li>
 		<li class="mysortable">
 			<div class="mylabel">+label</div>
@@ -199,9 +209,11 @@ $(document).ready(function(){
 </div>
 
 <div id="save_zone" class="well hide">
-	<button id="save_btn" class='btn btn-success'>Save</button>
+	<button id="save_btn" type="submit" class='btn btn-success'>Save</button>
 	<button id="cancel_btn" class='btn'>Cancel</button>
 </div>
+
+</form>
 
 <script>
 var textItem = '<span class="mylabel">+label</span> '
