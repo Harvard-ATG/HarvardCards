@@ -16,7 +16,7 @@ section.well-dark {
 	font-size: 35px;
 }
 </style>
-<form method="POST">{% csrf_token %}
+<form id="collection_form" method="POST">{% csrf_token %}
 <div class="row-fluid">
 	<section class="well-dark span8 offset2">
 		<div class="form-horizontal row-fluid" method="POST">
@@ -86,12 +86,15 @@ $(document).ready(function(){
 		//show the selected..
 		if($(this).attr("id") == 'template1_btn'){
 			$('#template1').removeClass('hide');
+			$('#template1').addClass('active-template');
 		}
 		if($(this).attr("id") == 'template2_btn'){
 			$('#template2').removeClass('hide');
+			$('#template2').addClass('active-template');
 		}
 		if($(this).attr("id") == 'template3_btn'){
 			$('#template3').removeClass('hide');
+			$('#template3').addClass('active-template');
 		}
 		$('#save_zone').removeClass('hide');
 //		console.log(this);
@@ -125,19 +128,20 @@ $(document).ready(function(){
 		<li id="draggableVideo" class="draggable ui-state-highlight textDrag">Video</li>
 	</ul>
 	<ul id="sortable" class="unstyled">
-		<li class="mysortable">
+		<li class="mysortable collection-type-text">
 			<span class="mylabel">+label</span>
 			<input type="text"/>
 			<i class="icon-align-justify"></i>
 			<i class="icon-remove-sign"></i>
+			<input type="hidden" name="field_type1" value="text"/>
 		</li>
-		<li class="mysortable">
+		<li class="mysortable collection-type-img">
 			<div class="mylabel">+label</div>
 			<img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRd-pVDClrxvD-0hOaXVw2gDkHLy2Vi7rGulqTtNyg29_4shOoF"/>
 			<i class="icon-align-justify"></i>
 			<i class="icon-remove-sign"></i>
 		</li>
-		<li class="mysortable">
+		<li class="mysortable collection-type-text">
 			<span class="mylabel"></span>
 			<input type="text"/>
 			<i class="icon-align-justify"></i>
@@ -155,19 +159,19 @@ $(document).ready(function(){
 		<li id="draggableVideo" class="draggable ui-state-highlight textDrag">Video</li>
 	</ul>
 	<ul id="sortable" class="unstyled">
-		<li class="mysortable">
+		<li class="mysortable collection-type-text">
 			<span class="mylabel">+label</span>
 			<input type="text"/>
 			<i class="icon-align-justify"></i>
 			<i class="icon-remove-sign"></i>
 		</li>
-		<li class="mysortable">
+		<li class="mysortable collection-type-img">
 			<div class="mylabel">+label</div>
 			<img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRd-pVDClrxvD-0hOaXVw2gDkHLy2Vi7rGulqTtNyg29_4shOoF"/>
 			<i class="icon-align-justify"></i>
 			<i class="icon-remove-sign"></i>
 		</li>
-		<li class="mysortable">
+		<li class="mysortable collection-type-text">
 			<span class="mylabel"></span>
 			<input type="text"/>
 			<i class="icon-align-justify"></i>
@@ -185,20 +189,19 @@ $(document).ready(function(){
 		<li id="draggableVideo" class="draggable ui-state-highlight textDrag">Video</li>
 	</ul>
 	<ul id="sortable" class="unstyled">
-		<li class="mysortable">
+		<li class="mysortable collection-type-text">
 			<span class="mylabel">+label</span>
 			<input type="text"/>
 			<i class="icon-align-justify"></i>
 			<i class="icon-remove-sign"></i>
-			<input type="hidden" name="asdf" value=""/>
 		</li>
-		<li class="mysortable">
+		<li class="mysortable collection-type-img">
 			<div class="mylabel">+label</div>
 			<img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRd-pVDClrxvD-0hOaXVw2gDkHLy2Vi7rGulqTtNyg29_4shOoF"/>
 			<i class="icon-align-justify"></i>
 			<i class="icon-remove-sign"></i>
 		</li>
-		<li class="mysortable">
+		<li class="mysortable collection-type-text">
 			<span class="mylabel"></span>
 			<input type="text"/>
 			<i class="icon-align-justify"></i>
@@ -209,8 +212,8 @@ $(document).ready(function(){
 </div>
 
 <div id="save_zone" class="well hide">
-	<button id="save_btn" type="submit" class='btn btn-success'>Save</button>
-	<button id="cancel_btn" class='btn'>Cancel</button>
+	<button id="save_btn" type="button" class='btn btn-success'>Save</button>
+	<button id="cancel_btn" type="button" class='btn'>Cancel</button>
 </div>
 
 </form>
@@ -241,8 +244,6 @@ $(document).ready(function(){
 	$('#sortable').sortable({
 		revert: true,
 		update: function(event, ui){
-			console.log("update");
-			console.log(ui.item);
 			if($(ui.item).hasClass('mysortable')){
 
 			} else {
@@ -253,7 +254,7 @@ $(document).ready(function(){
 					$(ui.item).html(textItem);					
 				}
 				if($(ui.item).hasClass('imgDrag')){
-					$(ui.item).html(imgItem);					
+					$(ui.item).html(imgItem);
 				}
 				setEditables();
 			}
@@ -268,7 +269,37 @@ $(document).ready(function(){
 	setEditables();
 
 	$('#save_btn').click(function(){
+		console.log("clicking the save");
+		// create the field data json
+		// get the active template class
+		// get all mysortables...
+		var data = [];
+		$('.active-template .mysortable').each(function(index){
+			console.log(index);
+			data[index] = {};
+			if($(this).hasClass('collection-type-text')){
+				data[index]['type'] = 'text';
+				console.log("text");
+				console.log(data);
+			}
+			if($(this).hasClass('collection-type-img'))
+				data[index]['type'] = 'image';
+			var label = $(this).children('.mylabel').text();
+			if(label != '+label' && label != '')
+				data[index]['label'] = label;
+			else 
+				data[index]['label'] = '';
+				
+				
+		});
+		var json = JSON.stringify(data);
+		console.log(json);
+
+		var input = $("<input>").attr("type", "hidden").attr("name", "field_data").val(json);
+		$('#collection_form').append($(input));
 		
+		console.log('submitting?');
+		$('#collection_form').submit();
 	});
 	
 });
