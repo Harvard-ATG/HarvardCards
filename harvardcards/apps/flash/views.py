@@ -2,8 +2,11 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
 
+from django.utils import simplejson as json
+
+from django.forms.formsets import formset_factory
 from models import Collection
-from forms import CollectionForm
+from forms import CollectionForm, FieldForm
 
 def index(request):
     #return HttpResponse("Hello Werld. This is the HarvardCards Index.")
@@ -18,17 +21,26 @@ def main(request):
 def create(request):
     # this is only POSTed when creating -- editing will be done on the fly
     if request.method == 'POST':
-#        for key in request.POST:
-#            value = request.POST[key]
-#            message += ' '+key+'=>'+value
-        f = CollectionForm(request.POST)
-        collection = f.save()
+        collectionForm = CollectionForm(request.POST)
         
-        # get collection id
+        if collectionForm.is_valid():
+            collection = collectionForm.save()
         
-        # use collection_id to create appropriate fields
+            # create the formset from the base fieldform
+            FieldFormSet = formset_factory(FieldForm)
+            # decode json
+            data = json.loads(request.POST['field_data'])
+            
+            formset = FieldFormSet(initial=data)
         
-        
+            # run through the formset to save each one
+            for form in formset:
+                f = form.save(commit=False)
+                f.collection = collection
+                f.save()
+        else:
+            return render(request, 'collections/create.html')
+            
         return redirect(index)
     else:
         return render(request, 'collections/create.html')
