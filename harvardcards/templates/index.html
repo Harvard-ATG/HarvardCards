@@ -63,11 +63,9 @@
 	<nav class="span4 collection-sidenav">
 		<ul class="nav nav-list affix collection-list">
 			{% for collection in collections %}
-			<li data-id="{{ collection.id }}"><a href="#course-{{ collection.id }}">{{ collection.title }}<i class="icon-chevron-right pull-right"></i></a></li>
+			<li class="collection-list-item" data-id="{{ collection.id }}"><a href="#course-{{ collection.id }}">{{ collection.title }}<i class="icon-chevron-right pull-right"></i></a></li>
 			{% endfor %}
-			{% if not collections %}
-			<li><a href="#">No Collections</a></li>
-			{% endif %}
+			<li class="no-collections-item {% if collections %}hide{% endif %}"><a href="#">No Collections</a></li>
 			<li>
 				<ul class="unstyled inline">
 					<li><button id="add_collection_button" class="btn">+</button></li>
@@ -112,13 +110,11 @@
 				</div>
 			</li>
 			{% endfor %}
-			{% if not collections %}
-			<li>
+			<li class="no-collections-item {% if collections %}hide{% endif %}">
 				<div class="cds-top">
 					<h5>No Collections</h5>
 				</div>
 			</li>			
-			{% endif %}
 		</ul>
 	</section>
 </div>
@@ -146,6 +142,9 @@ $(document).ready(function(){
 					// remove item from UI
 					$('.active-collection').parent().remove();
 					$('#course-' + collection_id).remove();
+					if($('.collection-list-item').length == 0){
+						$('.no-collections-item').removeClass("hide");
+					}
 				} else {
 					alert("Error deleting.")
 				}
@@ -155,7 +154,7 @@ $(document).ready(function(){
 			}
 		});
 	});
-	$('.collection-list li a').click(function(){
+	$('.collection-list-item a').click(function(){
 		$('.active-collection').removeClass("active-collection");
 		// setting it on the a because of the bgcolor
 		$(this).addClass("active-collection");
