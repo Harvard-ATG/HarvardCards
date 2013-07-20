@@ -47,4 +47,6 @@ def create(request):
         return redirect(index)
     else:
         return render(request, 'collections/create.html')
-    
+
+def delete(request):
+    return HttpResponse('{"success": false}')
