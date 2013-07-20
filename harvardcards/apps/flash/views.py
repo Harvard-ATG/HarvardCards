@@ -49,4 +49,15 @@ def create(request):
         return render(request, 'collections/create.html')
 
 def delete(request):
-    return HttpResponse('{"success": false}', mimetype="application/json")
+    returnValue = "false"
+    message = '';
+    for key,value in request.GET.items():
+        message += key + " => " + value + "<br>\n"
+    if request.GET['id']:
+        collection_id = request.GET['id']
+        Collection.objects.filter(id=collection_id).delete()
+        if not Collection.objects.filter(id=collection_id):
+            returnValue = "true"
+    
+#    return HttpResponse(message);
+    return HttpResponse('{"success": %s}' % returnValue, mimetype="application/json")
