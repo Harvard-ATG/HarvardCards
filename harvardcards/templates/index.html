@@ -30,6 +30,9 @@
 .collection-sidenav ul li ul li button{
 	margin: 0px;
 }
+.active-collection {
+	background-color: #DDDDDD;
+}
 
 .collection-decks-section {
 	border: solid gray 1px; 
@@ -46,7 +49,7 @@
 .cds-bottom ul li {
 	font-weight: bold;
 	text-align: center;
-	background: url("/img/deck.jpg");
+	/* background: url("/img/deck.jpg"); */
 	background-color: #CCCCCC;
 	height: 70px;
 	width: 110px;
@@ -58,9 +61,9 @@
 </style>
 <div class="row-fluid">
 	<nav class="span4 collection-sidenav">
-		<ul class="nav nav-list affix">
+		<ul class="nav nav-list affix collection-list">
 			{% for collection in collections %}
-			<li><a href="#">{{ collection.title }}<i class="icon-chevron-right pull-right"></i></a></li>
+			<li data-id="{{ collection.id }}"><a href="#collectionset-{{ collection.id }}">{{ collection.title }}<i class="icon-chevron-right pull-right"></i></a></li>
 			{% endfor %}
 			{% if not collections %}
 			<li><a href="#">No Collections</a></li>
@@ -78,7 +81,7 @@
 	<section class="span8 collection-decks-section">
 		<ul class="unstyled">
 			{% for collection in collections %}
-			<li>
+			<li id="collectionset-{{ collection.id }}">
 				<div class="cds-top">
 					<h5>{{ collection.title }}</h5>
 					<em>{{ collection.description }}</em>
@@ -108,6 +111,10 @@
 $(document).ready(function(){
 	$('#add_collection_button').click(function(){
 		window.location = "/collection/create";
+	});
+	$('.collection-list li a').click(function(){
+		$('.active-collection').removeClass("active-collection");
+		$(this).addClass("active-collection");
 	});
 });
 </script>
