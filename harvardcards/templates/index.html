@@ -71,7 +71,7 @@
 					<li><button id="add_collection_button" class="btn">+</button></li>
 					<li><button id="delete_collection_confirm_button" class="btn">-</button></li>
 					<li><button class="btn">++</button></li>
-					<li><button class="btn">E</button></li>
+					<li><button id="edit_collection_button" class="btn">E</button></li>
 				</ul>
 			</li>
 		</ul>
@@ -142,17 +142,21 @@ $(document).ready(function(){
 					// remove item from UI
 					$('.active-collection').parent().remove();
 					$('#course-' + collection_id).remove();
-					if($('.collection-list-item').length == 0){
+					// if it's the last one removed, make sure the no-collections-items are shown
+					if($('.collection-list-item').length == 0)
 						$('.no-collections-item').removeClass("hide");
-					}
 				} else {
 					alert("Error deleting.")
 				}
 			},
 			error: function(request, statusText){
-				alert("error");
+				alert("Request failed.");
 			}
 		});
+	});
+	$('#edit_collection_button').click(function(){
+		collection_id = $('.active-collection').parent().data("id");
+		window.location = "/collection/create/" + collection_id;
 	});
 	$('.collection-list-item a').click(function(){
 		$('.active-collection').removeClass("active-collection");
