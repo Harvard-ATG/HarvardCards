@@ -2,7 +2,7 @@ from django.db import models
 
 class Collection(models.Model):
     title = models.CharField(max_length=200)
-    description = models.CharField(max_length=4000)
+    description = models.TextField()
     #users = models.ManyToManyField(User, through='UserCollection')
 
 class Field(models.Model):
@@ -17,6 +17,7 @@ class Field(models.Model):
     show_label = models.BooleanField()
     collection = models.ForeignKey(Collection)
     display = models.BooleanField()
+    sort_order = models.IntegerField()
 
 class Card(models.Model):
     collection = models.ForeignKey(Collection)
