@@ -5,12 +5,15 @@ from django.core.context_processors import csrf
 from django.utils import simplejson as json
 
 from django.forms.formsets import formset_factory
-from models import Collection
+from models import Collection, Deck
 from forms import CollectionForm, FieldForm
 
 def index(request):
     #return HttpResponse("Hello Werld. This is the HarvardCards Index.")
-    return render(request, 'index.html')
+    collections = Collection.objects.all()
+    # can get decks in the template by using collection.deck_set.all
+    
+    return render(request, 'index.html', {"collections": collections})
     
 def splash(request):
     return render(request, 'splash.html')
