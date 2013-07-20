@@ -28,7 +28,7 @@
 	margin: 0px;
 }
 .collection-sidenav ul li ul li button{
-	margin: 0px;
+	margin: 5px;
 }
 .active-collection {
 	background-color: #DDDDDD;
@@ -63,7 +63,7 @@
 	<nav class="span4 collection-sidenav">
 		<ul class="nav nav-list affix collection-list">
 			{% for collection in collections %}
-			<li data-id="{{ collection.id }}"><a href="#collectionset-{{ collection.id }}">{{ collection.title }}<i class="icon-chevron-right pull-right"></i></a></li>
+			<li data-id="{{ collection.id }}"><a href="#course-{{ collection.id }}">{{ collection.title }}<i class="icon-chevron-right pull-right"></i></a></li>
 			{% endfor %}
 			{% if not collections %}
 			<li><a href="#">No Collections</a></li>
@@ -71,17 +71,33 @@
 			<li>
 				<ul class="unstyled inline">
 					<li><button id="add_collection_button" class="btn">+</button></li>
-					<li><button class="btn">-</button></li>
+					<li><button id="delete_collection_confirm_button" class="btn">-</button></li>
 					<li><button class="btn">++</button></li>
 					<li><button class="btn">E</button></li>
 				</ul>
 			</li>
 		</ul>
+		
+		
+		<div id="collectionDeleteModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="collectionDeleteModalLabel" aria-hidden="true">
+		  <div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		    <h3 id="collectionDeleteModalLabel">Confirm Delete</h3>
+		  </div>
+		  <div class="modal-body">
+		    <p>Are you sure you want to delete this Course?</p>
+		  </div>
+		  <div class="modal-footer">
+		    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+		    <button id="delete_collection_button" class="btn btn-error">Delete Course</button>
+		  </div>
+		</div>
 	</nav>
+	
 	<section class="span8 collection-decks-section">
 		<ul class="unstyled">
 			{% for collection in collections %}
-			<li id="collectionset-{{ collection.id }}">
+			<li id="course-{{ collection.id }}">
 				<div class="cds-top">
 					<h5>{{ collection.title }}</h5>
 					<em>{{ collection.description }}</em>
@@ -111,6 +127,27 @@
 $(document).ready(function(){
 	$('#add_collection_button').click(function(){
 		window.location = "/collection/create";
+	});
+	$('#delete_collection_confirm_button').click(function(){
+		if($('.active-collection').length){
+			$('#collectionDeleteModal').modal();
+			
+		}
+	});
+	$('#delete_collection_button').click(function(){
+		collection_id = $('.active-collection').data("id");
+		// send to the delete
+		$.ajax({
+			url: '/collection/delete',
+			data: {id: collection_id},
+			success: function(data, statusText){
+				alert("success");
+				$('#collectionDeleteModal').modal('hide');
+			},
+			error: function(request, statusText){
+				alert("error");
+			}
+		});
 	});
 	$('.collection-list li a').click(function(){
 		$('.active-collection').removeClass("active-collection");
