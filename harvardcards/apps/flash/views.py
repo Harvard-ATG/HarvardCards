@@ -49,4 +49,4 @@ def create(request):
         return render(request, 'collections/create.html')
 
 def delete(request):
-    return HttpResponse('{"success": false}')
+    return HttpResponse('{"success": false}', mimetype="application/json")
