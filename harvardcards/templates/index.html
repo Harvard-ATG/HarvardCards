@@ -135,14 +135,20 @@ $(document).ready(function(){
 		}
 	});
 	$('#delete_collection_button').click(function(){
-		collection_id = $('.active-collection').data("id");
+		collection_id = $('.active-collection').parent().data("id");
 		// send to the delete
 		$.ajax({
 			url: '/collection/delete',
 			data: {id: collection_id},
 			success: function(data, statusText){
-				alert("success");
-				$('#collectionDeleteModal').modal('hide');
+				if(data.success){
+					$('#collectionDeleteModal').modal('hide');
+					// remove item from UI
+					$('.active-collection').parent().remove();
+					$('#course-' + collection_id).remove();
+				} else {
+					alert("Error deleting.")
+				}
 			},
 			error: function(request, statusText){
 				alert("error");
@@ -151,6 +157,7 @@ $(document).ready(function(){
 	});
 	$('.collection-list li a').click(function(){
 		$('.active-collection').removeClass("active-collection");
+		// setting it on the a because of the bgcolor
 		$(this).addClass("active-collection");
 	});
 });
