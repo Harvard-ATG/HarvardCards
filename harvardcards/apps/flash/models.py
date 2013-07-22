@@ -18,6 +18,8 @@ class Field(models.Model):
     collection = models.ForeignKey(Collection)
     display = models.BooleanField()
     sort_order = models.IntegerField()
+    def export(self):
+        return repr(dict(label=self.label, field_type=self.field_type, sort_order=self.sort_order, display=self.display))
 
 class Card(models.Model):
     collection = models.ForeignKey(Collection)
