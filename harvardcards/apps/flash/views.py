@@ -25,9 +25,10 @@ def main(request):
 def create(request, collection_id=None):
     # is it an edit?
     if collection_id:
-        collection = Collection.objects.filter(id=collection_id)
+        collection = Collection.objects.get(id=collection_id)
+        fields = collection.field_set.all().order_by('sort_order')
         if collection:
-            return render(request, 'collections/create.html', {"collection": collection})
+            return render(request, 'collections/create.html', {"collection": collection, "fields": fields})
         else:
             raise ViewDoesNotExist("Course does not exist.")
     # is it a new post?
