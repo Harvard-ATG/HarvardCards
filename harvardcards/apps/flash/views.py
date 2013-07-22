@@ -23,25 +23,30 @@ def main(request):
     return render(request, 'main.html')
     
 def create(request, collection_id=None):
-    # is it an edit?
-    if collection_id:
-        collection = Collection.objects.get(id=collection_id)
-        fields = collection.field_set.all().order_by('sort_order')
-        if collection:
-            return render(request, 'collections/create.html', {"collection": collection, "fields": fields})
+    # is it a post?
+    message = '';
+    if request.method == 'POST':
+        for key in request.POST:
+            value = request.POST[key]
+            message += "{0} => {1}<br>".format(key, value)
+        #return HttpResponse(message)
+        
+        if(request.POST['collection_id']):
+            collection = Collection.objects.get(id=request.POST['collection_id'])
+            collectionForm = CollectionForm(request.POST, instance=collection)
+            collection.field_set.all().delete()
         else:
-            raise ViewDoesNotExist("Course does not exist.")
-    # is it a new post?
-    elif request.method == 'POST':
-        collectionForm = CollectionForm(request.POST)
+            collectionForm = CollectionForm(request.POST)
         
         if collectionForm.is_valid():
             collection = collectionForm.save()
+
         
             # create the formset from the base fieldform
             #FieldFormSet = formset_factory(FieldForm)
             # decode json
             data = json.loads(request.POST['field_data'])            
+            #return HttpResponse(repr(data))
             
             # run through field_data
             for d in data:
@@ -55,6 +60,16 @@ def create(request, collection_id=None):
             return redirect(index)
         else:
             return render(request, 'collections/create.html')
+    
+    # is it an edit?
+    elif collection_id:
+        collection = Collection.objects.get(id=collection_id)
+        fields = collection.field_set.all().order_by('sort_order')
+        if collection:
+            return render(request, 'collections/create.html', {"collection": collection, "fields": fields})
+        else:
+            raise ViewDoesNotExist("Course does not exist.")
+    
             
     else:
         return render(request, 'collections/create.html')
