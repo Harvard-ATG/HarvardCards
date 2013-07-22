@@ -134,21 +134,21 @@ $(document).ready(function(){
 			<span class="mylabel">+label</span>
 			<input type="text"/>
 			<i class="icon-align-justify"></i>
-			<i class="icon-remove-sign"></i>
+			<i class="icon-remove-sign remove-field"></i>
 			<input type="hidden" name="field_type1" value="text"/>
 		</li>
 		<li class="mysortable collection-type-img">
 			<div class="mylabel">+label</div>
 			<img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRd-pVDClrxvD-0hOaXVw2gDkHLy2Vi7rGulqTtNyg29_4shOoF"/>
 			<i class="icon-align-justify"></i>
-			<i class="icon-remove-sign"></i>
+			<i class="icon-remove-sign remove-field"></i>
 		</li>
 		<li class="hide-bar"></i>
 		<li class="mysortable collection-type-text hidden">
 			<span class="mylabel"></span>
 			<input type="text"/>
 			<i class="icon-align-justify"></i>
-			<i class="icon-remove-sign"></i>
+			<i class="icon-remove-sign remove-field"></i>
 		</li>
 	</ul>
 	
@@ -239,11 +239,11 @@ $(document).ready(function(){
 var textItem = '<span class="mylabel">+label</span> '
 			+ '<input type="text"/> '
 			+ '<i class="icon-align-justify"></i> '
-			+ '<i class="icon-remove-sign"></i> ';
+			+ '<i class="icon-remove-sign remove-field"></i> ';
 var imgItem = '<div class="mylabel">+label</div> '
 			+'<img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRd-pVDClrxvD-0hOaXVw2gDkHLy2Vi7rGulqTtNyg29_4shOoF"/> '
 			+'<i class="icon-align-justify"></i> '
-			+'<i class="icon-remove-sign"></i> ';
+			+'<i class="icon-remove-sign remove-field"></i> ';
 var hideBar = '<li class="hide-bar"> </i> ';
 
 
@@ -302,13 +302,13 @@ $(document).ready(function(){
 				+ '<span class="mylabel">'+label+'</span> '
 				+ '<input type="text"/> '
 				+ '<i class="icon-align-justify"></i> '
-				+ '<i class="icon-remove-sign"></i> '
+				+ '<i class="icon-remove-sign remove-field"></i> '
 				+ '</li> ';
 			var fullImgItem = '<li class="mysortable collection-type-img">'
 				+ '<div class="mylabel">'+label+'</div> '
 				+ '<img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRd-pVDClrxvD-0hOaXVw2gDkHLy2Vi7rGulqTtNyg29_4shOoF"/> '
 				+ '<i class="icon-align-justify"></i> '
-				+ '<i class="icon-remove-sign"></i> '
+				+ '<i class="icon-remove-sign remove-field"></i> '
 				+ '</li> ';
 			var item = '';
 			if(f.field_type == 'T')
@@ -343,9 +343,11 @@ $(document).ready(function(){
 				$(ui.item).addClass('mysortable');
 
 				if($(ui.item).hasClass('textDrag')){
+					$(ui.item).addClass('collection-type-text');
 					$(ui.item).html(textItem);					
 				}
 				if($(ui.item).hasClass('imgDrag')){
+					$(ui.item).addClass('collection-type-img');
 					$(ui.item).html(imgItem);
 				}
 				setEditables();
@@ -358,8 +360,12 @@ $(document).ready(function(){
         helper: "clone",
         revert: "invalid"
 	});
-	
+	// initial setup
 	setEditables();
+	
+	$('.remove-field').click(function(){
+		$(this).parent().remove();
+	});
 
 	$('#save_btn').click(function(){
 		// create the field data json
