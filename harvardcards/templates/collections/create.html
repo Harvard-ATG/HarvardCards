@@ -15,6 +15,23 @@ section.well-dark {
 .editable {
 	font-size: 35px;
 }
+.options {
+	padding: 8px;
+}
+.options li {
+	margin: 4px;
+}
+.mysortable {
+	border: dotted black 1px;
+}
+.hide-bar {
+	height: 25px;
+	width: 100%;
+	background-color: #000;
+}
+li.hidden {
+	background-color: #CCC;
+}
 </style>
 <form id="collection_form" method="POST">{% csrf_token %}
 <div class="row-fluid">
@@ -22,14 +39,14 @@ section.well-dark {
 		<div class="form-horizontal row-fluid" method="POST">
 			<div class="span6" style="height: 100%">
 				{% if True %}
-				<input type="text" name="title" value="" placeholder="Course name"/>
+				<input type="text" name="title" value="{{ collection.title }}" placeholder="Course name"/>
 				{% else %}
 				<div type="text" id="inputTitle" name="title" style="font-size: 35px">Title</div>
 				{% endif %}
 			</div>
 			<div class="span6" style="height: 100%">
 				{% if True %}
-				<textarea name="description" placeholder="Description"></textarea>
+				<textarea name="description" placeholder="Description">{{ collection.description }}</textarea>
 				{% else %}
 				<div id="inputDescription" name="description">Description</div>
 				{% endif %}
@@ -55,6 +72,17 @@ section.well-dark {
 </div>
 <script>
 $(document).ready(function(){
+	
+	var fields = [];
+	{% for f in collection.field_set.all %}
+	fields[] = {
+		label: {{ f.label }},
+		field_type: {{ f.field_type }},
+		sort_order: {{ f.sort_order }},
+		display: {{ f.display }}
+	}
+	{% endfor %}
+	console.log(fields);
 
 	$('#inputTitle').editable(function(value, settings){
 		return value;
@@ -105,21 +133,6 @@ $(document).ready(function(){
 </script>
 
 
-
-
-
-<style>
-.options {
-	padding: 8px;
-}
-.options li {
-	margin: 4px;
-}
-.mysortable {
-	border: dotted black 1px;
-}
-</style>
-
 <div id="template1" class="well hide">
 	<ul class="inline options">
 		<li id="draggableText" class="draggable ui-state-highlight textDrag">Text</li>
@@ -141,7 +154,8 @@ $(document).ready(function(){
 			<i class="icon-align-justify"></i>
 			<i class="icon-remove-sign"></i>
 		</li>
-		<li class="mysortable collection-type-text">
+		<li class="hide-bar"></i>
+		<li class="mysortable collection-type-text hidden">
 			<span class="mylabel"></span>
 			<input type="text"/>
 			<i class="icon-align-justify"></i>
@@ -240,6 +254,20 @@ setEditables = function(){
 	});
 }
 
+styleHidden = function(){
+	var display = true;
+	$('.active-template .mysortable').each(function(index){
+		if($(this).prev().hasClass('hide-bar')){
+			display = false;
+		}
+		if(display){
+			$(this).removeClass('hidden');
+		} else {
+			$(this).addClass('hidden');
+		}
+	});
+}
+
 $(document).ready(function(){
 	$('#sortable').sortable({
 		revert: true,
@@ -258,6 +286,7 @@ $(document).ready(function(){
 				}
 				setEditables();
 			}
+			styleHidden();
 		}
 	});
 	$('.draggable').draggable({
@@ -269,36 +298,47 @@ $(document).ready(function(){
 	setEditables();
 
 	$('#save_btn').click(function(){
-		console.log("clicking the save");
 		// create the field data json
 		// get the active template class
 		// get all mysortables...
 		var data = [];
+		var sort_order = 0;
+		var display = true;
 		$('.active-template .mysortable').each(function(index){
-			console.log(index);
+			if($(this).hasClass('hide-bar'))
+				return true;
+			if($(this).prev().hasClass('hide-bar'))
+				display = false;
+			
 			data[index] = {};
+			
+			// type
 			if($(this).hasClass('collection-type-text')){
-				data[index]['type'] = 'text';
-				console.log("text");
-				console.log(data);
+				data[index]['field_type'] = 'T';
 			}
 			if($(this).hasClass('collection-type-img'))
-				data[index]['type'] = 'image';
+				data[index]['field_type'] = 'I';
+			
+			// label
 			var label = $(this).children('.mylabel').text();
 			if(label != '+label' && label != '')
 				data[index]['label'] = label;
 			else 
 				data[index]['label'] = '';
-				
+			
+			// sort_order
+			data[index]['sort_order'] = sort_order++;
+			
+			// display
+			data[index]['display'] = display;
 				
 		});
 		var json = JSON.stringify(data);
-		console.log(json);
+		//console.log(json);
 
 		var input = $("<input>").attr("type", "hidden").attr("name", "field_data").val(json);
 		$('#collection_form').append($(input));
 		
-		console.log('submitting?');
 		$('#collection_form').submit();
 	});
 	
