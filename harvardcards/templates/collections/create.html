@@ -224,7 +224,9 @@ $(document).ready(function(){
 
 	</ul>
 </div>
-
+{% if collection %}
+<input type="hidden" name="collection_id" value="{{ collection.id }}"/>
+{% endif %}
 
 <div id="save_zone" class="well hide">
 	<button id="save_btn" type="button" class='btn btn-success'>Save</button>
@@ -242,7 +244,7 @@ var imgItem = '<div class="mylabel">+label</div> '
 			+'<img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRd-pVDClrxvD-0hOaXVw2gDkHLy2Vi7rGulqTtNyg29_4shOoF"/> '
 			+'<i class="icon-align-justify"></i> '
 			+'<i class="icon-remove-sign"></i> ';
-var hideBar = '<li class="hide-bar"></i>';
+var hideBar = '<li class="hide-bar"> </i> ';
 
 
 
@@ -334,6 +336,8 @@ $(document).ready(function(){
 		update: function(event, ui){
 			if($(ui.item).hasClass('mysortable')){
 
+			} else if($(ui.item).hasClass('hide-bar')){
+				
 			} else {
 				$(ui.item).removeClass('ui-state-highlight');
 				$(ui.item).addClass('mysortable');
@@ -350,7 +354,7 @@ $(document).ready(function(){
 		}
 	});
 	$('.draggable').draggable({
-        connectToSortable: "#sortable",
+        connectToSortable: ".sortable",
         helper: "clone",
         revert: "invalid"
 	});
@@ -394,12 +398,15 @@ $(document).ready(function(){
 				
 		});
 		var json = JSON.stringify(data);
-		//console.log(json);
 
 		var input = $("<input>").attr("type", "hidden").attr("name", "field_data").val(json);
 		$('#collection_form').append($(input));
 		
 		$('#collection_form').submit();
+	});
+	
+	$('#cancel_btn').click(function(){
+		window.location = "/index";
 	});
 	
 });
