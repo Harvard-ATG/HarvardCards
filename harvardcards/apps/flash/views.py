@@ -26,12 +26,12 @@ def create(request, collection_id=None):
     # is it a post?
     message = '';
     if request.method == 'POST':
-        for key in request.POST:
-            value = request.POST[key]
-            message += "{0} => {1}<br>".format(key, value)
+        #for key in request.POST:
+        #    value = request.POST[key]
+        #    message += "{0} => {1}<br>".format(key, value)
         #return HttpResponse(message)
         
-        if(request.POST['collection_id']):
+        if 'collection_id' in request.POST:
             collection = Collection.objects.get(id=request.POST['collection_id'])
             collectionForm = CollectionForm(request.POST, instance=collection)
             collection.field_set.all().delete()
