@@ -73,17 +73,6 @@ li.hidden {
 <script>
 $(document).ready(function(){
 	
-	var fields = [];
-	{% for f in collection.field_set.all %}
-	fields[] = {
-		label: {{ f.label }},
-		field_type: {{ f.field_type }},
-		sort_order: {{ f.sort_order }},
-		display: {{ f.display }}
-	}
-	{% endfor %}
-	console.log(fields);
-
 	$('#inputTitle').editable(function(value, settings){
 		return value;
 	}, { 
@@ -140,7 +129,7 @@ $(document).ready(function(){
 		<li id="draggableImage" class="draggable ui-state-highlight imgDrag">Image</li>
 		<li id="draggableVideo" class="draggable ui-state-highlight textDrag">Video</li>
 	</ul>
-	<ul id="sortable" class="unstyled">
+	<ul id="sortable" class="unstyled sortable">
 		<li class="mysortable collection-type-text">
 			<span class="mylabel">+label</span>
 			<input type="text"/>
@@ -172,7 +161,7 @@ $(document).ready(function(){
 		<li id="draggableImage" class="draggable ui-state-highlight imgDrag">Image</li>
 		<li id="draggableVideo" class="draggable ui-state-highlight textDrag">Video</li>
 	</ul>
-	<ul id="sortable" class="unstyled">
+	<ul id="sortable" class="unstyled sortable">
 		<li class="mysortable collection-type-text">
 			<span class="mylabel">+label</span>
 			<input type="text"/>
@@ -202,7 +191,7 @@ $(document).ready(function(){
 		<li id="draggableImage" class="draggable ui-state-highlight imgDrag">Image</li>
 		<li id="draggableVideo" class="draggable ui-state-highlight textDrag">Video</li>
 	</ul>
-	<ul id="sortable" class="unstyled">
+	<ul id="sortable" class="unstyled sortable">
 		<li class="mysortable collection-type-text">
 			<span class="mylabel">+label</span>
 			<input type="text"/>
@@ -222,8 +211,20 @@ $(document).ready(function(){
 			<i class="icon-remove-sign"></i>
 		</li>
 	</ul>
-	
 </div>
+
+<div id="edit-template" class="well hide">
+	<ul class="inline options">
+		<li id="draggableText" class="draggable ui-state-highlight textDrag">Text</li>
+		<li id="draggableSound" class="draggable ui-state-highlight textDrag">Sound</li>
+		<li id="draggableImage" class="draggable ui-state-highlight imgDrag">Image</li>
+		<li id="draggableVideo" class="draggable ui-state-highlight textDrag">Video</li>
+	</ul>
+	<ul id="sortable" class="unstyled sortable">
+
+	</ul>
+</div>
+
 
 <div id="save_zone" class="well hide">
 	<button id="save_btn" type="button" class='btn btn-success'>Save</button>
@@ -241,6 +242,21 @@ var imgItem = '<div class="mylabel">+label</div> '
 			+'<img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRd-pVDClrxvD-0hOaXVw2gDkHLy2Vi7rGulqTtNyg29_4shOoF"/> '
 			+'<i class="icon-align-justify"></i> '
 			+'<i class="icon-remove-sign"></i> ';
+var hideBar = '<li class="hide-bar"></i>';
+
+
+
+var fields = [];
+{% for f in fields %}
+fields.push({
+	label: '{{ f.label }}',
+	field_type: '{{ f.field_type }}',
+	sort_order: {{ f.sort_order }},
+	display: {% if f.display %}true{% else %}false{% endif %}
+});
+{% endfor %}
+console.log(fields);
+
 
 setEditables = function(){
 	$('.mylabel').editable(function(value, settings){
@@ -269,7 +285,51 @@ styleHidden = function(){
 }
 
 $(document).ready(function(){
-	$('#sortable').sortable({
+	
+	if(fields.length > 0){
+		// then it's an edit, and the templates shouldn't be shown
+		$('#wizarddd').addClass('hide');
+		$('#edit-template').removeClass('hide');
+		$('#edit-template').addClass('active-template');
+		var display = true;
+		fields.forEach(function(f){
+			var spot = $('#edit-template .sortable');
+			var label = '';
+			if(f.label == '') { label = '+label'; } else { label = f.label; }
+			var fullTextItem = '<li class="mysortable collection-type-text"> '
+				+ '<span class="mylabel">'+label+'</span> '
+				+ '<input type="text"/> '
+				+ '<i class="icon-align-justify"></i> '
+				+ '<i class="icon-remove-sign"></i> '
+				+ '</li> ';
+			var fullImgItem = '<li class="mysortable collection-type-img">'
+				+ '<div class="mylabel">'+label+'</div> '
+				+ '<img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRd-pVDClrxvD-0hOaXVw2gDkHLy2Vi7rGulqTtNyg29_4shOoF"/> '
+				+ '<i class="icon-align-justify"></i> '
+				+ '<i class="icon-remove-sign"></i> '
+				+ '</li> ';
+			var item = '';
+			if(f.field_type == 'T')
+				item = fullTextItem;
+			else if(f.field_type == 'I')
+				item = fullImgItem;			
+		
+			if(display && !f.display){
+				display = false;
+				spot.append(hideBar);
+			}
+			spot.append(item);
+	
+		});
+		setEditables();
+		styleHidden();
+		$('#save_zone').removeClass('hide');
+		
+	} 
+	
+	
+	
+	$('.sortable').sortable({
 		revert: true,
 		update: function(event, ui){
 			if($(ui.item).hasClass('mysortable')){
