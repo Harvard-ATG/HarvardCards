@@ -18,4 +18,4 @@ class CollectionForm(ModelForm):
 class FieldForm(ModelForm):
     class Meta:
         model = Field
-        fields = ['label', 'field_type']
+        fields = ['field_type', 'sort_order', 'display']
