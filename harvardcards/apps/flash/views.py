@@ -24,7 +24,6 @@ def main(request):
     
 def create(request, collection_id=None):
     # is it an edit?
-    message = ''
     if collection_id:
         collection = Collection.objects.filter(id=collection_id)
         if collection:
@@ -33,10 +32,6 @@ def create(request, collection_id=None):
             raise ViewDoesNotExist("Course does not exist.")
     # is it a new post?
     elif request.method == 'POST':
-        message += "BAM BAM<br>"
-        for key in request.POST:
-            value = value = request.POST[key]
-            message += "{0} => {1}<br>".format(key, value)
         collectionForm = CollectionForm(request.POST)
         
         if collectionForm.is_valid():
@@ -49,7 +44,6 @@ def create(request, collection_id=None):
             
             # run through field_data
             for d in data:
-                message += repr(d) + "<br>"
                 fieldForm = FieldForm(d)
                 f = fieldForm.save(commit=False) 
                 # this is how relationships have to be done -- forms cannot handle this
