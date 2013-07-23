@@ -182,9 +182,25 @@ $(document).ready(function(){
 			// save it when done editing...
 			callback: function(value, settings){
 				console.log("save!");
-				// TODO save
+				// send ajax to save it
+				$.ajax({
+					type: 'POST',
+					url: '/deck/create',
+					data: {title: $('#'+tempId).html()},
+					success: function(data, statusText){
+						if(data.success){
+							alert("success!");
+						} else {
+							alert("Error: "+data.message)
+						}
+					},
+					error: function(request, statusText){
+						alert("Request failed.");
+					}
+				});
+				
 				// add data to element
-		
+				
 			}
 		});
 		// activate it
