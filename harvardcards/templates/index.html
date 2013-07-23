@@ -102,7 +102,7 @@
 				</div>
 				<div class="cds-bottom">
 					<ul class="inline">
-						<li>+ Add new Deck</li>
+						<li class="new-deck-btn" data-collection_id={{collection.id}}>+ Add new Deck</li>
 						{% for deck in collection.deck_set.all %}
 						<li>Week X</li>
 						{% endfor %}
@@ -162,6 +162,35 @@ $(document).ready(function(){
 		$('.active-collection').removeClass("active-collection");
 		// setting it on the a because of the bgcolor
 		$(this).addClass("active-collection");
+	});
+	
+	deckCount = 0;
+	$('.new-deck-btn').click(function(){
+		// new temporary ID for the element
+		tempId = 'tmpdeck'+deckCount;
+		// create a new <li> there
+		var deckTmpl = '<li><div id="'+tempId+'" class="deck">Deck Name</div></li>';
+		$(this).parent().append(deckTmpl);
+		// add the editable field
+		$('#'+tempId).editable(function(value, settings){
+			return value;
+		}, { 
+			tooltip   : 'Click to edit...',
+			cssclass: 'editable',
+			style: 'inherit',
+			onblur: 'submit',
+			// save it when done editing...
+			callback: function(value, settings){
+				console.log("save!");
+				// TODO save
+				// add data to element
+		
+			}
+		});
+		// activate it
+		$('#'+tempId).trigger('click');
+				
+		deckCount++;
 	});
 });
 </script>
