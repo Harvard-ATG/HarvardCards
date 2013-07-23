@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django.forms import MultipleChoiceField
-from models import Collection, Field
+from models import Collection, Field, Deck
 from django import forms
 import logging
 
@@ -13,3 +13,8 @@ class FieldForm(ModelForm):
     class Meta:
         model = Field
         fields = ['field_type', 'sort_order', 'display']
+
+class DeckForm(ModelForm):
+    class Meta:
+        model = Deck
+        fields = ['title']
