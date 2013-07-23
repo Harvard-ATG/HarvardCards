@@ -87,3 +87,19 @@ def delete(request):
     
 #    return HttpResponse(message);
     return HttpResponse('{"success": %s}' % returnValue, mimetype="application/json")
+    
+def createDeck(request, deck_id=None):
+    if request.method == 'POST':
+        if 'deck_id' in request.POST:
+            # then it's an edit
+            True
+        else:
+            # then it's a new one
+            deckForm = DeckForm(request.POST)
+            if deckForm.is_valid():
+                return HttpResponse('{"success": true}')
+            else:
+                errorMsg = 'Validation Error.'
+    else:
+        errorMsg = 'Invalid Request.'
+    return HttpResponse('{"success": false, "message": {0}}'.format(errorMsg))
