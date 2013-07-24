@@ -47,7 +47,7 @@ class Users_Collections(models.Model):
 class Deck(models.Model):
     title = models.CharField(max_length=200)
     collection = models.ForeignKey(Collection)
-    owner = models.ForeignKey(User)
+    #owner = models.ForeignKey(User)
     cards = models.ManyToManyField(Card, through='Decks_Cards')
 
 class Decks_Cards(models.Model):
