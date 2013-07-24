@@ -104,7 +104,7 @@
 					<ul class="inline">
 						<li class="new-deck-btn" data-collection_id={{collection.id}}>+ Add new Deck</li>
 						{% for deck in collection.deck_set.all %}
-						<li>Week X</li>
+						<li>{{ deck.title }}</li>
 						{% endfor %}
 					</ul>
 				</div>
@@ -171,6 +171,8 @@ $(document).ready(function(){
 		// create a new <li> there
 		var deckTmpl = '<li><div id="'+tempId+'" class="deck">Deck Name</div></li>';
 		$(this).parent().append(deckTmpl);
+		var collection_id = $(this).data('collection_id');
+		console.log("collection_id: "+ collection_id);
 		// add the editable field
 		$('#'+tempId).editable(function(value, settings){
 			return value;
@@ -181,15 +183,14 @@ $(document).ready(function(){
 			onblur: 'submit',
 			// save it when done editing...
 			callback: function(value, settings){
-				console.log("save!");
 				// send ajax to save it
 				$.ajax({
 					type: 'POST',
-					url: '/deck/create',
-					data: {title: $('#'+tempId).html()},
+					url: '/deck/create/',
+					data: {title: $('#'+tempId).html(), collection_id: collection_id},
 					success: function(data, statusText){
 						if(data.success){
-							alert("success!");
+						
 						} else {
 							alert("Error: "+data.message)
 						}
