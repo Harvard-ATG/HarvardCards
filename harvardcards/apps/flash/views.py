@@ -7,7 +7,7 @@ from django.utils import simplejson as json
 
 from django.forms.formsets import formset_factory
 from models import Collection, Deck
-from forms import CollectionForm, FieldForm
+from forms import CollectionForm, FieldForm, DeckForm
 
 def index(request):
     #return HttpResponse("Hello Werld. This is the HarvardCards Index.")
@@ -76,16 +76,12 @@ def create(request, collection_id=None):
 
 def delete(request):
     returnValue = "false"
-    message = '';
-    for key,value in request.GET.items():
-        message += key + " => " + value + "<br>\n"
     if request.GET['id']:
         collection_id = request.GET['id']
         Collection.objects.filter(id=collection_id).delete()
         if not Collection.objects.filter(id=collection_id):
             returnValue = "true"
     
-#    return HttpResponse(message);
     return HttpResponse('{"success": %s}' % returnValue, mimetype="application/json")
     
 def createDeck(request, deck_id=None):
@@ -97,7 +93,7 @@ def createDeck(request, deck_id=None):
             # then it's a new one
             deckForm = DeckForm(request.POST)
             if deckForm.is_valid():
-                return HttpResponse('{"success": true}')
+                return HttpResponse('{"success": true}', mimetype="application/json")
             else:
                 errorMsg = 'Validation Error.'
     else:
