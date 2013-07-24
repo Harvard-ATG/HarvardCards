@@ -34,6 +34,8 @@ def create(request, collection_id=None):
         if 'collection_id' in request.POST:
             collection = Collection.objects.get(id=request.POST['collection_id'])
             collectionForm = CollectionForm(request.POST, instance=collection)
+            # this needs to be changed, can't just delete them
+            # TODO: github issue #2
             collection.field_set.all().delete()
         else:
             collectionForm = CollectionForm(request.POST)
@@ -88,14 +90,24 @@ def createDeck(request, deck_id=None):
     if request.method == 'POST':
         if 'deck_id' in request.POST:
             # then it's an edit
-            True
+            deck = Deck.objects.get(id=request.POST['deck_id'])
+            deckForm = DeckForm(request.POST, instance=deck)
         else:
             # then it's a new one
             deckForm = DeckForm(request.POST)
-            if deckForm.is_valid():
+            
+        deckForm = DeckForm(request.POST)
+        if deckForm.is_valid():
+            deck = deckForm.save(commit=False)
+            collection_id = request.POST['collection_id']
+            deck.collection = Collection.objects.get(id=collection_id)
+            deck.save()
+            if deck:
                 return HttpResponse('{"success": true}', mimetype="application/json")
             else:
-                errorMsg = 'Validation Error.'
+                errorMsg = 'Failure to save.'
+        else:
+            errorMsg = 'Validation Error.'
     else:
         errorMsg = 'Invalid Request.'
     return HttpResponse('{"success": false, "message": {0}}'.format(errorMsg))
