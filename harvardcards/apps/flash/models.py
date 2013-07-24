@@ -2,13 +2,13 @@ from django.db import models
 
 class Collection(models.Model):
     title = models.CharField(max_length=200)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     #users = models.ManyToManyField(User, through='UserCollection')
     def export(self):
         return repr(dict(title=self.title, description=self.description))
 
 class Field(models.Model):
-    label = models.CharField(max_length=200)
+    label = models.CharField(max_length=200, blank=True)
     FIELD_TYPES = (
         ('T', 'Text'),
         ('I', 'Image'),
