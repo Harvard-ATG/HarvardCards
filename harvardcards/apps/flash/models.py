@@ -49,6 +49,8 @@ class Deck(models.Model):
     collection = models.ForeignKey(Collection)
     #owner = models.ForeignKey(User)
     cards = models.ManyToManyField(Card, through='Decks_Cards')
+    def export(self):
+        return repr(dict(title=self.title, collection=self.collection.id, id=self.id))
 
 class Decks_Cards(models.Model):
     deck = models.ForeignKey(Deck)
