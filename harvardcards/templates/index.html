@@ -53,10 +53,41 @@
 	background-color: #CCCCCC;
 	height: 70px;
 	width: 110px;
-	padding-top: 40px;
+	/* padding-top: 40px; */
 	margin: 10px;
 	border: solid gray 1px;
 	border-radius: 5px;
+	position: relative;
+}
+.deck-text, .new-deck-btn-text  {
+	text-align: center;
+	position: absolute;
+	top: 25%;
+}
+
+.deck-controls {
+	position: absolute;
+	bottom: 0px;
+	padding: 4px;
+}
+
+.deck-review-btn, .deck-study-btn, .deck-delete-btn {
+	cursor: pointer;
+	background-color: #BBB;
+	border: solid 1px;
+	border-radius: 4px;	
+	border-color: #000;
+	font-size: 10px;
+	padding: 4px;
+}
+.deck-delete-btn {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	padding-left: 4px;
+	padding-right: 4px;
 }
 </style>
 <div class="row-fluid">
@@ -102,9 +133,18 @@
 				</div>
 				<div class="cds-bottom">
 					<ul class="inline">
-						<li class="new-deck-btn" data-collection_id={{collection.id}}>+ Add new Deck</li>
+						<li class="new-deck-btn" data-collection_id={{collection.id}}>
+							<div class="new-deck-btn-text ">+ Add new Deck</div>
+						</li>
 						{% for deck in collection.deck_set.all %}
-						<li><div class="deck" data-deck_id={{deck.id}}>{{ deck.title }}</div></li>
+						<li class="deck" data-deck_id={{deck.id}}>
+							<div class="deck-text" data-deck_id={{deck.id}}>{{ deck.title }}</div>
+							<div class="deck-controls hide">
+								<span class="deck-review-btn">Review</span>
+								<span class="deck-study-btn">Study</span>
+							</div>
+							<div class="deck-delete-btn hide">X</div>
+						</li>
 						{% endfor %}
 					</ul>
 				</div>
@@ -210,7 +250,7 @@ $(document).ready(function(){
 		deckCount++;
 	});
 	
-	$('.deck').editable(function(value, settings){
+	$('.deck-text').editable(function(value, settings){
 		return value;
 	}, { 
 		tooltip   : 'Click to edit...',
@@ -220,8 +260,6 @@ $(document).ready(function(){
 		// save it when done editing...
 		callback: function(value, settings){
 			// send ajax to save it
-			console.log($(this));
-			console.log($(this).data('deck_id'));
 			$.ajax({
 				type: 'POST',
 				url: '/deck/create/',
@@ -241,6 +279,16 @@ $(document).ready(function(){
 			// add data to element
 			
 		}
+	});
+	$('.deck').mouseover(function(){
+		$(this).children('.deck-controls').removeClass('hide');
+		$(this).children('.deck-delete-btn').removeClass('hide');
+		
+	});
+	$('.deck').mouseout(function(){
+		$(this).children('.deck-controls').addClass('hide');
+		$(this).children('.deck-delete-btn').addClass('hide');
+		
 	});
 });
 </script>
