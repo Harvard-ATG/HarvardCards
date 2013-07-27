@@ -51,7 +51,7 @@
 	text-align: center;
 	/* background: url("/img/deck.jpg"); */
 	background-color: #CCCCCC;
-	height: 70px;
+		height: 80px;
 	width: 110px;
 	/* padding-top: 40px; */
 	margin: 10px;
@@ -289,6 +289,25 @@ $(document).ready(function(){
 		$(this).children('.deck-controls').addClass('hide');
 		$(this).children('.deck-delete-btn').addClass('hide');
 		
+	});
+	
+	$('.deck-delete-btn').click(function(){
+		listItem = $(this).parent();
+		$.ajax({
+			type: 'POST',
+			url: '/deck/delete/',
+			data: {deck_id: listItem.data('deck_id')},
+			success: function(data, statusText){
+				if(data.success){
+					listItem.remove();
+				} else {
+					alert("Error: "+data.message)
+				}
+			},
+			error: function(request, statusText){
+				alert("Request failed.");
+			}
+		});
 	});
 });
 </script>
