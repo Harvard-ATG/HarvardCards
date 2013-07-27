@@ -116,3 +116,14 @@ def createDeck(request, deck_id=None):
     else:
         errorMsg = 'Invalid Request.'
     return HttpResponse('{"success": false, "message": {0}}'.format(errorMsg))
+
+def deleteDeck(request):
+    returnValue = "false"
+    if request.POST['deck_id']:
+        deck_id = request.POST['deck_id']
+        Deck.objects.filter(id=deck_id).delete()
+        if not Deck.objects.filter(id=deck_id):
+            returnValue = "true"
+    
+    return HttpResponse('{"success": %s}' % returnValue, mimetype="application/json")
+  
