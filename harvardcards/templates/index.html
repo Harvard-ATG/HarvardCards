@@ -209,7 +209,7 @@ $(document).ready(function(){
 		// new temporary ID for the element
 		tempId = 'tmpdeck'+deckCount;
 		// create a new <li> there
-		var deckTmpl = '<li><div id="'+tempId+'" class="deck">Deck Name</div></li>';
+		var deckTmpl = '<li class="deck"><div id="'+tempId+'" class="deck-text">Deck Name</div></li>';
 		$(this).parent().append(deckTmpl);
 		var collection_id = $(this).data('collection_id');
 		//console.log("collection_id: "+ collection_id);
