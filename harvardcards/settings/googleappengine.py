@@ -4,7 +4,7 @@ from harvardcards.settings.common import *
 DATABASES = {
     'default': {
         'ENGINE': 'google.appengine.ext.django.backends.rdbms',
-        'INSTANCE': 'dev-harvardcards:cloud1',
+        'INSTANCE': 'dev-harvardcards:cloud2',
         'NAME': 'harvardcards',
     }
 }
