@@ -11,7 +11,7 @@ require(['jquery', 'lodash', 'bootstrap'], function($, _, bootstrap){
 			this.editableText();
 			this.mouseoverMenu();
 			this.deleteButton();
-	
+			this.reviewButton();
 		},
 		
 		addNew: function(deckCount){
@@ -130,6 +130,13 @@ require(['jquery', 'lodash', 'bootstrap'], function($, _, bootstrap){
 				});
 			});
 			
+		},
+		
+		reviewButton: function(){
+			$('.deck-review-btn').click(function(){
+				var deck_id = $(this).data("deck_id");
+				window.location = "/deck/" + deck_id;
+			});
 		}
 		
 	});
