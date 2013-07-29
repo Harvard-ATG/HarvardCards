@@ -9,8 +9,8 @@ from django.forms.formsets import formset_factory
 from harvardcards.apps.flash.models import Collection, Deck
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
 
-def index(request):
-    return HttpResponse("deck/index")
+def index(request, deck_id=None):
+    return render(request, "decks/index.html")
 
 # 
 def create(request, deck_id=None):
