@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^collection/delete/$', 'harvardcards.apps.flash.views.collection.delete', name='delete'),
     url(r'^deck/create/$', 'harvardcards.apps.flash.views.deck.create', name='createDeck'),
     url(r'^deck/delete/$', 'harvardcards.apps.flash.views.deck.delete', name='deleteDeck'),
+    url(r'^deck/$', 'harvardcards.apps.flash.views.deck.index', name='deckIndex'),
     url(r'^deck/(?P<deck_id>\d+)$', 'harvardcards.apps.flash.views.deck.index', name='deckIndex')
     
     #url(r'^login/$', 'django_openid_auth.views.login_begin', name='openid-login'),
