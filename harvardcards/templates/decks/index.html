@@ -1,8 +1,127 @@
+{% extends "base.html" %}
+
+{% block content %}
 <style>
+.deck-index {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+.collection-nav {
+	border: solid black 1px;
+}
+.myborder {
+	border: dashed black 2px;
+}
+.collection-home-link {
+	background-color: #DDD;
+}
+.collection-nav ul li:hover {
+	background-color: #CCC;
+	cursor: pointer;
+}
+
+.deck-menu {
+	padding: 5px;
+}
+
+#add-card-btn {
+	position: relative;
+	top: 40px;
+	margin-right: 5px;
+}
+
+.card-carousel {
+	width: 100%;
+	height: 100px;
+	padding-top: 10px;
+}
+.card-carousel ul {
+    white-space: nowrap;
+    overflow-x: auto;
+}
+
+.carousel-card {
+	width: 100px;
+	height: 100px;
+	background-color: #EEE;
+}
+
+.active-carousel-card {
+	background-color: #777;
+}
+
+.card-container {
+	padding: 10px;
+}
+.card-main {
+	height: 300px;
+	width: 600px;
+	background-color: #999;
+	margin: 0 auto;
+}
+
 </style>
 
+
+<div class="deck-index row-fluid">
+	<nav class="collection-nav span2">
+		<ul class="unstyled">
+			<li class="collection-home-link">Home</li>
+			{% for collection in collections %}
+			<li>{{collection.title}}</li>
+			{% endfor %}
+		</ul>
+	</nav>
+	<div class="deck-main span10">
+		<div class="deck-menu">
+			<div class="btn-group">
+				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+					Deck Title 1 <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu">
+					<li><a href="#">Deck Title 2</a></li>
+					<li><a href="#">Deck Title 3</a></li>
+					<li><a href="#">Deck Title 4</a></li>
+				</ul>
+			</div>
+			<div class="deck-text">asdfasdf</div>
+			<div class="pull-right">
+				<button id="add-deck-btn" type="button" class="btn">Add Deck</button>
+			</div>
+		</div>
+		<div class="card-carousel-container myborder">
+			<button id="add-card-btn" type="button" class="btn pull-left">Add Card</button>
+			<div style="width:100%; height:120px" class="card-carousel">
+				<ul class="unstyled inline">
+					<li class="carousel-card"></li>
+					<li class="carousel-card active-carousel-card"></li>
+					<li class="carousel-card"></li>
+					<li class="carousel-card"></li>
+					<li class="carousel-card"></li>
+					<li class="carousel-card"></li>
+					<li class="carousel-card"></li>
+					<li class="carousel-card"></li>
+					<li class="carousel-card"></li>
+					<li class="carousel-card"></li>
+					<li class="carousel-card"></li>
+				</ul>
+			</div>
+		</div>
+		<div class="card-container">
+			<div class="card-main">
+				
+			</div>
+		</div>
+		
+	</div>
+</div>
+
 <script>
-//require(['models/deck'], function(){
-	//deck = new Deck();
-	//});
+require(['models/Deck'], function(Deck){
+	var deck = new Deck();
+	deck.collectionNav();
+	
+	
+});
 </script>
+{% endblock %}
