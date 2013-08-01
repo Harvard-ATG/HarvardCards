@@ -251,6 +251,7 @@ var hideBar = '<li class="hide-bar"> </i> ';
 var fields = [];
 {% for f in fields %}
 fields.push({
+	id: '{{ f.id }}',
 	label: '{{ f.label }}',
 	field_type: '{{ f.field_type }}',
 	sort_order: {{ f.sort_order }},
@@ -298,13 +299,13 @@ $(document).ready(function(){
 			var spot = $('#edit-template .sortable');
 			var label = '';
 			if(f.label == '') { label = '+label'; } else { label = f.label; }
-			var fullTextItem = '<li class="mysortable collection-type-text"> '
+			var fullTextItem = '<li data-field_id="'+f.id+'" class="mysortable collection-type-text"> '
 				+ '<span class="mylabel">'+label+'</span> '
 				+ '<input type="text"/> '
 				+ '<i class="icon-align-justify"></i> '
 				+ '<i class="icon-remove-sign remove-field"></i> '
 				+ '</li> ';
-			var fullImgItem = '<li class="mysortable collection-type-img">'
+			var fullImgItem = '<li data-field_id="'+f.id+'" class="mysortable collection-type-img">'
 				+ '<div class="mylabel">'+label+'</div> '
 				+ '<img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRd-pVDClrxvD-0hOaXVw2gDkHLy2Vi7rGulqTtNyg29_4shOoF"/> '
 				+ '<i class="icon-align-justify"></i> '
@@ -381,6 +382,9 @@ $(document).ready(function(){
 				display = false;
 			
 			data[index] = {};
+			if($(this).data("field_id") !== ''){
+				data[index]['id'] = $(this).data("field_id");
+			}
 			
 			// type
 			if($(this).hasClass('collection-type-text')){
