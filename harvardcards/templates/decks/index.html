@@ -19,6 +19,12 @@
 	background-color: #CCC;
 	cursor: pointer;
 }
+.collection-link {
+	
+}
+.deck-link {
+	padding-left: 10px;
+}
 
 .deck-menu {
 	padding: 5px;
@@ -68,7 +74,10 @@
 		<ul class="unstyled">
 			<li class="collection-home-link">Home</li>
 			{% for collection in collections %}
-			<li>{{collection.title}}</li>
+			<li class="collection-link" data-id="{{collection.id}}">{{collection.title}}</li>
+				{% for deck in collection.deck_set.all %}
+				<li class="deck-link" data-id="{{deck.id}}">{{deck.title}}</li>
+				{% endfor %}
 			{% endfor %}
 		</ul>
 	</nav>
@@ -84,11 +93,11 @@
 					<li><a href="#">Deck Title 4</a></li>
 				</ul>
 			</div>
-			<div class="deck-text">asdfasdf</div>
 			<div class="pull-right">
 				<button id="add-deck-btn" type="button" class="btn">Add Deck</button>
 			</div>
 		</div>
+		<div class="deck-text">asdfasdf</div>
 		<div class="card-carousel-container myborder">
 			<button id="add-card-btn" type="button" class="btn pull-left">Add Card</button>
 			<div style="width:100%; height:120px" class="card-carousel">
@@ -118,9 +127,9 @@
 
 <script>
 require(['models/Deck'], function(Deck){
-	var deck = new Deck();
+	var deck = new Deck({% if deck %}{{deck.id}}{% endif %});
 	deck.collectionNav();
-	
+
 	
 });
 </script>

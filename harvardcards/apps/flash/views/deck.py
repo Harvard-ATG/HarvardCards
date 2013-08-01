@@ -10,7 +10,14 @@ from harvardcards.apps.flash.models import Collection, Deck
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
 
 def index(request, deck_id=None):
-    return render(request, "decks/index.html")
+    collections = Collection.objects.all()    
+    if not deck_id:
+        # then it's a create
+        return render(request, "decks/index.html", {"collections": collections, "deck": {"id": "true", "title": "spamatam"}})
+    
+    deck = Deck.objects.get(id=deck_id)
+    
+    return render(request, "decks/index.html", {"collections": collections, "deck": deck})
 
 # 
 def create(request, deck_id=None):
