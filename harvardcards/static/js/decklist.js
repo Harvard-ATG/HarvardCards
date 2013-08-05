@@ -1,4 +1,4 @@
-require(['jquery', 'lodash', 'bootstrap'], function($, _, bootstrap){
+require(['jquery', 'lodash', 'bootstrap', 'post'], function($, _, bootstrap, post){
 
 	var DeckList = function(){
 		var deckCount = 0;
@@ -13,8 +13,15 @@ require(['jquery', 'lodash', 'bootstrap'], function($, _, bootstrap){
 			this.deleteButton();
 			this.reviewButton();
 		},
-		
 		addNew: function(deckCount){
+			// just send it to /deck/ with a collection_id set
+			$('.new-deck-btn').click(function(){
+				$.postGo('/deck/', {collection_id: $(this).data('collection_id')});
+				
+			});
+		},
+		
+		addNew_old: function(deckCount){
 			$('.new-deck-btn').click(function(){
 				// new temporary ID for the element
 				tempId = 'tmpdeck'+deckCount;
