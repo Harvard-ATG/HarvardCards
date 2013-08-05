@@ -13,11 +13,14 @@ def index(request, deck_id=None):
     collections = Collection.objects.all()    
     if not deck_id:
         # then it's a create
-        return render(request, "decks/index.html", {"collections": collections, "deck": {"id": "true", "title": "spamatam"}})
+        # and if it's a create, the request should be a post with the collection_id in it
+        if 'collection_id' in request.POST:
+            collection_id = request.POST['collection_id']
+        return render(request, "decks/index.html", {"collection_id": collection_id, "collections": collections, "deck": {"id": "true", "title": "spamatam"}})
     
     deck = Deck.objects.get(id=deck_id)
     
-    return render(request, "decks/index.html", {"collections": collections, "deck": deck})
+    return render(request, "decks/index.html", {"collections": collections, "deck": deck, "collection_id": deck.collection.id})
 
 # 
 def create(request, deck_id=None):
