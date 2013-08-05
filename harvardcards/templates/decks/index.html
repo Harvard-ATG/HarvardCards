@@ -127,10 +127,17 @@
 
 <script>
 require(['models/Deck'], function(Deck){
+	var collection_id = '{{collection_id}}';
+	if(collection_id == ''){
+		var msg = "No associated course id.";
+		alert(msg);
+		window.location = "/index/";
+	}
 	var deck = new Deck({% if deck %}{{deck.id}}{% endif %});
 	deck.collectionNav();
 
 	
+
 });
 </script>
 {% endblock %}
