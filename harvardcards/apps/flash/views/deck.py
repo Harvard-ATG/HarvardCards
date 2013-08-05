@@ -10,20 +10,29 @@ from harvardcards.apps.flash.models import Collection, Deck
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
 
 def index(request, deck_id=None):
-    collections = Collection.objects.all()    
+    collections = Collection.objects.all()  
     if not deck_id:
         # then it's a create
         # and if it's a create, the request should be a post with the collection_id in it
         if 'collection_id' in request.POST:
             collection_id = request.POST['collection_id']
-        return render(request, "decks/index.html", {"collection_id": collection_id, "collections": collections, "deck": {"id": "true", "title": "spamatam"}})
-    
-    deck = Deck.objects.get(id=deck_id)
-    
-    return render(request, "decks/index.html", {"collections": collections, "deck": deck, "collection_id": deck.collection.id})
+            current_collection = Collection.objects.get(id=collection_id)
+        else:
+            raise ViewDoesNotExist
+        deck = None
+        deck_cards = None
+    else:
+        deck = Deck.objects.get(id=deck_id)
+        current_collection = Collection.objects.get(id=deck.collection.id)
+        deck_cards = Deck.objects.card_set.all()
+    return render(request, "decks/index.html", 
+        {"collections": collections, "deck": deck, "deck_cards": deck_cards, 
+        "collection_id": current_collection.id, "collection": current_collection})
 
 # 
 def create(request, deck_id=None):
+
+    
     if request.method == 'POST':
         if 'deck_id' in request.POST:
             # then it's an edit
@@ -36,6 +45,7 @@ def create(request, deck_id=None):
             deckForm = DeckForm(request.POST)
             collection_id = request.POST['collection_id']
             
+            
         deckForm = DeckForm(request.POST)
         if deckForm.is_valid():
             deck = deckForm.save(commit=False)
@@ -44,14 +54,14 @@ def create(request, deck_id=None):
                 deck.id = deck_id
             deck.save()
             if deck:
-                return HttpResponse('{"success": true}', mimetype="application/json")
+                return HttpResponse('{"success": true, "id": %s}' % deck.id, mimetype="application/json")
             else:
                 errorMsg = 'Failure to save.'
         else:
             errorMsg = 'Validation Error.'
     else:
         errorMsg = 'Invalid Request.'
-    return HttpResponse('{"success": false, "message": {0}}'.format(errorMsg))
+    return HttpResponse('{"success": false, "message": {0}}'.format(errorMsg), mimetype="application/json")
 
 def delete(request):
     returnValue = "false"
