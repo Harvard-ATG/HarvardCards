@@ -22,6 +22,13 @@
 .collection-link {
 	
 }
+.active-collection {
+	font-weight: bold;
+}
+.active-deck {
+	font-weight: bold;
+}
+
 .deck-link {
 	padding-left: 10px;
 }
@@ -35,11 +42,16 @@
 	top: 40px;
 	margin-right: 5px;
 }
+.add-card-btn {
+	border: dashed black 2px;
+	cursor: pointer;
+}
 
 .card-carousel {
 	width: 100%;
 	height: 100px;
 	padding-top: 10px;
+	
 }
 .card-carousel ul {
     white-space: nowrap;
@@ -73,35 +85,30 @@
 	<nav class="collection-nav span2">
 		<ul class="unstyled">
 			<li class="collection-home-link">Home</li>
-			{% for collection in collections %}
-			<li class="collection-link" data-id="{{collection.id}}">{{collection.title}}</li>
-				{% for deck in collection.deck_set.all %}
-				<li class="deck-link" data-id="{{deck.id}}">{{deck.title}}</li>
-				{% endfor %}
+			{% for c in collections %}
+			<li class="collection-link" data-id="{{c.id}}">{{c.title}}</li>
+				{% if c.id == collection.id %}
+					{% for d in c.deck_set.all %}
+					<li class="deck-link" data-id="{{d.id}}">{{d.title}}</li>
+					{% endfor %}
+				{% endif %}
 			{% endfor %}
 		</ul>
 	</nav>
 	<div class="deck-main span10">
 		<div class="deck-menu">
-			<div class="btn-group">
-				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-					Deck Title 1 <span class="caret"></span>
-				</button>
-				<ul class="dropdown-menu">
-					<li><a href="#">Deck Title 2</a></li>
-					<li><a href="#">Deck Title 3</a></li>
-					<li><a href="#">Deck Title 4</a></li>
-				</ul>
-			</div>
-			<div class="pull-right">
-				<button id="add-deck-btn" type="button" class="btn">Add Deck</button>
-			</div>
+			
+			<div class="deck-title-text">{{deck.title}}</div>
+			
 		</div>
-		<div class="deck-text">asdfasdf</div>
-		<div class="card-carousel-container myborder">
-			<button id="add-card-btn" type="button" class="btn pull-left">Add Card</button>
+		<div class="card-carousel-container">
 			<div style="width:100%; height:120px" class="card-carousel">
-				<ul class="unstyled inline">
+				<ul class="unstyled inline" style="display:inline">
+					<li class="carousel-card add-card-btn">Add Card</li>
+				</ul>
+				
+				<ul class="unstyled inline" style="display:inline">
+					{% if deck_cards %}
 					<li class="carousel-card"></li>
 					<li class="carousel-card active-carousel-card"></li>
 					<li class="carousel-card"></li>
@@ -113,6 +120,9 @@
 					<li class="carousel-card"></li>
 					<li class="carousel-card"></li>
 					<li class="carousel-card"></li>
+					{% else %}
+					<li class="carousel-card no-cards">No cards</li>
+					{% endif %}
 				</ul>
 			</div>
 		</div>
@@ -127,16 +137,16 @@
 
 <script>
 require(['models/Deck'], function(Deck){
-	var collection_id = '{{collection_id}}';
+	var collection_id = '{{collection.id}}';
+	var deck_id = '{{deck.id}}';
 	if(collection_id == ''){
 		var msg = "No associated course id.";
 		alert(msg);
 		window.location = "/index/";
 	}
-	var deck = new Deck({% if deck %}{{deck.id}}{% endif %});
-	deck.collectionNav();
-
-	
+	var deck = new Deck(collection_id, deck_id);
+	deck.collectionNav(collection_id);
+	deck.newDeckInit(collection_id);
 
 });
 </script>
