@@ -24,7 +24,8 @@ def index(request, deck_id=None):
     else:
         deck = Deck.objects.get(id=deck_id)
         current_collection = Collection.objects.get(id=deck.collection.id)
-        deck_cards = Deck.objects.card_set.all()
+        #deck_cards = Deck.objects.card_set.all()
+        deck_cards = None
     return render(request, "decks/index.html", 
         {"collections": collections, "deck": deck, "deck_cards": deck_cards, 
         "collection_id": current_collection.id, "collection": current_collection})
