@@ -136,7 +136,7 @@
 </div>
 
 <script>
-require(['models/Deck'], function(Deck){
+require(['models/Deck','models/Card'], function(Deck, Card){
 	var collection_id = '{{collection.id}}';
 	var deck_id = '{{deck.id}}';
 	if(collection_id == ''){
@@ -145,9 +145,14 @@ require(['models/Deck'], function(Deck){
 		window.location = "/index/";
 	}
 	var deck = new Deck(collection_id, deck_id);
-	deck.collectionNav(collection_id);
-	deck.deckLink(deck_id);
-	deck.newDeckInit(collection_id, deck_id);
+	deck.collectionNav();
+	deck.deckLink();
+	deck.initNewDeck();
+
+	var card = new Card();
+	card.initNewCard();
+	
+
 
 });
 </script>

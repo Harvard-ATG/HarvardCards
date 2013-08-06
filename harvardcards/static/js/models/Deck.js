@@ -1,18 +1,20 @@
 define(['jquery', 'lodash', 'bootstrap'], function($, _, bootstrap){
 	var Deck = function(collection_id, deck_id){
-		var id = deck_id;
-		var collection_id = collection_id;
+		this.deck_id = deck_id;
+		this.collection_id = collection_id;
 	}
 	
 	_.extend(Deck.prototype, {
-		collectionNav: function(collection_id){
+		collectionNav: function(){
+			var collection_id = this.collection_id;
 			$('.collection-home-link').click(function(){
 				window.location = "/index";
 			});
 			$('.collection-link[data-id='+collection_id+']').addClass("active-collection");
 			
 		},
-		deckLink: function(current_deck_id){
+		deckLink: function(){
+			var current_deck_id = this.deck_id;
 			$('.deck-link').click(function(){
 				deck_id = $(this).data("id");
 				if(deck_id == '')
@@ -30,7 +32,9 @@ define(['jquery', 'lodash', 'bootstrap'], function($, _, bootstrap){
 			});
 		},
 		// this only happens if there is no deck id associated
-		newDeckInit: function(collection_id, deck_id){
+		initNewDeck: function(){
+			var collection_id = this.collection_id;
+			var deck_id = this.deck_id;
 			// create an input
 			if(deck_id == ''){
 				// setup the input
