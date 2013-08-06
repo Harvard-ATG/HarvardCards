@@ -146,7 +146,8 @@ require(['models/Deck'], function(Deck){
 	}
 	var deck = new Deck(collection_id, deck_id);
 	deck.collectionNav(collection_id);
-	deck.newDeckInit(collection_id);
+	deck.deckLink(deck_id);
+	deck.newDeckInit(collection_id, deck_id);
 
 });
 </script>

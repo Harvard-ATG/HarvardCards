@@ -12,6 +12,17 @@ define(['jquery', 'lodash', 'bootstrap'], function($, _, bootstrap){
 			$('.collection-link[data-id='+collection_id+']').addClass("active-collection");
 			
 		},
+		deckLink: function(current_deck_id){
+			$('.deck-link').click(function(){
+				deck_id = $(this).data("id");
+				if(deck_id == '')
+					alert("Error: invalid deck-link");
+				else
+					window.location = "/deck/"+deck_id;
+			});
+			// activate the current
+			$('.deck-link[data-id='+current_deck_id+']').addClass("active-deck");
+		},
 		
 		newDeckButton: function(){
 			$('#add-deck-button').click(function(){
@@ -19,9 +30,9 @@ define(['jquery', 'lodash', 'bootstrap'], function($, _, bootstrap){
 			});
 		},
 		// this only happens if there is no deck id associated
-		newDeckInit: function(collection_id){
+		newDeckInit: function(collection_id, deck_id){
 			// create an input
-			if(this.id != ''){
+			if(deck_id == ''){
 				// setup the input
 				this.setupEditable(collection_id);
 			}
