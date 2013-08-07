@@ -72,10 +72,25 @@
 	padding: 10px;
 }
 .card-main {
-	height: 300px;
 	width: 600px;
-	background-color: #999;
+	background-color: #EEE;
 	margin: 0 auto;
+}
+
+.field-template {
+	padding-top: 10px;
+	width: 100%;
+}
+.display {
+	
+}
+.reveal {
+	
+}
+.hide-bar {
+	height: 25px;
+	width: 100%;
+	background-color: #000;
 }
 
 </style>
@@ -149,7 +164,7 @@ require(['models/Deck','models/Card'], function(Deck, Card){
 	deck.deckLink();
 	deck.initNewDeck();
 
-	var card = new Card();
+	var card = new Card(collection_id, deck_id);
 	card.initNewCard();
 	
 
