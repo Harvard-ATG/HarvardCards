@@ -14,6 +14,7 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 			// get the field data for the collection
 			if(this.field_data){
 				this.setupFieldUI();
+				this.saveCardButton();
 			} else {
 				this.getFieldData(collection_id);
 			}
@@ -62,6 +63,36 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 				$('.card-main').append(field.template);
 			});
 		
+		},
+		saveCardButton: function(){
+			$('.save-card-btn').click(function(){
+				card_id = '';
+				// collect data
+				var fields = [];
+				$('.field-template input').each(function(keys, input){
+					var field = {};
+					field['value'] = $(input).val();
+					field['field_id'] = $(input).data("id");
+					fields.push(field);
+				});
+				// send data to the server
+				$.ajax({
+					type: 'POST',
+					url: '/card/create/',
+					data: {fields: fields, card_id: card_id},
+					success: function(data, statusText){
+						if(data.card_id !== undefined){
+							alert("success!");
+						} else {
+							alert("Error: no card_id returned\n"+data.error)
+						}
+					},
+					error: function(request, statusText){
+						alert("Request failed.");
+					}
+				});
+			
+			});
 		}
 		
 		
