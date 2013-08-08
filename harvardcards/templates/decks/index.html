@@ -116,31 +116,29 @@
 			<div class="deck-title-text">{{deck.title}}</div>
 			
 		</div>
-		<div class="card-carousel-container">
-			<div style="width:100%; height:120px" class="card-carousel">
-				<ul class="unstyled inline" style="display:inline">
-					<li class="carousel-card add-card-btn">Add Card</li>
-				</ul>
+		<div class="card-carousel-container row">
+			<ul class="unstyled inline card-carousel span2">
+				<li class="carousel-card add-card-btn">Add Card</li>
+			</ul>
+
+			<div style="height:120px" class="card-carousel span10">
 				
-				<ul class="unstyled inline" style="display:inline">
-					{% if deck_cards %}
-					<li class="carousel-card"></li>
-					<li class="carousel-card active-carousel-card"></li>
-					<li class="carousel-card"></li>
-					<li class="carousel-card"></li>
-					<li class="carousel-card"></li>
-					<li class="carousel-card"></li>
-					<li class="carousel-card"></li>
-					<li class="carousel-card"></li>
-					<li class="carousel-card"></li>
-					<li class="carousel-card"></li>
-					<li class="carousel-card"></li>
+				<ul class="unstyled inline card-carousel-list">
+					{% if cards %}
+						{% for card in cards %}
+							<li class="carousel-card" data-id="{{card.card_id}}">{{card.first_value}}</li>
+						{% endfor %}
 					{% else %}
 					<li class="carousel-card no-cards">No cards</li>
 					{% endif %}
 				</ul>
 			</div>
+			
+					
+					
 		</div>
+
+
 		<div class="card-container">
 			<div class="card-main">
 				
@@ -153,9 +151,11 @@
 </div>
 
 <script>
-require(['models/Deck','models/Card'], function(Deck, Card){
+require(['models/Deck','models/Card'], function(Deck, Card){		
+		
 	var collection_id = '{{collection.id}}';
 	var deck_id = '{{deck.id}}';
+	var cards_in_deck = '{{cards|length}}';
 	if(collection_id == ''){
 		var msg = "No associated course id.";
 		alert(msg);
@@ -167,6 +167,7 @@ require(['models/Deck','models/Card'], function(Deck, Card){
 	deck.initNewDeck();
 
 	var card = new Card(collection_id, deck_id);
+	card.initFirstCard();
 	card.initNewCard();
 	
 
