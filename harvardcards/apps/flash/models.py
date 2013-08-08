@@ -58,6 +58,7 @@ class Decks_Cards(models.Model):
     sort_order = models.IntegerField()
 
 class Cards_Fields(models.Model):
+    value = models.CharField(max_length=500)
     card = models.ForeignKey(Card)
     field = models.ForeignKey(Field)
     sort_order = models.IntegerField()
