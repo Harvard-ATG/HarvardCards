@@ -65,6 +65,7 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 		
 		},
 		saveCardButton: function(){
+			var that = this;
 			$('.save-card-btn').click(function(){
 				card_id = '';
 				// collect data
@@ -75,11 +76,13 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 					field['field_id'] = $(input).data("id");
 					fields.push(field);
 				});
+				// json stringify the fields object
+				json_fields = JSON.stringify(fields);
 				// send data to the server
 				$.ajax({
 					type: 'POST',
 					url: '/card/create/',
-					data: {fields: fields, card_id: card_id},
+					data: {fields: json_fields, card_id: card_id, collection_id: that.collection_id, deck_id: that.deck_id},
 					success: function(data, statusText){
 						if(data.card_id !== undefined){
 							alert("success!");
