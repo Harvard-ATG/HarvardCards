@@ -6,7 +6,7 @@ from django.core.exceptions import ViewDoesNotExist
 from django.utils import simplejson as json
 
 from django.forms.formsets import formset_factory
-from harvardcards.apps.flash.models import Collection, Deck
+from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
 
 def index(request, deck_id=None):
@@ -20,14 +20,25 @@ def index(request, deck_id=None):
         else:
             raise ViewDoesNotExist
         deck = None
-        deck_cards = None
+        cards = None
     else:
         deck = Deck.objects.get(id=deck_id)
         current_collection = Collection.objects.get(id=deck.collection.id)
         #deck_cards = Deck.objects.card_set.all()
-        deck_cards = None
+        #decks_cards = Deck.objects.filter(deck=deck)
+        deck_cards = Decks_Cards.objects.filter(deck=deck)
+        cards = []
+        for dc in deck_cards:
+            card_dict = {}
+            card_dict['card_id'] = dc.card.id
+            cf = dc.card.cards_fields_set.all()[0]
+            card_dict['first_label'] = cf.field.label
+            card_dict['first_value'] = cf.value
+            cards.append(card_dict)
+        
+        #Decks_Cards.objects.filter(deck=deck).card.all()
     return render(request, "decks/index.html", 
-        {"collections": collections, "deck": deck, "deck_cards": deck_cards, 
+        {"collections": collections, "deck": deck, "cards": cards, 
         "collection_id": current_collection.id, "collection": current_collection})
 
 # 
