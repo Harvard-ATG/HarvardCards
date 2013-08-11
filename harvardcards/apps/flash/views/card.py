@@ -46,14 +46,15 @@ def create(request):
                     deck = Deck.objects.get(id=deck_id)
                     dc = Decks_Cards(deck=deck, card=card, sort_order=0)
                     dc.save()
+                    card_data = {}
+                    card_data['card_id'] = card.id
+                    #card_data['first_label'] = data[0].label
+                    card_data['first_value'] = data[0]['value']
                     
-            
+                    return HttpResponse('{"success": true, "card_data": %s}' % json.dumps(card_data), mimetype="application/json")
+                    
                 else:
                     errorMsg = "Field data not provided."
-                    for key in request.POST:
-                        value = request.POST[key]
-                        errorMsg += "\n{0} => {1}".format(key, value)
-                    
             else:
                 errorMsg = "card_id not provided"
         else:

@@ -84,10 +84,12 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 					url: '/card/create/',
 					data: {fields: json_fields, card_id: card_id, collection_id: that.collection_id, deck_id: that.deck_id},
 					success: function(data, statusText){
-						if(data.card_id !== undefined){
+						if(data.card_data !== undefined){
 							alert("success!");
+							console.log(data.card_data);
 						} else {
 							alert("Error: no card_id returned\n"+data.error)
+							console.log(data);
 						}
 					},
 					error: function(request, statusText){
@@ -96,6 +98,11 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 				});
 			
 			});
+		},
+		
+		// this needs to set up the first card if there are no other cards
+		initFirstCard: function(){
+			
 		}
 		
 		
