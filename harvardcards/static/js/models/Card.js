@@ -51,7 +51,7 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 			});
 		},
 		
-		getFieldValues: function(){
+		getFieldValues: function(mycallback, mycallbackObj){
 			var that = this;
 			$.ajax({
 				type: 'POST',
@@ -60,8 +60,11 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 				success: function(data, statusText){
 					console.log(data);
 					if(data.fields !== undefined){
-						alert("success.");
-						
+						data.fields.forEach(function(field){
+							f = new Field(field.label, field.field_type, field.field_id, field.display, field.value);
+							that.fields.push(f);
+						});
+						mycallback.apply(mycallbackObj);
 					} else {
 						alert("Error: "+data.error);
 					}
@@ -72,9 +75,6 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 					alert("request failed.");
 				}
 			});
-		},
-		something:function(){
-			alert("something");
 		},
 		
 		setFieldData: function(field_data){
@@ -87,6 +87,7 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 		},
 		
 		setupFieldUI: function(){
+			console.log("setupFieldUI");
 			this.clearCardView();
 			// run through each field item
 			var hide_bar = '<li class="hide-bar"> </i> ';
@@ -97,7 +98,11 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 					display = false;
 					$('.card-main').append(hide_bar);
 				}
-				$('.card-main').append(field.template);
+				if(field.value !== undefined){
+					$('.card-main').append(field.view_template);
+				} else {
+					$('.card-main').append(field.edit_template);
+				}
 			});
 		
 		},
@@ -148,6 +153,7 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 		},
 		
 		display: function(){
+			var that = this;
 			console.log('display');
 			collection_id = this.collection_id;
 			// get the field data for the collection
@@ -155,11 +161,12 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 				this.setupFieldUI();
 				this.saveCardButton();
 			} else {
-				if(this.card_id == ''){
+				if(this.card_id == '' || this.card_id === undefined){
 					this.getFieldData();
 				} else {
-					this.getFieldData();
-					this.getFieldValues();
+					//this.getFieldData();
+					// doing this with a callback causes setupFieldUI to be called from the global scope! (without 'that')
+					this.getFieldValues(that.setupFieldUI, that);
 				}
 			
 			}
