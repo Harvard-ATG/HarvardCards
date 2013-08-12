@@ -1,7 +1,8 @@
-define(['jquery', 'lodash', 'bootstrap'], function($, _, bootstrap){
+define(['jquery', 'lodash', 'bootstrap', 'models/Card'], function($, _, bootstrap, Card){
 	var Deck = function(collection_id, deck_id){
 		this.deck_id = deck_id;
 		this.collection_id = collection_id;
+		this.current_card = '';
 	}
 	
 	_.extend(Deck.prototype, {
@@ -81,6 +82,24 @@ define(['jquery', 'lodash', 'bootstrap'], function($, _, bootstrap){
 			});
 			$('.deck-title-text').trigger('click');
 			
+		},
+		
+		// displays proper card
+		setCurrentCard: function(card){
+			this.current_card = card;
+			// display card
+			this.current_card.display();
+		},
+		
+		// set the click on the cards
+		initCarouselCards: function(){
+			var that = this;
+			$('.carousel-card').click(function(){
+				var card_id = $(this).data("id");
+				var card = new Card(that.collection_id, that.deck_id, card_id);
+				that.setCurrentCard(card);
+
+			});
 		}
 	
 	
