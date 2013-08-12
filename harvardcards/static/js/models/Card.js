@@ -5,22 +5,28 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 		this.card_id = card_id;
 		this.field_data = '';
 		this.fields = [];
+		if(card_id == ''){
+			
+		}
 	}
 	
 	_.extend(Card.prototype, {
 		// initiate new card
 		initNewCard: function(){
+			console.log('initNewCard');
 			collection_id = this.collection_id;
 			// get the field data for the collection
 			if(this.field_data){
 				this.setupFieldUI();
 				this.saveCardButton();
 			} else {
-				this.getFieldData(collection_id);
+				console.log(this);
+				this.getFieldData('new');
 			}
 		},
 		
-		getFieldData: function(){
+		getFieldData: function(type){
+			console.log('getFieldData');
 			var that = this;
 			var collection_id = this.collection_id;
 			$.ajax({
@@ -30,7 +36,11 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 				success: function(data, statusText){
 					if(data.fields !== undefined){
 						that.setFieldData(data.fields);
-						that.initNewCard();
+						if(type == 'new'){
+							that.initNewCard();
+						} else {
+							that.display();
+						}
 					} else {
 						alert("Error: "+data.error)
 					}
@@ -39,6 +49,32 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 					alert("Request failed.");
 				}
 			});
+		},
+		
+		getFieldValues: function(){
+			var that = this;
+			$.ajax({
+				type: 'POST',
+				url: '/card/fields/',
+				data: {card_id: that.card_id},
+				success: function(data, statusText){
+					console.log(data);
+					if(data.fields !== undefined){
+						alert("success.");
+						
+					} else {
+						alert("Error: "+data.error);
+					}
+					
+					//mycallback();
+				},
+				error: function(request, statusText){
+					alert("request failed.");
+				}
+			});
+		},
+		something:function(){
+			alert("something");
 		},
 		
 		setFieldData: function(field_data){
@@ -51,6 +87,7 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 		},
 		
 		setupFieldUI: function(){
+			this.clearCardView();
 			// run through each field item
 			var hide_bar = '<li class="hide-bar"> </i> ';
 			var display = true;
@@ -85,15 +122,16 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 					data: {fields: json_fields, card_id: card_id, collection_id: that.collection_id, deck_id: that.deck_id},
 					success: function(data, statusText){
 						if(data.card_data !== undefined){
-							alert("success!");
+							// TODO: add card to carousel
+							alert("success! TODO: add card to carousel");
 							console.log(data.card_data);
 						} else {
-							alert("Error: no card_id returned\n"+data.error)
+							alert("Error: no card data returned!\n")
 							console.log(data);
 						}
 					},
 					error: function(request, statusText){
-						alert("Request failed.");
+						alert("Request failed!");
 					}
 				});
 			
@@ -103,7 +141,31 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 		// this needs to set up the first card if there are no other cards
 		initFirstCard: function(){
 			
+		},
+		
+		clearCardView: function(){
+			$('.card-main').children().remove();
+		},
+		
+		display: function(){
+			console.log('display');
+			collection_id = this.collection_id;
+			// get the field data for the collection
+			if(this.field_data){
+				this.setupFieldUI();
+				this.saveCardButton();
+			} else {
+				if(this.card_id == ''){
+					this.getFieldData();
+				} else {
+					this.getFieldData();
+					this.getFieldValues();
+				}
+			
+			}
 		}
+		
+
 		
 		
 	});
