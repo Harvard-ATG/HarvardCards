@@ -161,14 +161,18 @@ require(['models/Deck','models/Card'], function(Deck, Card){
 		alert(msg);
 		window.location = "/index/";
 	}
+	var card = new Card(collection_id, deck_id);
+	//card.initFirstCard();
+	//card.initNewCard();
+	
 	var deck = new Deck(collection_id, deck_id);
 	deck.collectionNav();
 	deck.deckLink();
 	deck.initNewDeck();
+	deck.setCurrentCard(card);
+	deck.initCarouselCards();
 
-	var card = new Card(collection_id, deck_id);
-	card.initFirstCard();
-	card.initNewCard();
+	
 	
 
 
