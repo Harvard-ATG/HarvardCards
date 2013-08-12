@@ -68,3 +68,26 @@ def create(request):
     
     return HttpResponse('{"success": true, "error": "%s"}' % errorMsg, mimetype="application/json")
     
+
+def fields(request):
+    errorMsg = '';
+    # get the card id
+    if 'card_id' in request.POST:
+        card_id = request.POST['card_id']
+        card = Card.objects.get(id=card_id)
+        cfs = Cards_Fields.objects.filter(card=card).order_by('sort_order')
+        fields = []
+        for cf in cfs:
+            field = {}
+            field['value'] = cf.value
+            field['label'] = cf.field.label
+            field['display'] = cf.field.display
+            fields.append(field)
+        fields_json = json.dumps(fields)
+        return HttpResponse('{"success": true, "fields": %s}' % fields_json, mimetype="application/json")
+    else:
+        errorMsg = "card_id not provided."
+    return HttpResponse('{"success": true, "error": "%s"}' % errorMsg, mimetype="application/json")
+    
+
+    
