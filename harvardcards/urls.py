@@ -16,7 +16,9 @@ urlpatterns = patterns('',
     url(r'^deck/$', 'harvardcards.apps.flash.views.deck.index', name='deckIndex'),
     url(r'^deck/(?P<deck_id>\d+)$', 'harvardcards.apps.flash.views.deck.index', name='deckIndex'),
     url(r'^collection/fields/$', 'harvardcards.apps.flash.views.collection.fields', name='fields'),
-    url(r'^card/create/$', 'harvardcards.apps.flash.views.card.create', name='createCard')
+    url(r'^card/create/$', 'harvardcards.apps.flash.views.card.create', name='createCard'),
+    url(r'^card/fields/$', 'harvardcards.apps.flash.views.card.fields', name='cardFields')
+    
     
     #url(r'^login/$', 'django_openid_auth.views.login_begin', name='openid-login'),
 	#url(r'^login-complete/$', 'django_openid_auth.views.login_complete', name='openid-complete'),
