@@ -134,10 +134,10 @@ define('models/Card', ['jquery', 'lodash', 'models/Field'], function($, _, Field
 					data: {fields: json_fields, card_id: card_id, collection_id: that.collection_id, deck_id: that.deck_id},
 					success: function(data, statusText){
 						if(data.card_data !== undefined){
-							console.log(data);
-							// TODO: add card to carousel
-							//alert("success! TODO: add card to carousel");
-							new_carousel_card = $('.carousel-card-template').clone();
+							//console.log(data);
+
+							$('.no-cards').css("display", "none");
+							var new_carousel_card = $('.carousel-card-template').clone();
 							new_carousel_card.removeClass("carousel-card-template");
 							new_carousel_card.css("display", "inline-block");
 							new_carousel_card.html(fields[0]['value']);
@@ -175,8 +175,13 @@ define('models/Card', ['jquery', 'lodash', 'models/Field'], function($, _, Field
 							active_carousel_card.next().trigger("click");
 						else
 							active_carousel_card.prev().trigger("click");
+							
 						// remove old carousel-card from dom
 						active_carousel_card.remove();
+						
+						if($('.carousel-card').length <= 3){
+							$('.no-cards').css("display", "inline-block");
+						}
 
 					},
 					error: function(request, statusText){
@@ -234,7 +239,7 @@ define('models/Card', ['jquery', 'lodash', 'models/Field'], function($, _, Field
 						data: {cards_fields_id: cf_id, value: value},
 						success: function(data, statusText){
 							if(data.error === undefined){
-								alert("success");
+								//alert("success");
 							} else {
 								alert("error: "+data.error);
 							}

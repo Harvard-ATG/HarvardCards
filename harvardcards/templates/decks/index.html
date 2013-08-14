@@ -129,10 +129,10 @@
 			</ul>
 
 			<div style="height:120px" class="card-carousel span10">
-				
 				<ul class="unstyled inline card-carousel-list">
+					<li class="carousel-card carousel-card-template" style="display: none;">Card Template</li>
 					{% if cards %}
-						<li class="carousel-card carousel-card-template" style="display: none;">Card Template</li>
+						<li class="carousel-card no-cards" style="display: none;">No cards</li>
 						{% for card in cards %}
 							<li class="carousel-card" data-id="{{card.card_id}}">{{card.first_value}}</li>
 						{% endfor %}
@@ -141,9 +141,6 @@
 					{% endif %}
 				</ul>
 			</div>
-			
-					
-					
 		</div>
 
 
