@@ -13,20 +13,17 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 	_.extend(Card.prototype, {
 		// initiate new card
 		initNewCard: function(){
-			console.log('initNewCard');
 			collection_id = this.collection_id;
 			// get the field data for the collection
 			if(this.field_data){
 				this.setupFieldUI();
 				this.saveCardButton();
 			} else {
-				console.log(this);
 				this.getFieldData('new');
 			}
 		},
 		
 		getFieldData: function(type){
-			console.log('getFieldData');
 			var that = this;
 			var collection_id = this.collection_id;
 			$.ajax({
@@ -58,7 +55,6 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 				url: '/card/fields/',
 				data: {card_id: that.card_id},
 				success: function(data, statusText){
-					console.log(data);
 					if(data.fields !== undefined){
 						data.fields.forEach(function(field){
 							f = new Field(field.label, field.field_type, field.field_id, field.display, field.value);
@@ -87,7 +83,6 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 		},
 		
 		setupFieldUI: function(){
-			console.log("setupFieldUI");
 			this.clearCardView();
 			// run through each field item
 			var hide_bar = '<li class="hide-bar"> </i> ';
@@ -104,10 +99,22 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 					$('.card-main').append(field.edit_template);
 				}
 			});
+			// save button or delete button
+			if(this.card_id !== undefined){
+				$('.card-main-save').addClass("hide");
+				$('.card-main-delete').removeClass("hide");
+				// set the id for the delete button
+				$('.delete-card-btn').data("id", this.card_id);
+				this.deleteCardButton();
+			} else {
+				$('.card-main-save').removeClass("hide");
+				$('.card-main-delete').addClass("hide");				
+			}
 		
 		},
 		saveCardButton: function(){
 			var that = this;
+			$('.save-card-btn').unbind("click");
 			$('.save-card-btn').click(function(){
 				card_id = '';
 				// collect data
@@ -129,7 +136,6 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 						if(data.card_data !== undefined){
 							// TODO: add card to carousel
 							alert("success! TODO: add card to carousel");
-							console.log(data.card_data);
 						} else {
 							alert("Error: no card data returned!\n")
 							console.log(data);
@@ -140,6 +146,26 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 					}
 				});
 			
+			});
+		},
+		deleteCardButton: function(){
+			var that = this;
+			$('.delete-card-btn').unbind("click");
+			$('.delete-card-btn').click(function(){
+				var card_id = $(this).data("id");
+				console.log(card_id);
+				$.ajax({
+					type: 'POST',
+					url: '/card/delete/',
+					data: {card_id: card_id},
+					success: function(data, statusText){
+						alert("success!");
+						console.log(data);
+					},
+					error: function(request, statusText){
+						alert("Request failed!");
+					}
+				})
 			});
 		},
 		
@@ -154,8 +180,10 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 		
 		display: function(){
 			var that = this;
-			console.log('display');
 			collection_id = this.collection_id;
+			
+			
+			
 			// get the field data for the collection
 			if(this.field_data){
 				this.setupFieldUI();

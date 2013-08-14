@@ -98,6 +98,7 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Card'], function($, _, bootstra
 				var card_id = $(this).data("id");
 				var card = new Card(that.collection_id, that.deck_id, card_id);
 				that.setCurrentCard(card);
+				// TODO: set class of clicked carousel-card
 
 			});
 		}
