@@ -70,7 +70,7 @@ def create(request):
     
 
 def fields(request):
-    errorMsg = '';
+    errorMsg = ''
     # get the card id
     if 'card_id' in request.POST:
         card_id = request.POST['card_id']
@@ -91,5 +91,14 @@ def fields(request):
         errorMsg = "card_id not provided."
     return HttpResponse('{"success": true, "error": "%s"}' % errorMsg, mimetype="application/json")
     
-
+def delete(request):
+    errorMsg = ''
+    if 'card_id' in request.POST:
+        card_id = request.POST['card_id']
+        card = Card.objects.get(id=card_id)
+        card.delete()
+        return HttpResponse('{"success": true}', mimetype="application/json")
+    else:
+        errorMsg = "card_id not provided."
+    return HttpResponse('{"success": true, "error": "%s"}' % errorMsg, mimetype="application/json")
     
