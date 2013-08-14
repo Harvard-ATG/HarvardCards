@@ -162,7 +162,6 @@ define('models/Card', ['jquery', 'lodash', 'models/Field'], function($, _, Field
 			$('.delete-card-btn').unbind("click");
 			$('.delete-card-btn').click(function(){
 				var card_id = $(this).data("id");
-				console.log(card_id);
 				$.ajax({
 					type: 'POST',
 					url: '/card/delete/',
@@ -171,7 +170,7 @@ define('models/Card', ['jquery', 'lodash', 'models/Field'], function($, _, Field
 						// find current carousel-card
 						active_carousel_card = $('.active-carousel-card');
 						// click on next carousel card
-						if(active_carousel_card.next())
+						if(active_carousel_card.next().length > 0)
 							active_carousel_card.next().trigger("click");
 						else
 							active_carousel_card.prev().trigger("click");
