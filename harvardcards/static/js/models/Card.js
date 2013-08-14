@@ -1,13 +1,12 @@
-define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstrap, Field){
-	var Card = function(collection_id, deck_id, card_id){
+define('models/Card', ['jquery', 'lodash', 'models/Field'], function($, _, Field){
+	var Card = function(collection_id, deck, card_id){
 		this.collection_id = collection_id;
-		this.deck_id = deck_id;
+		this.deck_id = deck.deck_id;
 		this.card_id = card_id;
 		this.field_data = '';
 		this.fields = [];
-		if(card_id == ''){
-			
-		}
+		//console.log(Field);
+		this.deck = deck;
 	}
 	
 	_.extend(Card.prototype, {
@@ -134,8 +133,18 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 					data: {fields: json_fields, card_id: card_id, collection_id: that.collection_id, deck_id: that.deck_id},
 					success: function(data, statusText){
 						if(data.card_data !== undefined){
+							console.log(data);
 							// TODO: add card to carousel
-							alert("success! TODO: add card to carousel");
+							//alert("success! TODO: add card to carousel");
+							new_carousel_card = $('.carousel-card-template').clone();
+							new_carousel_card.removeClass("carousel-card-template");
+							new_carousel_card.css("display", "inline-block");
+							new_carousel_card.html(fields[0]['value']);
+							new_carousel_card.data("id", data.card_data.card_id)
+							$('.card-carousel-list').append(new_carousel_card);
+							that.deck.initCarouselCards();
+							new_carousel_card.trigger("click");
+							
 						} else {
 							alert("Error: no card data returned!\n")
 							console.log(data);
@@ -162,7 +171,10 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 						// find current carousel-card
 						active_carousel_card = $('.active-carousel-card');
 						// click on next carousel card
-						active_carousel_card.next().trigger("click");
+						if(active_carousel_card.next())
+							active_carousel_card.next().trigger("click");
+						else
+							active_carousel_card.prev().trigger("click");
 						// remove old carousel-card from dom
 						active_carousel_card.remove();
 

@@ -1,4 +1,4 @@
-define(['jquery', 'lodash', 'bootstrap', 'models/Card'], function($, _, bootstrap, Card){
+define('models/Deck', ['jquery', 'lodash', 'bootstrap', 'models/Card'], function($, _, bootstrap, Card){
 	var Deck = function(collection_id, deck_id){
 		this.deck_id = deck_id;
 		this.collection_id = collection_id;
@@ -94,11 +94,12 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Card'], function($, _, bootstra
 		// set the click on the cards
 		initCarouselCards: function(){
 			var that = this;
+			$('.carousel-card').unbind("click");
 			$('.carousel-card').click(function(){
 				$('.active-carousel-card').removeClass("active-carousel-card");
 				$(this).addClass("active-carousel-card");
 				var card_id = $(this).data("id");
-				var card = new Card(that.collection_id, that.deck_id, card_id);
+				var card = new Card(that.collection_id, that, card_id);
 				that.setCurrentCard(card);
 				// TODO: set class of clicked carousel-card
 

@@ -47,7 +47,7 @@
 	cursor: pointer;
 }
 
-.card-carousel {
+.card-carousel, .fake-card-carousel {
 	width: 100%;
 	height: 100px;
 	padding-top: 10px;
@@ -124,7 +124,7 @@
 			
 		</div>
 		<div class="card-carousel-container row">
-			<ul class="unstyled inline card-carousel span2">
+			<ul class="unstyled inline fake-card-carousel span2">
 				<li class="carousel-card add-card-btn">Add Card</li>
 			</ul>
 
@@ -132,6 +132,7 @@
 				
 				<ul class="unstyled inline card-carousel-list">
 					{% if cards %}
+						<li class="carousel-card carousel-card-template" style="display: none;">Card Template</li>
 						{% for card in cards %}
 							<li class="carousel-card" data-id="{{card.card_id}}">{{card.first_value}}</li>
 						{% endfor %}
@@ -173,11 +174,13 @@ require(['models/Deck','models/Card'], function(Deck, Card){
 		alert(msg);
 		window.location = "/index/";
 	}
-	var card = new Card(collection_id, deck_id);
+	//var card = new Card(collection_id, deck_id);
 	//card.initFirstCard();
 	//card.initNewCard();
 	
 	var deck = new Deck(collection_id, deck_id);
+	var card = new Card(collection_id, deck);
+
 	deck.collectionNav();
 	deck.deckLink();
 	deck.initNewDeck();
