@@ -95,6 +95,8 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Card'], function($, _, bootstra
 		initCarouselCards: function(){
 			var that = this;
 			$('.carousel-card').click(function(){
+				$('.active-carousel-card').removeClass("active-carousel-card");
+				$(this).addClass("active-carousel-card");
 				var card_id = $(this).data("id");
 				var card = new Card(that.collection_id, that.deck_id, card_id);
 				that.setCurrentCard(card);

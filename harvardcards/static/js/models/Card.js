@@ -159,8 +159,13 @@ define(['jquery', 'lodash', 'bootstrap', 'models/Field'], function($, _, bootstr
 					url: '/card/delete/',
 					data: {card_id: card_id},
 					success: function(data, statusText){
-						alert("success!");
-						console.log(data);
+						// find current carousel-card
+						active_carousel_card = $('.active-carousel-card');
+						// click on next carousel card
+						active_carousel_card.next().trigger("click");
+						// remove old carousel-card from dom
+						active_carousel_card.remove();
+
 					},
 					error: function(request, statusText){
 						alert("Request failed!");
