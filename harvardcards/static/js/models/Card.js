@@ -56,7 +56,7 @@ define('models/Card', ['jquery', 'lodash', 'models/Field'], function($, _, Field
 				success: function(data, statusText){
 					if(data.fields !== undefined){
 						data.fields.forEach(function(field){
-							f = new Field(field.label, field.field_type, field.field_id, field.display, field.value);
+							f = new Field(field.label, field.field_type, field.field_id, field.display, field.value, field.cards_fields_id);
 							that.fields.push(f);
 						});
 						mycallback.apply(mycallbackObj);
@@ -105,6 +105,7 @@ define('models/Card', ['jquery', 'lodash', 'models/Field'], function($, _, Field
 				// set the id for the delete button
 				$('.delete-card-btn').data("id", this.card_id);
 				this.deleteCardButton();
+				this.setFieldEditables();
 			} else {
 				$('.card-main-save').removeClass("hide");
 				$('.card-main-delete').addClass("hide");				
@@ -214,6 +215,36 @@ define('models/Card', ['jquery', 'lodash', 'models/Field'], function($, _, Field
 				}
 			
 			}
+		},
+		
+		setFieldEditables: function(){
+			var that = this;
+			$('.text-field-template').editable(function(value, settings){
+				return value;
+			}, { 
+				tooltip   : 'Click to edit...',
+				cssclass: 'editable',
+				style: 'inherit',
+				onblur: 'submit',
+				callback: function(value, settings){
+					var cf_id = $(this).data("cf_id");
+					$.ajax({
+						type: 'POST',
+						url: '/card/fieldEdit/',
+						data: {cards_fields_id: that.card_id, value: value},
+						success: function(data, statusText){
+							alert("success");
+					
+						},
+						error: function(request, statusText){
+							alert("request failed.");
+						}
+					});
+					*/
+					
+				}
+			});
+
 		}
 		
 
