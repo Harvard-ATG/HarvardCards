@@ -231,16 +231,19 @@ define('models/Card', ['jquery', 'lodash', 'models/Field'], function($, _, Field
 					$.ajax({
 						type: 'POST',
 						url: '/card/fieldEdit/',
-						data: {cards_fields_id: that.card_id, value: value},
+						data: {cards_fields_id: cf_id, value: value},
 						success: function(data, statusText){
-							alert("success");
-					
+							if(data.error === undefined){
+								alert("success");
+							} else {
+								alert("error: "+data.error);
+							}
 						},
 						error: function(request, statusText){
 							alert("request failed.");
+							console.log(request);
 						}
 					});
-					*/
 					
 				}
 			});

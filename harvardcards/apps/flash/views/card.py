@@ -102,4 +102,22 @@ def delete(request):
     else:
         errorMsg = "card_id not provided."
     return HttpResponse('{"success": true, "error": "%s"}' % errorMsg, mimetype="application/json")
+
+def fieldEdit(request):
+    errorMsg = ''
+    if 'cards_fields_id' in request.POST:
+        if 'value' in request.POST:
+            cf_id = request.POST['cards_fields_id']
+            value = request.POST['value']
+            cf = Cards_Fields.objects.get(id=cf_id)
+            cf.value = value
+            cf.save()
+            return HttpResponse('{"success": true}', mimetype="application/json")
+        else:
+            errorMsg = "value not provided."
+    else:
+        errorMsg = "cards_fields_id not provided."
+        
+    return HttpResponse('{"success": true, "error": "%s"}' % errorMsg, mimetype="application/json")
+    
     
