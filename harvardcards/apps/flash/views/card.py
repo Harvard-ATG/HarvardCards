@@ -84,6 +84,7 @@ def fields(request):
             field['display'] = cf.field.display
             field['field_type'] = cf.field.field_type
             field['field_id'] = cf.field.id
+            field['cards_fields_id'] = cf.id
             fields.append(field)
         fields_json = json.dumps(fields)
         return HttpResponse('{"success": true, "fields": %s}' % fields_json, mimetype="application/json")
