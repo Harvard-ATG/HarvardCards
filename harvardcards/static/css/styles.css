@@ -1,0 +1,611 @@
+@font-face {
+    font-family: 'League Gothic';
+    src: url('/static/webfonts/leaguegothic-regular-webfont.eot');
+    src: url('/static/webfonts/leaguegothic-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/static/webfonts/leaguegothic-regular-webfont.woff') format('woff'),
+         url('/static/webfonts/leaguegothic-regular-webfont.ttf') format('truetype'),
+         url('/static/webfonts/leaguegothic-regular-webfont.svg#league_gothicregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+/* =Reset default browser CSS. Based on work by Eric Meyer: http://meyerweb.com/eric/tools/css/reset/index.html
+-------------------------------------------------------------- */
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+.clear { clear:both; }
+
+body{
+	background: transparent url('/static/img/backgrundTile.png') left top;
+	font-family: 'Vollkorn', Times, serif;
+}
+
+/* FONTS */
+h1, h2, h3, h4, a#addAcourse{
+	font-family: 'League Gothic', Arial, sans-serif;
+}
+	h1{ font-size: 3em; }
+	h1#appTitle { padding: 0.25em 0; }
+	
+	h2{ font-size: 1.875em; }
+
+/* FONTS (end) */
+
+#fc_headerWrapper{
+	background-color:#1e1e1e;
+}
+
+.sectionWrapper{
+	width: 100%;
+	display: inline-block;
+}
+
+	.section img{
+		padding: 0.375em 0;
+	}
+	
+	ul#userInfo{
+		float: right;
+		display: inline-block;
+		font-family:Arial, Helvetica, sans-serif;
+		color: #f3f3f1;
+		font-size: 0.75em;
+		display: none;
+	}
+	
+		ul#userInfo li{
+			display: inline-block;
+			list-style: none;
+		}
+			ul#userInfo li span{
+				padding: 0 0.5em;
+			}
+		
+		ul#userInfo li a{
+			display: inline-block;
+			padding: 1.11em 1em ;
+			text-decoration: none;
+			background-color: #414141;
+			color: #f3f3f1;
+			border-right: solid 1px #5f5e5e;
+			border-left: solid 1px #5f5e5e;
+		}
+
+.contentWrapper{
+	display: inline-block;
+}
+	
+	#content{
+		float: left;
+		display: inline-block;
+		/*background-color: #C99;*/
+	}
+	
+/********** main nav (start) *************/
+#navigation{
+	float: left;
+	width: 16.666666666667%;
+	/*background-color: #0CF;*/
+}
+
+	#navigation nav > ul a{
+		font-family: 'Vollkorn', Times, serif;
+		font-size: 1.25em;
+		color: #4c4c4c;
+		text-decoration: none;
+		line-height: 1.15em;
+		display: inline-block;
+		width:90%;
+		padding: 0.25em 0 0.25em 10%;
+	}
+		#navigation nav > ul a:hover {
+			background: transparent url('/static/img/mainNavHover.png') no-repeat left top;
+		}
+		#navigation nav > ul a.active {
+			background: transparent url('/static/img/mainNavActive.png') no-repeat left top;
+		}
+	
+	#navigation nav ul ul a{
+		font-family: Arial, Helvetica, san-serif;
+		font-size: 0.75em;
+		font-weight: bold;
+		color: #4c4c4c;
+		text-decoration: none;
+		width: 80%;
+		padding: 0.75em 0 0.15em 20%;
+	}
+	
+		#navigation nav ul ul a:hover{
+			background: transparent url('/static/img/subNavHover.png') no-repeat 1.5em 1em;
+		}
+		#navigation nav ul ul a.active{
+			background: transparent url('/static/img/subNavActive.png') no-repeat 1.5em 1em !important;
+		}
+/********** main nav (end) *************/		
+
+a#addAcourse{
+	text-align: center;
+	text-decoration: none;
+	display: block;
+	width: 60%;
+	font-size: 1.875em;
+	color: #4c4c4c;
+	border: 2px dashed #838383;
+	text-transform:uppercase;
+	margin: 0 auto 0.25em;
+	padding: 0.25em 10%;
+}
+
+/********** hp course ROW (start) ***********/
+.courseWrapper{ display: inline-block; width: 100%; margin-bottom: 1em;}	
+.courseHeader{
+	width: 100%;
+	border-bottom: solid 2px #4c4c4c;
+	display: inline-block;
+	margin-bottom: 1em;
+}
+
+.courseHeader h2{
+	float: left;
+}
+
+	/* decks on homepage (start)*/
+	ul.courseDecks { display: inline-block; width: 100%; }
+	ul.courseDecks li{
+		background: #eeeded url('/static/img/deckBkg.jpg') no-repeat 50% 50%;
+		text-align: center;
+		border: solid 1px #e1dfdf;
+		position: relative;
+	}
+		li.deck { height: 167px; } 
+		
+		ul.courseDecks h2 { padding: 0.25em 0; }
+		ul.courseDecks h3{display: inline;}
+		p.lastUpdated { font-style: italic; margin-bottom: 1em; }
+	
+	
+		/* arrows (start) */
+		.arrow{
+			display: inline-block;
+			float: right;
+			background-color: #f3f3f3;
+		}
+		
+		.arrowExpand { 
+			border-top: solid 1px #e1dfdf;
+			position: absolute;
+			bottom: 0;
+			right: 0;
+		}
+		/* arrows (end) */
+		
+		ul.deckMenu{
+			display: none;
+		}
+		
+			ul.deckMenu li{
+				width: 50%;
+				float: left;
+				display: inline-block;
+				background-image: none;
+				background-color: #f8f8f7;
+				border: 0;
+				margin:0;
+			}
+			
+			ul.deckMenu li.arrowContainer{
+				width: 100%;
+				border-bottom: 0;
+			}
+			
+			.viewReview{
+				background: #4e84c4 url('/static/img/viewReviewArrow.jpg') no-repeat 90% 50%;
+				padding: 0.5em 0.85em;
+				display: inline-block;
+				-webkit-border-radius: 12px; 
+				-moz-border-radius: 12px; 
+				border-radius: 12px;
+				color: #f3f3f1;
+				font-family: 'League Gothic';
+				font-size: 1.25em;
+				text-transform: uppercase;
+				text-decoration: none;
+			}
+			
+		.openDeckMenu{
+			width: 100%;
+			height: 134px;
+			margin-top: -78px;
+			z-index: 1;
+			position: relative;
+			border-top: solid 1px #e1dfdf;
+			background-color: #f8f8f7;
+		}
+	/* decks on homepage (end)*/
+
+/********** hp course ROW (end) *************/
+/********** admin menus i.e edit/delete/share (start) ***********/
+ul.adminMenu {
+	display: inline-block;
+	float: left;
+	margin-left: 1em;
+}
+
+	ul.adminMenuRight{
+		float: right;
+		margin-right: 0em;
+	}
+		
+	ul.adminMenu li {
+		display: inline-block;
+		margin-right: 0.5em;
+	}
+		ul.adminMenuRight li { margin: 0; } /*no margin needed for right hand menu*/
+	
+	ul.adminMenu li a, 
+	.adminMenuBtn{
+		display: inline-block;
+		padding: 0.5em 1em;
+		color: #444444;
+		text-decoration: none;
+		font-family: Arial, Helvetica, sans-serif;
+		font-weight:700;
+		font-size: 0.75em;
+		background-color: #f5f5f5; 
+		background-image: url('/static/img/adminMenuFallBackImg.jpg'); 
+		background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f1f1f1), to(#f5f5f5));
+		background-image: -webkit-linear-gradient(top, #f1f1f1, #f5f5f5); 
+		background-image:    -moz-linear-gradient(top, #f1f1f1, #f5f5f5);
+		background-image:     -ms-linear-gradient(top, #f1f1f1, #f5f5f5);
+		background-image:      -o-linear-gradient(top, #f1f1f1, #f5f5f5);
+		border: solid 1px #dcdcdc;
+	}
+	
+/********** admin menus i.e edit/delete/share (end) *************/
+
+
+
+@media screen and (min-width: 320px){
+/* 
+* iPhone portrait
+*/
+	/*body{ background-color: blue; background-image:none; }*/
+	
+	.section{
+		padding: 0 1%;
+		width: 98%;
+	}
+	
+	.contentWrapper{
+		width: 100%;
+		/*background-color:#990066;*/
+	}
+	
+	#navigation{ display: none; }
+	
+	#content{	
+		width: 100%;
+		padding: 0%;
+	}
+	
+	ul.courseDecks li{
+		width: 90%;
+		padding: 0;
+		display: inline-block;
+		margin: 0 5%;
+	}
+	
+	.arrow{
+		width: 100%;
+		border-left: 0;
+		padding: 1em 0;
+	}
+	
+	.arrowExpand { border-top: solid 1px #e1dfdf;}
+	
+	.arrowCollapse { border-bottom: solid 1px #e1dfdf; }
+	
+	ul.deckMenu li { 
+		margin: 0;
+		width: 50%;
+		padding: 0 0 0.25em 0;
+		display: inline-block;
+	}
+	
+	/********** slider (start) *************/
+	/*.slider {
+	  width: 90%; 
+	  height: 300px;
+	  overflow: hidden;
+	  margin: 0 5%;
+	}*/
+	  .slider > ul {
+		/* styled by JS to match the added width and height of all <li>’s */
+		/*position: relative;
+		-webkit-transition: 0.5s left;
+		-moz-transition: 0.5s left;
+		-ms-transition: 0.5s left;
+		-o-transition: 0.5s left;
+	 
+		list-style: none;
+		margin: 0; padding: 0;*/
+	  }
+		.slider > ul > li
+		, li.deck {
+		  /*float: left;
+		  width: 400px !important; 
+		  height: 300px;
+		  margin: 0 !important;*/
+		}
+	/********** slider (end) *************/
+}
+@media screen and (min-width: 480px){
+/* 
+* iPhone landscape
+*/
+	/*body{ background-color: yellow; background-image:none; }*/
+	.section{
+		padding: 0 1%;
+		width: 98%;
+	}
+	#navigation{ display: none; }
+	
+	#content{	
+		width: 100%;
+		padding: 0%;
+	}
+	
+	ul.courseDecks li{
+		width: 90%;
+		padding: 0;
+		display: inline-block;
+		margin: 0 5%;
+	}
+	
+	.arrow{
+		width: 100%;
+		padding: 1em 0;
+	}
+	
+	.arrowExpand { border-top: solid 1px #e1dfdf;}
+	
+	.arrowCollapse { border-bottom: solid 1px #e1dfdf; }
+	
+	ul.deckMenu li { 
+		margin: 0;
+		width: 50%;
+		padding: 0 0 0.25em 0;
+		display: inline-block;
+	}
+}
+@media screen and (min-width: 768px){
+/* 
+* iPad Portrait
+*/
+	/*body{ background-color: orange; background-image:none;}*/
+	
+	.section{
+		padding: 0 1%;
+		width: 98%;
+	}
+	
+	ul#userInfo{
+		display: block;
+	}
+	
+	#navigation { display: none; }
+	
+	#content{	
+		width: 100%;
+		padding: 0%;
+	}
+	
+	ul.courseDecks li{
+		width: 30%;
+		padding: 0;
+		margin: 0 3.5% 1em 0;
+		display: inline-block;
+	}
+	
+		ul.courseDecks li.deck:nth-child(3n){ /*every third child */
+			margin-right: 0;
+		}
+		/*every 3+1 so each new row starting from 1*/
+		ul.courseDecks li.deck:nth-child(3n+1){
+			clear:left;						
+		}
+	
+	.arrow{
+		padding: 5% 0%;
+		width: 25%;
+	}
+	
+	.arrowExpand { 
+		border-top: solid 1px #e1dfdf;
+		border-left: solid 1px #e1dfdf;
+	}
+	
+	.arrowCollapse{
+		border-left: solid 1px #e1dfdf;
+		border-bottom: solid 1px #e1dfdf;
+	}
+	
+	ul.deckMenu li { 
+		width: 50%;
+		padding: 0 0 0.25em 0;
+		display: inline-block;
+		margin: 0;
+	}
+}
+@media screen and (min-width: 1024px){
+/* 
+ * this break point is for normal size desktop view so it's all fluid
+*/
+	/*body{ background-color: gray; background-image:none;}*/
+	
+	.section{
+		padding: 0 1%;
+		width: 98%;
+	}
+	
+	ul#userInfo{
+		display: block;
+	}
+	
+	#navigation {
+		display: inline-block;
+	}
+	
+	#content{	
+		width: 80.333333333333%;
+		padding-left: 3%;
+	}
+	
+	ul.courseDecks li{
+		width: 21.744791666667%;
+		margin: 0 3.5% 1em 0;
+		display: inline-block;
+	}
+	
+		ul.courseDecks li.deck:nth-child(3n){ /*every fourth child */
+			margin-right: 3.5%;
+		}
+		/*every 4+1 so each new row starting from 1*/
+		ul.courseDecks li.deck:nth-child(3n+1){
+			clear:none;						
+		}
+	
+		ul.courseDecks li.deck:nth-child(4n){ /*every fourth child */
+			margin-right: 0;
+		}
+		/*every 4+1 so each new row starting from 1*/
+		ul.courseDecks li.deck:nth-child(4n+1){
+			clear:left;						
+		}
+	
+	.arrow{
+		padding: 5% 0%;
+		width: 30%;
+	}
+	
+	.arrowExpand { 
+		border-top: solid 1px #e1dfdf;
+		border-left: solid 1px #e1dfdf;
+	}
+	
+	.arrowCollapse{
+		border-left: solid 1px #e1dfdf;
+		border-bottom: solid 1px #e1dfdf;
+	}
+	
+	ul.deckMenu li { 
+		width: 50%;
+		padding: 0 0 0.25em 0;
+		display: inline-block;
+		margin: 0;
+	}
+}
+
+@media screen and (min-width: 1280px){
+/*  
+ * for desktop that has huge monitors will fix the width at 1280px
+*/	
+	/*body{ background-color: green;  background-image:none;}*/
+	
+	/*#fc_header { background-color: red; }*/
+	
+	.section{
+		padding: 0 16px;
+		width: 1253px;
+		margin: 0 auto;
+	}
+	
+	ul#userInfo{
+		display: block;
+	}
+	
+	.contentWrapper{
+		width: 100%;
+		/*background-color:#990066;*/
+	}
+	
+	#navigation {
+		display: inline-block;
+	}
+	
+	#content{	
+		width: 80.333333333333%;
+		padding-left: 3%;
+	}
+	
+	ul.courseDecks li{
+		width: 21.744791666667%;
+		margin: 0 3.5% 1em 0;
+		display: inline-block;
+	}
+	
+	.arrow{
+		padding: 5% 0%;
+		width: 30%;
+	}
+	
+	.arrowExpand { 
+		border-left: solid 1px #e1dfdf;
+		border-top: solid 1px #e1dfdf;
+	}
+	
+	.arrowCollapse{
+		border-left: solid 1px #e1dfdf;
+		border-bottom: solid 1px #e1dfdf;
+	}
+	
+	ul.deckMenu li { 
+		width: 50%;
+		padding: 0 0 0.25em 0;
+		margin: 0;
+		display: inline-block;
+	}
+}
