@@ -25,8 +25,5 @@ class CollectionTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'index.html')
 
-    def test_collection(self):
-        title = "title of card"
-        des = "nothing in description"
-
-        TestCase.assertEqual()
+    def test_create_collection_get(self):
+        
