@@ -123,6 +123,3 @@ def fields(request):
         for key, value in request.POST.iteritems():
             errorMsg += "<br>" + key + " => " + value
     return HttpResponse('{"success": true, "error": "%s"}' % errorMsg, mimetype="application/json")
-        
-    
-    
