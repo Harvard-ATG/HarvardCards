@@ -32,17 +32,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="tests.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/apps/flash/tests.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="15" column="4" selection-start="595" selection-end="595" vertical-scroll-proportion="0.4473684" vertical-offset="0" max-vertical-offset="570">
-              <folding>
-                <element signature="e#0#36#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="forms.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/apps/flash/forms.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -52,10 +41,21 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="tests.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/apps/flash/tests.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="26" column="0" selection-start="1046" selection-end="1046" vertical-scroll-proportion="0.7754386" vertical-offset="0" max-vertical-offset="629">
+              <folding>
+                <element signature="e#0#36#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="collection.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/apps/flash/views/collection.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="99" column="84" selection-start="3691" selection-end="3751" vertical-scroll-proportion="0.0" vertical-offset="1113" max-vertical-offset="2057">
+            <state line="13" column="4" selection-start="522" selection-end="560" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2057">
               <folding />
             </state>
           </provider>
@@ -547,14 +547,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/apps/flash/views/collection.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="99" column="84" selection-start="3691" selection-end="3751" vertical-scroll-proportion="0.0" vertical-offset="1113" max-vertical-offset="2057">
+        <state line="13" column="4" selection-start="522" selection-end="560" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2057">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/apps/flash/tests.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="4" selection-start="595" selection-end="595" vertical-scroll-proportion="0.4473684" vertical-offset="0" max-vertical-offset="570">
+        <state line="26" column="0" selection-start="1046" selection-end="1046" vertical-scroll-proportion="0.7754386" vertical-offset="0" max-vertical-offset="629">
           <folding>
             <element signature="e#0#36#0" expanded="true" />
           </folding>
