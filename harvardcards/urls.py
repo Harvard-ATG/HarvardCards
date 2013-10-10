@@ -19,13 +19,11 @@ urlpatterns = patterns('',
     url(r'^card/create/$', 'harvardcards.apps.flash.views.card.create', name='createCard'),
     url(r'^card/fields/$', 'harvardcards.apps.flash.views.card.fields', name='cardFields'),
     url(r'^card/delete/$', 'harvardcards.apps.flash.views.card.delete', name='deleteCard'),
-    url(r'^card/fieldEdit/$', 'harvardcards.apps.flash.views.card.fieldEdit', name='editCardField')
+    url(r'^card/fieldEdit/$', 'harvardcards.apps.flash.views.card.fieldEdit', name='editCardField'),
     
-    
-    
-    #url(r'^login/$', 'django_openid_auth.views.login_begin', name='openid-login'),
-	#url(r'^login-complete/$', 'django_openid_auth.views.login_complete', name='openid-complete'),
-	#url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/',}, name='logout'),
+    url(r'^login/$', 'django_openid_auth.views.login_begin', name='openid-login'),
+    url(r'^login-complete/$', 'django_openid_auth.views.login_complete', name='openid-complete'),
+    url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/',}, name='logout'),
 	
 	# url(r'^$', 'HarvardCards.views.home', name='home'),
     # url(r'^HarvardCards/', include('harvardcards.foo.urls')),
