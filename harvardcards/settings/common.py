@@ -173,7 +173,7 @@ LOGGING = {
 }
 
 AUTHENTICATION_BACKENDS = (
-	'harvardcards.libs.auth.GoogleBackend',
+	#'libs.auth.GoogleBackend',
     'django_openid_auth.auth.OpenIDBackend',
 	'django.contrib.auth.backends.ModelBackend',
 )
