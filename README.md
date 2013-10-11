@@ -10,6 +10,10 @@
 - To install Pip, see [their instructions](http://www.pip-installer.org/en/latest/installing.html).
 
 ```sh
+pip install django-openid
+```
+
+```sh
 $ git clone git@github.com:Harvard-ATG/HarvardCards.git HarvardCards
 $ cd HarvardCards
 $ ./manage.py syncdb

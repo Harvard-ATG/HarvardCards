@@ -134,7 +134,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #'django_openid_auth',
+    'django_openid_auth',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -172,14 +172,14 @@ LOGGING = {
     }
 }
 
-#AUTHENTICATION_BACKENDS = (
-#	'harvardcards.libs.auth.GoogleBackend',
-#    'django_openid_auth.auth.OpenIDBackend',
-#	'django.contrib.auth.backends.ModelBackend',
-#)
-#OPENID_CREATE_USERS = True
-#OPENID_UPDATE_DETAILS_FROM_SREG = True
-#LOGIN_URL = '/login/'
-#LOGIN_REDIRECT_URL = '/'
-#LOGOUT_URL = '/logout/'
-#OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
+AUTHENTICATION_BACKENDS = (
+	#'libs.auth.GoogleBackend',
+    'django_openid_auth.auth.OpenIDBackend',
+	'django.contrib.auth.backends.ModelBackend',
+)
+OPENID_CREATE_USERS = True
+OPENID_UPDATE_DETAILS_FROM_SREG = True
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_URL = '/logout/'
+OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
