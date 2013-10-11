@@ -2,6 +2,8 @@ from django.db import models
 
 class Collection(models.Model):
     title = models.CharField(max_length=200)
+    def __unicode__(self):
+        return self.title
     description = models.TextField(blank=True)
     #users = models.ManyToManyField(User, through='UserCollection')
     def export(self):

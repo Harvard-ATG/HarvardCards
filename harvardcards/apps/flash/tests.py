@@ -26,4 +26,3 @@ class CollectionTest(TestCase):
         self.assertTemplateUsed(response, 'index.html')
 
     def test_create_collection_get(self):
-        
