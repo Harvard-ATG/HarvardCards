@@ -48,6 +48,8 @@ class Users_Collections(models.Model):
 
 class Deck(models.Model):
     title = models.CharField(max_length=200)
+    def __unicode__(self):
+        return self.title
     collection = models.ForeignKey(Collection)
     #owner = models.ForeignKey(User)
     cards = models.ManyToManyField(Card, through='Decks_Cards')

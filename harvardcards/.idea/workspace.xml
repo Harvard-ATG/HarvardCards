@@ -23,28 +23,30 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="models.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="models.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/apps/flash/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="19" selection-start="1090" selection-end="1090" vertical-scroll-proportion="0.95454544" vertical-offset="153" max-vertical-offset="1207">
+            <state line="8" column="21" selection-start="296" selection-end="296" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1241">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="common.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/settings/common.py">
+      <file leaf-file-name="tests.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/apps/flash/tests.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="85" column="37" selection-start="2694" selection-end="2694" vertical-scroll-proportion="0.0" vertical-offset="1272" max-vertical-offset="3230">
-              <folding />
+            <state line="53" column="60" selection-start="2327" selection-end="2327" vertical-scroll-proportion="0.48114902" vertical-offset="633" max-vertical-offset="1190">
+              <folding>
+                <element signature="e#0#36#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="urls.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/urls.py">
+      <file leaf-file-name="create.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/collections/create.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="100" selection-start="1529" selection-end="1529" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="748">
+            <state line="103" column="40" selection-start="2383" selection-end="2383" vertical-scroll-proportion="24.846153" vertical-offset="2397" max-vertical-offset="7293">
               <folding />
             </state>
           </provider>
@@ -53,19 +55,19 @@
       <file leaf-file-name="collection.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/apps/flash/views/collection.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="4" selection-start="283" selection-end="302" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2210">
-              <folding />
+            <state line="33" column="0" selection-start="1236" selection-end="1236" vertical-scroll-proportion="0.0" vertical-offset="510" max-vertical-offset="2227">
+              <folding>
+                <element signature="e#0#36#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="admin.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/apps/flash/admin.py">
+      <file leaf-file-name="forms.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/apps/flash/forms.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="0" selection-start="158" selection-end="158" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="289">
-              <folding>
-                <element signature="e#0#32#0" expanded="true" />
-              </folding>
+            <state line="19" column="26" selection-start="514" selection-end="514" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="357">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -85,11 +87,11 @@
         <option value="$PROJECT_DIR$/apps/flash/test1" />
         <option value="$PROJECT_DIR$/settings/common.py" />
         <option value="$PROJECT_DIR$/apps/flash/test1.py" />
-        <option value="$PROJECT_DIR$/apps/flash/views/collection.py" />
-        <option value="$PROJECT_DIR$/apps/flash/tests.py" />
         <option value="$PROJECT_DIR$/urls.py" />
         <option value="$PROJECT_DIR$/apps/flash/admin.py" />
         <option value="$PROJECT_DIR$/apps/flash/models.py" />
+        <option value="$PROJECT_DIR$/apps/flash/views/collection.py" />
+        <option value="$PROJECT_DIR$/apps/flash/tests.py" />
       </list>
     </option>
   </component>
@@ -140,6 +142,52 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="harvardcards" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="harvardcards" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="harvardcards" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="harvardcards" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="harvardcards" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="collections" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="harvardcards" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="harvardcards" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -387,15 +435,15 @@
     <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24962406" sideWeight="0.67114097" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32885906" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32885906" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -419,23 +467,30 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/apps/flash/views/collection.py">
       <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="4" selection-start="283" selection-end="302" vertical-scroll-proportion="0.0" vertical-offset="136" max-vertical-offset="2261">
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apps/flash/views/collection.py">
+      <provider selected="true" editor-type-id="text-editor">
         <state line="117" column="23" selection-start="4369" selection-end="4369" vertical-scroll-proportion="0.0" vertical-offset="1691" max-vertical-offset="2261">
-          <folding />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/apps/flash/views/deck.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="75" column="4" selection-start="2908" selection-end="2908" vertical-scroll-proportion="0.0" vertical-offset="807" max-vertical-offset="1581">
-          <folding />
-        </state>
+        <state line="75" column="4" selection-start="2908" selection-end="2908" vertical-scroll-proportion="0.0" vertical-offset="807" max-vertical-offset="1581" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/apps/flash/views/card.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="92" column="2" selection-start="3528" selection-end="3528" vertical-scroll-proportion="0.0" vertical-offset="153" max-vertical-offset="2176">
-          <folding />
-        </state>
+        <state line="92" column="2" selection-start="3528" selection-end="3528" vertical-scroll-proportion="0.0" vertical-offset="153" max-vertical-offset="2176" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/settings/googleappengine.py">
@@ -445,9 +500,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/apps/flash/views/card.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="21" selection-start="744" selection-end="744" vertical-scroll-proportion="0.0" vertical-offset="153" max-vertical-offset="2176">
-          <folding />
-        </state>
+        <state line="22" column="21" selection-start="744" selection-end="744" vertical-scroll-proportion="0.0" vertical-offset="153" max-vertical-offset="2176" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/settings/__init__.py">
@@ -455,30 +508,9 @@
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="570" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/collections/create.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="103" column="40" selection-start="2383" selection-end="2383" vertical-scroll-proportion="0.32015067" vertical-offset="1581" max-vertical-offset="7293" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/apps/flash/forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="570">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/apps/flash/tests.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="45" selection-start="82" selection-end="82" vertical-scroll-proportion="0.015789473" vertical-offset="8" max-vertical-offset="578">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/apps/flash/views/deck.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="75" column="4" selection-start="2908" selection-end="2908" vertical-scroll-proportion="0.8210526" vertical-offset="807" max-vertical-offset="1581">
-          <folding />
-        </state>
+        <state line="75" column="4" selection-start="2908" selection-end="2908" vertical-scroll-proportion="0.8210526" vertical-offset="807" max-vertical-offset="1581" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/urls.py">
@@ -488,20 +520,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/apps/flash/admin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="0" selection-start="158" selection-end="158" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="289">
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/settings/dev.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="570">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="570" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/settings/common.py">
@@ -511,17 +532,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/apps/flash/views/collection.py">
+    <entry file="file://$PROJECT_DIR$/apps/flash/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="4" selection-start="283" selection-end="302" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2210">
+        <state line="8" column="21" selection-start="296" selection-end="296" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1241">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/apps/flash/models.py">
+    <entry file="file://$PROJECT_DIR$/templates/collections/create.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="19" selection-start="1090" selection-end="1090" vertical-scroll-proportion="0.95454544" vertical-offset="153" max-vertical-offset="1207">
+        <state line="103" column="40" selection-start="2383" selection-end="2383" vertical-scroll-proportion="24.846153" vertical-offset="2397" max-vertical-offset="7293">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apps/flash/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="26" selection-start="514" selection-end="514" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="357">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apps/flash/views/collection.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="33" column="0" selection-start="1236" selection-end="1236" vertical-scroll-proportion="0.0" vertical-offset="510" max-vertical-offset="2227">
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apps/flash/tests.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="53" column="60" selection-start="2327" selection-end="2327" vertical-scroll-proportion="0.48114902" vertical-offset="633" max-vertical-offset="1190">
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
