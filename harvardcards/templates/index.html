@@ -45,8 +45,54 @@
             
             <div id="content"><!-- content (start) -->
             
-            	<div class="courseWrapper"><!-- courseWrapper (start) -->
-                    <div class="courseHeader"><!-- courseHeader (start) -->
+				<div class="courseWrapper addCourseWrapper"><!-- courseWrapper (start) -->
+					<div class="courseHeader"><!-- courseHeader (start) -->
+						<h2>Enter course name</h2>
+						<ul class="adminMenu">
+							<li><a href="#">Edit</a></li>
+						</ul>
+						<ul class="adminMenu adminMenuRight">
+							<li><a href="#">Cancel</a></li>
+						</ul>
+					</div><!-- courseHeader (end) -->
+                    <!-- slider (start) -->
+                     <div class="slider">
+                     	<ul class="templateDecks"><!-- templateDecks(start) -->
+                             <li class="deck"><!-- deck (start) -->
+                                 <a class="template" href="#">
+                                 	<h2>Template 1</h2>
+                                 </a>
+                             </li><!-- deck (end) -->
+                            
+                             <li class="deck"><!-- deck (start) -->
+                                 <a class="template" href="#">
+                                 	<h2>Template 2</h2>
+                                 </a>
+                             </li><!-- deck (end) -->
+                            
+                             <li class="deck"><!-- deck (start) -->
+                                 <a class="template" href="#">
+                                 	<h2>Template 3</h2>
+                                 </a>
+                             </li><!-- deck (end) -->
+                            
+                         </ul><!-- templateDecks (end) -->
+                     </div>
+                     <!-- slider (end) -->
+                    
+                     <!-- sliderNav (start) -->
+                     <div class="sliderNav">
+                         <ul class="sliderNavNextPrev">
+                             <li class="sliderPrev"><a href="javascript:sliders[0].goToPrev()">&laquo; Prev</a></li>
+                             <li class="sliderNext"><a href="javascript:sliders[0].goToNext()">Next &raquo;</a></li>
+                             <!--li><a href="javascript:sliders[0].respond()">.respond()</a></li-->
+                         </ul>
+ 					</div>
+                     <!-- sliderNav (end) -->
+                 </div><!-- courseWrapper (end) -->
+
+                 <div class="courseWrapper"><!-- courseWrapper (start) -->
+                     <div class="courseHeader"><!-- courseHeader (start) -->
                         <h2>Course 2</h2>
                         <ul class="adminMenu">
                             <li><a href="#">Edit</a></li>
@@ -153,8 +199,9 @@
 <script>
 require(['views/CollectionList'], function(CollectionList){		
 		
-	//var collections = '{{collections}}';
-	
+	var collectionList = new CollectionList({
+		add_collection_button: $('#addAcourse'),
+	});
 
 
 });
