@@ -10,7 +10,7 @@
 - To install Pip, see [their instructions](http://www.pip-installer.org/en/latest/installing.html).
 
 ```sh
-pip install django-openid
+pip install -r requirements.txt
 ```
 
 ```sh
