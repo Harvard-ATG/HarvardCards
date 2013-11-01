@@ -2,6 +2,7 @@ define(['jquery', 'lodash'], function($, _){
 
 	var CollectionList = function(config){
 		this.config = config;
+
 		this.init();
 	};
 	
@@ -11,7 +12,10 @@ define(['jquery', 'lodash'], function($, _){
 		},
 		
 		initCreateButton: function(){
-			this.config.add_collection_button.click(function(){
+			var that = this;
+			that.config.add_collection_button.click(function(){
+				// show the collection
+				that.config.add_collection_content.show();
 				
 
 			});
