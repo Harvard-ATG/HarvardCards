@@ -223,7 +223,9 @@ a#addCard{
 	display: inline-block;
 	margin-bottom: 1em;
 }
-
+.addCourseWrapper{
+	display: none;
+}
 .courseHeader h2{
 	float: left;
 }
