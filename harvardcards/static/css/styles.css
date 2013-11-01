@@ -61,25 +61,54 @@ table {
 body{
 	background: transparent url('/static/img/backgrundTile.png') left top;
 	font-family: 'Vollkorn', Times, serif;
+	color: #4c4c4c;
 }
 
 /* FONTS */
-h1, h2, h3, h4, a#addAcourse{
+h1, h2, h3, h4
+, a#addAcourse
+, a#addCard{
 	font-family: 'League Gothic', Arial, sans-serif;
 }
 	h1{ font-size: 3em; }
 	h1#appTitle { padding: 0.25em 0; }
 	
 	h2{ font-size: 1.875em; }
+	li.deck h2 { color: #293352; }
+	
+	/* fonts for deck view/review course headers only (start) */
+	h2.courseTitle{
+		background: transparent url('/static/img/courseTitleBreadCrumb.png') no-repeat right 50%;
+		display: inline-block;
+		float: none !important;
+		padding-right: 0.5em;
+		margin-right: 0.25em;
+	}
+	
+	.courseHeader h3 {
+		display:inline-block;
+		font-size: 1.5625em;
+		color: #a51c30;
+	}
+	/* fonts for deck view/review course headers only (end) */
 
+#singleCardHolder
+, #singleCardHolder h1{
+	font-family: 'Vollkorn', Times, serif;
+}
 /* FONTS (end) */
 
 #fc_headerWrapper{
 	background-color:#1e1e1e;
 }
 
+	#fc_header img{
+		float: left;
+	}
+
 .sectionWrapper{
 	width: 100%;
+	float: left;
 	display: inline-block;
 }
 
@@ -166,7 +195,8 @@ h1, h2, h3, h4, a#addAcourse{
 		}
 /********** main nav (end) *************/		
 
-a#addAcourse{
+a#addAcourse
+, a#addCard{
 	text-align: center;
 	text-decoration: none;
 	display: block;
@@ -179,6 +209,12 @@ a#addAcourse{
 	padding: 0.25em 10%;
 }
 
+a#addCard{
+	margin: 0;
+	padding: 1em 2%;
+	width: 8%;
+	float: left;
+}
 /********** hp course ROW (start) ***********/
 .courseWrapper{ display: inline-block; width: 100%; margin-bottom: 1em;}	
 .courseHeader{
@@ -187,22 +223,43 @@ a#addAcourse{
 	display: inline-block;
 	margin-bottom: 1em;
 }
-
+.addCourseWrapper{
+	display: none;
+}
 .courseHeader h2{
 	float: left;
 }
 
 	/* decks on homepage (start)*/
-	ul.courseDecks { display: inline-block; width: 100%; }
+	ul.courseDecks
+	, ul.templateDecks { display: inline-block; width: 100%; }
 	ul.courseDecks li{
 		background: #eeeded url('/static/img/deckBkg.jpg') no-repeat 50% 50%;
 		text-align: center;
 		border: solid 1px #e1dfdf;
 		position: relative;
 	}
+	/* template deck (start) */
+	ul.templateDecks li{
+		background: none;
+		text-align: center;
+		border: dashed 2px #838383;
+		position: relative;
+	}
+		a.template{
+			display: inline-block;
+			width: 100%;
+			height: 167px;
+			text-decoration: none;
+		}
+			a.template:hover h2{
+				color: #A51C30;
+			}
+	/* template deck (end) */
 		li.deck { height: 167px; } 
 		
-		ul.courseDecks h2 { padding: 0.25em 0; }
+		ul.courseDecks h2
+		, ul.templateDecks h2 { padding: 0.25em 0; }
 		ul.courseDecks h3{display: inline;}
 		p.lastUpdated { font-style: italic; margin-bottom: 1em; }
 	
@@ -257,8 +314,6 @@ a#addAcourse{
 			
 		.openDeckMenu{
 			width: 100%;
-			height: 134px;
-			margin-top: -78px;
 			z-index: 1;
 			position: relative;
 			border-top: solid 1px #e1dfdf;
@@ -268,11 +323,18 @@ a#addAcourse{
 
 /********** hp course ROW (end) *************/
 /********** admin menus i.e edit/delete/share (start) ***********/
-ul.adminMenu {
+ul.adminMenu 
+, ul.sliderNavNextPrev{
 	display: inline-block;
 	float: left;
 	margin-left: 1em;
 }
+
+	ul.sliderNavNextPrev{
+		width: 100%;
+		margin-left: 5%;
+		margin-right: 5%;
+	}
 
 	ul.adminMenuRight{
 		float: right;
@@ -285,8 +347,11 @@ ul.adminMenu {
 	}
 		ul.adminMenuRight li { margin: 0; } /*no margin needed for right hand menu*/
 	
-	ul.adminMenu li a, 
-	.adminMenuBtn{
+	ul.adminMenu li a
+	, .adminMenuBtn
+	, li.sliderPrev a
+	, li.sliderNext a
+	, a.reveal{
 		display: inline-block;
 		padding: 0.5em 1em;
 		color: #444444;
@@ -303,11 +368,161 @@ ul.adminMenu {
 		background-image:      -o-linear-gradient(top, #f1f1f1, #f5f5f5);
 		border: solid 1px #dcdcdc;
 	}
+		li.sliderPrev {
+			float: left;
+		}
+		li.sliderNext {
+			float: right;
+		}
 	
 /********** admin menus i.e edit/delete/share (end) *************/
 
+/********** cards inside a deck view (start) *************/
+#cardSlider{
+	display: inline-block;
+	float: left;
+	background-color: #f3f3f1;
+	border: solid 1px #e1dfdf;
+	padding: 0.5em 4.976851851852%;
+	position: relative;
+}
 
+.cardHolder{
+	display: inline-block;
+	width: 100%;
+	overflow: hidden;
+	float: left;
+}
 
+ul#cards{
+	display: inline-block;
+	float: left;
+	width: 100%;
+	position: relative;
+	-webkit-transition: 0.5s left;
+	-moz-transition: 0.5s left;
+	-ms-transition: 0.5s left;
+	-o-transition: 0.5s left;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+	ul#cards li{
+		display: inline-block;
+		width: 19%;
+		/*background-color: green;*/
+		margin-right: 1%;
+		float: left;
+		border:solid 6px #d2d2d2
+	}
+	
+		a.card {
+			display: block;
+			width: 100%;
+			padding: 0.8em 0%;
+			height: 4.3375em;
+			text-align: center;
+			color: #a51c30;
+			text-decoration: none;
+		}
+		
+		ul#cards li:hover{
+			border: solid 0.375em #4d4d4d;
+		}
+		
+div.deckNav{
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	padding-top: 0.5em;
+}
+
+	ul.deckNavNextPrev li{
+		display: inline-block;
+	}
+	
+	li.deckPrev
+	, div.deckPrev{
+		float: left;
+		position: absolute;
+		top: 0;
+		left: 0;
+		padding-top: 0.5em;
+	}
+	
+		div.deckPrev a:hover
+		, div.deckNext a:hover{
+			background-color: #d2d2d2;
+		}
+	
+		li.deckPrev a
+		, div.deckPrev a{				
+			background: transparent url('/static/img/deckNavPrev.png') no-repeat center 50%;
+			text-indent: -30000px;
+			display: inline-block;
+			height: 106px;
+			width: 40px;
+		}
+	
+	li.deckNext
+	, div.deckNext{
+		float: right;
+		position: absolute;
+		top: 0;
+		right: 0;
+		padding-top: 0.5em;
+	}
+	
+		li.deckNext a
+		, div.deckNext a{
+			background: transparent url('/static/img/courseTitleBreadCrumb.png') no-repeat center 50%;
+			text-indent: -30000px;
+			display: inline-block;
+			height: 106px;
+			width: 40px;
+		}
+		
+/*full card (start) */
+#singleCardHolder{
+	width: 94.5%;
+	display: inline-block;
+	background: #f3f3f1;
+	float: left;
+	padding: 2.5%;
+	margin-top: 1em;
+	border: solid 1px #eae9e8;
+}
+	.showRevealWrapper{
+		width: 98%;
+		display: inline-block;
+		background-color: #fff;
+		float: left;
+		text-align: center;
+		padding: 1.25em 1%;
+	}
+	
+	.hideRevealHr{
+		width: 100%;
+		background: transparent url('/static/img/hideRevealLine.png') repeat left top;
+		display: inline-block;
+		float: left;
+		text-align: center;
+		padding: 0.25em 0;
+	}
+	
+	.hide{
+		display: none;
+	}
+	
+	.show{
+		display: block;
+	}
+/*full card (end) */
+
+/********** cards inside a deck view (end) *************/
 @media screen and (min-width: 320px){
 /* 
 * iPhone portrait
@@ -324,7 +539,8 @@ ul.adminMenu {
 		/*background-color:#990066;*/
 	}
 	
-	#navigation{ display: none; }
+	#navigation
+	, a#addCard { display: none; }
 	
 	#content{	
 		width: 100%;
@@ -335,12 +551,13 @@ ul.adminMenu {
 		width: 90%;
 		padding: 0;
 		display: inline-block;
-		margin: 0 5%;
+		/*margin: 0 5%;*/
+		float: left;
 	}
 	
 	.arrow{
-		width: 100%;
-		border-left: 0;
+		width: 25%;/* today */
+		border-left: solid 1px #e1dfdf;
 		padding: 1em 0;
 	}
 	
@@ -356,31 +573,50 @@ ul.adminMenu {
 	}
 	
 	/********** slider (start) *************/
-	/*.slider {
+	
+	.slider {
 	  width: 90%; 
-	  height: 300px;
+	  /*height: 300px;*/
 	  overflow: hidden;
 	  margin: 0 5%;
-	}*/
+	}
 	  .slider > ul {
-		/* styled by JS to match the added width and height of all <li>’s */
-		/*position: relative;
+		/* styled by JS to match the added width and height of all <li>â€™s */
+		position: relative;
 		-webkit-transition: 0.5s left;
 		-moz-transition: 0.5s left;
 		-ms-transition: 0.5s left;
 		-o-transition: 0.5s left;
 	 
 		list-style: none;
-		margin: 0; padding: 0;*/
+		margin: 0; padding: 0;
 	  }
 		.slider > ul > li
 		, li.deck {
 		  /*float: left;
-		  width: 400px !important; 
+		  width: 400px; 
 		  height: 300px;
-		  margin: 0 !important;*/
+		  margin: 0 ;*/
 		}
+		
+	.openDeckMenu{
+		margin-top: -88px;
+		height: 144px;
+	}
+	
+	.sliderNav{
+		display: inline-block;
+		width: 90%;
+		margin-top: 1em;
+	}
 	/********** slider (end) *************/
+	
+	
+#cardSlider{
+	margin-left: 0;
+	width: 90.046296296296%;
+}
+	
 }
 @media screen and (min-width: 480px){
 /* 
@@ -391,7 +627,8 @@ ul.adminMenu {
 		padding: 0 1%;
 		width: 98%;
 	}
-	#navigation{ display: none; }
+	#navigation
+	, a#addCard { display: none; }
 	
 	#content{	
 		width: 100%;
@@ -402,11 +639,11 @@ ul.adminMenu {
 		width: 90%;
 		padding: 0;
 		display: inline-block;
-		margin: 0 5%;
+		/*margin: 0 5%;*/
 	}
 	
 	.arrow{
-		width: 100%;
+		width: 25%;/* today */
 		padding: 1em 0;
 	}
 	
@@ -420,6 +657,24 @@ ul.adminMenu {
 		padding: 0 0 0.25em 0;
 		display: inline-block;
 	}
+	
+	.sliderNav { 
+		display: inline-block;
+		width: 90%;
+		margin-top: 1em;
+	}
+	
+	.openDeckMenu{
+		margin-top: -88px;
+		height: 144px;
+	}
+	
+	
+#cardSlider{
+	margin-left: 0;
+	width: 90.046296296296%;
+}
+
 }
 @media screen and (min-width: 768px){
 /* 
@@ -436,7 +691,8 @@ ul.adminMenu {
 		display: block;
 	}
 	
-	#navigation { display: none; }
+	#navigation
+	, a#addCard { display: none; }
 	
 	#content{	
 		width: 100%;
@@ -479,6 +735,24 @@ ul.adminMenu {
 		display: inline-block;
 		margin: 0;
 	}
+	
+	.sliderNav { 
+		display: inline-block; 
+		width: 90%;
+		margin-top: 1em;
+	}
+	
+	.openDeckMenu{
+		margin-top: -78px;
+		height: 134px;
+	}
+	
+
+#cardSlider{
+	margin-left: 0;
+	width: 90.046296296296%;
+}
+
 }
 @media screen and (min-width: 1024px){
 /* 
@@ -495,16 +769,16 @@ ul.adminMenu {
 		display: block;
 	}
 	
-	#navigation {
-		display: inline-block;
-	}
+	#navigation
+	, a#addCard { display: inline-block; }
 	
 	#content{	
 		width: 80.333333333333%;
 		padding-left: 3%;
 	}
 	
-	ul.courseDecks li{
+	ul.courseDecks li
+	, ul.templateDecks li{
 		width: 21.744791666667%;
 		margin: 0 3.5% 1em 0;
 		display: inline-block;
@@ -547,6 +821,20 @@ ul.adminMenu {
 		display: inline-block;
 		margin: 0;
 	}
+	
+	.sliderNav { display: none; }
+	
+	.openDeckMenu{
+		margin-top: -78px;
+		height: 134px;
+	}
+
+
+#cardSlider{
+	margin-left: 1.634320735444%;
+	width: 75.647090735224%;
+}
+
 }
 
 @media screen and (min-width: 1280px){
@@ -558,7 +846,7 @@ ul.adminMenu {
 	/*#fc_header { background-color: red; }*/
 	
 	.section{
-		padding: 0 16px;
+		/*padding: 0 16px;*/
 		width: 1253px;
 		margin: 0 auto;
 	}
@@ -572,16 +860,16 @@ ul.adminMenu {
 		/*background-color:#990066;*/
 	}
 	
-	#navigation {
-		display: inline-block;
-	}
+	#navigation
+	, a#addCard { display: inline-block; }
 	
 	#content{	
 		width: 80.333333333333%;
 		padding-left: 3%;
 	}
 	
-	ul.courseDecks li{
+	ul.courseDecks li
+	, ul.templateDecks li{
 		width: 21.744791666667%;
 		margin: 0 3.5% 1em 0;
 		display: inline-block;
@@ -607,5 +895,12 @@ ul.adminMenu {
 		padding: 0 0 0.25em 0;
 		margin: 0;
 		display: inline-block;
+	}
+	
+	.sliderNav { display: none; }
+	
+	.openDeckMenu{
+		margin-top: -78px;
+		height: 134px;
 	}
 }
