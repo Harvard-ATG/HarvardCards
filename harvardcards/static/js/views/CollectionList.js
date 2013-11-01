@@ -12,6 +12,7 @@ define(['jquery', 'lodash', 'models/Collection'], function($, _, Collection){
 			this.initNewCollection();
 			this.initCreateButton();
 			this.initTitleEditable();
+			this.initCancelButton();
 		},
 		
 		initNewCollection: function(){
@@ -28,12 +29,21 @@ define(['jquery', 'lodash', 'models/Collection'], function($, _, Collection){
 			});
 		},
 		
+		initCancelButton: function(){
+			var that = this;
+			that.config.collection_cancel.click(function(){
+				// show the collection
+				that.config.add_collection_content.hide();
+			});
+		},
+		
 		initTitleEditable: function(){
 			var that = this;
 			that.config.add_collection_title.editable(function(value, settings){
 				return value;
 			}, { 
 				tooltip   : 'Click to edit...',
+				select: true,
 				style: 'inherit',
 				onblur: 'submit',
 				callback: function(value, settings){
