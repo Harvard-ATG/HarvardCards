@@ -9,6 +9,12 @@ from django.forms.formsets import formset_factory
 from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
 
+def test1(request):
+    return render(request, "decks/test1.html")
+
+def test2(request):
+    return render(request, "decks/test2.html")
+
 def index(request, deck_id=None):
     collections = Collection.objects.all()  
     if not deck_id:
