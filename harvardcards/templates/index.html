@@ -1,76 +1,216 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 <script src="{{ STATIC_URL }}js/collectionlist.js"></script>
 <script src="{{ STATIC_URL }}js/decklist.js"></script>
+<script src="{{ STATIC_URL }}js/lib.js"></script>
+<link href='http://fonts.googleapis.com/css?family=Vollkorn' rel='stylesheet' type='text/css'>
+<link href='{{ STATIC_URL }}css/styles.css' rel='stylesheet' type='text/css'>
 
-<div class="row-fluid">
-	<nav class="span4 collection-sidenav">
-		<ul class="nav nav-list affix collection-list">
-			{% for collection in collections %}
-			<li class="collection-list-item" data-id="{{ collection.id }}"><a href="#course-{{ collection.id }}">{{ collection.title }}<i class="icon-chevron-right pull-right"></i></a></li>
-			{% endfor %}
-			<li class="no-collections-item {% if collections %}hide{% endif %}"><a href="#">No Collections</a></li>
-			<li>
-				<ul class="unstyled inline">
-					<li><button id="add_collection_button" class="btn">+</button></li>
-					<li><button id="delete_collection_confirm_button" class="btn">-</button></li>
-					<li><button class="btn">++</button></li>
-					<li><button id="edit_collection_button" class="btn">E</button></li>
-				</ul>
-			</li>
-		</ul>
+
+<div id="fc_headerWrapper" class="sectionWrapper"><!-- sectionWrapper (start) -->
+	<div id="fc_header" class="section"><!-- section (start) -->
+    	<img src="/static/img/harvardLogo.png" alt="Harvard University" title="Harvard University" border="0" />
+        <ul id="userInfo">
+        	<li><span>Roderick Morales<span></li>
+            <li><a href="#">Sign out</a></li>
+        </ul>
+    </div><!-- section (end) -->
+</div><!-- sectionWrapper (end) -->
+
+<div class="sectionWrapper"><!-- sectionWrapper (start) -->
+	<div class="section"><!-- section (start) -->
+    	
+        <div class="contentWrapper"><!-- contentWrapper (start) -->
+        
+	    	<h1 id="appTitle">HARVARD CARDS</h1>
+    		<div id="navigation"><!-- navigaton (start) -->
+            	<a href="#" id="addAcourse">Add a course</a>
+            	<nav>
+                	<ul>
+                    	<li><a href="#">Home</a></li>
+                        <li>
+                        	<a href="#" class="active">Course 1</a>
+                        	<ul>
+                            	<li><a href="#">Week 4</a></li>
+                                <li><a href="#">Week 3</a></li>
+                                <li><a href="#" class="active">Week 2 with a really long title for the week</a></li>
+                                <li><a href="#">Week 1</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Course 2 and very long title for a course</a></li>
+                        <li><a href="#">Custom course</a></li>
+                    </ul>
+                </nav>
+            </div><!-- navigaton (end) -->
+            
+            <div id="content"><!-- content (start) -->
+            
+				<div class="courseWrapper addCourseWrapper"><!-- courseWrapper (start) -->
+					<div class="courseHeader"><!-- courseHeader (start) -->
+						<h2>Enter course name</h2>
+						<ul class="adminMenu">
+							<li><a href="#">Edit</a></li>
+						</ul>
+						<ul class="adminMenu adminMenuRight">
+							<li><a href="#" id="collection_cancel">Cancel</a></li>
+						</ul>
+					</div><!-- courseHeader (end) -->
+                    <!-- slider (start) -->
+                     <div class="slider">
+                     	<ul class="templateDecks"><!-- templateDecks(start) -->
+                             <li class="deck"><!-- deck (start) -->
+                                 <a class="template" href="#">
+                                 	<h2>Template 1</h2>
+                                 </a>
+                             </li><!-- deck (end) -->
+                            
+                             <li class="deck"><!-- deck (start) -->
+                                 <a class="template" href="#">
+                                 	<h2>Template 2</h2>
+                                 </a>
+                             </li><!-- deck (end) -->
+                            
+                             <li class="deck"><!-- deck (start) -->
+                                 <a class="template" href="#">
+                                 	<h2>Template 3</h2>
+                                 </a>
+                             </li><!-- deck (end) -->
+                            
+                         </ul><!-- templateDecks (end) -->
+                     </div>
+                     <!-- slider (end) -->
+                    
+                     <!-- sliderNav (start) -->
+                     <div class="sliderNav">
+                         <ul class="sliderNavNextPrev">
+                             <li class="sliderPrev"><a href="javascript:sliders[0].goToPrev()">&laquo; Prev</a></li>
+                             <li class="sliderNext"><a href="javascript:sliders[0].goToNext()">Next &raquo;</a></li>
+                             <!--li><a href="javascript:sliders[0].respond()">.respond()</a></li-->
+                         </ul>
+ 					</div>
+                     <!-- sliderNav (end) -->
+                 </div><!-- courseWrapper (end) -->
+
+                 <div class="courseWrapper"><!-- courseWrapper (start) -->
+                     <div class="courseHeader"><!-- courseHeader (start) -->
+                        <h2>Course 2</h2>
+                        <ul class="adminMenu">
+                            <li><a href="#">Edit</a></li>
+                            <li><a href="#">Share</a></li>
+                        </ul>
+                        <ul class="adminMenu adminMenuRight">
+                            <li><a href="#">Delete</a></li>
+                        </ul>
+                    </div><!-- courseHeader (end) -->
+                    <div class="slider"><!-- slider (start) -->
+                    </div>
+                    <div class="noslider"><!-- noslider (start) -->
+                        <ul class="courseDecks"><!-- courseDecks(start) -->
+                            <li class="deck"><!-- deck (start) -->
+                                <h2>Week 5</h2>
+                                <p><h3>15</h3> Cards</p>
+                                <p>Last modified</p>
+                                <p class="lastUpdated">Today</p>
+                                <a href="#" class="arrow arrowExpand"><img src="/static/img/arrowUp.png"></a>
+                                <ul class="deckMenu">
+                                    <li class="arrowContainer"><a href="#" class="arrow arrowCollapse"><img src="/static/img/arrowDown.png"></a></li>
+                                    <li><a class="viewReview" href="#">View</a></li>
+                                    <li><a class="viewReview" href="#">Review</a></li>
+                                    <li><a class="adminMenuBtn" href="#">Edit</a></li>
+                                    <li><a class="adminMenuBtn" href="#">Delete</a></li>
+                                </ul>
+                            </li><!-- deck (end) -->
+                            
+                            <li class="deck"><!-- deck (start) -->
+                                <h2>Week 4</h2>
+                                <p><h3>15</h3> Cards</p>
+                                <p>Last modified</p>
+                                <p class="lastUpdated">Today</p>
+                                <a href="#" class="arrow arrowExpand"><img src="/static/img/arrowUp.png"></a>
+                                <ul class="deckMenu">
+                                    <li class="arrowContainer"><a href="#" class="arrow arrowCollapse"><img src="/static/img/arrowDown.png"></a></li>
+                                    <li><a class="viewReview" href="#">View</a></li>
+                                    <li><a class="viewReview" href="#">Review</a></li>
+                                </ul>
+                            </li><!-- deck (end) -->
+                            
+                            <li class="deck"><!-- deck (start) -->
+                                <h2>Week 3</h2>
+                                <p><h3>15</h3> Cards</p>
+                                <p>Last modified</p>
+                                <p class="lastUpdated">Today</p>
+                                <a href="#" class="arrow arrowExpand"><img src="/static/img/arrowUp.png"></a>
+                                <ul class="deckMenu">
+                                    <li class="arrowContainer"><a href="#" class="arrow arrowCollapse"><img src="/static/img/arrowDown.png"></a></li>
+                                    <li><a class="viewReview" href="#">View</a></li>
+                                    <li><a class="viewReview" href="#">Review</a></li>
+                                </ul>
+                            </li><!-- deck (end) -->
+                            
+                            <li class="deck"><!-- deck (start) -->
+                                <h2>Week 2</h2>
+                                <p><h3>15</h3> Cards</p>
+                                <p>Last modified</p>
+                                <p class="lastUpdated">Today</p>
+                                <a href="#" class="arrow arrowExpand"><img src="/static/img/arrowUp.png"></a>
+                                <ul class="deckMenu">
+                                    <li class="arrowContainer"><a href="#" class="arrow arrowCollapse"><img src="/static/img/arrowDown.png"></a></li>
+                                    <li><a class="viewReview" href="#">View</a></li>
+                                    <li><a class="viewReview" href="#">Review</a></li>
+                                </ul>
+                            </li><!-- deck (end) -->
+                            
+                            <li class="deck"><!-- deck (start) -->
+                                <h2>Week 1</h2>
+                                <p><h3>15</h3> Cards</p>
+                                <p>Last modified</p>
+                                <p class="lastUpdated">Today</p>
+                                <a href="#" class="arrow arrowExpand"><img src="/static/img/arrowUp.png"></a>
+                                <ul class="deckMenu">
+                                    <li class="arrowContainer"><a href="#" class="arrow arrowCollapse"><img src="/static/img/arrowDown.png"></a></li>
+                                    <li><a class="viewReview" href="#">View</a></li>
+                                    <li><a class="viewReview" href="#">Review</a></li>
+                                </ul>
+                            </li><!-- deck (end) -->
+                            
+                        </ul><!-- courseDecks (end) -->
+                    </div><!-- noslider (end) -->
+                    <!--<script>
+					var sliders = [];
+					$('.slider').each(function() {
+						sliders.push(new Slider(this))
+					});
+					</script>
+                      <ul>
+                        <li><a href="javascript:sliders[0].goToPrev()">.goToPrev()</a></li>
+                        <li><a href="javascript:sliders[0].goToNext()">.goToNext()</a></li>
+                      </ul>-->
+
+                </div><!-- courseWrapper (end) -->
+            
+            </div><!-- content (end) -->
+            
+        </div><!-- contentWrapper (end) -->
+        
+    </div><!-- section (end) -->
+</div><!-- sectionWrapper (end) -->
+
+
+<script>
+require(['views/CollectionList'], function(CollectionList){		
 		
-		
-		<div id="collectionDeleteModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="collectionDeleteModalLabel" aria-hidden="true">
-		  <div class="modal-header">
-		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		    <h3 id="collectionDeleteModalLabel">Confirm Delete</h3>
-		  </div>
-		  <div class="modal-body">
-		    <p>Are you sure you want to delete this Course?</p>
-		  </div>
-		  <div class="modal-footer">
-		    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-		    <button id="delete_collection_button" class="btn btn-error">Delete Course</button>
-		  </div>
-		</div>
-	</nav>
-	
-	<section class="span8 collection-decks-section">
-		<ul class="unstyled">
-			{% for collection in collections %}
-			<li id="course-{{ collection.id }}">
-				<div class="cds-top">
-					<h5>{{ collection.title }}</h5>
-					<em>{{ collection.description }}</em>
-				</div>
-				<div class="cds-bottom">
-					<ul class="inline">
-						<li class="new-deck-btn" data-collection_id={{collection.id}}>
-							<div class="new-deck-btn-text ">+ Add new Deck</div>
-						</li>
-						{% for deck in collection.deck_set.all %}
-						<li class="deck" data-deck_id={{deck.id}}>
-							<div class="deck-text" data-deck_id={{deck.id}}>{{ deck.title }}</div>
-							<div class="deck-controls hide">
-								<span class="deck-review-btn" data-deck_id={{deck.id}}>Review</span>
-								<span class="deck-study-btn">Study</span>
-							</div>
-							<div class="deck-delete-btn hide">X</div>
-						</li>
-						{% endfor %}
-					</ul>
-				</div>
-			</li>
-			{% endfor %}
-			<li class="no-collections-item {% if collections %}hide{% endif %}">
-				<div class="cds-top">
-					<h5>No Collections</h5>
-				</div>
-			</li>			
-		</ul>
-	</section>
-</div>
+	var collectionList = new CollectionList({
+		add_collection_button: $('#addAcourse'),
+		collection_cancel: $('#collection_cancel'),
+		add_collection_content: $('.addCourseWrapper'),
+		add_collection_title: $('.courseHeader h2'),
+	});
+
+
+});
+</script>
+
 
 {% endblock %}
