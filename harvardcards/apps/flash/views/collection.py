@@ -20,6 +20,7 @@ def create(request, collection_id=None):
     # is it a post?
     message = '';
     if request.method == 'POST':
+
         #for key in request.POST:
         #    value = request.POST[key]
         #    message += "{0} => {1}<br>".format(key, value)
@@ -31,7 +32,7 @@ def create(request, collection_id=None):
             
         else:
             collectionForm = CollectionForm(request.POST)
-        
+
         if collectionForm.is_valid():
             collection = collectionForm.save()
 
@@ -40,7 +41,7 @@ def create(request, collection_id=None):
             # decode json
             data = json.loads(request.POST['field_data'])            
             #return HttpResponse(repr(data))
-            
+
             # is it an edit?
             # get all ids from data
             editList = []
@@ -123,6 +124,3 @@ def fields(request):
         for key, value in request.POST.iteritems():
             errorMsg += "<br>" + key + " => " + value
     return HttpResponse('{"success": true, "error": "%s"}' % errorMsg, mimetype="application/json")
-        
-    
-    
