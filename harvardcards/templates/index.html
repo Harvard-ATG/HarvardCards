@@ -4,7 +4,7 @@
 
 <script src="{{ STATIC_URL }}js/collectionlist.js"></script>
 <script src="{{ STATIC_URL }}js/decklist.js"></script>
-<script src="{{ STATIC_URL }}js/lib.js"></script>
+
 <link href='http://fonts.googleapis.com/css?family=Vollkorn' rel='stylesheet' type='text/css'>
 <link href='{{ STATIC_URL }}css/styles.css' rel='stylesheet' type='text/css'>
 
@@ -104,9 +104,7 @@
                             <li><a href="#">Delete</a></li>
                         </ul>
                     </div><!-- courseHeader (end) -->
-                    <div class="slider"><!-- slider (start) -->
-                    </div>
-                    <div class="noslider"><!-- noslider (start) -->
+                    <div class="slider"><!--slider (start) -->
                         <ul class="courseDecks"><!-- courseDecks(start) -->
                             <li class="deck"><!-- deck (start) -->
                                 <h2>Week 5</h2>
@@ -176,7 +174,7 @@
                             </li><!-- deck (end) -->
                             
                         </ul><!-- courseDecks (end) -->
-                    </div><!-- noslider (end) -->
+                    </div><!-- slider (end) -->
                     <!--<script>
 					var sliders = [];
 					$('.slider').each(function() {
@@ -187,7 +185,14 @@
                         <li><a href="javascript:sliders[0].goToPrev()">.goToPrev()</a></li>
                         <li><a href="javascript:sliders[0].goToNext()">.goToNext()</a></li>
                       </ul>-->
-
+						<!-- sliderNav (start) -->
+                    <div class="sliderNav">
+                        <ul class="sliderNavNextPrev">
+                            <li class="sliderPrev"><a href="javascript:sliders[1].goToPrev()">&laquo; Prev</a></li>
+                            <li class="sliderNext"><a href="javascript:sliders[1].goToNext()">Next &raquo;</a></li>
+                            <!--li><a href="javascript:sliders[2].respond()">.respond()</a></li-->
+                        </ul>
+					</div>
                 </div><!-- courseWrapper (end) -->
             
             </div><!-- content (end) -->
@@ -197,7 +202,7 @@
     </div><!-- section (end) -->
 </div><!-- sectionWrapper (end) -->
 
-
+<script src="{{ STATIC_URL }}js/lib.js"></script>
 <script>
 require(['views/CollectionList'], function(CollectionList){		
 
@@ -211,6 +216,40 @@ require(['views/CollectionList'], function(CollectionList){
 	});
 	
 });
+
+var sliders = [];
+var sliderLength;
+
+var sliderObjExist = false;
+$('.slider').each(function() {
+	if ( $(this).text() != '' ){
+		//create Slider objects
+		sliders.push(new Slider(this));
+		//sliders[i].respond();
+		sliderObjExist = true;
+	}	
+});
+
+$(window).on("resize", function () {
+	
+	sliderLength = sliders.length;
+	
+	if ( sliderObjExist )
+	{
+		for( var i=0; i < sliderLength; i++ )
+		{
+			if ($('.sliderNav').css('display') == 'none'){
+				
+				//removing the size when going back into the noslider div
+				sliders[i].resetUL();
+			}else{
+				//console.log($('.sliderNav').css('display'));
+				sliders[i].respond();
+			}
+		}
+	}
+}).resize();
+
 </script>
 
 
