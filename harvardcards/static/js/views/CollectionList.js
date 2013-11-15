@@ -3,7 +3,12 @@ define(['jquery', 'lodash', 'models/Collection'], function($, _, Collection){
 	var CollectionList = function(config){
 		this.config = config;
 		this.newCollection = {};
-
+		// these are required
+		// TODO: checkConfig method
+		//$add_collection_button
+		//$add_collection_content
+		//$add_collection_title
+		//$collection_cancel
 		this.init();
 	};
 	
@@ -23,23 +28,23 @@ define(['jquery', 'lodash', 'models/Collection'], function($, _, Collection){
 		
 		initCreateButton: function(){
 			var that = this;
-			that.config.add_collection_button.click(function(){
+			that.config.$add_collection_button.click(function(){
 				// show the collection
-				that.config.add_collection_content.show();
+				that.config.$add_collection_content.show();
 			});
 		},
 		
 		initCancelButton: function(){
 			var that = this;
-			that.config.collection_cancel.click(function(){
+			that.config.$collection_cancel.click(function(){
 				// show the collection
-				that.config.add_collection_content.hide();
+				that.config.$add_collection_content.hide();
 			});
 		},
 		
 		initTitleEditable: function(){
 			var that = this;
-			that.config.add_collection_title.editable(function(value, settings){
+			that.config.$add_collection_title.editable(function(value, settings){
 				return value;
 			}, { 
 				tooltip   : 'Click to edit...',

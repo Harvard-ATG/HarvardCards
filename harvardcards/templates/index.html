@@ -10,30 +10,30 @@
 
 
 <div id="fc_headerWrapper" class="sectionWrapper"><!-- sectionWrapper (start) -->
-	<div id="fc_header" class="section"><!-- section (start) -->
-    	<img src="/static/img/harvardLogo.png" alt="Harvard University" title="Harvard University" border="0" />
+        <div id="fc_header" class="section"><!-- section (start) -->
+            <img src="/static/img/harvardLogo.png" alt="Harvard University" title="Harvard University" border="0" />
         <ul id="userInfo">
-        	<li><span>Roderick Morales<span></li>
+                <li><span>Roderick Morales<span></li>
             <li><a href="#">Sign out</a></li>
         </ul>
     </div><!-- section (end) -->
 </div><!-- sectionWrapper (end) -->
 
 <div class="sectionWrapper"><!-- sectionWrapper (start) -->
-	<div class="section"><!-- section (start) -->
-    	
+        <div class="section"><!-- section (start) -->
+            
         <div class="contentWrapper"><!-- contentWrapper (start) -->
         
-	    	<h1 id="appTitle">HARVARD CARDS</h1>
-    		<div id="navigation"><!-- navigaton (start) -->
-            	<a href="#" id="addAcourse">Add a course</a>
-            	<nav>
-                	<ul>
-                    	<li><a href="#">Home</a></li>
+                    <h1 id="appTitle">HARVARD CARDS</h1>
+                    <div id="navigation"><!-- navigaton (start) -->
+                    <a href="#" id="addAcourse">Add a course</a>
+                    <nav>
+                        <ul>
+                            <li><a href="#">Home</a></li>
                         <li>
-                        	<a href="#" class="active">Course 1</a>
-                        	<ul>
-                            	<li><a href="#">Week 4</a></li>
+                                <a href="#" class="active">Course 1</a>
+                                <ul>
+                                    <li><a href="#">Week 4</a></li>
                                 <li><a href="#">Week 3</a></li>
                                 <li><a href="#" class="active">Week 2 with a really long title for the week</a></li>
                                 <li><a href="#">Week 1</a></li>
@@ -47,34 +47,34 @@
             
             <div id="content"><!-- content (start) -->
             
-				<div class="courseWrapper addCourseWrapper"><!-- courseWrapper (start) -->
-					<div class="courseHeader"><!-- courseHeader (start) -->
-						<h2>Enter course name</h2>
-						<ul class="adminMenu">
-							<li><a href="#">Edit</a></li>
-						</ul>
-						<ul class="adminMenu adminMenuRight">
-							<li><a href="#" id="collection_cancel">Cancel</a></li>
-						</ul>
-					</div><!-- courseHeader (end) -->
+                                <div class="courseWrapper addCourseWrapper"><!-- courseWrapper (start) -->
+                                        <div class="courseHeader"><!-- courseHeader (start) -->
+                                                <h2>Enter course name</h2>
+                                                <ul class="adminMenu">
+                                                        <li><a href="#">Edit</a></li>
+                                                </ul>
+                                                <ul class="adminMenu adminMenuRight">
+                                                        <li><a href="#" id="collection_cancel">Cancel</a></li>
+                                                </ul>
+                                        </div><!-- courseHeader (end) -->
                     <!-- slider (start) -->
                      <div class="slider">
-                     	<ul class="templateDecks"><!-- templateDecks(start) -->
+                             <ul class="templateDecks"><!-- templateDecks(start) -->
                              <li class="deck"><!-- deck (start) -->
                                  <a class="template" href="#">
-                                 	<h2>Template 1</h2>
+                                         <h2>Template 1</h2>
                                  </a>
                              </li><!-- deck (end) -->
                             
                              <li class="deck"><!-- deck (start) -->
                                  <a class="template" href="#">
-                                 	<h2>Template 2</h2>
+                                         <h2>Template 2</h2>
                                  </a>
                              </li><!-- deck (end) -->
                             
                              <li class="deck"><!-- deck (start) -->
                                  <a class="template" href="#">
-                                 	<h2>Template 3</h2>
+                                         <h2>Template 3</h2>
                                  </a>
                              </li><!-- deck (end) -->
                             
@@ -89,7 +89,7 @@
                              <li class="sliderNext"><a href="javascript:sliders[0].goToNext()">Next &raquo;</a></li>
                              <!--li><a href="javascript:sliders[0].respond()">.respond()</a></li-->
                          </ul>
- 					</div>
+                                         </div>
                      <!-- sliderNav (end) -->
                  </div><!-- courseWrapper (end) -->
 
@@ -178,11 +178,11 @@
                         </ul><!-- courseDecks (end) -->
                     </div><!-- noslider (end) -->
                     <!--<script>
-					var sliders = [];
-					$('.slider').each(function() {
-						sliders.push(new Slider(this))
-					});
-					</script>
+                                        var sliders = [];
+                                        $('.slider').each(function() {
+                                                sliders.push(new Slider(this))
+                                        });
+                                        </script>
                       <ul>
                         <li><a href="javascript:sliders[0].goToPrev()">.goToPrev()</a></li>
                         <li><a href="javascript:sliders[0].goToNext()">.goToNext()</a></li>
@@ -199,14 +199,14 @@
 
 
 <script>
-require(['views/CollectionList'], function(CollectionList){		
-		
-	var collectionList = new CollectionList({
-		add_collection_button: $('#addAcourse'),
-		collection_cancel: $('#collection_cancel'),
-		add_collection_content: $('.addCourseWrapper'),
-		add_collection_title: $('.courseHeader h2'),
-	});
+require(['views/CollectionList'], function(CollectionList){                
+                
+        var collectionList = new CollectionList({
+                add_collection_button: $('#addAcourse'),
+                collection_cancel: $('#collection_cancel'),
+                add_collection_content: $('.addCourseWrapper'),
+                add_collection_title: $('.courseHeader h2'),
+        });
 
 
 });

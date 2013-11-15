@@ -1,8 +1,8 @@
 from django.conf.urls import patterns, include, url
 
 # Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+from django.contrib import admin
+admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
@@ -15,6 +15,8 @@ urlpatterns = patterns('',
     url(r'^deck/delete/$', 'harvardcards.apps.flash.views.deck.delete', name='deleteDeck'),
     url(r'^deck/$', 'harvardcards.apps.flash.views.deck.index', name='deckIndex'),
     url(r'^deck/(?P<deck_id>\d+)$', 'harvardcards.apps.flash.views.deck.index', name='deckIndex'),
+    url(r'^deck/test1/$', 'harvardcards.apps.flash.views.deck.test1', name='deckIndex'),
+    url(r'^deck/test2/$', 'harvardcards.apps.flash.views.deck.test2', name='deckIndex'),
     url(r'^collection/fields/$', 'harvardcards.apps.flash.views.collection.fields', name='fields'),
     url(r'^card/create/$', 'harvardcards.apps.flash.views.card.create', name='createCard'),
     url(r'^card/fields/$', 'harvardcards.apps.flash.views.card.fields', name='cardFields'),
@@ -32,5 +34,5 @@ urlpatterns = patterns('',
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
-    # url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', include(admin.site.urls)),
 )
