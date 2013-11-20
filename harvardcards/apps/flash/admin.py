@@ -5,8 +5,13 @@ class CardsInLine(admin.TabularInline):
     model = Cards_Fields
     extra = 1
 
+class DecksInLine(admin.TabularInline):
+    model = Decks_Cards
+    extra = 1
+
+
 class CardAdmin(admin.ModelAdmin):
-    inlines=(CardsInLine,)
+    inlines=(CardsInLine, DecksInLine)
 
 admin.site.register(Collection)
 admin.site.register(Field)

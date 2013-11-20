@@ -11,6 +11,8 @@ class Collection(models.Model):
 
 class Field(models.Model):
     label = models.CharField(max_length=200, blank=True)
+    def __unicode__(self):
+        return self.label
     FIELD_TYPES = (
         ('T', 'Text'),
         ('I', 'Image'),
@@ -29,6 +31,8 @@ class Card(models.Model):
     collection = models.ForeignKey(Collection)
     sort_order = models.IntegerField()
     fields = models.ManyToManyField(Field, through='Cards_Fields')
+    def __unicode__(self):
+        return ', '.join([a.label for a in self.fields.all()])
     
 class User(models.Model):
     name = models.CharField(max_length=200)
