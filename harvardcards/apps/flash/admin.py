@@ -4,11 +4,12 @@ from harvardcards.apps.flash.models import Collection, Field, Card, User, Users_
 class CardsInLine(admin.TabularInline):
     model = Cards_Fields
     extra = 1
+    max_num = 1
 
 class DecksInLine(admin.TabularInline):
     model = Decks_Cards
     extra = 1
-
+    max_num = 1
 
 class CardAdmin(admin.ModelAdmin):
     inlines=(CardsInLine, DecksInLine)

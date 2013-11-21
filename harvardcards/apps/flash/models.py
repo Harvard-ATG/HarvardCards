@@ -1,6 +1,9 @@
 from django.db import models
 
 class Collection(models.Model):
+    class Meta:
+        verbose_name = 'Collection'
+        verbose_name_plural = 'Collections'
     title = models.CharField(max_length=200)
     def __unicode__(self):
         return self.title
@@ -28,6 +31,7 @@ class Field(models.Model):
         return repr(dict(label=self.label, field_type=self.field_type, sort_order=self.sort_order, display=self.display))
 
 class Card(models.Model):
+
     collection = models.ForeignKey(Collection)
     sort_order = models.IntegerField()
     fields = models.ManyToManyField(Field, through='Cards_Fields')
@@ -40,6 +44,9 @@ class User(models.Model):
     collections = models.ManyToManyField(Collection, through='Users_Collections')
 
 class Users_Collections(models.Model):
+    class Meta:
+        verbose_name = 'Users Collection'
+
     collection = models.ForeignKey(Collection)
     user = models.ForeignKey(User)
     PERMISSIONS = (
@@ -61,11 +68,18 @@ class Deck(models.Model):
         return repr(dict(title=self.title, collection=self.collection.id, id=self.id))
 
 class Decks_Cards(models.Model):
+    class Meta:
+        verbose_name = 'Choose Deck'
+        verbose_name_plural = 'Choose Deck'
     deck = models.ForeignKey(Deck)
     card = models.ForeignKey(Card)
     sort_order = models.IntegerField()
 
 class Cards_Fields(models.Model):
+    class Meta:
+        verbose_name = 'Card Fields'
+        verbose_name_plural = 'Card Fields'
+
     value = models.CharField(max_length=500)
     card = models.ForeignKey(Card)
     field = models.ForeignKey(Field)
