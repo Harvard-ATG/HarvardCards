@@ -1,12 +1,13 @@
 from django.contrib import admin
 from harvardcards.apps.flash.models import Collection, Field, Card, User, Users_Collections, Deck, Decks_Cards, Cards_Fields
+from harvardcards.apps.flash.forms import *
 
-class CardsInLine(admin.TabularInline):
+class CardsInLine(admin.StackedInline):
     model = Cards_Fields
     extra = 1
     max_num = 1
 
-class DecksInLine(admin.TabularInline):
+class DecksInLine(admin.StackedInline):
     model = Decks_Cards
     extra = 1
     max_num = 1
