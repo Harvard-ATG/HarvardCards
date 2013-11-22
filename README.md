@@ -1,8 +1,8 @@
-[![Build Status](https://travis-ci.org/Harvard-ATG/HarvardCards.png?branch=master)](https://travis-ci.org/Harvard-ATG/HarvardCards)
+[![Build Status](https://travis-ci.org/Harvard-ATG/HarvardCards.png?branch=dev)](https://travis-ci.org/Harvard-ATG/HarvardCards)
 
 # Overview
 
-
+Where's our elevator pitch?
 
 # Quickstart
 
