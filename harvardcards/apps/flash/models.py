@@ -31,12 +31,11 @@ class Field(models.Model):
         return repr(dict(label=self.label, field_type=self.field_type, sort_order=self.sort_order, display=self.display))
 
 class Card(models.Model):
-
     collection = models.ForeignKey(Collection)
-    sort_order = models.IntegerField(verbose_name="Card ID")
+    sort_order = models.IntegerField()
     fields = models.ManyToManyField(Field, through='Cards_Fields')
     def __unicode__(self):
-        name = "Card: "+ str(self.sort_order) +"; Collection: "+ str(self.collection.title)
+        name = "Card: "+ str(self.id) +"; Collection: "+ str(self.collection.title)
         return name
     
 class User(models.Model):
@@ -76,7 +75,7 @@ class Decks_Cards(models.Model):
     card = models.ForeignKey(Card)
     sort_order = models.IntegerField()
     def __unicode__(self):
-        name="Deck: "+str(self.deck.title) +"; Card: "+ str(self.card.sort_order)
+        name="Deck: "+str(self.deck.title) +"; Card: "+ str(self.card.id)
         return name
 
 class Cards_Fields(models.Model):
