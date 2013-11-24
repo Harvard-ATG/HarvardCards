@@ -4,14 +4,14 @@ from harvardcards.apps.flash.models import Collection, Field, Card, User, Users_
 class CardsInLine(admin.StackedInline):
     verbose_name = "Card's fields"
     model = Cards_Fields
-    extra = 0
+    extra = 2
 
 class DecksInLine(admin.StackedInline):
     model = Decks_Cards
-    extra = 0
+    extra = 1
 
 class CardAdmin(admin.ModelAdmin):
-    list_display = ('id', 'collection',)
+    list_display = ('sort_order', 'collection',)
     search_fields=('collection__title', )
     inlines=(DecksInLine, CardsInLine,)
 
@@ -22,7 +22,6 @@ class CardsInLine(admin.StackedInline):
     model=Decks_Cards
 
 class DeckAdmin(admin.ModelAdmin):
-    list_display = ('title', 'collection')
     inlines=(CardsInLine,)
 
 admin.site.register(Collection)

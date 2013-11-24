@@ -10,7 +10,6 @@ env:
 install: "pip install -r requirements.txt --use-mirrors"
 
 # command to run tests
-
 script: 
     - python manage.py syncdb --noinput
     - nosetests
