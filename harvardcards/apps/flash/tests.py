@@ -24,13 +24,17 @@ class CollectionTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         #TODO why is this failing?
-        #self.assertTemplateUsed(response, 'index.html')
+	#This test isn’t failing
+
+        self.assertTemplateUsed(response, 'index.html')
 
     def test_collection_get(self):
         url = reverse('create')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         #TODO why is this failing?
+	#This is failing because we don’t have a separate template for add a course now
+
         #self.assertTemplateUsed(response, 'collections/create.html')
 
     def test_collection_post(self):
