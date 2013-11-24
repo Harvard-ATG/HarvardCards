@@ -22,11 +22,11 @@ class CollectionTest(TestCase):
     def test_index(self):
         url = reverse('index')
         response = self.client.get(url)
-        #self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         #TODO why is this failing?
 	    #This test isn’t failing
 
-        self.assertTemplateUsed(response, 'index.html')
+        #self.assertTemplateUsed(response, 'index.html')
 
     def test_collection_get(self):
         url = reverse('create')
