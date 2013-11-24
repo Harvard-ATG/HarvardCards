@@ -1,0 +1,6322 @@
+[
+    {
+        "pk": 1, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 1, 
+            "sort_order": 1, 
+            "card": "59", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/59/1-Spiral Jetty.png"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 2, 
+            "sort_order": 2, 
+            "card": "59", 
+            "value": "Robert Smithson"
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 3, 
+            "sort_order": 3, 
+            "card": "59", 
+            "value": "1970"
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 4, 
+            "sort_order": 4, 
+            "card": "59", 
+            "value": "Spiral Jetty"
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 5, 
+            "sort_order": 5, 
+            "card": "59", 
+            "value": "Earth, black basalt rock, salt"
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 6, 
+            "sort_order": 6, 
+            "card": "59", 
+            "value": "Great Salt Lake, Utah"
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 7, 
+            "sort_order": 1, 
+            "card": "60", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/60/2-Cole-Oxbow.png"
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 8, 
+            "sort_order": 2, 
+            "card": "60", 
+            "value": "Thomas Cole"
+        }
+    }, 
+    {
+        "pk": 9, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 9, 
+            "sort_order": 3, 
+            "card": "60", 
+            "value": "1836"
+        }
+    }, 
+    {
+        "pk": 10, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 10, 
+            "sort_order": 4, 
+            "card": "60", 
+            "value": "The Oxbow"
+        }
+    }, 
+    {
+        "pk": 11, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 11, 
+            "sort_order": 5, 
+            "card": "60", 
+            "value": "Oil on canvas"
+        }
+    }, 
+    {
+        "pk": 12, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 12, 
+            "sort_order": 6, 
+            "card": "60", 
+            "value": "Metropolitan Museum of Art, New York"
+        }
+    }, 
+    {
+        "pk": 13, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 13, 
+            "sort_order": 1, 
+            "card": "61", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/61/3-DeMaria2.png"
+        }
+    }, 
+    {
+        "pk": 14, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 14, 
+            "sort_order": 2, 
+            "card": "61", 
+            "value": "Walter de Maria"
+        }
+    }, 
+    {
+        "pk": 15, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 15, 
+            "sort_order": 3, 
+            "card": "61", 
+            "value": "1977"
+        }
+    }, 
+    {
+        "pk": 16, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 16, 
+            "sort_order": 4, 
+            "card": "61", 
+            "value": "New York Earth Room"
+        }
+    }, 
+    {
+        "pk": 17, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 17, 
+            "sort_order": 5, 
+            "card": "61", 
+            "value": "Earth"
+        }
+    }, 
+    {
+        "pk": 18, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 18, 
+            "sort_order": 6, 
+            "card": "61", 
+            "value": "New York City"
+        }
+    }, 
+    {
+        "pk": 19, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 19, 
+            "sort_order": 1, 
+            "card": "62", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/62/1-Hapshepsut Temple2.png"
+        }
+    }, 
+    {
+        "pk": 20, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 20, 
+            "sort_order": 2, 
+            "card": "62", 
+            "value": "Royal Architect Senemut"
+        }
+    }, 
+    {
+        "pk": 21, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 21, 
+            "sort_order": 3, 
+            "card": "62", 
+            "value": "c. 1460 BCE"
+        }
+    }, 
+    {
+        "pk": 22, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 22, 
+            "sort_order": 4, 
+            "card": "62", 
+            "value": "Mortuary Temple of Queen Hatshepsut"
+        }
+    }, 
+    {
+        "pk": 23, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 23, 
+            "sort_order": 5, 
+            "card": "62", 
+            "value": "stone"
+        }
+    }, 
+    {
+        "pk": 24, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 24, 
+            "sort_order": 6, 
+            "card": "62", 
+            "value": "Deir al-Bahri, Egypt"
+        }
+    }, 
+    {
+        "pk": 25, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 25, 
+            "sort_order": 1, 
+            "card": "63", 
+            "value": "stone"
+        }
+    }, 
+    {
+        "pk": 26, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 26, 
+            "sort_order": 2, 
+            "card": "63", 
+            "value": "Karnak, Egypt"
+        }
+    }, 
+    {
+        "pk": 27, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 27, 
+            "sort_order": 3, 
+            "card": "63", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/63/2-hapshepsut-obelisk2.png"
+        }
+    }, 
+    {
+        "pk": 28, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 28, 
+            "sort_order": 4, 
+            "card": "63", 
+            "value": "c.15th c. BCE"
+        }
+    }, 
+    {
+        "pk": 29, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 29, 
+            "sort_order": 5, 
+            "card": "63", 
+            "value": "Obelisk for Queen Hatshepsut"
+        }
+    }, 
+    {
+        "pk": 30, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 30, 
+            "sort_order": 1, 
+            "card": "64", 
+            "value": "stone"
+        }
+    }, 
+    {
+        "pk": 31, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 31, 
+            "sort_order": 2, 
+            "card": "64", 
+            "value": "Deir al-Bahri, Egypt"
+        }
+    }, 
+    {
+        "pk": 32, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 32, 
+            "sort_order": 3, 
+            "card": "64", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/64/3-osiran statues2.png"
+        }
+    }, 
+    {
+        "pk": 33, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 33, 
+            "sort_order": 4, 
+            "card": "64", 
+            "value": "c. 1460 BCE"
+        }
+    }, 
+    {
+        "pk": 34, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 34, 
+            "sort_order": 5, 
+            "card": "64", 
+            "value": "Osiran Statues at Mortuary Temple of Hatshepsut"
+        }
+    }, 
+    {
+        "pk": 35, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 35, 
+            "sort_order": 1, 
+            "card": "65", 
+            "value": "marble and limestone"
+        }
+    }, 
+    {
+        "pk": 36, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 36, 
+            "sort_order": 2, 
+            "card": "65", 
+            "value": "Athens, Greece"
+        }
+    }, 
+    {
+        "pk": 37, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 37, 
+            "sort_order": 3, 
+            "card": "65", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/65/4-parthenon2.png"
+        }
+    }, 
+    {
+        "pk": 38, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 38, 
+            "sort_order": 4, 
+            "card": "65", 
+            "value": "448-432 BCE"
+        }
+    }, 
+    {
+        "pk": 39, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 39, 
+            "sort_order": 5, 
+            "card": "65", 
+            "value": "Parthenon"
+        }
+    }, 
+    {
+        "pk": 40, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 40, 
+            "sort_order": 1, 
+            "card": "66", 
+            "value": "marble"
+        }
+    }, 
+    {
+        "pk": 41, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 41, 
+            "sort_order": 2, 
+            "card": "66", 
+            "value": "Athens, Greece"
+        }
+    }, 
+    {
+        "pk": 42, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 42, 
+            "sort_order": 3, 
+            "card": "66", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/66/5-parthenon caryatids.png"
+        }
+    }, 
+    {
+        "pk": 43, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 43, 
+            "sort_order": 4, 
+            "card": "66", 
+            "value": "c. 420 BCE"
+        }
+    }, 
+    {
+        "pk": 44, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 44, 
+            "sort_order": 5, 
+            "card": "66", 
+            "value": "Caryatids at the Parthenon"
+        }
+    }, 
+    {
+        "pk": 45, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 45, 
+            "sort_order": 1, 
+            "card": "67", 
+            "value": "mural painting"
+        }
+    }, 
+    {
+        "pk": 46, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 46, 
+            "sort_order": 2, 
+            "card": "67", 
+            "value": "Deir al-Bahri, Egypt"
+        }
+    }, 
+    {
+        "pk": 47, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 47, 
+            "sort_order": 3, 
+            "card": "67", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/67/6-expedition to Punt.png"
+        }
+    }, 
+    {
+        "pk": 48, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 48, 
+            "sort_order": 4, 
+            "card": "67", 
+            "value": "c. 1460 BCE"
+        }
+    }, 
+    {
+        "pk": 49, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 49, 
+            "sort_order": 5, 
+            "card": "67", 
+            "value": "Expedition to Punt"
+        }
+    }, 
+    {
+        "pk": 50, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 50, 
+            "sort_order": 1, 
+            "card": "69", 
+            "value": "manuscript"
+        }
+    }, 
+    {
+        "pk": 51, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 51, 
+            "sort_order": 2, 
+            "card": "69", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/69/1-gilbert of limerick.jpg"
+        }
+    }, 
+    {
+        "pk": 52, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 52, 
+            "sort_order": 3, 
+            "card": "69", 
+            "value": "Gilbert of Limerick"
+        }
+    }, 
+    {
+        "pk": 53, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 53, 
+            "sort_order": 4, 
+            "card": "69", 
+            "value": "c. 1190"
+        }
+    }, 
+    {
+        "pk": 54, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 54, 
+            "sort_order": 5, 
+            "card": "69", 
+            "value": "De statu ecclesiae"
+        }
+    }, 
+    {
+        "pk": 55, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 55, 
+            "sort_order": 1, 
+            "card": "70", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/70/2-notre dame.jpg"
+        }
+    }, 
+    {
+        "pk": 56, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 56, 
+            "sort_order": 2, 
+            "card": "70", 
+            "value": "Jean de Chelles"
+        }
+    }, 
+    {
+        "pk": 57, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 57, 
+            "sort_order": 3, 
+            "card": "70", 
+            "value": "1163-1240s"
+        }
+    }, 
+    {
+        "pk": 58, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 58, 
+            "sort_order": 4, 
+            "card": "70", 
+            "value": "Notre Dame Cathedral"
+        }
+    }, 
+    {
+        "pk": 59, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 59, 
+            "sort_order": 5, 
+            "card": "70", 
+            "value": "stone, concrete, stained glass"
+        }
+    }, 
+    {
+        "pk": 60, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 60, 
+            "sort_order": 6, 
+            "card": "70", 
+            "value": "Paris, France"
+        }
+    }, 
+    {
+        "pk": 61, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 61, 
+            "sort_order": 1, 
+            "card": "71", 
+            "value": "stone, wood"
+        }
+    }, 
+    {
+        "pk": 62, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 62, 
+            "sort_order": 2, 
+            "card": "71", 
+            "value": "Rome, Italy"
+        }
+    }, 
+    {
+        "pk": 63, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 63, 
+            "sort_order": 3, 
+            "card": "71", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/71/3-old st. peters.jpg"
+        }
+    }, 
+    {
+        "pk": 64, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 64, 
+            "sort_order": 4, 
+            "card": "71", 
+            "value": "c. 325"
+        }
+    }, 
+    {
+        "pk": 65, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 65, 
+            "sort_order": 5, 
+            "card": "71", 
+            "value": "Old St. Peter's"
+        }
+    }, 
+    {
+        "pk": 66, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 66, 
+            "sort_order": 1, 
+            "card": "72", 
+            "value": "stone, concrete"
+        }
+    }, 
+    {
+        "pk": 67, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 67, 
+            "sort_order": 2, 
+            "card": "72", 
+            "value": "Rome, Italy"
+        }
+    }, 
+    {
+        "pk": 68, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 68, 
+            "sort_order": 3, 
+            "card": "72", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/72/4-pantheon.jpg"
+        }
+    }, 
+    {
+        "pk": 69, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 69, 
+            "sort_order": 4, 
+            "card": "72", 
+            "value": "17 BCE"
+        }
+    }, 
+    {
+        "pk": 70, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 70, 
+            "sort_order": 5, 
+            "card": "72", 
+            "value": "Pantheon"
+        }
+    }, 
+    {
+        "pk": 71, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 71, 
+            "sort_order": 1, 
+            "card": "73", 
+            "value": "stone, concrete, stained glass"
+        }
+    }, 
+    {
+        "pk": 72, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 72, 
+            "sort_order": 2, 
+            "card": "73", 
+            "value": "Toulouse, France"
+        }
+    }, 
+    {
+        "pk": 73, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 73, 
+            "sort_order": 3, 
+            "card": "73", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/73/5-saint sernin.jpg"
+        }
+    }, 
+    {
+        "pk": 74, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 74, 
+            "sort_order": 4, 
+            "card": "73", 
+            "value": "1080-1118"
+        }
+    }, 
+    {
+        "pk": 75, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 75, 
+            "sort_order": 5, 
+            "card": "73", 
+            "value": "Interior of Saint-Sernin"
+        }
+    }, 
+    {
+        "pk": 76, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 76, 
+            "sort_order": 1, 
+            "card": "74", 
+            "value": "stone, concrete, stained glass"
+        }
+    }, 
+    {
+        "pk": 77, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 77, 
+            "sort_order": 2, 
+            "card": "74", 
+            "value": "Sainte-Chapelle, France"
+        }
+    }, 
+    {
+        "pk": 78, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 78, 
+            "sort_order": 3, 
+            "card": "74", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/74/6-sainte-chapelle.jpg"
+        }
+    }, 
+    {
+        "pk": 79, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 79, 
+            "sort_order": 4, 
+            "card": "74", 
+            "value": "mid-13th c."
+        }
+    }, 
+    {
+        "pk": 80, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 80, 
+            "sort_order": 5, 
+            "card": "74", 
+            "value": "Sainte-Chapelle"
+        }
+    }, 
+    {
+        "pk": 81, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 81, 
+            "sort_order": 1, 
+            "card": "75", 
+            "value": "etching"
+        }
+    }, 
+    {
+        "pk": 82, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 82, 
+            "sort_order": 2, 
+            "card": "75", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/75/7-gillray.jpg"
+        }
+    }, 
+    {
+        "pk": 83, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 83, 
+            "sort_order": 3, 
+            "card": "75", 
+            "value": "James Gillray"
+        }
+    }, 
+    {
+        "pk": 84, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 84, 
+            "sort_order": 4, 
+            "card": "75", 
+            "value": "1793"
+        }
+    }, 
+    {
+        "pk": 85, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 85, 
+            "sort_order": 5, 
+            "card": "75", 
+            "value": "The Zenith of French Glory"
+        }
+    }, 
+    {
+        "pk": 86, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 86, 
+            "sort_order": 1, 
+            "card": "76", 
+            "value": "illuminated manuscript on vellum"
+        }
+    }, 
+    {
+        "pk": 87, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 87, 
+            "sort_order": 2, 
+            "card": "76", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/76/8-fouquet hours.jpg"
+        }
+    }, 
+    {
+        "pk": 88, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 88, 
+            "sort_order": 3, 
+            "card": "76", 
+            "value": "Jean Fouquet"
+        }
+    }, 
+    {
+        "pk": 89, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 89, 
+            "sort_order": 4, 
+            "card": "76", 
+            "value": "1452-1460"
+        }
+    }, 
+    {
+        "pk": 90, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 90, 
+            "sort_order": 5, 
+            "card": "76", 
+            "value": "Hours of Etienne Chevalier"
+        }
+    }, 
+    {
+        "pk": 91, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 91, 
+            "sort_order": 1, 
+            "card": "77", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/77/9-notre dame-south.jpg"
+        }
+    }, 
+    {
+        "pk": 92, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 92, 
+            "sort_order": 2, 
+            "card": "77", 
+            "value": "Jean de Chelles"
+        }
+    }, 
+    {
+        "pk": 93, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 93, 
+            "sort_order": 3, 
+            "card": "77", 
+            "value": "1163-1240s"
+        }
+    }, 
+    {
+        "pk": 94, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 94, 
+            "sort_order": 4, 
+            "card": "77", 
+            "value": "Notre Dame (south view)"
+        }
+    }, 
+    {
+        "pk": 95, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 95, 
+            "sort_order": 5, 
+            "card": "77", 
+            "value": "stone, concrete, stained glass"
+        }
+    }, 
+    {
+        "pk": 96, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 96, 
+            "sort_order": 6, 
+            "card": "77", 
+            "value": "Paris, France"
+        }
+    }, 
+    {
+        "pk": 97, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 97, 
+            "sort_order": 1, 
+            "card": "78", 
+            "value": "stone"
+        }
+    }, 
+    {
+        "pk": 98, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 98, 
+            "sort_order": 2, 
+            "card": "78", 
+            "value": "Paris, France"
+        }
+    }, 
+    {
+        "pk": 99, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 99, 
+            "sort_order": 3, 
+            "card": "78", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/78/10-tympanum.jpg"
+        }
+    }, 
+    {
+        "pk": 100, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 100, 
+            "sort_order": 4, 
+            "card": "78", 
+            "value": "13th c."
+        }
+    }, 
+    {
+        "pk": 101, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 101, 
+            "sort_order": 5, 
+            "card": "78", 
+            "value": "Tympanum of Notre Dame (west portal)"
+        }
+    }, 
+    {
+        "pk": 102, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 102, 
+            "sort_order": 1, 
+            "card": "79", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 103, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 103, 
+            "sort_order": 2, 
+            "card": "79", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/79/11-robert.jpg"
+        }
+    }, 
+    {
+        "pk": 104, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 104, 
+            "sort_order": 3, 
+            "card": "79", 
+            "value": "Hubert Robert"
+        }
+    }, 
+    {
+        "pk": 105, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 105, 
+            "sort_order": 4, 
+            "card": "79", 
+            "value": "1793"
+        }
+    }, 
+    {
+        "pk": 106, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 106, 
+            "sort_order": 5, 
+            "card": "79", 
+            "value": "Violation of the Crypt of the Kings at the Basilica of St.-Denis in October, 1793"
+        }
+    }, 
+    {
+        "pk": 107, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 107, 
+            "sort_order": 1, 
+            "card": "80", 
+            "value": "bronze"
+        }
+    }, 
+    {
+        "pk": 108, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 108, 
+            "sort_order": 2, 
+            "card": "80", 
+            "value": "Hildesheim, Germany"
+        }
+    }, 
+    {
+        "pk": 109, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 109, 
+            "sort_order": 3, 
+            "card": "80", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/80/12-hildesheim.jpg"
+        }
+    }, 
+    {
+        "pk": 110, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 110, 
+            "sort_order": 4, 
+            "card": "80", 
+            "value": "1015"
+        }
+    }, 
+    {
+        "pk": 111, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 111, 
+            "sort_order": 5, 
+            "card": "80", 
+            "value": "Hildesheim Doors"
+        }
+    }, 
+    {
+        "pk": 112, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 112, 
+            "sort_order": 1, 
+            "card": "81", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/81/1-bahram album2.png"
+        }
+    }, 
+    {
+        "pk": 113, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 113, 
+            "sort_order": 2, 
+            "card": "81", 
+            "value": "Dust Muhammad"
+        }
+    }, 
+    {
+        "pk": 114, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 114, 
+            "sort_order": 3, 
+            "card": "81", 
+            "value": "1544-45"
+        }
+    }, 
+    {
+        "pk": 115, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 115, 
+            "sort_order": 4, 
+            "card": "81", 
+            "value": "Bahram Mirza Album"
+        }
+    }, 
+    {
+        "pk": 116, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 116, 
+            "sort_order": 5, 
+            "card": "81", 
+            "value": "illuminated manuscript"
+        }
+    }, 
+    {
+        "pk": 117, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 117, 
+            "sort_order": 6, 
+            "card": "81", 
+            "value": "Tabriz, Iran"
+        }
+    }, 
+    {
+        "pk": 118, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 118, 
+            "sort_order": 1, 
+            "card": "82", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/82/2-gabriel2.png"
+        }
+    }, 
+    {
+        "pk": 119, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 119, 
+            "sort_order": 2, 
+            "card": "82", 
+            "value": "Ahmad Musa"
+        }
+    }, 
+    {
+        "pk": 120, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 120, 
+            "sort_order": 3, 
+            "card": "82", 
+            "value": "c. 1330-1350"
+        }
+    }, 
+    {
+        "pk": 121, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 121, 
+            "sort_order": 4, 
+            "card": "82", 
+            "value": "Gabriel Presents the City of Jerusalem to Prophet Muhammed from the Mi' rajnama"
+        }
+    }, 
+    {
+        "pk": 122, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 122, 
+            "sort_order": 5, 
+            "card": "82", 
+            "value": "illuminated manuscript"
+        }
+    }, 
+    {
+        "pk": 123, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 123, 
+            "sort_order": 6, 
+            "card": "82", 
+            "value": "Tabriz, Iran"
+        }
+    }, 
+    {
+        "pk": 124, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 124, 
+            "sort_order": 1, 
+            "card": "83", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/83/3-alexander2.png"
+        }
+    }, 
+    {
+        "pk": 125, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 125, 
+            "sort_order": 2, 
+            "card": "83", 
+            "value": "Directed by Ghiyath al-Din"
+        }
+    }, 
+    {
+        "pk": 126, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 126, 
+            "sort_order": 3, 
+            "card": "83", 
+            "value": "1330s"
+        }
+    }, 
+    {
+        "pk": 127, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 127, 
+            "sort_order": 4, 
+            "card": "83", 
+            "value": "The Funeral Bier of Alexander from the Great Mongol Shahnama"
+        }
+    }, 
+    {
+        "pk": 128, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 128, 
+            "sort_order": 5, 
+            "card": "83", 
+            "value": "illuminated manuscript"
+        }
+    }, 
+    {
+        "pk": 129, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 129, 
+            "sort_order": 6, 
+            "card": "83", 
+            "value": "Tabriz, Iran"
+        }
+    }, 
+    {
+        "pk": 130, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 130, 
+            "sort_order": 1, 
+            "card": "84", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/84/4-bahrum gur2.png"
+        }
+    }, 
+    {
+        "pk": 131, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 131, 
+            "sort_order": 2, 
+            "card": "84", 
+            "value": "Directed by Ghiyath al-Din"
+        }
+    }, 
+    {
+        "pk": 132, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 132, 
+            "sort_order": 3, 
+            "card": "84", 
+            "value": "1330s"
+        }
+    }, 
+    {
+        "pk": 133, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 133, 
+            "sort_order": 4, 
+            "card": "84", 
+            "value": "Bahram Gur Slays the Wolf from the Great Mongol Shahnama"
+        }
+    }, 
+    {
+        "pk": 134, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 134, 
+            "sort_order": 5, 
+            "card": "84", 
+            "value": "illuminated manuscript"
+        }
+    }, 
+    {
+        "pk": 135, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 135, 
+            "sort_order": 6, 
+            "card": "84", 
+            "value": "Tabriz, Iran"
+        }
+    }, 
+    {
+        "pk": 136, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 136, 
+            "sort_order": 1, 
+            "card": "85", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/85/5-iron calvary2.png"
+        }
+    }, 
+    {
+        "pk": 137, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 137, 
+            "sort_order": 2, 
+            "card": "85", 
+            "value": "Directed by Ghiyath al-Din"
+        }
+    }, 
+    {
+        "pk": 138, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 138, 
+            "sort_order": 3, 
+            "card": "85", 
+            "value": "1330s"
+        }
+    }, 
+    {
+        "pk": 139, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 139, 
+            "sort_order": 4, 
+            "card": "85", 
+            "value": "Alexander's iron calvary from the Great Mongol Shahnama"
+        }
+    }, 
+    {
+        "pk": 140, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 140, 
+            "sort_order": 5, 
+            "card": "85", 
+            "value": "illuminated manuscript"
+        }
+    }, 
+    {
+        "pk": 141, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 141, 
+            "sort_order": 6, 
+            "card": "85", 
+            "value": "Tabriz, Iran"
+        }
+    }, 
+    {
+        "pk": 142, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 142, 
+            "sort_order": 1, 
+            "card": "86", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/86/6-jami2.png"
+        }
+    }, 
+    {
+        "pk": 143, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 143, 
+            "sort_order": 2, 
+            "card": "86", 
+            "value": "Rashid al-Din"
+        }
+    }, 
+    {
+        "pk": 144, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 144, 
+            "sort_order": 3, 
+            "card": "86", 
+            "value": "1314-15"
+        }
+    }, 
+    {
+        "pk": 145, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 145, 
+            "sort_order": 4, 
+            "card": "86", 
+            "value": "The Nine Emperors of the Tang Dynasty from the Jami al-tawarifk (Gatherer of Histories)"
+        }
+    }, 
+    {
+        "pk": 146, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 146, 
+            "sort_order": 5, 
+            "card": "86", 
+            "value": "manuscript"
+        }
+    }, 
+    {
+        "pk": 147, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 147, 
+            "sort_order": 6, 
+            "card": "86", 
+            "value": "Tabriz, Iran"
+        }
+    }, 
+    {
+        "pk": 148, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 148, 
+            "sort_order": 1, 
+            "card": "116", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/116/1-hadrian villa2.png"
+        }
+    }, 
+    {
+        "pk": 149, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 149, 
+            "sort_order": 2, 
+            "card": "116", 
+            "value": "Unknown"
+        }
+    }, 
+    {
+        "pk": 150, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 150, 
+            "sort_order": 3, 
+            "card": "116", 
+            "value": "first half of 2nd c. CE"
+        }
+    }, 
+    {
+        "pk": 151, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 151, 
+            "sort_order": 4, 
+            "card": "116", 
+            "value": "Villa of Emperor Hadrian at Tivolli"
+        }
+    }, 
+    {
+        "pk": 152, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 152, 
+            "sort_order": 5, 
+            "card": "116", 
+            "value": "stone and marble"
+        }
+    }, 
+    {
+        "pk": 153, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 153, 
+            "sort_order": 6, 
+            "card": "116", 
+            "value": "Tivoli, Italy"
+        }
+    }, 
+    {
+        "pk": 154, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 154, 
+            "sort_order": 1, 
+            "card": "117", 
+            "value": "book"
+        }
+    }, 
+    {
+        "pk": 155, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 155, 
+            "sort_order": 2, 
+            "card": "117", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/117/2-serlio2.png"
+        }
+    }, 
+    {
+        "pk": 156, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 156, 
+            "sort_order": 3, 
+            "card": "117", 
+            "value": "Sebastiano Serlio"
+        }
+    }, 
+    {
+        "pk": 157, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 157, 
+            "sort_order": 4, 
+            "card": "117", 
+            "value": "1540"
+        }
+    }, 
+    {
+        "pk": 158, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 158, 
+            "sort_order": 5, 
+            "card": "117", 
+            "value": "Book III on the Antiquities of Rome"
+        }
+    }, 
+    {
+        "pk": 159, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 159, 
+            "sort_order": 1, 
+            "card": "118", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/118/3-veronese-barbaro2.png"
+        }
+    }, 
+    {
+        "pk": 160, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 160, 
+            "sort_order": 2, 
+            "card": "118", 
+            "value": "Paolo Veronese"
+        }
+    }, 
+    {
+        "pk": 161, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 161, 
+            "sort_order": 3, 
+            "card": "118", 
+            "value": "1556-67"
+        }
+    }, 
+    {
+        "pk": 162, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 162, 
+            "sort_order": 4, 
+            "card": "118", 
+            "value": "Portrait of Daniele Barbaro"
+        }
+    }, 
+    {
+        "pk": 163, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 163, 
+            "sort_order": 5, 
+            "card": "118", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 164, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 164, 
+            "sort_order": 6, 
+            "card": "118", 
+            "value": "National Gallery, London, England"
+        }
+    }, 
+    {
+        "pk": 165, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 165, 
+            "sort_order": 1, 
+            "card": "119", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/119/4-rotonda2.png"
+        }
+    }, 
+    {
+        "pk": 166, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 166, 
+            "sort_order": 2, 
+            "card": "119", 
+            "value": "Andrea Palladio"
+        }
+    }, 
+    {
+        "pk": 167, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 167, 
+            "sort_order": 3, 
+            "card": "119", 
+            "value": "1566-70"
+        }
+    }, 
+    {
+        "pk": 168, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 168, 
+            "sort_order": 4, 
+            "card": "119", 
+            "value": "Villa Almerico (Rotonda)"
+        }
+    }, 
+    {
+        "pk": 169, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 169, 
+            "sort_order": 5, 
+            "card": "119", 
+            "value": "stone, ceramic tile, marble"
+        }
+    }, 
+    {
+        "pk": 170, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 170, 
+            "sort_order": 6, 
+            "card": "119", 
+            "value": "Vicenza, Italy"
+        }
+    }, 
+    {
+        "pk": 171, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 171, 
+            "sort_order": 1, 
+            "card": "120", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/120/5-rotonda2.png"
+        }
+    }, 
+    {
+        "pk": 172, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 172, 
+            "sort_order": 2, 
+            "card": "120", 
+            "value": "Andrea Palladio"
+        }
+    }, 
+    {
+        "pk": 173, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 173, 
+            "sort_order": 3, 
+            "card": "120", 
+            "value": "1566-70"
+        }
+    }, 
+    {
+        "pk": 174, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 174, 
+            "sort_order": 4, 
+            "card": "120", 
+            "value": "Villa Almerico (Rotonda)"
+        }
+    }, 
+    {
+        "pk": 175, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 175, 
+            "sort_order": 5, 
+            "card": "120", 
+            "value": "stone, ceramic tile, marble"
+        }
+    }, 
+    {
+        "pk": 176, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 176, 
+            "sort_order": 6, 
+            "card": "120", 
+            "value": "Vicenza, Italy"
+        }
+    }, 
+    {
+        "pk": 177, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 177, 
+            "sort_order": 1, 
+            "card": "121", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/121/6-rotonda-interior2.png"
+        }
+    }, 
+    {
+        "pk": 178, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 178, 
+            "sort_order": 2, 
+            "card": "121", 
+            "value": "Alessandro and Giovanni Battista Maganza"
+        }
+    }, 
+    {
+        "pk": 179, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 179, 
+            "sort_order": 3, 
+            "card": "121", 
+            "value": "Late 16th c."
+        }
+    }, 
+    {
+        "pk": 180, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 180, 
+            "sort_order": 4, 
+            "card": "121", 
+            "value": "Frescoes in Interior of the Rotonda"
+        }
+    }, 
+    {
+        "pk": 181, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 181, 
+            "sort_order": 5, 
+            "card": "121", 
+            "value": "fresco"
+        }
+    }, 
+    {
+        "pk": 182, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 182, 
+            "sort_order": 6, 
+            "card": "121", 
+            "value": "Vicenza, Italy"
+        }
+    }, 
+    {
+        "pk": 183, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 183, 
+            "sort_order": 1, 
+            "card": "122", 
+            "value": "book"
+        }
+    }, 
+    {
+        "pk": 184, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 184, 
+            "sort_order": 2, 
+            "card": "122", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/122/7-palladio2.png"
+        }
+    }, 
+    {
+        "pk": 185, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 185, 
+            "sort_order": 3, 
+            "card": "122", 
+            "value": "Andrea Palladio"
+        }
+    }, 
+    {
+        "pk": 186, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 186, 
+            "sort_order": 4, 
+            "card": "122", 
+            "value": "1570"
+        }
+    }, 
+    {
+        "pk": 187, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 187, 
+            "sort_order": 5, 
+            "card": "122", 
+            "value": "Quattro Libri (Four Books of Architecture)"
+        }
+    }, 
+    {
+        "pk": 188, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 188, 
+            "sort_order": 1, 
+            "card": "123", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/123/8-maser.png"
+        }
+    }, 
+    {
+        "pk": 189, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 189, 
+            "sort_order": 2, 
+            "card": "123", 
+            "value": "Andrea Palladio"
+        }
+    }, 
+    {
+        "pk": 190, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 190, 
+            "sort_order": 3, 
+            "card": "123", 
+            "value": "1549/51-58"
+        }
+    }, 
+    {
+        "pk": 191, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 191, 
+            "sort_order": 4, 
+            "card": "123", 
+            "value": "Villa Barbaro"
+        }
+    }, 
+    {
+        "pk": 192, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 192, 
+            "sort_order": 5, 
+            "card": "123", 
+            "value": "stone, ceramic tile, marble"
+        }
+    }, 
+    {
+        "pk": 193, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 193, 
+            "sort_order": 6, 
+            "card": "123", 
+            "value": "Maser, Italy"
+        }
+    }, 
+    {
+        "pk": 194, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 194, 
+            "sort_order": 1, 
+            "card": "124", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/124/9-maser-nymph2.png"
+        }
+    }, 
+    {
+        "pk": 195, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 195, 
+            "sort_order": 2, 
+            "card": "124", 
+            "value": "Andrea Palladio"
+        }
+    }, 
+    {
+        "pk": 196, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 196, 
+            "sort_order": 3, 
+            "card": "124", 
+            "value": "1549/51-58"
+        }
+    }, 
+    {
+        "pk": 197, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 197, 
+            "sort_order": 4, 
+            "card": "124", 
+            "value": "Nympahaeum at the Villa Barbaro"
+        }
+    }, 
+    {
+        "pk": 198, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 198, 
+            "sort_order": 5, 
+            "card": "124", 
+            "value": "stone, ceramic tile, marble"
+        }
+    }, 
+    {
+        "pk": 199, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 199, 
+            "sort_order": 6, 
+            "card": "124", 
+            "value": "Maser, Italy"
+        }
+    }, 
+    {
+        "pk": 200, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 200, 
+            "sort_order": 1, 
+            "card": "125", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/125/10-monticello2.png"
+        }
+    }, 
+    {
+        "pk": 201, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 201, 
+            "sort_order": 2, 
+            "card": "125", 
+            "value": "Thomas Jefferson"
+        }
+    }, 
+    {
+        "pk": 202, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 202, 
+            "sort_order": 3, 
+            "card": "125", 
+            "value": "1769-84"
+        }
+    }, 
+    {
+        "pk": 203, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 203, 
+            "sort_order": 4, 
+            "card": "125", 
+            "value": "Monticello"
+        }
+    }, 
+    {
+        "pk": 204, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 204, 
+            "sort_order": 5, 
+            "card": "125", 
+            "value": "stone and brick"
+        }
+    }, 
+    {
+        "pk": 205, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 205, 
+            "sort_order": 6, 
+            "card": "125", 
+            "value": "Charlottesville, VA"
+        }
+    }, 
+    {
+        "pk": 206, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 206, 
+            "sort_order": 1, 
+            "card": "126", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/126/1-verrocchio2.png"
+        }
+    }, 
+    {
+        "pk": 207, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 207, 
+            "sort_order": 2, 
+            "card": "126", 
+            "value": "Andrea del Verrocchio and Leonardo da Vinci"
+        }
+    }, 
+    {
+        "pk": 208, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 208, 
+            "sort_order": 3, 
+            "card": "126", 
+            "value": "c. 1472"
+        }
+    }, 
+    {
+        "pk": 209, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 209, 
+            "sort_order": 4, 
+            "card": "126", 
+            "value": "Tobias and the Angel"
+        }
+    }, 
+    {
+        "pk": 210, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 210, 
+            "sort_order": 5, 
+            "card": "126", 
+            "value": "tempera on panel"
+        }
+    }, 
+    {
+        "pk": 211, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 211, 
+            "sort_order": 6, 
+            "card": "126", 
+            "value": "National Gallery, London, England"
+        }
+    }, 
+    {
+        "pk": 212, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 212, 
+            "sort_order": 1, 
+            "card": "127", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/127/2-leonardo2.png"
+        }
+    }, 
+    {
+        "pk": 213, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 213, 
+            "sort_order": 2, 
+            "card": "127", 
+            "value": "Leonardo da Vinci"
+        }
+    }, 
+    {
+        "pk": 214, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 214, 
+            "sort_order": 3, 
+            "card": "127", 
+            "value": "c. 1515"
+        }
+    }, 
+    {
+        "pk": 215, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 215, 
+            "sort_order": 4, 
+            "card": "127", 
+            "value": "Self-Portrait"
+        }
+    }, 
+    {
+        "pk": 216, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 216, 
+            "sort_order": 5, 
+            "card": "127", 
+            "value": "red chalk on paper"
+        }
+    }, 
+    {
+        "pk": 217, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 217, 
+            "sort_order": 6, 
+            "card": "127", 
+            "value": "Biblioteca Reale, Turin, Italy"
+        }
+    }, 
+    {
+        "pk": 218, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 218, 
+            "sort_order": 1, 
+            "card": "128", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/128/3-masaccio2.png"
+        }
+    }, 
+    {
+        "pk": 219, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 219, 
+            "sort_order": 2, 
+            "card": "128", 
+            "value": "Masaccio"
+        }
+    }, 
+    {
+        "pk": 220, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 220, 
+            "sort_order": 3, 
+            "card": "128", 
+            "value": "c. 1427"
+        }
+    }, 
+    {
+        "pk": 221, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 221, 
+            "sort_order": 4, 
+            "card": "128", 
+            "value": "The Tribute Money"
+        }
+    }, 
+    {
+        "pk": 222, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 222, 
+            "sort_order": 5, 
+            "card": "128", 
+            "value": "fresco"
+        }
+    }, 
+    {
+        "pk": 223, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 223, 
+            "sort_order": 6, 
+            "card": "128", 
+            "value": "Brancacci Chapel, Florence, Italy"
+        }
+    }, 
+    {
+        "pk": 224, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 224, 
+            "sort_order": 1, 
+            "card": "129", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/129/4-titian2.png"
+        }
+    }, 
+    {
+        "pk": 225, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 225, 
+            "sort_order": 2, 
+            "card": "129", 
+            "value": "Titian"
+        }
+    }, 
+    {
+        "pk": 226, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 226, 
+            "sort_order": 3, 
+            "card": "129", 
+            "value": "c. 1555"
+        }
+    }, 
+    {
+        "pk": 227, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 227, 
+            "sort_order": 4, 
+            "card": "129", 
+            "value": "Self-Portrait"
+        }
+    }, 
+    {
+        "pk": 228, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 228, 
+            "sort_order": 5, 
+            "card": "129", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 229, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 229, 
+            "sort_order": 6, 
+            "card": "129", 
+            "value": "Berlin, Germany"
+        }
+    }, 
+    {
+        "pk": 230, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 230, 
+            "sort_order": 1, 
+            "card": "130", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/130/5-adoration2.png"
+        }
+    }, 
+    {
+        "pk": 231, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 231, 
+            "sort_order": 2, 
+            "card": "130", 
+            "value": "Leonardo da Vinci"
+        }
+    }, 
+    {
+        "pk": 232, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 232, 
+            "sort_order": 3, 
+            "card": "130", 
+            "value": "c. 1481"
+        }
+    }, 
+    {
+        "pk": 233, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 233, 
+            "sort_order": 4, 
+            "card": "130", 
+            "value": "Adoration of the Magi"
+        }
+    }, 
+    {
+        "pk": 234, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 234, 
+            "sort_order": 5, 
+            "card": "130", 
+            "value": "oil on wood"
+        }
+    }, 
+    {
+        "pk": 235, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 235, 
+            "sort_order": 6, 
+            "card": "130", 
+            "value": "Uffizi, Florence, Italy"
+        }
+    }, 
+    {
+        "pk": 236, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 236, 
+            "sort_order": 1, 
+            "card": "131", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/131/6-last supper2.png"
+        }
+    }, 
+    {
+        "pk": 237, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 237, 
+            "sort_order": 2, 
+            "card": "131", 
+            "value": "Leonardo da Vinci"
+        }
+    }, 
+    {
+        "pk": 238, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 238, 
+            "sort_order": 3, 
+            "card": "131", 
+            "value": "c. 1495-97"
+        }
+    }, 
+    {
+        "pk": 239, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 239, 
+            "sort_order": 4, 
+            "card": "131", 
+            "value": "Last Supper"
+        }
+    }, 
+    {
+        "pk": 240, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 240, 
+            "sort_order": 5, 
+            "card": "131", 
+            "value": "fresco"
+        }
+    }, 
+    {
+        "pk": 241, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 241, 
+            "sort_order": 6, 
+            "card": "131", 
+            "value": "Milan, Italy"
+        }
+    }, 
+    {
+        "pk": 242, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 242, 
+            "sort_order": 1, 
+            "card": "132", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/132/7-thomas2.png"
+        }
+    }, 
+    {
+        "pk": 243, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 243, 
+            "sort_order": 2, 
+            "card": "132", 
+            "value": "Andrea del Verrocchio"
+        }
+    }, 
+    {
+        "pk": 244, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 244, 
+            "sort_order": 3, 
+            "card": "132", 
+            "value": "c.1469-83"
+        }
+    }, 
+    {
+        "pk": 245, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 245, 
+            "sort_order": 4, 
+            "card": "132", 
+            "value": "The Incredulity of St. Thomas"
+        }
+    }, 
+    {
+        "pk": 246, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 246, 
+            "sort_order": 5, 
+            "card": "132", 
+            "value": "bronze"
+        }
+    }, 
+    {
+        "pk": 247, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 247, 
+            "sort_order": 6, 
+            "card": "132", 
+            "value": "Or San Michele, Florence, Italy"
+        }
+    }, 
+    {
+        "pk": 248, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 248, 
+            "sort_order": 1, 
+            "card": "133", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/133/8-virgin2.png"
+        }
+    }, 
+    {
+        "pk": 249, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 249, 
+            "sort_order": 2, 
+            "card": "133", 
+            "value": "Leonardo da Vinci"
+        }
+    }, 
+    {
+        "pk": 250, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 250, 
+            "sort_order": 3, 
+            "card": "133", 
+            "value": "c.1510-13"
+        }
+    }, 
+    {
+        "pk": 251, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 251, 
+            "sort_order": 4, 
+            "card": "133", 
+            "value": "Virgin and Child with Saint Anne"
+        }
+    }, 
+    {
+        "pk": 252, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 252, 
+            "sort_order": 5, 
+            "card": "133", 
+            "value": "oil on wood"
+        }
+    }, 
+    {
+        "pk": 253, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 253, 
+            "sort_order": 6, 
+            "card": "133", 
+            "value": "Louvre, Paris, France"
+        }
+    }, 
+    {
+        "pk": 254, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 254, 
+            "sort_order": 1, 
+            "card": "138", 
+            "value": "ivory"
+        }
+    }, 
+    {
+        "pk": 255, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 255, 
+            "sort_order": 2, 
+            "card": "138", 
+            "value": "Benin"
+        }
+    }, 
+    {
+        "pk": 256, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 256, 
+            "sort_order": 3, 
+            "card": "138", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/138/1-queen.jpg"
+        }
+    }, 
+    {
+        "pk": 257, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 257, 
+            "sort_order": 4, 
+            "card": "138", 
+            "value": "1504-1550"
+        }
+    }, 
+    {
+        "pk": 258, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 258, 
+            "sort_order": 5, 
+            "card": "138", 
+            "value": "Queen Idia Mask"
+        }
+    }, 
+    {
+        "pk": 259, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 259, 
+            "sort_order": 1, 
+            "card": "139", 
+            "value": "bronze"
+        }
+    }, 
+    {
+        "pk": 260, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 260, 
+            "sort_order": 2, 
+            "card": "139", 
+            "value": "Dahomey"
+        }
+    }, 
+    {
+        "pk": 261, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 261, 
+            "sort_order": 3, 
+            "card": "139", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/139/2-behanzin.jpg"
+        }
+    }, 
+    {
+        "pk": 262, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 262, 
+            "sort_order": 4, 
+            "card": "139", 
+            "value": "late 19th c."
+        }
+    }, 
+    {
+        "pk": 263, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 263, 
+            "sort_order": 5, 
+            "card": "139", 
+            "value": "King Behanzin as Shark"
+        }
+    }, 
+    {
+        "pk": 264, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 264, 
+            "sort_order": 1, 
+            "card": "140", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/140/3-picasso.jpg"
+        }
+    }, 
+    {
+        "pk": 265, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 265, 
+            "sort_order": 2, 
+            "card": "140", 
+            "value": "Pablo Picasso"
+        }
+    }, 
+    {
+        "pk": 266, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 266, 
+            "sort_order": 3, 
+            "card": "140", 
+            "value": "1906-7"
+        }
+    }, 
+    {
+        "pk": 267, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 267, 
+            "sort_order": 4, 
+            "card": "140", 
+            "value": "Les Demoiselles d'Avignon"
+        }
+    }, 
+    {
+        "pk": 268, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 268, 
+            "sort_order": 5, 
+            "card": "140", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 269, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 269, 
+            "sort_order": 6, 
+            "card": "140", 
+            "value": "Museum of Modern Art, New York"
+        }
+    }, 
+    {
+        "pk": 270, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 270, 
+            "sort_order": 1, 
+            "card": "141", 
+            "value": "Copper and wood"
+        }
+    }, 
+    {
+        "pk": 271, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 271, 
+            "sort_order": 2, 
+            "card": "141", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/141/4-bird.jpg"
+        }
+    }, 
+    {
+        "pk": 272, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 272, 
+            "sort_order": 3, 
+            "card": "141", 
+            "value": "19th c."
+        }
+    }, 
+    {
+        "pk": 273, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 273, 
+            "sort_order": 4, 
+            "card": "141", 
+            "value": "The Bird of Benin"
+        }
+    }, 
+    {
+        "pk": 274, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 274, 
+            "sort_order": 1, 
+            "card": "142", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 275, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 275, 
+            "sort_order": 2, 
+            "card": "142", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/142/5-cezanne.jpg"
+        }
+    }, 
+    {
+        "pk": 276, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 276, 
+            "sort_order": 3, 
+            "card": "142", 
+            "value": "Paul Cezanne"
+        }
+    }, 
+    {
+        "pk": 277, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 277, 
+            "sort_order": 4, 
+            "card": "142", 
+            "value": "1885"
+        }
+    }, 
+    {
+        "pk": 278, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 278, 
+            "sort_order": 5, 
+            "card": "142", 
+            "value": "L'Estaque with Red Roofs"
+        }
+    }, 
+    {
+        "pk": 279, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 279, 
+            "sort_order": 1, 
+            "card": "143", 
+            "value": "charcoal drawing"
+        }
+    }, 
+    {
+        "pk": 280, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 280, 
+            "sort_order": 2, 
+            "card": "143", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/143/6-picasso-study.jpg"
+        }
+    }, 
+    {
+        "pk": 281, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 281, 
+            "sort_order": 3, 
+            "card": "143", 
+            "value": "Pablo Picasso"
+        }
+    }, 
+    {
+        "pk": 282, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 282, 
+            "sort_order": 4, 
+            "card": "143", 
+            "value": "1906"
+        }
+    }, 
+    {
+        "pk": 283, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 283, 
+            "sort_order": 5, 
+            "card": "143", 
+            "value": "1906 Study for Les Demoiselles"
+        }
+    }, 
+    {
+        "pk": 284, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 284, 
+            "sort_order": 1, 
+            "card": "144", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/144/1-bernini-four rivers.jpg"
+        }
+    }, 
+    {
+        "pk": 285, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 285, 
+            "sort_order": 2, 
+            "card": "144", 
+            "value": "Gianlorenzo Bernini"
+        }
+    }, 
+    {
+        "pk": 286, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 286, 
+            "sort_order": 3, 
+            "card": "144", 
+            "value": "1648-51"
+        }
+    }, 
+    {
+        "pk": 287, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 287, 
+            "sort_order": 4, 
+            "card": "144", 
+            "value": "Four Rivers Fountain"
+        }
+    }, 
+    {
+        "pk": 288, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 288, 
+            "sort_order": 5, 
+            "card": "144", 
+            "value": "marble and stone"
+        }
+    }, 
+    {
+        "pk": 289, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 289, 
+            "sort_order": 6, 
+            "card": "144", 
+            "value": "Piazza Navona, Rome"
+        }
+    }, 
+    {
+        "pk": 290, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 290, 
+            "sort_order": 1, 
+            "card": "145", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/145/2-four rivers detail.jpg"
+        }
+    }, 
+    {
+        "pk": 291, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 291, 
+            "sort_order": 2, 
+            "card": "145", 
+            "value": "Gianlorenzo Bernini"
+        }
+    }, 
+    {
+        "pk": 292, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 292, 
+            "sort_order": 3, 
+            "card": "145", 
+            "value": "1648-51"
+        }
+    }, 
+    {
+        "pk": 293, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 293, 
+            "sort_order": 4, 
+            "card": "145", 
+            "value": "Four Rivers Fountain"
+        }
+    }, 
+    {
+        "pk": 294, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 294, 
+            "sort_order": 5, 
+            "card": "145", 
+            "value": "marble and stone"
+        }
+    }, 
+    {
+        "pk": 295, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 295, 
+            "sort_order": 6, 
+            "card": "145", 
+            "value": "Piazza Navona, Rome"
+        }
+    }, 
+    {
+        "pk": 296, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 296, 
+            "sort_order": 1, 
+            "card": "146", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/146/3-bernini teresa.jpg"
+        }
+    }, 
+    {
+        "pk": 297, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 297, 
+            "sort_order": 2, 
+            "card": "146", 
+            "value": "Gianlorenzo Bernini"
+        }
+    }, 
+    {
+        "pk": 298, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 298, 
+            "sort_order": 3, 
+            "card": "146", 
+            "value": "1647-1651"
+        }
+    }, 
+    {
+        "pk": 299, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 299, 
+            "sort_order": 4, 
+            "card": "146", 
+            "value": "Ecstasy of Saint Teresa"
+        }
+    }, 
+    {
+        "pk": 300, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 300, 
+            "sort_order": 5, 
+            "card": "146", 
+            "value": "marble"
+        }
+    }, 
+    {
+        "pk": 301, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 301, 
+            "sort_order": 6, 
+            "card": "146", 
+            "value": "Cornaro Chapel, Santa Maria della Vittoria, Rome"
+        }
+    }, 
+    {
+        "pk": 302, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 302, 
+            "sort_order": 1, 
+            "card": "147", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/147/4-bernini apollo.jpg"
+        }
+    }, 
+    {
+        "pk": 303, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 303, 
+            "sort_order": 2, 
+            "card": "147", 
+            "value": "Gianlorenzo Bernini"
+        }
+    }, 
+    {
+        "pk": 304, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 304, 
+            "sort_order": 3, 
+            "card": "147", 
+            "value": "1622/24"
+        }
+    }, 
+    {
+        "pk": 305, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 305, 
+            "sort_order": 4, 
+            "card": "147", 
+            "value": "Apollo and Daphne"
+        }
+    }, 
+    {
+        "pk": 306, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 306, 
+            "sort_order": 5, 
+            "card": "147", 
+            "value": "marble"
+        }
+    }, 
+    {
+        "pk": 307, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 307, 
+            "sort_order": 6, 
+            "card": "147", 
+            "value": "Galleria Borghese, Rome"
+        }
+    }, 
+    {
+        "pk": 308, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 308, 
+            "sort_order": 1, 
+            "card": "148", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/148/5-velazquez.jpg"
+        }
+    }, 
+    {
+        "pk": 309, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 309, 
+            "sort_order": 2, 
+            "card": "148", 
+            "value": "Diego Velazquez"
+        }
+    }, 
+    {
+        "pk": 310, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 310, 
+            "sort_order": 3, 
+            "card": "148", 
+            "value": "c.1650"
+        }
+    }, 
+    {
+        "pk": 311, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 311, 
+            "sort_order": 4, 
+            "card": "148", 
+            "value": "Portrait of Innocent X"
+        }
+    }, 
+    {
+        "pk": 312, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 312, 
+            "sort_order": 5, 
+            "card": "148", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 313, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 313, 
+            "sort_order": 6, 
+            "card": "148", 
+            "value": "Galleria Doria Pamphilj, Rome"
+        }
+    }, 
+    {
+        "pk": 314, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 314, 
+            "sort_order": 1, 
+            "card": "149", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/149/6-bernini-san andrea2.jpg"
+        }
+    }, 
+    {
+        "pk": 315, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 315, 
+            "sort_order": 2, 
+            "card": "149", 
+            "value": "Gianlorenzo Bernini"
+        }
+    }, 
+    {
+        "pk": 316, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 316, 
+            "sort_order": 3, 
+            "card": "149", 
+            "value": "1658-70"
+        }
+    }, 
+    {
+        "pk": 317, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 317, 
+            "sort_order": 4, 
+            "card": "149", 
+            "value": "Church of Sant'Andrea al Quirinale"
+        }
+    }, 
+    {
+        "pk": 318, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 318, 
+            "sort_order": 5, 
+            "card": "149", 
+            "value": "stone, marble, stucco"
+        }
+    }, 
+    {
+        "pk": 319, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 319, 
+            "sort_order": 6, 
+            "card": "149", 
+            "value": "Rome, Italy"
+        }
+    }, 
+    {
+        "pk": 320, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 320, 
+            "sort_order": 1, 
+            "card": "150", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/150/7-borromini-san carlo2.jpg"
+        }
+    }, 
+    {
+        "pk": 321, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 321, 
+            "sort_order": 2, 
+            "card": "150", 
+            "value": "Francesco Borromini"
+        }
+    }, 
+    {
+        "pk": 322, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 322, 
+            "sort_order": 3, 
+            "card": "150", 
+            "value": "1638-70"
+        }
+    }, 
+    {
+        "pk": 323, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 323, 
+            "sort_order": 4, 
+            "card": "150", 
+            "value": "San Carlo alle Quattro Fontane (San Carlito)"
+        }
+    }, 
+    {
+        "pk": 324, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 324, 
+            "sort_order": 5, 
+            "card": "150", 
+            "value": "stone, marble, stucco"
+        }
+    }, 
+    {
+        "pk": 325, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 325, 
+            "sort_order": 6, 
+            "card": "150", 
+            "value": "Rome, Italy"
+        }
+    }, 
+    {
+        "pk": 326, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 326, 
+            "sort_order": 1, 
+            "card": "151", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/151/8-borromini-cupola2.jpg"
+        }
+    }, 
+    {
+        "pk": 327, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 327, 
+            "sort_order": 2, 
+            "card": "151", 
+            "value": "Francesco Borromini"
+        }
+    }, 
+    {
+        "pk": 328, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 328, 
+            "sort_order": 3, 
+            "card": "151", 
+            "value": "1638-70"
+        }
+    }, 
+    {
+        "pk": 329, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 329, 
+            "sort_order": 4, 
+            "card": "151", 
+            "value": "Cupola of San Carlo alle Quattro Fontane (San Carlito)"
+        }
+    }, 
+    {
+        "pk": 330, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 330, 
+            "sort_order": 5, 
+            "card": "151", 
+            "value": "stone, stucco"
+        }
+    }, 
+    {
+        "pk": 331, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 331, 
+            "sort_order": 6, 
+            "card": "151", 
+            "value": "Rome, Italy"
+        }
+    }, 
+    {
+        "pk": 332, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 332, 
+            "sort_order": 1, 
+            "card": "152", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/152/9-st. peters2.jpg"
+        }
+    }, 
+    {
+        "pk": 333, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 333, 
+            "sort_order": 2, 
+            "card": "152", 
+            "value": "Gianlorenzo Bernini"
+        }
+    }, 
+    {
+        "pk": 334, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 334, 
+            "sort_order": 3, 
+            "card": "152", 
+            "value": "1656-67"
+        }
+    }, 
+    {
+        "pk": 335, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 335, 
+            "sort_order": 4, 
+            "card": "152", 
+            "value": "Piazza San Pietro (St. Peter's Square)"
+        }
+    }, 
+    {
+        "pk": 336, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 336, 
+            "sort_order": 5, 
+            "card": "152", 
+            "value": "stone"
+        }
+    }, 
+    {
+        "pk": 337, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 337, 
+            "sort_order": 6, 
+            "card": "152", 
+            "value": "Vatican City"
+        }
+    }, 
+    {
+        "pk": 338, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 338, 
+            "sort_order": 1, 
+            "card": "153", 
+            "value": "salt print"
+        }
+    }, 
+    {
+        "pk": 339, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 339, 
+            "sort_order": 2, 
+            "card": "153", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/153/1-open door.jpg"
+        }
+    }, 
+    {
+        "pk": 340, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 340, 
+            "sort_order": 3, 
+            "card": "153", 
+            "value": "William Henry Fox Talbot"
+        }
+    }, 
+    {
+        "pk": 341, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 341, 
+            "sort_order": 4, 
+            "card": "153", 
+            "value": "1844-46"
+        }
+    }, 
+    {
+        "pk": 342, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 342, 
+            "sort_order": 5, 
+            "card": "153", 
+            "value": "The Open Door"
+        }
+    }, 
+    {
+        "pk": 343, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 343, 
+            "sort_order": 1, 
+            "card": "154", 
+            "value": "daguerreotype"
+        }
+    }, 
+    {
+        "pk": 344, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 344, 
+            "sort_order": 2, 
+            "card": "154", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/154/2-douglass.jpg"
+        }
+    }, 
+    {
+        "pk": 345, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 345, 
+            "sort_order": 3, 
+            "card": "154", 
+            "value": "c. 1855"
+        }
+    }, 
+    {
+        "pk": 346, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 346, 
+            "sort_order": 4, 
+            "card": "154", 
+            "value": "Frederick Douglass"
+        }
+    }, 
+    {
+        "pk": 347, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 347, 
+            "sort_order": 1, 
+            "card": "155", 
+            "value": "silver albumen print"
+        }
+    }, 
+    {
+        "pk": 348, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 348, 
+            "sort_order": 2, 
+            "card": "155", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/155/3-great wave.jpg"
+        }
+    }, 
+    {
+        "pk": 349, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 349, 
+            "sort_order": 3, 
+            "card": "155", 
+            "value": "Gustave Le Gray"
+        }
+    }, 
+    {
+        "pk": 350, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 350, 
+            "sort_order": 4, 
+            "card": "155", 
+            "value": "1857"
+        }
+    }, 
+    {
+        "pk": 351, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 351, 
+            "sort_order": 5, 
+            "card": "155", 
+            "value": "The Great Wave, Sette"
+        }
+    }, 
+    {
+        "pk": 352, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 352, 
+            "sort_order": 1, 
+            "card": "156", 
+            "value": "albumen print"
+        }
+    }, 
+    {
+        "pk": 353, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 353, 
+            "sort_order": 2, 
+            "card": "156", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/156/4-herschel.jpg"
+        }
+    }, 
+    {
+        "pk": 354, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 354, 
+            "sort_order": 3, 
+            "card": "156", 
+            "value": "Julia Margaret Cameron"
+        }
+    }, 
+    {
+        "pk": 355, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 355, 
+            "sort_order": 4, 
+            "card": "156", 
+            "value": "1867"
+        }
+    }, 
+    {
+        "pk": 356, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 356, 
+            "sort_order": 5, 
+            "card": "156", 
+            "value": "Sir John Herschel"
+        }
+    }, 
+    {
+        "pk": 357, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 357, 
+            "sort_order": 1, 
+            "card": "157", 
+            "value": "lantern slide"
+        }
+    }, 
+    {
+        "pk": 358, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 358, 
+            "sort_order": 2, 
+            "card": "157", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/157/5-stieglitz-terminal2.jpg"
+        }
+    }, 
+    {
+        "pk": 359, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 359, 
+            "sort_order": 3, 
+            "card": "157", 
+            "value": "Alfred Stieglitz"
+        }
+    }, 
+    {
+        "pk": 360, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 360, 
+            "sort_order": 4, 
+            "card": "157", 
+            "value": "1893"
+        }
+    }, 
+    {
+        "pk": 361, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 361, 
+            "sort_order": 5, 
+            "card": "157", 
+            "value": "The Terminal"
+        }
+    }, 
+    {
+        "pk": 362, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 362, 
+            "sort_order": 1, 
+            "card": "158", 
+            "value": "collotype"
+        }
+    }, 
+    {
+        "pk": 363, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 363, 
+            "sort_order": 2, 
+            "card": "158", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/158/6-discus.jpg"
+        }
+    }, 
+    {
+        "pk": 364, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 364, 
+            "sort_order": 3, 
+            "card": "158", 
+            "value": "Eadweard Muybridge"
+        }
+    }, 
+    {
+        "pk": 365, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 365, 
+            "sort_order": 4, 
+            "card": "158", 
+            "value": "1883-87"
+        }
+    }, 
+    {
+        "pk": 366, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 366, 
+            "sort_order": 5, 
+            "card": "158", 
+            "value": "Man Throwing Discus"
+        }
+    }, 
+    {
+        "pk": 367, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 367, 
+            "sort_order": 1, 
+            "card": "159", 
+            "value": "lantern slide"
+        }
+    }, 
+    {
+        "pk": 368, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 368, 
+            "sort_order": 2, 
+            "card": "159", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/159/7-street paver.jpg"
+        }
+    }, 
+    {
+        "pk": 369, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 369, 
+            "sort_order": 3, 
+            "card": "159", 
+            "value": "Alfred Stieglitz"
+        }
+    }, 
+    {
+        "pk": 370, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 370, 
+            "sort_order": 4, 
+            "card": "159", 
+            "value": "1892-93"
+        }
+    }, 
+    {
+        "pk": 371, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 371, 
+            "sort_order": 5, 
+            "card": "159", 
+            "value": "An Impression"
+        }
+    }, 
+    {
+        "pk": 372, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 372, 
+            "sort_order": 1, 
+            "card": "160", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/160/8-monet-train2.jpg"
+        }
+    }, 
+    {
+        "pk": 373, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 373, 
+            "sort_order": 2, 
+            "card": "160", 
+            "value": "Claude Monet"
+        }
+    }, 
+    {
+        "pk": 374, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 374, 
+            "sort_order": 3, 
+            "card": "160", 
+            "value": "1877"
+        }
+    }, 
+    {
+        "pk": 375, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 375, 
+            "sort_order": 4, 
+            "card": "160", 
+            "value": "Gare Saint Lazare"
+        }
+    }, 
+    {
+        "pk": 376, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 376, 
+            "sort_order": 5, 
+            "card": "160", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 377, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 377, 
+            "sort_order": 6, 
+            "card": "160", 
+            "value": "Cambridge, MA"
+        }
+    }, 
+    {
+        "pk": 378, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 378, 
+            "sort_order": 1, 
+            "card": "161", 
+            "value": "glass negative"
+        }
+    }, 
+    {
+        "pk": 379, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 379, 
+            "sort_order": 2, 
+            "card": "161", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/161/9-lartigue-grand prix.jpg"
+        }
+    }, 
+    {
+        "pk": 380, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 380, 
+            "sort_order": 3, 
+            "card": "161", 
+            "value": "Jacques Henri Lartigue"
+        }
+    }, 
+    {
+        "pk": 381, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 381, 
+            "sort_order": 4, 
+            "card": "161", 
+            "value": "1913"
+        }
+    }, 
+    {
+        "pk": 382, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 382, 
+            "sort_order": 5, 
+            "card": "161", 
+            "value": "Grand Prix of Automobile Club of France"
+        }
+    }, 
+    {
+        "pk": 383, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 383, 
+            "sort_order": 1, 
+            "card": "162", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/162/1-david-oath.jpg"
+        }
+    }, 
+    {
+        "pk": 384, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 384, 
+            "sort_order": 2, 
+            "card": "162", 
+            "value": "Jacques-Louis David"
+        }
+    }, 
+    {
+        "pk": 385, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 385, 
+            "sort_order": 3, 
+            "card": "162", 
+            "value": "1785"
+        }
+    }, 
+    {
+        "pk": 386, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 386, 
+            "sort_order": 4, 
+            "card": "162", 
+            "value": "Oath of the Horatii"
+        }
+    }, 
+    {
+        "pk": 387, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 387, 
+            "sort_order": 5, 
+            "card": "162", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 388, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 388, 
+            "sort_order": 6, 
+            "card": "162", 
+            "value": "Louvre, Paris"
+        }
+    }, 
+    {
+        "pk": 389, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 389, 
+            "sort_order": 1, 
+            "card": "163", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/163/2-david-tennis.jpg"
+        }
+    }, 
+    {
+        "pk": 390, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 390, 
+            "sort_order": 2, 
+            "card": "163", 
+            "value": "Jacques-Louis David"
+        }
+    }, 
+    {
+        "pk": 391, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 391, 
+            "sort_order": 3, 
+            "card": "163", 
+            "value": "1791"
+        }
+    }, 
+    {
+        "pk": 392, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 392, 
+            "sort_order": 4, 
+            "card": "163", 
+            "value": "The Tennis Court Oath"
+        }
+    }, 
+    {
+        "pk": 393, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 393, 
+            "sort_order": 5, 
+            "card": "163", 
+            "value": "Pen and brown ink, brown wash with white highlights"
+        }
+    }, 
+    {
+        "pk": 394, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 394, 
+            "sort_order": 6, 
+            "card": "163", 
+            "value": "Versailles, France"
+        }
+    }, 
+    {
+        "pk": 395, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 395, 
+            "sort_order": 1, 
+            "card": "164", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/164/3-david-marat.jpg"
+        }
+    }, 
+    {
+        "pk": 396, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 396, 
+            "sort_order": 2, 
+            "card": "164", 
+            "value": "Jacques-Louis David"
+        }
+    }, 
+    {
+        "pk": 397, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 397, 
+            "sort_order": 3, 
+            "card": "164", 
+            "value": "1793"
+        }
+    }, 
+    {
+        "pk": 398, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 398, 
+            "sort_order": 4, 
+            "card": "164", 
+            "value": "Marat at His Last Breath"
+        }
+    }, 
+    {
+        "pk": 399, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 399, 
+            "sort_order": 5, 
+            "card": "164", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 400, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 400, 
+            "sort_order": 6, 
+            "card": "164", 
+            "value": "Brussels, Belgium"
+        }
+    }, 
+    {
+        "pk": 401, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 401, 
+            "sort_order": 1, 
+            "card": "165", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/165/4-david-sabine.jpg"
+        }
+    }, 
+    {
+        "pk": 402, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 402, 
+            "sort_order": 2, 
+            "card": "165", 
+            "value": "Jacques-Louis David"
+        }
+    }, 
+    {
+        "pk": 403, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 403, 
+            "sort_order": 3, 
+            "card": "165", 
+            "value": "1799"
+        }
+    }, 
+    {
+        "pk": 404, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 404, 
+            "sort_order": 4, 
+            "card": "165", 
+            "value": "Sabine Women"
+        }
+    }, 
+    {
+        "pk": 405, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 405, 
+            "sort_order": 5, 
+            "card": "165", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 406, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 406, 
+            "sort_order": 6, 
+            "card": "165", 
+            "value": "Louvre, Paris"
+        }
+    }, 
+    {
+        "pk": 407, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 407, 
+            "sort_order": 1, 
+            "card": "166", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/166/1-baudry-pearl.jpg"
+        }
+    }, 
+    {
+        "pk": 408, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 408, 
+            "sort_order": 2, 
+            "card": "166", 
+            "value": "Paul Baudry"
+        }
+    }, 
+    {
+        "pk": 409, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 409, 
+            "sort_order": 3, 
+            "card": "166", 
+            "value": "1862"
+        }
+    }, 
+    {
+        "pk": 410, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 410, 
+            "sort_order": 4, 
+            "card": "166", 
+            "value": "The Pearl"
+        }
+    }, 
+    {
+        "pk": 411, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 411, 
+            "sort_order": 5, 
+            "card": "166", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 412, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 412, 
+            "sort_order": 6, 
+            "card": "166", 
+            "value": "Prado, Madrid"
+        }
+    }, 
+    {
+        "pk": 413, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 413, 
+            "sort_order": 1, 
+            "card": "167", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/167/2-manet-luncheon.jpg"
+        }
+    }, 
+    {
+        "pk": 414, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 414, 
+            "sort_order": 2, 
+            "card": "167", 
+            "value": "Edouard Manet"
+        }
+    }, 
+    {
+        "pk": 415, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 415, 
+            "sort_order": 3, 
+            "card": "167", 
+            "value": "1862-63"
+        }
+    }, 
+    {
+        "pk": 416, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 416, 
+            "sort_order": 4, 
+            "card": "167", 
+            "value": "Luncheon on the Grass"
+        }
+    }, 
+    {
+        "pk": 417, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 417, 
+            "sort_order": 5, 
+            "card": "167", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 418, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 418, 
+            "sort_order": 6, 
+            "card": "167", 
+            "value": "Musee d'Orsay, Paris"
+        }
+    }, 
+    {
+        "pk": 419, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 419, 
+            "sort_order": 1, 
+            "card": "168", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/168/3-manet-olympia.jpg"
+        }
+    }, 
+    {
+        "pk": 420, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 420, 
+            "sort_order": 2, 
+            "card": "168", 
+            "value": "Edouard Manet"
+        }
+    }, 
+    {
+        "pk": 421, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 421, 
+            "sort_order": 3, 
+            "card": "168", 
+            "value": "1863"
+        }
+    }, 
+    {
+        "pk": 422, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 422, 
+            "sort_order": 4, 
+            "card": "168", 
+            "value": "Olympia"
+        }
+    }, 
+    {
+        "pk": 423, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 423, 
+            "sort_order": 5, 
+            "card": "168", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 424, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 424, 
+            "sort_order": 6, 
+            "card": "168", 
+            "value": "Musee d'Orsay, Paris"
+        }
+    }, 
+    {
+        "pk": 425, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 425, 
+            "sort_order": 1, 
+            "card": "169", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/169/4-latour-studio.jpg"
+        }
+    }, 
+    {
+        "pk": 426, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 426, 
+            "sort_order": 2, 
+            "card": "169", 
+            "value": "Henri Fantin-Latour"
+        }
+    }, 
+    {
+        "pk": 427, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 427, 
+            "sort_order": 3, 
+            "card": "169", 
+            "value": "1870"
+        }
+    }, 
+    {
+        "pk": 428, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 428, 
+            "sort_order": 4, 
+            "card": "169", 
+            "value": "The Studio at Batignolles"
+        }
+    }, 
+    {
+        "pk": 429, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 429, 
+            "sort_order": 5, 
+            "card": "169", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 430, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 430, 
+            "sort_order": 6, 
+            "card": "169", 
+            "value": "Musee d'Orsay, Paris"
+        }
+    }, 
+    {
+        "pk": 431, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 431, 
+            "sort_order": 1, 
+            "card": "170", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/170/5-cabanel-venus.jpg"
+        }
+    }, 
+    {
+        "pk": 432, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 432, 
+            "sort_order": 2, 
+            "card": "170", 
+            "value": "Alexandre Cabanel"
+        }
+    }, 
+    {
+        "pk": 433, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 433, 
+            "sort_order": 3, 
+            "card": "170", 
+            "value": "1863"
+        }
+    }, 
+    {
+        "pk": 434, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 434, 
+            "sort_order": 4, 
+            "card": "170", 
+            "value": "The Birth of Venus"
+        }
+    }, 
+    {
+        "pk": 435, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 435, 
+            "sort_order": 5, 
+            "card": "170", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 436, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 436, 
+            "sort_order": 6, 
+            "card": "170", 
+            "value": "Musee d'Orsay, Paris"
+        }
+    }, 
+    {
+        "pk": 437, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 437, 
+            "sort_order": 1, 
+            "card": "171", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/171/6-manet-bar.jpg"
+        }
+    }, 
+    {
+        "pk": 438, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 438, 
+            "sort_order": 2, 
+            "card": "171", 
+            "value": "Edouard Manet"
+        }
+    }, 
+    {
+        "pk": 439, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 439, 
+            "sort_order": 3, 
+            "card": "171", 
+            "value": "1881-82"
+        }
+    }, 
+    {
+        "pk": 440, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 440, 
+            "sort_order": 4, 
+            "card": "171", 
+            "value": "A Bar at the Follies Bergeres"
+        }
+    }, 
+    {
+        "pk": 441, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 441, 
+            "sort_order": 5, 
+            "card": "171", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 442, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 442, 
+            "sort_order": 6, 
+            "card": "171", 
+            "value": "Courtauld Institute of Art, London"
+        }
+    }, 
+    {
+        "pk": 443, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 443, 
+            "sort_order": 1, 
+            "card": "172", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/172/1-braque-estaque2.jpg"
+        }
+    }, 
+    {
+        "pk": 444, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 444, 
+            "sort_order": 2, 
+            "card": "172", 
+            "value": "Georges Braque"
+        }
+    }, 
+    {
+        "pk": 445, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 445, 
+            "sort_order": 3, 
+            "card": "172", 
+            "value": "1908"
+        }
+    }, 
+    {
+        "pk": 446, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 446, 
+            "sort_order": 4, 
+            "card": "172", 
+            "value": "Houses at L'Estaque"
+        }
+    }, 
+    {
+        "pk": 447, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 447, 
+            "sort_order": 5, 
+            "card": "172", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 448, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 448, 
+            "sort_order": 6, 
+            "card": "172", 
+            "value": "Villeneuve-d'Ascq"
+        }
+    }, 
+    {
+        "pk": 449, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 449, 
+            "sort_order": 1, 
+            "card": "173", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/173/2-picasso-three woman2.jpg"
+        }
+    }, 
+    {
+        "pk": 450, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 450, 
+            "sort_order": 2, 
+            "card": "173", 
+            "value": "Pablo Picasso"
+        }
+    }, 
+    {
+        "pk": 451, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 451, 
+            "sort_order": 3, 
+            "card": "173", 
+            "value": "1907-08"
+        }
+    }, 
+    {
+        "pk": 452, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 452, 
+            "sort_order": 4, 
+            "card": "173", 
+            "value": "Three Women"
+        }
+    }, 
+    {
+        "pk": 453, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 453, 
+            "sort_order": 5, 
+            "card": "173", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 454, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 454, 
+            "sort_order": 6, 
+            "card": "173", 
+            "value": "Hermitage, St. Petersburg"
+        }
+    }, 
+    {
+        "pk": 455, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 455, 
+            "sort_order": 1, 
+            "card": "174", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/174/3-picasso-kahnweiler2.jpg"
+        }
+    }, 
+    {
+        "pk": 456, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 456, 
+            "sort_order": 2, 
+            "card": "174", 
+            "value": "Pablo Picasso"
+        }
+    }, 
+    {
+        "pk": 457, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 457, 
+            "sort_order": 3, 
+            "card": "174", 
+            "value": "1910"
+        }
+    }, 
+    {
+        "pk": 458, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 458, 
+            "sort_order": 4, 
+            "card": "174", 
+            "value": "Portrait of Kahnweiler"
+        }
+    }, 
+    {
+        "pk": 459, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 459, 
+            "sort_order": 5, 
+            "card": "174", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 460, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 460, 
+            "sort_order": 6, 
+            "card": "174", 
+            "value": "Art Institute of Chicago"
+        }
+    }, 
+    {
+        "pk": 461, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 461, 
+            "sort_order": 1, 
+            "card": "175", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/175/4-braque-portugais2.jpg"
+        }
+    }, 
+    {
+        "pk": 462, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 462, 
+            "sort_order": 2, 
+            "card": "175", 
+            "value": "Georges Braque"
+        }
+    }, 
+    {
+        "pk": 463, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 463, 
+            "sort_order": 3, 
+            "card": "175", 
+            "value": "1912"
+        }
+    }, 
+    {
+        "pk": 464, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 464, 
+            "sort_order": 4, 
+            "card": "175", 
+            "value": "Le Portugais"
+        }
+    }, 
+    {
+        "pk": 465, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 465, 
+            "sort_order": 5, 
+            "card": "175", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 466, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 466, 
+            "sort_order": 6, 
+            "card": "175", 
+            "value": "Basel, Switzerland"
+        }
+    }, 
+    {
+        "pk": 467, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 467, 
+            "sort_order": 1, 
+            "card": "176", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/176/5-picasso-violin2.jpg"
+        }
+    }, 
+    {
+        "pk": 468, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 468, 
+            "sort_order": 2, 
+            "card": "176", 
+            "value": "Pablo Picasso"
+        }
+    }, 
+    {
+        "pk": 469, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 469, 
+            "sort_order": 3, 
+            "card": "176", 
+            "value": "1912"
+        }
+    }, 
+    {
+        "pk": 470, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 470, 
+            "sort_order": 4, 
+            "card": "176", 
+            "value": "Violin"
+        }
+    }, 
+    {
+        "pk": 471, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 471, 
+            "sort_order": 5, 
+            "card": "176", 
+            "value": "newsprint and charcoal on paper"
+        }
+    }, 
+    {
+        "pk": 472, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 472, 
+            "sort_order": 6, 
+            "card": "176", 
+            "value": "National Museum of Modern Art, Paris"
+        }
+    }, 
+    {
+        "pk": 473, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 473, 
+            "sort_order": 1, 
+            "card": "177", 
+            "value": "cardboard"
+        }
+    }, 
+    {
+        "pk": 474, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 474, 
+            "sort_order": 2, 
+            "card": "177", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/177/6-picasso-installation2.jpg"
+        }
+    }, 
+    {
+        "pk": 475, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 475, 
+            "sort_order": 3, 
+            "card": "177", 
+            "value": "Pablo Picasso"
+        }
+    }, 
+    {
+        "pk": 476, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 476, 
+            "sort_order": 4, 
+            "card": "177", 
+            "value": "1913"
+        }
+    }, 
+    {
+        "pk": 477, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 477, 
+            "sort_order": 5, 
+            "card": "177", 
+            "value": "Guitar"
+        }
+    }, 
+    {
+        "pk": 478, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 478, 
+            "sort_order": 1, 
+            "card": "178", 
+            "value": "mixed materials"
+        }
+    }, 
+    {
+        "pk": 479, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 479, 
+            "sort_order": 2, 
+            "card": "178", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/178/7-tatlin-corner2.jpg"
+        }
+    }, 
+    {
+        "pk": 480, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 480, 
+            "sort_order": 3, 
+            "card": "178", 
+            "value": "Vladimir Tatlin"
+        }
+    }, 
+    {
+        "pk": 481, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 481, 
+            "sort_order": 4, 
+            "card": "178", 
+            "value": "1915"
+        }
+    }, 
+    {
+        "pk": 482, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 482, 
+            "sort_order": 5, 
+            "card": "178", 
+            "value": "Corner-Counter Relief no. 133"
+        }
+    }, 
+    {
+        "pk": 483, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 483, 
+            "sort_order": 1, 
+            "card": "179", 
+            "value": "wood, cardboard, wire, metal, oil paper"
+        }
+    }, 
+    {
+        "pk": 484, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 484, 
+            "sort_order": 2, 
+            "card": "179", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/179/8-tatlin-monument2.jpg"
+        }
+    }, 
+    {
+        "pk": 485, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 485, 
+            "sort_order": 3, 
+            "card": "179", 
+            "value": "Vladimir Tatlin"
+        }
+    }, 
+    {
+        "pk": 486, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 486, 
+            "sort_order": 4, 
+            "card": "179", 
+            "value": "1920"
+        }
+    }, 
+    {
+        "pk": 487, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 487, 
+            "sort_order": 5, 
+            "card": "179", 
+            "value": "Design for Monument to the Third International"
+        }
+    }, 
+    {
+        "pk": 488, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 488, 
+            "sort_order": 1, 
+            "card": "180", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/180/9-eiffel2.jpg"
+        }
+    }, 
+    {
+        "pk": 489, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 489, 
+            "sort_order": 2, 
+            "card": "180", 
+            "value": "Gustave Eiffel (engineer)"
+        }
+    }, 
+    {
+        "pk": 490, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 490, 
+            "sort_order": 3, 
+            "card": "180", 
+            "value": "1887-89"
+        }
+    }, 
+    {
+        "pk": 491, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 491, 
+            "sort_order": 4, 
+            "card": "180", 
+            "value": "Eiffel Tower"
+        }
+    }, 
+    {
+        "pk": 492, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 492, 
+            "sort_order": 5, 
+            "card": "180", 
+            "value": "iron"
+        }
+    }, 
+    {
+        "pk": 493, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 493, 
+            "sort_order": 6, 
+            "card": "180", 
+            "value": "Paris, France"
+        }
+    }, 
+    {
+        "pk": 494, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 494, 
+            "sort_order": 1, 
+            "card": "181", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/181/10-malevich-red2.jpg"
+        }
+    }, 
+    {
+        "pk": 495, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 495, 
+            "sort_order": 2, 
+            "card": "181", 
+            "value": "Kazimir Malevich"
+        }
+    }, 
+    {
+        "pk": 496, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 496, 
+            "sort_order": 3, 
+            "card": "181", 
+            "value": "1913"
+        }
+    }, 
+    {
+        "pk": 497, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 497, 
+            "sort_order": 4, 
+            "card": "181", 
+            "value": "Red Square"
+        }
+    }, 
+    {
+        "pk": 498, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 498, 
+            "sort_order": 5, 
+            "card": "181", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 499, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 499, 
+            "sort_order": 6, 
+            "card": "181", 
+            "value": "Moscow, Russia"
+        }
+    }, 
+    {
+        "pk": 500, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 500, 
+            "sort_order": 1, 
+            "card": "182", 
+            "value": "lithographic poster"
+        }
+    }, 
+    {
+        "pk": 501, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 501, 
+            "sort_order": 2, 
+            "card": "182", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/182/11-lissitzky-whites2.jpg"
+        }
+    }, 
+    {
+        "pk": 502, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 502, 
+            "sort_order": 3, 
+            "card": "182", 
+            "value": "El Lissitzky"
+        }
+    }, 
+    {
+        "pk": 503, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 503, 
+            "sort_order": 4, 
+            "card": "182", 
+            "value": "1920"
+        }
+    }, 
+    {
+        "pk": 504, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 504, 
+            "sort_order": 5, 
+            "card": "182", 
+            "value": "Beat the Whites with the Red Wedge"
+        }
+    }, 
+    {
+        "pk": 505, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 505, 
+            "sort_order": 1, 
+            "card": "183", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/183/12-lissitzky-proun 232.jpg"
+        }
+    }, 
+    {
+        "pk": 506, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 506, 
+            "sort_order": 2, 
+            "card": "183", 
+            "value": "El Lissitzky"
+        }
+    }, 
+    {
+        "pk": 507, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 507, 
+            "sort_order": 3, 
+            "card": "183", 
+            "value": "1919"
+        }
+    }, 
+    {
+        "pk": 508, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 508, 
+            "sort_order": 4, 
+            "card": "183", 
+            "value": "Proun 23, no. 6"
+        }
+    }, 
+    {
+        "pk": 509, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 509, 
+            "sort_order": 5, 
+            "card": "183", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 510, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 510, 
+            "sort_order": 6, 
+            "card": "183", 
+            "value": "Eindhoven, The Netherlands"
+        }
+    }, 
+    {
+        "pk": 511, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 511, 
+            "sort_order": 1, 
+            "card": "184", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/184/13-malevich-suprematism2.jpg"
+        }
+    }, 
+    {
+        "pk": 512, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 512, 
+            "sort_order": 2, 
+            "card": "184", 
+            "value": "Kazimir Malevich"
+        }
+    }, 
+    {
+        "pk": 513, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 513, 
+            "sort_order": 3, 
+            "card": "184", 
+            "value": "1915"
+        }
+    }, 
+    {
+        "pk": 514, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 514, 
+            "sort_order": 4, 
+            "card": "184", 
+            "value": "Suprematism: Painterly Realism of a Football Player: Color Masses in the Fourth Dimension"
+        }
+    }, 
+    {
+        "pk": 515, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 515, 
+            "sort_order": 5, 
+            "card": "184", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 516, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 516, 
+            "sort_order": 6, 
+            "card": "184", 
+            "value": "Amsterdam, The Netherlands"
+        }
+    }, 
+    {
+        "pk": 517, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 517, 
+            "sort_order": 1, 
+            "card": "185", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/185/14-lissitzky-proun yale2.jpg"
+        }
+    }, 
+    {
+        "pk": 518, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 518, 
+            "sort_order": 2, 
+            "card": "185", 
+            "value": "El Lissitzky"
+        }
+    }, 
+    {
+        "pk": 519, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 519, 
+            "sort_order": 3, 
+            "card": "185", 
+            "value": "before 1924"
+        }
+    }, 
+    {
+        "pk": 520, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 520, 
+            "sort_order": 4, 
+            "card": "185", 
+            "value": "Proun no. 99"
+        }
+    }, 
+    {
+        "pk": 521, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 521, 
+            "sort_order": 5, 
+            "card": "185", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 522, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 522, 
+            "sort_order": 6, 
+            "card": "185", 
+            "value": "Yale University Art Gallery, New Haven"
+        }
+    }, 
+    {
+        "pk": 523, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 523, 
+            "sort_order": 1, 
+            "card": "186", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/186/bernini.png"
+        }
+    }, 
+    {
+        "pk": 524, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 524, 
+            "sort_order": 2, 
+            "card": "186", 
+            "value": "Gianlorenzo Bernini"
+        }
+    }, 
+    {
+        "pk": 525, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 525, 
+            "sort_order": 3, 
+            "card": "186", 
+            "value": "1658-1670"
+        }
+    }, 
+    {
+        "pk": 526, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 526, 
+            "sort_order": 4, 
+            "card": "186", 
+            "value": "Plan of Sant'Andrea al Quirinale"
+        }
+    }, 
+    {
+        "pk": 527, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 527, 
+            "sort_order": 5, 
+            "card": "186", 
+            "value": "drawing"
+        }
+    }, 
+    {
+        "pk": 528, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 528, 
+            "sort_order": 6, 
+            "card": "186", 
+            "value": "(Building) Rome, Italy"
+        }
+    }, 
+    {
+        "pk": 529, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 529, 
+            "sort_order": 1, 
+            "card": "187", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/187/51-villa_rotonda_plan.jpg"
+        }
+    }, 
+    {
+        "pk": 530, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 530, 
+            "sort_order": 2, 
+            "card": "187", 
+            "value": "Andrea Palladio"
+        }
+    }, 
+    {
+        "pk": 531, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 531, 
+            "sort_order": 3, 
+            "card": "187", 
+            "value": "1566-70"
+        }
+    }, 
+    {
+        "pk": 532, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 532, 
+            "sort_order": 4, 
+            "card": "187", 
+            "value": "Villa Almerico (Rotonda)"
+        }
+    }, 
+    {
+        "pk": 533, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 533, 
+            "sort_order": 5, 
+            "card": "187", 
+            "value": "drawing"
+        }
+    }, 
+    {
+        "pk": 534, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 534, 
+            "sort_order": 6, 
+            "card": "187", 
+            "value": "(Building) Vicenza, Italy"
+        }
+    }, 
+    {
+        "pk": 535, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 535, 
+            "sort_order": 1, 
+            "card": "191", 
+            "value": "Albumen print"
+        }
+    }, 
+    {
+        "pk": 536, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 536, 
+            "sort_order": 2, 
+            "card": "191", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/191/M2C1864.jpg"
+        }
+    }, 
+    {
+        "pk": 537, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 537, 
+            "sort_order": 3, 
+            "card": "191", 
+            "value": "Julia Margaret Cameron"
+        }
+    }, 
+    {
+        "pk": 538, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 538, 
+            "sort_order": 4, 
+            "card": "191", 
+            "value": "1864"
+        }
+    }, 
+    {
+        "pk": 539, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 539, 
+            "sort_order": 5, 
+            "card": "191", 
+            "value": "Madonna and Two Children"
+        }
+    }, 
+    {
+        "pk": 540, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 540, 
+            "sort_order": 1, 
+            "card": "192", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 541, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 541, 
+            "sort_order": 2, 
+            "card": "192", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/192/1-pollock2.jpg"
+        }
+    }, 
+    {
+        "pk": 542, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 542, 
+            "sort_order": 3, 
+            "card": "192", 
+            "value": "Jackson Pollock"
+        }
+    }, 
+    {
+        "pk": 543, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 543, 
+            "sort_order": 4, 
+            "card": "192", 
+            "value": "1948"
+        }
+    }, 
+    {
+        "pk": 544, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 544, 
+            "sort_order": 5, 
+            "card": "192", 
+            "value": "Number 1"
+        }
+    }, 
+    {
+        "pk": 545, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 545, 
+            "sort_order": 1, 
+            "card": "193", 
+            "value": "Encaustic, oil, and collage on fabric mounted on plywood"
+        }
+    }, 
+    {
+        "pk": 546, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 546, 
+            "sort_order": 2, 
+            "card": "193", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/193/2-johns2.jpg"
+        }
+    }, 
+    {
+        "pk": 547, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 547, 
+            "sort_order": 3, 
+            "card": "193", 
+            "value": "Jasper Johns"
+        }
+    }, 
+    {
+        "pk": 548, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 548, 
+            "sort_order": 4, 
+            "card": "193", 
+            "value": "1954"
+        }
+    }, 
+    {
+        "pk": 549, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 549, 
+            "sort_order": 5, 
+            "card": "193", 
+            "value": "Flag"
+        }
+    }, 
+    {
+        "pk": 550, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 550, 
+            "sort_order": 1, 
+            "card": "194", 
+            "value": "mixed media"
+        }
+    }, 
+    {
+        "pk": 551, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 551, 
+            "sort_order": 2, 
+            "card": "194", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/194/3-warhol-cola2.jpg"
+        }
+    }, 
+    {
+        "pk": 552, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 552, 
+            "sort_order": 3, 
+            "card": "194", 
+            "value": "Andy Warhol"
+        }
+    }, 
+    {
+        "pk": 553, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 553, 
+            "sort_order": 4, 
+            "card": "194", 
+            "value": "1962"
+        }
+    }, 
+    {
+        "pk": 554, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 554, 
+            "sort_order": 5, 
+            "card": "194", 
+            "value": "Coca Cola Painting"
+        }
+    }, 
+    {
+        "pk": 555, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 555, 
+            "sort_order": 1, 
+            "card": "195", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/195/4-warhol-campbell2.jpg"
+        }
+    }, 
+    {
+        "pk": 556, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 556, 
+            "sort_order": 2, 
+            "card": "195", 
+            "value": "Andy Warhol"
+        }
+    }, 
+    {
+        "pk": 557, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 557, 
+            "sort_order": 3, 
+            "card": "195", 
+            "value": "1962"
+        }
+    }, 
+    {
+        "pk": 558, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 558, 
+            "sort_order": 4, 
+            "card": "195", 
+            "value": "Campbell Soup Gallery Installation"
+        }
+    }, 
+    {
+        "pk": 559, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 559, 
+            "sort_order": 5, 
+            "card": "195", 
+            "value": "Synthetic polymer paint on thirty-two canvases"
+        }
+    }, 
+    {
+        "pk": 560, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 560, 
+            "sort_order": 6, 
+            "card": "195", 
+            "value": "Los Angeles, CA"
+        }
+    }, 
+    {
+        "pk": 561, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 561, 
+            "sort_order": 1, 
+            "card": "196", 
+            "value": "screenprint"
+        }
+    }, 
+    {
+        "pk": 562, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 562, 
+            "sort_order": 2, 
+            "card": "196", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/196/5-warhol-marilyn2.jpg"
+        }
+    }, 
+    {
+        "pk": 563, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 563, 
+            "sort_order": 3, 
+            "card": "196", 
+            "value": "Andy Warhol"
+        }
+    }, 
+    {
+        "pk": 564, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 564, 
+            "sort_order": 4, 
+            "card": "196", 
+            "value": "1967"
+        }
+    }, 
+    {
+        "pk": 565, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 565, 
+            "sort_order": 5, 
+            "card": "196", 
+            "value": "Marilyn Monroe"
+        }
+    }, 
+    {
+        "pk": 566, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 566, 
+            "sort_order": 1, 
+            "card": "197", 
+            "value": "silkscreen on wallpaper"
+        }
+    }, 
+    {
+        "pk": 567, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 567, 
+            "sort_order": 2, 
+            "card": "197", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/197/6-warhol-thirteen2.jpg"
+        }
+    }, 
+    {
+        "pk": 568, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 568, 
+            "sort_order": 3, 
+            "card": "197", 
+            "value": "Andy Warhol"
+        }
+    }, 
+    {
+        "pk": 569, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 569, 
+            "sort_order": 4, 
+            "card": "197", 
+            "value": "1966"
+        }
+    }, 
+    {
+        "pk": 570, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 570, 
+            "sort_order": 5, 
+            "card": "197", 
+            "value": "Cow Wallpaper (Pink on Yellow)"
+        }
+    }, 
+    {
+        "pk": 571, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 571, 
+            "sort_order": 1, 
+            "card": "198", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/198/7-warhol-cow2.jpg"
+        }
+    }, 
+    {
+        "pk": 572, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 572, 
+            "sort_order": 2, 
+            "card": "198", 
+            "value": "Andy Warhol"
+        }
+    }, 
+    {
+        "pk": 573, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 573, 
+            "sort_order": 3, 
+            "card": "198", 
+            "value": "1964"
+        }
+    }, 
+    {
+        "pk": 574, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 574, 
+            "sort_order": 4, 
+            "card": "198", 
+            "value": "Thirteen Most Wanted Men"
+        }
+    }, 
+    {
+        "pk": 575, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 575, 
+            "sort_order": 5, 
+            "card": "198", 
+            "value": "silkscreen print on masonite"
+        }
+    }, 
+    {
+        "pk": 576, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 576, 
+            "sort_order": 6, 
+            "card": "198", 
+            "value": "New York"
+        }
+    }, 
+    {
+        "pk": 577, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 577, 
+            "sort_order": 1, 
+            "card": "199", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/199/8-richter-dresden2.jpg"
+        }
+    }, 
+    {
+        "pk": 578, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 578, 
+            "sort_order": 2, 
+            "card": "199", 
+            "value": "Gerhard Richter"
+        }
+    }, 
+    {
+        "pk": 579, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 579, 
+            "sort_order": 3, 
+            "card": "199", 
+            "value": "1956"
+        }
+    }, 
+    {
+        "pk": 580, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 580, 
+            "sort_order": 4, 
+            "card": "199", 
+            "value": "Joy of Life"
+        }
+    }, 
+    {
+        "pk": 581, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 581, 
+            "sort_order": 5, 
+            "card": "199", 
+            "value": "mural"
+        }
+    }, 
+    {
+        "pk": 582, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 582, 
+            "sort_order": 6, 
+            "card": "199", 
+            "value": "German Hygiene Museum, Dresden"
+        }
+    }, 
+    {
+        "pk": 583, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 583, 
+            "sort_order": 1, 
+            "card": "200", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/200/9-richter-table2.jpg"
+        }
+    }, 
+    {
+        "pk": 584, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 584, 
+            "sort_order": 2, 
+            "card": "200", 
+            "value": "Gerhard Richter"
+        }
+    }, 
+    {
+        "pk": 585, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 585, 
+            "sort_order": 3, 
+            "card": "200", 
+            "value": "1962"
+        }
+    }, 
+    {
+        "pk": 586, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 586, 
+            "sort_order": 4, 
+            "card": "200", 
+            "value": "Table"
+        }
+    }, 
+    {
+        "pk": 587, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 587, 
+            "sort_order": 5, 
+            "card": "200", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 588, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 588, 
+            "sort_order": 6, 
+            "card": "200", 
+            "value": "Harvard Art Museum"
+        }
+    }, 
+    {
+        "pk": 589, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 589, 
+            "sort_order": 1, 
+            "card": "201", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 590, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 590, 
+            "sort_order": 2, 
+            "card": "201", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/201/10-richter-family2.jpg"
+        }
+    }, 
+    {
+        "pk": 591, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 591, 
+            "sort_order": 3, 
+            "card": "201", 
+            "value": "Gerhard Richter"
+        }
+    }, 
+    {
+        "pk": 592, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 592, 
+            "sort_order": 4, 
+            "card": "201", 
+            "value": "1964"
+        }
+    }, 
+    {
+        "pk": 593, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 593, 
+            "sort_order": 5, 
+            "card": "201", 
+            "value": "Family at the Seaside"
+        }
+    }, 
+    {
+        "pk": 594, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 594, 
+            "sort_order": 1, 
+            "card": "202", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 595, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 595, 
+            "sort_order": 2, 
+            "card": "202", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/202/11-richter-rudy2.jpg"
+        }
+    }, 
+    {
+        "pk": 596, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 596, 
+            "sort_order": 3, 
+            "card": "202", 
+            "value": "Gerhard Richter"
+        }
+    }, 
+    {
+        "pk": 597, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 597, 
+            "sort_order": 4, 
+            "card": "202", 
+            "value": "1965"
+        }
+    }, 
+    {
+        "pk": 598, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 598, 
+            "sort_order": 5, 
+            "card": "202", 
+            "value": "Uncle Rudi"
+        }
+    }, 
+    {
+        "pk": 599, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 599, 
+            "sort_order": 1, 
+            "card": "203", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 600, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 600, 
+            "sort_order": 2, 
+            "card": "203", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/203/12-richter-portraits2.jpg"
+        }
+    }, 
+    {
+        "pk": 601, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 601, 
+            "sort_order": 3, 
+            "card": "203", 
+            "value": "Gerhard Richter"
+        }
+    }, 
+    {
+        "pk": 602, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 602, 
+            "sort_order": 4, 
+            "card": "203", 
+            "value": "1971-72"
+        }
+    }, 
+    {
+        "pk": 603, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 603, 
+            "sort_order": 5, 
+            "card": "203", 
+            "value": "48 Portraits"
+        }
+    }, 
+    {
+        "pk": 604, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 604, 
+            "sort_order": 1, 
+            "card": "204", 
+            "value": "oil on canvas"
+        }
+    }, 
+    {
+        "pk": 605, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 605, 
+            "sort_order": 2, 
+            "card": "204", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/204/13-richter-red.jpg"
+        }
+    }, 
+    {
+        "pk": 606, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 606, 
+            "sort_order": 3, 
+            "card": "204", 
+            "value": "Gerhard Richter"
+        }
+    }, 
+    {
+        "pk": 607, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 607, 
+            "sort_order": 4, 
+            "card": "204", 
+            "value": "1987"
+        }
+    }, 
+    {
+        "pk": 608, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 608, 
+            "sort_order": 5, 
+            "card": "204", 
+            "value": "18 October 1977 (Portraits of Members of Red Army Faction)"
+        }
+    }, 
+    {
+        "pk": 609, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 609, 
+            "sort_order": 1, 
+            "card": "205", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/205/1-carbide.jpg"
+        }
+    }, 
+    {
+        "pk": 610, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 610, 
+            "sort_order": 2, 
+            "card": "205", 
+            "value": "Nat White"
+        }
+    }, 
+    {
+        "pk": 611, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 611, 
+            "sort_order": 3, 
+            "card": "205", 
+            "value": "c.1950-68"
+        }
+    }, 
+    {
+        "pk": 612, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 612, 
+            "sort_order": 4, 
+            "card": "205", 
+            "value": "\"Union Carbide - \"\"A Hand in Things to Come\"\""
+        }
+    }, 
+    {
+        "pk": 613, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 613, 
+            "sort_order": 1, 
+            "card": "206", 
+            "value": "video"
+        }
+    }, 
+    {
+        "pk": 614, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 614, 
+            "sort_order": 2, 
+            "card": "206", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/206/2-yes men-bhopal.jpg"
+        }
+    }, 
+    {
+        "pk": 615, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 615, 
+            "sort_order": 3, 
+            "card": "206", 
+            "value": "Yes Men"
+        }
+    }, 
+    {
+        "pk": 616, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 616, 
+            "sort_order": 4, 
+            "card": "206", 
+            "value": "2004"
+        }
+    }, 
+    {
+        "pk": 617, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 617, 
+            "sort_order": 5, 
+            "card": "206", 
+            "value": "Dow Does the Right Thing"
+        }
+    }, 
+    {
+        "pk": 618, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 618, 
+            "sort_order": 1, 
+            "card": "207", 
+            "value": "website"
+        }
+    }, 
+    {
+        "pk": 619, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 619, 
+            "sort_order": 2, 
+            "card": "207", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/207/3-yes men-bush.jpg"
+        }
+    }, 
+    {
+        "pk": 620, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 620, 
+            "sort_order": 3, 
+            "card": "207", 
+            "value": "Yes Men"
+        }
+    }, 
+    {
+        "pk": 621, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 621, 
+            "sort_order": 4, 
+            "card": "207", 
+            "value": "1999"
+        }
+    }, 
+    {
+        "pk": 622, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 622, 
+            "sort_order": 5, 
+            "card": "207", 
+            "value": "gwbush.com"
+        }
+    }, 
+    {
+        "pk": 623, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 623, 
+            "sort_order": 1, 
+            "card": "208", 
+            "value": "newspaper"
+        }
+    }, 
+    {
+        "pk": 624, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 624, 
+            "sort_order": 2, 
+            "card": "208", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/208/4-yes men-nytimes.jpg"
+        }
+    }, 
+    {
+        "pk": 625, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 625, 
+            "sort_order": 3, 
+            "card": "208", 
+            "value": "Yes Men"
+        }
+    }, 
+    {
+        "pk": 626, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 626, 
+            "sort_order": 4, 
+            "card": "208", 
+            "value": "2008"
+        }
+    }, 
+    {
+        "pk": 627, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 627, 
+            "sort_order": 5, 
+            "card": "208", 
+            "value": "New York Times Special Edition"
+        }
+    }, 
+    {
+        "pk": 628, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 628, 
+            "sort_order": 1, 
+            "card": "209", 
+            "value": "digital photograph"
+        }
+    }, 
+    {
+        "pk": 629, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 629, 
+            "sort_order": 2, 
+            "card": "209", 
+            "value": "http://flashcard.fas.harvard.edu/imagerepository/209/5-marzi.jpg"
+        }
+    }, 
+    {
+        "pk": 630, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 630, 
+            "sort_order": 3, 
+            "card": "209", 
+            "value": "Adriano Marzi"
+        }
+    }, 
+    {
+        "pk": 631, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 631, 
+            "sort_order": 4, 
+            "card": "209", 
+            "value": "c.2012"
+        }
+    }, 
+    {
+        "pk": 632, 
+        "model": "flash.Cards_Fields", 
+        "fields": {
+            "field": 632, 
+            "sort_order": 5, 
+            "card": "209", 
+            "value": "Bhopal Toxic Legacy"
+        }
+    }
+]
