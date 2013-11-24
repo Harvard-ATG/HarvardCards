@@ -1,5 +1,4 @@
 import json
-from pprint import pprint
 import os
 
 json_file = 'arthistoryflash.json'
