@@ -96,7 +96,7 @@ for k in range(0, cards):
     card_mapping[card_id] = card_pk
     cards_json.append({
                        "model":"flash.Card",
-                       "pk":sort_order,
+                       "pk":card_pk,
                        "fields":
                            {
                             "sort_order": sort_order,
