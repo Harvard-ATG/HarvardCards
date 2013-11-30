@@ -2,7 +2,7 @@
 # The script loads the json files found in the fixtures folder into the HarvardCards Django App.
 # Usage:
 #   ./load_initial_data.py                      Loads the json files in the fixtures folder
-#   ./initial_data.py [json_file]               Creates the importable json files from the given json file and then, loads them all
+#   ./load_initial_data.py [json_file]          Creates the importable json files from the given json file and then, loads them all
 
 
 import os, sys
