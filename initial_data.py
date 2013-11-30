@@ -20,7 +20,8 @@ elif len(sys.argv) == 2:
         sys.exit()
 else:
     print "Invalid arguments."
-
+    sys.exit()
+    
 json_data = open(json_file)
 data = json.load(json_data)
 json_data.close()
