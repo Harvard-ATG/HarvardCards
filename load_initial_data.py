@@ -2,7 +2,7 @@
 # The script loads the json files found in the fixtures folder into the HarvardCards Django App.
 # Usage:
 #   ./load_initial_data.py                      Loads the json files in the fixtures folder
-#   ./initial_data.py create [json_file]        Creates the importable json files from the given json file and then, loads them all
+#   ./initial_data.py [json_file]               Creates the importable json files from the given json file and then, loads them all
 
 
 import os, sys
@@ -16,21 +16,14 @@ def loaddata(file):
     os.system("python manage.py loaddata %s" % file)
 
 
-if len(sys.argv) == 3:
-    json_file = sys.argv[2]
+if len(sys.argv) == 2:
+    json_file = sys.argv[1]
     if not json_file.endswith('.json'):
         print "Invalid filename."
         sys.exit()
     os.system("python initial_data.py %s" %json_file)
 
-elif len(sys.argv) == 2:
-    if sys.argv[1]=='create':
-        os.system("python initial_data.py")
-    else:
-        print "Invalid Arguments."
-        sys.exit()
-
-elif len(sys.argv) > 3:
+elif len(sys.argv) > 2:
     print "Invalid Arguments."
     sys.exit()
 
