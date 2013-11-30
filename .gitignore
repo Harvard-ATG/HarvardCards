@@ -1,3 +1,4 @@
 .svn
 *.pyc
 flash.db
+/harvardcards/modules/flashcard-exporter/cache/*
