@@ -1,5 +1,6 @@
 #
 # The script creates the json files which can be directly imported into HarvardCards Django App.
+# It looks for the json file in the folder specified by the variable "path_files_folder"
 # Usage:
 #   ./initial_data.py [json_file]
 # Note: For now, you can execute ./initial_data.py and the script will use the arthistoryflash.json file.
@@ -10,6 +11,7 @@ import os
 import sys
 from get_initial_pks import get_initial_pks
 
+path_files_folder = 'data/'
 # if filename not specified use arthistoryflash.json
 if len(sys.argv) < 2:
     json_file = 'arthistoryflash.json'
@@ -22,7 +24,7 @@ else:
     print "Invalid arguments."
     sys.exit()
 
-json_data = open(json_file)
+json_data = open(os.path.join(os.path.dirname(__file__), path_files_folder, json_file))
 data = json.load(json_data)
 json_data.close()
 

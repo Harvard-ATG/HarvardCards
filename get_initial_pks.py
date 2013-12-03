@@ -18,6 +18,8 @@ def get_initial_pks():
     json_data = open(filename)
     data = json.load(json_data)
     json_data.close()
+    # comment out to keep the dumpdata file
+    os.remove(filename)
 
     # function returns the maximum pk of given model's instances
     def get_max_pk(model_name):
