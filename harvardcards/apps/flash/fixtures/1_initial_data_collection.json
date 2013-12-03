@@ -1,0 +1,10 @@
+[
+    {
+        "pk": 4, 
+        "model": "flash.Collection", 
+        "fields": {
+            "description": "A course on History of Art & Architecture", 
+            "title": "History of Art & Architecture"
+        }
+    }
+]
