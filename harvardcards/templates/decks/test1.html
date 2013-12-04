@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link href='http://fonts.googleapis.com/css?family=Vollkorn' rel='stylesheet' type='text/css'>
+<link href='{{ STATIC_URL }}css/styles.css' rel='stylesheet' type='text/css'>
+
+<div id="fc_headerWrapper" class="sectionWrapper"><!-- sectionWrapper (start) -->
+	<div id="fc_header" class="section"><!-- section (start) -->
+    	<img src="images/harvardLogo.png" alt="Harvard University" title="Harvard University" border="0" />
+        <ul id="userInfo">
+        	<li><span>Roderick Morales<span></li>
+            <li><a href="#">Sign out</a></li>
+        </ul>
+    </div><!-- section (end) -->
+</div><!-- sectionWrapper (end) -->
+
+<div class="sectionWrapper"><!-- sectionWrapper (start) -->
+	<div class="section"><!-- section (start) -->
+    	
+        <div class="contentWrapper"><!-- contentWrapper (start) -->
+        
+	    	<h1 id="appTitle">HARVARD CARDS</h1>
+    		<div id="navigation"><!-- navigaton (start) -->
+            	
+            	<nav>
+                	<ul>
+                    	<li><a href="#">Home</a></li>
+                        <li>
+                        	<a href="#" class="active">Course 1</a>
+                        	<ul>
+                            	<li><a href="#">Week 4</a></li>
+                                <li><a href="#">Week 3</a></li>
+                                <li><a href="#" class="active">Week 2 with a really long title for the week</a></li>
+                                <li><a href="#">Week 1</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Course 2 and very long title for a course</a></li>
+                        <li><a href="#">Custom course</a></li>
+                    </ul>
+                </nav>
+            </div><!-- navigaton (end) -->
+            
+            <div id="content"><!-- content (start) -->
+            
+            	<div class="courseWrapper"><!-- courseWrapper (start) -->
+                
+                    <div class="courseHeader"><!-- courseHeader (start) -->
+                        <h2 class="courseTitle">Course 6</h2><h3>Week 5</h3>
+                        <ul class="adminMenu adminMenuRight">
+                            <li><a href="#">Delete</a></li>
+                        </ul>
+                    </div><!-- courseHeader (end) -->
+                    
+                    <a href="#" id="addCard">Add Card</a>
+                    <div id="cardSlider">
+                        <div class="deckPrev"><a href="javascript:sliders[0].goToPrev()">&laquo; Prev</a></div>
+                        <div class="cardHolder">
+                            <ul id="cards">
+                                <li><a class="card" href="#">Card 1</a></li>
+                                <li><a class="card" href="#">Card 2</a></li>
+                                <li><a class="card" href="#">Card 3</a></li>
+                                <li><a class="card" href="#">Card 4</a></li>
+                                <li><a class="card" href="#">Card 5</a></li>
+                                <li><a class="card" href="#">Card 6</a></li>
+                                <li><a class="card" href="#">Card 7</a></li>
+                                <li><a class="card" href="#">Card 8</a></li>
+                            </ul>
+                        </div>
+                        <div class="deckNext"><a href="javascript:sliders[0].goToNext()">Next &raquo;</a></div>
+                        <!-- sliderNav (start) -->
+                        <!--<div class="deckNav">
+                            <ul class="deckNavNextPrev">
+                                <li class="deckPrev"><a href="javascript:sliders[0].goToPrev()">&laquo; Prev</a></li>
+                                <li class="deckNext"><a href="javascript:sliders[0].goToNext()">Next &raquo;</a></li>
+                            </ul>
+                        </div>-->
+                        <!-- sliderNav (end) -->
+
+                    </div>
+                    
+                    <div id="singleCardHolder"><!-- singleCardHolder (start)-->
+                    	<div id="cardOverflow"><!-- cardOverflow (start) -->
+	                    	<ul>
+		                    	<li><!-- card0 (start) -->
+			                    	<div class="showRevealWrapper">
+			                        	<h1>Perro</h1>
+			                            <!--<a href="#" class="reveal">Reveal</a>-->
+			                        </div>
+									<div class="hideRevealHr"></div>
+			                        <div class="showRevealWrapper">
+			                        	<h1>Dog</h1>
+			                        </div>
+		                        </li><!-- card0 (end) -->
+		                        
+		                        <li><!-- card1 (start) -->
+			                    	<div class="showRevealWrapper">
+			                        	<h1>Gato</h1>
+			                            <!--<a href="#" class="reveal">Reveal</a>-->
+			                        </div>
+									<div class="hideRevealHr"></div>
+			                        <div class="showRevealWrapper">
+			                        	<h1>Cat</h1>
+			                        </div>
+		                        </li><!-- card1 (end) -->
+		                        
+		                        <li><!-- card2 (start) -->
+			                    	<div class="showRevealWrapper">
+			                        	<h1>Vaca</h1>
+			                            <!--<a href="#" class="reveal">Reveal</a>-->
+			                        </div>
+									<div class="hideRevealHr"></div>
+			                        <div class="showRevealWrapper">
+			                        	<h1>Cow</h1>
+			                        </div>
+		                        </li><!-- card2 (end) -->
+		                        
+	                        </ul>
+                        </div><!-- cardOverflow (end) -->
+                    </div><!-- singleCardHolder (end)-->
+                    
+                </div><!-- courseWrapper (end) -->
+                
+            </div><!-- content (end) -->
+            
+        </div><!-- contentWrapper (end) -->
+        
+    </div><!-- section (end) -->
+</div><!-- sectionWrapper (end) -->
+
+
+<script language="javascript" src="{{ STATIC_URL }}/appendAround.js"></script>
+<script src="{{ STATIC_URL }}js/lib.js"></script>
+
+<script type="text/javascript">
+var sliders = [];
+var sliderLength;
+
+var sliderObjExist = false;
+$('.cardHolder').each(function() {
+	if ( $(this).text() != '' ){
+		//create Slider objects
+		sliders.push(new Slider(this,true));
+		//sliders[i].respond();
+		sliderObjExist = true;
+	}	
+});
+
+var current = 0;
+$(window).on("resize", function () {
+	
+	
+	if ( sliderObjExist )
+	{
+		//console.log($('.sliderNav').css('display'));
+		sliders[0].respond();
+			
+	}
+	
+	var cardHolder = $('#singleCardHolder');
+	var holderWidth = Math.round(cardHolder.width());
+	var cardItems = $('#singleCardHolder ul li');
+	var liCount = cardItems.length;
+	//give each a card li the width of the container
+	cardItems.width(holderWidth + 'px');
+	//make the ul width big enough to fit all cards side by side
+	var ulWidth = holderWidth * liCount;
+	$('#singleCardHolder ul').width(ulWidth + 'px');
+	
+	//on first load show the first card
+	cardItems.eq(current).show();
+	
+	//change main card based on thumbnail click
+	$('a.card').click(function(){
+		var i = $(this).parent().index();
+		if (i != current)
+		{
+			cardItems.eq(current).hide();
+			cardItems.eq(i).show();
+			current = i;
+		}
+		
+	});
+	
+}).resize();
+</script>
+
+
+{% endblock %}
