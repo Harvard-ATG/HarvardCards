@@ -2,7 +2,7 @@
 
 # Overview
 
-Where's our elevator pitch?
+HarvardCards is a web-based flashcard application for students who want to memorize words, media, or concepts and instructors who want to assess student progress. It is open source and released under the [BSD License](https://github.com/Harvard-ATG/HarvardCards/blob/master/LICENSE).
 
 # Quickstart
 
