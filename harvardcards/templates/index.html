@@ -1,4 +1,4 @@
-{% extends "layout_left_sidebar.html" %}
+{% extends "__layout_left_sidebar.html" %}
 
 {% block css %}
 <link href='http://fonts.googleapis.com/css?family=Vollkorn' rel='stylesheet' type='text/css' />
@@ -6,24 +6,7 @@
 {% endblock %}
 
 {% block sidebar_content %}
-<div id="navigation"><!-- navigaton (start) -->
-	<a href="#" id="addAcourse">Add a course</a>
-	<nav>
-		<ul>
-		{% for collection in collections %}
-			<li><a href="#">{{ collection.title|truncatechars:30 }}</a>
-			{% if collection.deck_set.count > 0 %}
-				<ul>
-					{% for deck in collection.deck_set.all %}
-					<li><a href="{% url 'deckIndex' deck.id %}">{{ deck.title|truncatechars:30}}</a></li>
-					{% endfor %}
-				</ul>
-			{% endif %}
-			</li>
-		{% endfor %}
-	</ul>
-</nav>
-</div><!-- navigaton (end) -->
+	{% include "_collection_nav.html" with collection=collection %}
 {% endblock %}
 
 {% block main_content %}
