@@ -5,52 +5,53 @@
 	<meta name="language" content="en" />
 
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+	{% block css %}{% endblock %}
 
-    <style>
-      body {
-		  /* padding-top: 60px;*/ /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-	  .splash-box {
-		  margin: 20px;
-		  padding: 10px;	
-		  background-color: #CCCCCC;  	
-		  border-radius: 5px;
-	  }
-    </style>
     <script data-main="{{ STATIC_URL }}js/main" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.8/require.min.js"></script>
     <script src="{{ STATIC_URL }}js/main.js"></script>
-
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.3.1/jquery.cookie.min.js"></script>
     <script src="http://www.appelsiini.net/download/jquery.jeditable.js"></script>
 
-
-	<title>Harvard Cards</title>
+	<title>{% block title %}Harvard Cards{% endblock %}</title>
 </head>
 <body>
-
 	<div class="container">
+		{% block header %}
+		<div id="fc_headerWrapper" class="sectionWrapper"><!-- sectionWrapper (start) -->
+				<div id="fc_header" class="section"><!-- section (start) -->
+					<a href="{% url 'index' %}"><img src="{{ STATIC_URL }}img/harvardLogo.png" alt="Harvard University" title="Harvard University" border="0" /></a>
+				<ul id="userInfo">
+					<li><span>Roderick Morales<span></li>
+					<li><a href="#">Sign out</a></li>
+				</ul>
+			</div><!-- section (end) -->
+		</div><!-- sectionWrapper (end) -->
+		{% endblock %}
+
 		{% block content %}{% endblock %}
+
+		{% block footer %}{% endblock %}
 	</div>
 
-{% block js_extra %}{% endblock %}
+	<script>
+	var csrftoken = $.cookie('csrftoken');
+	function csrfSafeMethod(method) {
+		// these HTTP methods do not require CSRF protection
+		return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+	}
+	$.ajaxSetup({
+		crossDomain: false, // obviates need for sameOrigin test
+		beforeSend: function(xhr, settings) {
+			if (!csrfSafeMethod(settings.type)) {
+				xhr.setRequestHeader("X-CSRFToken", csrftoken);
+			}
+		}
+	});
+	</script>
 
-<script>
-var csrftoken = $.cookie('csrftoken');
-function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-$.ajaxSetup({
-    crossDomain: false, // obviates need for sameOrigin test
-    beforeSend: function(xhr, settings) {
-        if (!csrfSafeMethod(settings.type)) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        }
-    }
-});
+	{% block javascript %}{% endblock %}
 
-</script>
 </body>
 </html>

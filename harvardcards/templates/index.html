@@ -1,204 +1,125 @@
-{% extends "base.html" %}
+{% extends "layout_left_sidebar.html" %}
 
-{% block content %}
+{% block css %}
+<link href='http://fonts.googleapis.com/css?family=Vollkorn' rel='stylesheet' type='text/css' />
+<link href='{{ STATIC_URL }}css/styles.css' rel='stylesheet' type='text/css' />
+{% endblock %}
 
-<link href='http://fonts.googleapis.com/css?family=Vollkorn' rel='stylesheet' type='text/css'>
-<link href='{{ STATIC_URL }}css/styles.css' rel='stylesheet' type='text/css'>
+{% block sidebar_content %}
+<div id="navigation"><!-- navigaton (start) -->
+	<a href="#" id="addAcourse">Add a course</a>
+	<nav>
+		<ul>
+			<li><a href="#">Home</a></li>
+		<li>
+				<ul>
+					<li><a href="#">Week 4</a></li>
+				<li><a href="#">Week 3</a></li>
+				<li><a href="#" class="active">Week 2 with a really long title for the week</a></li>
+				<li><a href="#">Week 1</a></li>
+			</ul>
+		</li>
+		<li><a href="#">Course 2 and very long title for a course</a></li>
+		<li><a href="#">Custom course</a></li>
+	</ul>
+</nav>
+</div><!-- navigaton (end) -->
+{% endblock %}
 
+{% block main_content %}
+<div id="content"><!-- content (start) -->
+	<div class="courseWrapper addCourseWrapper"><!-- courseWrapper (start) -->
+			<div class="courseHeader"><!-- courseHeader (start) -->
+					<h2>Enter course name</h2>
+					<ul class="adminMenu">
+							<li><a href="#">Edit</a></li>
+					</ul>
+					<ul class="adminMenu adminMenuRight">
+							<li><a href="#" id="collection_cancel">Cancel</a></li>
+					</ul>
+			</div><!-- courseHeader (end) -->
 
-<div id="fc_headerWrapper" class="sectionWrapper"><!-- sectionWrapper (start) -->
-        <div id="fc_header" class="section"><!-- section (start) -->
-            <img src="/static/img/harvardLogo.png" alt="Harvard University" title="Harvard University" border="0" />
-        <ul id="userInfo">
-                <li><span>Roderick Morales<span></li>
-            <li><a href="#">Sign out</a></li>
-        </ul>
-    </div><!-- section (end) -->
-</div><!-- sectionWrapper (end) -->
+		<!-- slider (start) -->
+		 <div class="slider">
+				 <ul class="templateDecks"><!-- templateDecks(start) -->
+				 <li class="deck"><!-- deck (start) -->
+					 <a class="template" href="#">
+							 <h2>Template 1</h2>
+					 </a>
+				 </li><!-- deck (end) -->
+				
+				 <li class="deck"><!-- deck (start) -->
+					 <a class="template" href="#">
+							 <h2>Template 2</h2>
+					 </a>
+				 </li><!-- deck (end) -->
+				
+				 <li class="deck"><!-- deck (start) -->
+					 <a class="template" href="#">
+							 <h2>Template 3</h2>
+					 </a>
+				 </li><!-- deck (end) -->
+				
+			 </ul><!-- templateDecks (end) -->
+		 </div>
+		 <!-- slider (end) -->
+		
+		 <!-- sliderNav (start) -->
+		 <div class="sliderNav">
+			 <ul class="sliderNavNextPrev">
+				 <li class="sliderPrev"><a href="javascript:sliders[0].goToPrev()">&laquo; Prev</a></li>
+				 <li class="sliderNext"><a href="javascript:sliders[0].goToNext()">Next &raquo;</a></li>
+				 <!--li><a href="javascript:sliders[0].respond()">.respond()</a></li-->
+			 </ul>
+							 </div>
+		 <!-- sliderNav (end) -->
+	 </div><!-- courseWrapper (end) -->
 
-<div class="sectionWrapper"><!-- sectionWrapper (start) -->
-        <div class="section"><!-- section (start) -->
-            
-        <div class="contentWrapper"><!-- contentWrapper (start) -->
-        
-                    <h1 id="appTitle">HARVARD CARDS</h1>
-                    <div id="navigation"><!-- navigaton (start) -->
-                    <a href="#" id="addAcourse">Add a course</a>
-                    <nav>
-                        <ul>
-                            <li><a href="#">Home</a></li>
-                        <li>
-                                <a href="#" class="active">Course 1</a>
-                                <ul>
-                                    <li><a href="#">Week 4</a></li>
-                                <li><a href="#">Week 3</a></li>
-                                <li><a href="#" class="active">Week 2 with a really long title for the week</a></li>
-                                <li><a href="#">Week 1</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#">Course 2 and very long title for a course</a></li>
-                        <li><a href="#">Custom course</a></li>
-                    </ul>
-                </nav>
-            </div><!-- navigaton (end) -->
-            
-            <div id="content"><!-- content (start) -->
-            
-                                <div class="courseWrapper addCourseWrapper"><!-- courseWrapper (start) -->
-                                        <div class="courseHeader"><!-- courseHeader (start) -->
-                                                <h2>Enter course name</h2>
-                                                <ul class="adminMenu">
-                                                        <li><a href="#">Edit</a></li>
-                                                </ul>
-                                                <ul class="adminMenu adminMenuRight">
-                                                        <li><a href="#" id="collection_cancel">Cancel</a></li>
-                                                </ul>
-                                        </div><!-- courseHeader (end) -->
-                    <!-- slider (start) -->
-                     <div class="slider">
-                             <ul class="templateDecks"><!-- templateDecks(start) -->
-                             <li class="deck"><!-- deck (start) -->
-                                 <a class="template" href="#">
-                                         <h2>Template 1</h2>
-                                 </a>
-                             </li><!-- deck (end) -->
-                            
-                             <li class="deck"><!-- deck (start) -->
-                                 <a class="template" href="#">
-                                         <h2>Template 2</h2>
-                                 </a>
-                             </li><!-- deck (end) -->
-                            
-                             <li class="deck"><!-- deck (start) -->
-                                 <a class="template" href="#">
-                                         <h2>Template 3</h2>
-                                 </a>
-                             </li><!-- deck (end) -->
-                            
-                         </ul><!-- templateDecks (end) -->
-                     </div>
-                     <!-- slider (end) -->
-                    
-                     <!-- sliderNav (start) -->
-                     <div class="sliderNav">
-                         <ul class="sliderNavNextPrev">
-                             <li class="sliderPrev"><a href="javascript:sliders[0].goToPrev()">&laquo; Prev</a></li>
-                             <li class="sliderNext"><a href="javascript:sliders[0].goToNext()">Next &raquo;</a></li>
-                             <!--li><a href="javascript:sliders[0].respond()">.respond()</a></li-->
-                         </ul>
-                                         </div>
-                     <!-- sliderNav (end) -->
-                 </div><!-- courseWrapper (end) -->
+	{% for collection in collections %}
+	<div class="courseWrapper"><!-- courseWrapper (start) -->
+		<div class="courseHeader"><!-- courseHeader (start) -->
+			<h2>{{ collection.title }}</h2>
+			<ul class="adminMenu">
+				<li><a href="#">Edit</a></li>
+				<li><a href="#">Share</a></li>
+			</ul>
+			<ul class="adminMenu adminMenuRight">
+				<li><a href="#">Delete</a></li>
+			</ul>
+		</div>
+		<div class="slider"><!--slider (start) -->
+			<ul class="courseDecks"><!-- courseDecks(start) -->
+				{% for deck in collection.deck_set.all %}
+				<li class="deck"><!-- deck (start) -->
+					<h2>{{ deck.title }}</h2>
+					<p><h3>n</h3> Cards</p>
+					<p>Last modified</p>
+					<p class="lastUpdated">Today</p>
+					<a href="#" class="arrow arrowExpand"><img src="{{ STATIC_URL }}img/arrowUp.png"></a>
+					<ul class="deckMenu">
+						<li class="arrowContainer"><a href="#" class="arrow arrowCollapse"><img src="{{ STATIC_URL }}img/arrowDown.png"></a></li>
+						<li><a class="viewReview" href="{% url 'deckIndex' deck.id %}">View</a></li>
+						<li><a class="viewReview" href="{% url 'deckIndex' deck.id %}">Review</a></li>
+						<li><a class="adminMenuBtn" href="#">Edit</a></li>
+						<li><a class="adminMenuBtn" href="#">Delete</a></li>
+					</ul>
+				</li><!-- deck (end) -->
+				{% endfor %}
+			</ul>
+		</div><!-- slider (end) -->
+		<div class="sliderNav"><!-- sliderNav (start) -->
+			<ul class="sliderNavNextPrev">
+				<li class="sliderPrev"><a href="javascript:sliders[1].goToPrev()">&laquo; Prev</a></li>
+				<li class="sliderNext"><a href="javascript:sliders[1].goToNext()">Next &raquo;</a></li>
+				<!--li><a href="javascript:sliders[2].respond()">.respond()</a></li-->
+			</ul>
+		</div>
+	</div><!-- courseWrapper (end) -->
+	{% endfor %}
+</div><!-- content (end) -->
+{% endblock %}
 
-                 <div class="courseWrapper"><!-- courseWrapper (start) -->
-                     <div class="courseHeader"><!-- courseHeader (start) -->
-                        <h2>Course 2</h2>
-                        <ul class="adminMenu">
-                            <li><a href="#">Edit</a></li>
-                            <li><a href="#">Share</a></li>
-                        </ul>
-                        <ul class="adminMenu adminMenuRight">
-                            <li><a href="#">Delete</a></li>
-                        </ul>
-                    </div><!-- courseHeader (end) -->
-                    <div class="slider"><!--slider (start) -->
-                        <ul class="courseDecks"><!-- courseDecks(start) -->
-                            <li class="deck"><!-- deck (start) -->
-                                <h2>Week 5</h2>
-                                <p><h3>15</h3> Cards</p>
-                                <p>Last modified</p>
-                                <p class="lastUpdated">Today</p>
-                                <a href="#" class="arrow arrowExpand"><img src="/static/img/arrowUp.png"></a>
-                                <ul class="deckMenu">
-                                    <li class="arrowContainer"><a href="#" class="arrow arrowCollapse"><img src="/static/img/arrowDown.png"></a></li>
-                                    <li><a class="viewReview" href="/deck/test1">View</a></li>
-                                    <li><a class="viewReview" href="/deck/test2">Review</a></li>
-                                    <li><a class="adminMenuBtn" href="#">Edit</a></li>
-                                    <li><a class="adminMenuBtn" href="#">Delete</a></li>
-                                </ul>
-                            </li><!-- deck (end) -->
-                            
-                            <li class="deck"><!-- deck (start) -->
-                                <h2>Week 4</h2>
-                                <p><h3>15</h3> Cards</p>
-                                <p>Last modified</p>
-                                <p class="lastUpdated">Today</p>
-                                <a href="#" class="arrow arrowExpand"><img src="/static/img/arrowUp.png"></a>
-                                <ul class="deckMenu">
-                                    <li class="arrowContainer"><a href="#" class="arrow arrowCollapse"><img src="/static/img/arrowDown.png"></a></li>
-                                    <li><a class="viewReview" href="#">View</a></li>
-                                    <li><a class="viewReview" href="#">Review</a></li>
-                                </ul>
-                            </li><!-- deck (end) -->
-                            
-                            <li class="deck"><!-- deck (start) -->
-                                <h2>Week 3</h2>
-                                <p><h3>15</h3> Cards</p>
-                                <p>Last modified</p>
-                                <p class="lastUpdated">Today</p>
-                                <a href="#" class="arrow arrowExpand"><img src="/static/img/arrowUp.png"></a>
-                                <ul class="deckMenu">
-                                    <li class="arrowContainer"><a href="#" class="arrow arrowCollapse"><img src="/static/img/arrowDown.png"></a></li>
-                                    <li><a class="viewReview" href="#">View</a></li>
-                                    <li><a class="viewReview" href="#">Review</a></li>
-                                </ul>
-                            </li><!-- deck (end) -->
-                            
-                            <li class="deck"><!-- deck (start) -->
-                                <h2>Week 2</h2>
-                                <p><h3>15</h3> Cards</p>
-                                <p>Last modified</p>
-                                <p class="lastUpdated">Today</p>
-                                <a href="#" class="arrow arrowExpand"><img src="/static/img/arrowUp.png"></a>
-                                <ul class="deckMenu">
-                                    <li class="arrowContainer"><a href="#" class="arrow arrowCollapse"><img src="/static/img/arrowDown.png"></a></li>
-                                    <li><a class="viewReview" href="#">View</a></li>
-                                    <li><a class="viewReview" href="#">Review</a></li>
-                                </ul>
-                            </li><!-- deck (end) -->
-                            
-                            <li class="deck"><!-- deck (start) -->
-                                <h2>Week 1</h2>
-                                <p><h3>15</h3> Cards</p>
-                                <p>Last modified</p>
-                                <p class="lastUpdated">Today</p>
-                                <a href="#" class="arrow arrowExpand"><img src="/static/img/arrowUp.png"></a>
-                                <ul class="deckMenu">
-                                    <li class="arrowContainer"><a href="#" class="arrow arrowCollapse"><img src="/static/img/arrowDown.png"></a></li>
-                                    <li><a class="viewReview" href="#">View</a></li>
-                                    <li><a class="viewReview" href="#">Review</a></li>
-                                </ul>
-                            </li><!-- deck (end) -->
-                            
-                        </ul><!-- courseDecks (end) -->
-                    </div><!-- slider (end) -->
-                    <!--<script>
-                                        var sliders = [];
-                                        $('.slider').each(function() {
-                                                sliders.push(new Slider(this))
-                                        });
-                                        </script>
-                      <ul>
-                        <li><a href="javascript:sliders[0].goToPrev()">.goToPrev()</a></li>
-                        <li><a href="javascript:sliders[0].goToNext()">.goToNext()</a></li>
-                      </ul>-->
-                                                <!-- sliderNav (start) -->
-                    <div class="sliderNav">
-                        <ul class="sliderNavNextPrev">
-                            <li class="sliderPrev"><a href="javascript:sliders[1].goToPrev()">&laquo; Prev</a></li>
-                            <li class="sliderNext"><a href="javascript:sliders[1].goToNext()">Next &raquo;</a></li>
-                            <!--li><a href="javascript:sliders[2].respond()">.respond()</a></li-->
-                        </ul>
-                                        </div>
-                </div><!-- courseWrapper (end) -->
-            
-            </div><!-- content (end) -->
-            
-        </div><!-- contentWrapper (end) -->
-        
-    </div><!-- section (end) -->
-</div><!-- sectionWrapper (end) -->
-
+{% block javascript %}
 <script src="{{ STATIC_URL }}js/lib.js"></script>
 <script>
 require(['views/CollectionList'], function(CollectionList){                
@@ -248,6 +169,4 @@ $(window).on("resize", function () {
 }).resize();
 
 </script>
-
-
 {% endblock %}
