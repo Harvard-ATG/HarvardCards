@@ -15,7 +15,7 @@
 			{% if collection.deck_set.count > 0 %}
 				<ul>
 					{% for deck in collection.deck_set.all %}
-					<li><a href="#">{{ deck.title|truncatechars:30}}</a></li>
+					<li><a href="{% url 'deckIndex' deck.id %}">{{ deck.title|truncatechars:30}}</a></li>
 					{% endfor %}
 				</ul>
 			{% endif %}
