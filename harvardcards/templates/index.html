@@ -10,17 +10,17 @@
 	<a href="#" id="addAcourse">Add a course</a>
 	<nav>
 		<ul>
-			<li><a href="#">Home</a></li>
-		<li>
+		{% for collection in collections %}
+			<li><a href="#">{{ collection.title|truncatechars:30 }}</a>
+			{% if collection.deck_set.count > 0 %}
 				<ul>
-					<li><a href="#">Week 4</a></li>
-				<li><a href="#">Week 3</a></li>
-				<li><a href="#" class="active">Week 2 with a really long title for the week</a></li>
-				<li><a href="#">Week 1</a></li>
-			</ul>
-		</li>
-		<li><a href="#">Course 2 and very long title for a course</a></li>
-		<li><a href="#">Custom course</a></li>
+					{% for deck in collection.deck_set.all %}
+					<li><a href="#">{{ deck.title|truncatechars:30}}</a></li>
+					{% endfor %}
+				</ul>
+			{% endif %}
+			</li>
+		{% endfor %}
 	</ul>
 </nav>
 </div><!-- navigaton (end) -->
