@@ -1,4 +1,7 @@
+define(['jquery'], function($) {
+
 var Slider = function() { this.initialize.apply(this, arguments) }
+
 Slider.prototype = {
 
 	initialize: function(slider,deckView) {
@@ -208,3 +211,10 @@ $(document).ready(function(e) {
 	
 });
 
+var exports = {
+	Slider: Slider
+};
+
+return exports;
+
+});

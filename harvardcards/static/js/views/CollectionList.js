@@ -1,4 +1,4 @@
-define(['jquery', 'lodash', 'models/Collection'], function($, _, Collection){
+define(['jquery', 'jquery.jeditable', 'lodash', 'models/Collection'], function($, edtiable, _, Collection){
 
 	var CollectionList = function(config){
 		this.config = config;
