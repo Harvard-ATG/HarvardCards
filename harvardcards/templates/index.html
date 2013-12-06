@@ -1,10 +1,5 @@
 {% extends "__layout_left_sidebar.html" %}
 
-{% block css %}
-<link href='http://fonts.googleapis.com/css?family=Vollkorn' rel='stylesheet' type='text/css' />
-<link href='{{ STATIC_URL }}css/styles.css' rel='stylesheet' type='text/css' />
-{% endblock %}
-
 {% block sidebar_content %}
 	{% include "_collection_nav.html" with collection=collection %}
 {% endblock %}
@@ -103,53 +98,52 @@
 {% endblock %}
 
 {% block javascript %}
-<script src="{{ STATIC_URL }}js/lib.js"></script>
 <script>
 require(['views/CollectionList'], function(CollectionList){                
-
-        $(document).ready(function(){
-                var collectionList = new CollectionList({
-                        $add_collection_button: $('#addAcourse'),
-                        $collection_cancel: $('#collection_cancel'),
-                        $add_collection_content: $('.addCourseWrapper'),
-                        $add_collection_title: $('.courseHeader h2'),
-                });        
-        });
-        
+	$(document).ready(function(){
+			var collectionList = new CollectionList({
+					$add_collection_button: $('#addAcourse'),
+					$collection_cancel: $('#collection_cancel'),
+					$add_collection_content: $('.addCourseWrapper'),
+					$add_collection_title: $('.courseHeader h2'),
+			});        
+	});
 });
 
-var sliders = [];
-var sliderLength;
+require(['jquery', 'lib'], function($, lib) {
+	var Slider = lib.Slider;
+	var sliders = [];
+	var sliderLength;
+	var sliderObjExist = false;
+	$('.slider').each(function() {
+			if ( $(this).text() != '' ){
+					//create Slider objects
+					sliders.push(new Slider(this));
+					//sliders[i].respond();
+					sliderObjExist = true;
+			}        
+	});
 
-var sliderObjExist = false;
-$('.slider').each(function() {
-        if ( $(this).text() != '' ){
-                //create Slider objects
-                sliders.push(new Slider(this));
-                //sliders[i].respond();
-                sliderObjExist = true;
-        }        
+	$(window).on("resize", function () {
+			
+			sliderLength = sliders.length;
+			
+			if ( sliderObjExist )
+			{
+					for( var i=0; i < sliderLength; i++ )
+					{
+							if ($('.sliderNav').css('display') == 'none'){
+									
+									//removing the size when going back into the noslider div
+									sliders[i].resetUL();
+							}else{
+									//console.log($('.sliderNav').css('display'));
+									sliders[i].respond();
+							}
+					}
+			}
+	}).resize();
 });
-
-$(window).on("resize", function () {
-        
-        sliderLength = sliders.length;
-        
-        if ( sliderObjExist )
-        {
-                for( var i=0; i < sliderLength; i++ )
-                {
-                        if ($('.sliderNav').css('display') == 'none'){
-                                
-                                //removing the size when going back into the noslider div
-                                sliders[i].resetUL();
-                        }else{
-                                //console.log($('.sliderNav').css('display'));
-                                sliders[i].respond();
-                        }
-                }
-        }
-}).resize();
 
 </script>
 {% endblock %}
