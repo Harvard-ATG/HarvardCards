@@ -1,3 +1,7 @@
+# Loads all the json files found in the data folder within the flashcard-exporter module
+# Usage:
+#   python load_all.py
+
 import os
 
 path_files_folder = 'flashcard-exporter/data/'
