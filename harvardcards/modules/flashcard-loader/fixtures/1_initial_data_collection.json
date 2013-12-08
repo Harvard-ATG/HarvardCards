@@ -1,0 +1,10 @@
+[
+    {
+        "pk": 4, 
+        "model": "flash.Collection", 
+        "fields": {
+            "description": "A course on Quizlet Set 273709", 
+            "title": "Quizlet Set 273709"
+        }
+    }
+]

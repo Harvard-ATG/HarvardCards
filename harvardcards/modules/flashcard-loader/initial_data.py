@@ -11,7 +11,9 @@ import os
 import sys
 from get_initial_pks import get_initial_pks
 
-path_files_folder = 'data/'
+path_files_folder = 'flashcard-exporter/data/'
+path_folder_full = os.path.join(os.path.dirname(os.path.abspath(__file__)),os.pardir, path_files_folder)
+
 # if filename not specified use arthistoryflash.json
 if len(sys.argv) < 2:
     json_file = 'arthistoryflash.json'
@@ -24,7 +26,7 @@ else:
     print "Invalid arguments."
     sys.exit()
 
-json_data = open(os.path.join(os.path.dirname(__file__), path_files_folder, json_file))
+json_data = open(os.path.join(path_folder_full, json_file))
 data = json.load(json_data)
 json_data.close()
 
@@ -33,7 +35,7 @@ global file_order
 file_order = 0
 
 # where to save the json files
-path_fixtures = 'harvardcards/apps/flash/fixtures/'
+path_fixtures = 'fixtures/'
 
 # creates json file
 def output_create(model_name, json_dump):

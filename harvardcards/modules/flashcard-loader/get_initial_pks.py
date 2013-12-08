@@ -6,13 +6,16 @@
 # Usage:
 #   initial_collection_pk, initial_deck_pk, initial_card_pk, initial_field_pk, initial_decks_cards_pk = get_initial_pks()
 
+import os
 
+script_path = os.path.dirname(os.path.abspath(__file__))
 
 def get_initial_pks():
     import os, json
 
     # dumps the current django data
     filename = 'all_data.json'
+    os.chdir(os.path.join(os.pardir, os.pardir, os.pardir))
     os.system("python manage.py dumpdata --indent=4 flash>%s" %filename)
 
     json_data = open(filename)
@@ -20,6 +23,7 @@ def get_initial_pks():
     json_data.close()
     # comment out to keep the dumpdata file
     os.remove(filename)
+    os.chdir(script_path)
 
     # function returns the maximum pk of given model's instances
     def get_max_pk(model_name):

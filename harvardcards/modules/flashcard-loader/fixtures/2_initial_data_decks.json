@@ -1,0 +1,10 @@
+[
+    {
+        "pk": 14, 
+        "model": "flash.Deck", 
+        "fields": {
+            "collection": 4, 
+            "title": "Bases"
+        }
+    }
+]

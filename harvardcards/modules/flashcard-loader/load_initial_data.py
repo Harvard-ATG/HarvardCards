@@ -7,14 +7,16 @@
 
 import os, sys
 # folder where the json files are stored
-path_fixtures = 'harvardcards/apps/flash/fixtures/'
+path_fixtures = 'fixtures/'
+script_path = os.path.dirname(os.path.abspath(__file__))
 
 # The function loads the file into the app
-def loaddata(file):
-    file = os.path.join(os.path.dirname(__file__),path_fixtures,file)
-    print file
-    os.system("python manage.py loaddata %s" % file)
-
+def loaddata(file_name):
+    file_name_full = os.path.join(script_path,path_fixtures,file_name)
+    print file_name
+    os.chdir(os.path.join(os.pardir, os.pardir, os.pardir))
+    os.system("python manage.py loaddata %s" % file_name_full)
+    os.chdir(script_path)
 
 if len(sys.argv) == 2:
     json_file = sys.argv[1]
