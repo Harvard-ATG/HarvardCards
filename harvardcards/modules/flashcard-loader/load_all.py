@@ -9,6 +9,6 @@ path_folder_full = os.path.join(os.path.dirname(os.path.abspath(__file__)),os.pa
 
 for file in os.listdir(path_folder_full):
     if file.endswith('.json'):
-        print "Now loading " + file + "\n"
+        print "Now loading " + file + "...\n"
         os.system("python load_initial_data.py %s" %file)
         print "\n"

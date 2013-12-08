@@ -150,7 +150,7 @@ for k in range(0, cards):
                                       {
                                        "sort_order": sort_order,
                                        "value": value,
-                                       "field":pk,
+                                       "field":field_pk,
                                        "card":card
                                       }
         })
