@@ -19,11 +19,15 @@
 	<div class="container">
 		{% block header %}
 		<div id="fc_headerWrapper" class="sectionWrapper"><!-- sectionWrapper (start) -->
-				<div id="fc_header" class="section"><!-- section (start) -->
-					<a href="{% url 'index' %}"><img src="{{ STATIC_URL }}img/harvardLogo.png" alt="Harvard University" title="Harvard University" border="0" /></a>
+			<div id="fc_header" class="section"><!-- section (start) -->
+				<a href="{% url 'index' %}"><img src="{{ STATIC_URL }}img/harvardLogo.png" alt="Harvard University" title="Harvard University" border="0" /></a>
 				<ul id="userInfo">
-					<li><span>Roderick Morales<span></li>
-					<li><a href="#">Sign out</a></li>
+					{% if user.is_authenticated %}
+						<li><span>{{ user.email }}<span></li>
+						<li><a href="/logout">Sign out</a></li>
+					{% else %}
+						<li><span><a href="/login">Login</a></span></li>
+					{% endif %}
 				</ul>
 			</div><!-- section (end) -->
 		</div><!-- sectionWrapper (end) -->
