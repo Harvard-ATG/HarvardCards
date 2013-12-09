@@ -43,7 +43,7 @@ def index(request, deck_id=None):
             cards.append(card_dict)
         
         #Decks_Cards.objects.filter(deck=deck).card.all()
-    return render(request, "decks/index.html", 
+    return render(request, "deck_view.html",
         {"collections": collections, "deck": deck, "cards": cards, 
         "collection_id": current_collection.id, "collection": current_collection})
 
