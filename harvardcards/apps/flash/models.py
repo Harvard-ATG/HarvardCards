@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 class Collection(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
+    users = models.ManyToManyField(User, through='Users_Collections')
 
     class Meta:
         verbose_name = 'Collection'
@@ -46,7 +47,6 @@ class Card(models.Model):
 #class User(models.Model):
 #    name = models.CharField(max_length=200)
 #    email = models.CharField(max_length=200)
-#    collection = models.ManyToManyField(Collection, through='Users_Collections')
     
 class Users_Collections(models.Model):
     user = models.ForeignKey(User)
@@ -58,10 +58,34 @@ class Users_Collections(models.Model):
         ('O', 'Owner')
     )
     role = models.CharField(max_length=1, choices=ROLES, default='G')
+    date_joined = models.DateField()
 
-    class Meta:
-        verbose_name = 'User Collections'
-        verbose_name_plural = 'User Collections'
+    def __unicode__(self):
+        return "User Collections: " + "user=" + str(self.user.pk) + "collection=" + str(self.collection.pk) + "role=" + str(self.role)
+
+    @classmethod
+    def get_role_buckets(self, user, collections):
+        ''' Given a user and a set of collections, this function returns a
+        dictionary that maps roles to collections. '''
+
+        role_map = dict([(role[0], role[1].upper()) for role in self.ROLES])
+        role_buckets = dict([(bucket, []) for bucket in role_map.values()])
+
+        user_collections = dict([
+            (item.collection_id, item.role)
+            for item in self.objects.filter(user=user.id)
+        ])
+
+        for collection in collections:
+            if user.is_superuser:
+                role = 'A'
+            elif collection.id in user_collections:
+                role = user_collections[collection.id]
+            else:
+                role = 'G'
+            role_buckets[role_map[role]].append(collection.id)
+
+        return role_buckets
 
 class Deck(models.Model):
     title = models.CharField(max_length=200)

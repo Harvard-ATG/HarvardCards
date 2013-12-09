@@ -6,15 +6,18 @@ from django.core.exceptions import ViewDoesNotExist
 from django.utils import simplejson as json
 
 from django.forms.formsets import formset_factory
-from harvardcards.apps.flash.models import Collection, Deck, Field
+from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
 
 def index(request):
-    #return HttpResponse("Hello Werld. This is the HarvardCards Index.")
     collections = Collection.objects.all()
-    # can get decks in the template by using collection.deck_set.all
-    
-    return render(request, 'collection_index.html', {"collections": collections})
+    user_collection_role = Users_Collections.get_role_buckets(request.user, collections)
+    context = {
+        "collections": collections,
+        "user_collection_role": user_collection_role
+    }
+
+    return render(request, 'collection_index.html', context)
     
 def create(request, collection_id=None):
     # is it a post?
