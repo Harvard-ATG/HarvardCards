@@ -1,5 +1,5 @@
 from django.contrib import admin
-from harvardcards.apps.flash.models import Collection, Field, Card, User, Users_Collections, Deck, Decks_Cards, Cards_Fields
+from harvardcards.apps.flash.models import Collection, Field, Card, Users_Collections, Deck, Decks_Cards, Cards_Fields
 
 class CardsInLine(admin.StackedInline):
     verbose_name = "Card's fields"
@@ -28,7 +28,6 @@ class DeckAdmin(admin.ModelAdmin):
 admin.site.register(Collection)
 admin.site.register(Field)
 admin.site.register(Card, CardAdmin)
-admin.site.register(User)
 admin.site.register(Users_Collections)
 admin.site.register(Deck, DeckAdmin)
 admin.site.register(Decks_Cards)
