@@ -47,9 +47,10 @@
                     <div id="singleCardHolder"><!-- singleCardHolder (start)-->
                     	<div id="cardOverflow"><!-- cardOverflow (start) -->
 	                    	<ul>
+                                {% for card in cards %}
 		                    	<li>
 			                    	<div class="showRevealWrapper">
-			                        	<h1>Perro</h1>
+			                        	<h1>{{card.first_value}}</h1>
 			                            <!--<a href="#" class="reveal">Reveal</a>-->
 			                        </div>
 									<div class="hideRevealHr"></div>
@@ -57,7 +58,7 @@
 			                        	<h1>Dog</h1>
 			                        </div>
 		                        </li>
-		                        
+		                        {% endfor %}
 	                        </ul>
                         </div><!-- cardOverflow (end) -->
                     </div><!-- singleCardHolder (end)-->
@@ -74,7 +75,7 @@
 <script type="text/javascript">
 
 require(['jquery', 'lib', 'appendAround'], function($, lib) {
-var sliders = [];
+sliders = [];
 var sliderLength;
 var sliderObjExist = false;
 var Slider = lib.Slider
