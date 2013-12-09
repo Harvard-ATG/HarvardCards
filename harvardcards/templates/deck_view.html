@@ -7,7 +7,6 @@
 {% block main_content %}
 
 <link href='http://fonts.googleapis.com/css?family=Vollkorn' rel='stylesheet' type='text/css'>
-<link href='../static/css/styles.css' rel='stylesheet' type='text/css'>
 
             
             <div id="content"><!-- content (start) -->
@@ -48,7 +47,7 @@
                     <div id="singleCardHolder"><!-- singleCardHolder (start)-->
                     	<div id="cardOverflow"><!-- cardOverflow (start) -->
 	                    	<ul>
-		                    	<li><!-- card0 (start) -->
+		                    	<li>
 			                    	<div class="showRevealWrapper">
 			                        	<h1>Perro</h1>
 			                            <!--<a href="#" class="reveal">Reveal</a>-->
@@ -57,29 +56,7 @@
 			                        <div class="showRevealWrapper">
 			                        	<h1>Dog</h1>
 			                        </div>
-		                        </li><!-- card0 (end) -->
-		                        
-		                        <li><!-- card1 (start) -->
-			                    	<div class="showRevealWrapper">
-			                        	<h1>Gato</h1>
-			                            <!--<a href="#" class="reveal">Reveal</a>-->
-			                        </div>
-									<div class="hideRevealHr"></div>
-			                        <div class="showRevealWrapper">
-			                        	<h1>Cat</h1>
-			                        </div>
-		                        </li><!-- card1 (end) -->
-		                        
-		                        <li><!-- card2 (start) -->
-			                    	<div class="showRevealWrapper">
-			                        	<h1>Vaca</h1>
-			                            <!--<a href="#" class="reveal">Reveal</a>-->
-			                        </div>
-									<div class="hideRevealHr"></div>
-			                        <div class="showRevealWrapper">
-			                        	<h1>Cow</h1>
-			                        </div>
-		                        </li><!-- card2 (end) -->
+		                        </li>
 		                        
 	                        </ul>
                         </div><!-- cardOverflow (end) -->
@@ -93,36 +70,34 @@
         
 
 
-<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script
-<script language="javascript" src="../static/js/appendAround.js"></script>
-<script src="../static/js/lib.js"></script>
 
 <script type="text/javascript">
+
+require(['jquery', 'lib', 'appendAround'], function($, lib) {
 var sliders = [];
 var sliderLength;
-
 var sliderObjExist = false;
+var Slider = lib.Slider
 $('.cardHolder').each(function() {
 	if ( $(this).text() != '' ){
 		//create Slider objects
 		sliders.push(new Slider(this,true));
 		//sliders[i].respond();
 		sliderObjExist = true;
-	}	
+	}
 });
 
 var current = 0;
 $(window).on("resize", function () {
-	
-	
+
+
 	if ( sliderObjExist )
 	{
 		//console.log($('.sliderNav').css('display'));
 		sliders[0].respond();
-			
+
 	}
-	
+
 	var cardHolder = $('#singleCardHolder');
 	var holderWidth = Math.round(cardHolder.width());
 	var cardItems = $('#singleCardHolder ul li');
@@ -132,10 +107,10 @@ $(window).on("resize", function () {
 	//make the ul width big enough to fit all cards side by side
 	var ulWidth = holderWidth * liCount;
 	$('#singleCardHolder ul').width(ulWidth + 'px');
-	
+
 	//on first load show the first card
 	cardItems.eq(current).show();
-	
+
 	//change main card based on thumbnail click
 	$('a.card').click(function(){
 		var i = $(this).parent().index();
@@ -145,10 +120,12 @@ $(window).on("resize", function () {
 			cardItems.eq(i).show();
 			current = i;
 		}
-		
+
 	});
-	
+
 }).resize();
+});
+
 </script>
 
 
