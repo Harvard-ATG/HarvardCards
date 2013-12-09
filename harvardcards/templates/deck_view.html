@@ -50,12 +50,12 @@
                                 {% for card in cards %}
 		                    	<li>
 			                    	<div class="showRevealWrapper">
-			                        	<h1>{{card.fc}}</h1>
+			                        	<h1>{{card.first_value}}</h1>
 			                            <!--<a href="#" class="reveal">Reveal</a>-->
 			                        </div>
 									<div class="hideRevealHr"></div>
 			                        <div class="showRevealWrapper">
-			                        	<h1>Dog</h1>
+			                        	<h1>{{card.first_label}}</h1>
 			                        </div>
 		                        </li>
 		                        {% endfor %}
