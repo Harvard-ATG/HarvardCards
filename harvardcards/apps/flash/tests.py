@@ -29,7 +29,7 @@ class CollectionTest(TestCase):
         #self.assertTemplateUsed(response, 'index.html')
 
     def test_collection_get(self):
-        url = reverse('create')
+        url = reverse('createCollection')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         #TODO why is this failing?
@@ -43,7 +43,7 @@ class CollectionTest(TestCase):
         #self.assertEqual(len_collection1, 0)
 
         # url for create collection
-        url = reverse('create')
+        url = reverse('createCollection')
 
         # sample post data
         post_data = {'field_data': '[{"field_type":"T","label":"","sort_order":0,"display":true},{"field_type":"I","label":"","sort_order":1,"display":true},{"field_type":"T","label":"","sort_order":2,"display":false}]', 'csrfmiddlewaretoken': '38vLxTwts8C4pUcFqoOgQAq3eXgAdpro', 'field_type1': 'text', 'description': 'lots of math', 'title': 'math 454'}
