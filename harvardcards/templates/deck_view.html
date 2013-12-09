@@ -28,7 +28,7 @@
 
                             <ul id="cards">
                                 {% for card in cards %}
-                                <li><a class="card" href="#">{{card.card_id}}</a></li>
+                                <li id = {{forloop.counter}}><a class="card" href="#">{{card.card_id}}</a></li>
                                 {% endfor %}
                             </ul>
                         </div>
@@ -136,6 +136,7 @@ $(window).on("resize", function () {
 
 	//on first load show the first card
 	cardItems.eq(current).show();
+    document.getElementById(current+1).style.border="solid 0.375em #4d4d4d";
 
 	//change main card based on thumbnail click
 	$('a.card').click(function(){
@@ -143,7 +144,9 @@ $(window).on("resize", function () {
 		if (i != current)
 		{
 			cardItems.eq(current).hide();
+			document.getElementById(current+1).style.border="solid 6px #d2d2d2";
 			cardItems.eq(i).show();
+            document.getElementById(i+1).style.border="solid 0.375em #4d4d4d";
 			current = i;
 		}
 
