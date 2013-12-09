@@ -23,9 +23,10 @@
 				<a href="{% url 'index' %}"><img src="{{ STATIC_URL }}img/harvardLogo.png" alt="Harvard University" title="Harvard University" border="0" /></a>
 				<ul id="userInfo">
 					{% if user.is_authenticated %}
-						<li><span>{{ user.email }}<span></li>
+						<li><span>{{ user.email }}</span></li>
 						<li><a href="/logout">Sign out</a></li>
 					{% else %}
+						<li><span>Guest</span></li>
 						<li><span><a href="/login">Login</a></span></li>
 					{% endif %}
 				</ul>
