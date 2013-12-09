@@ -14,7 +14,7 @@ def index(request):
     collections = Collection.objects.all()
     # can get decks in the template by using collection.deck_set.all
     
-    return render(request, 'index.html', {"collections": collections})
+    return render(request, 'collection_index.html', {"collections": collections})
     
 def create(request, collection_id=None):
     # is it a post?
