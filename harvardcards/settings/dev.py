@@ -18,10 +18,10 @@ DATABASES = {
 MIDDLEWARE_CLASSES.append('debug_toolbar.middleware.DebugToolbarMiddleware')
 INSTALLED_APPS.append('debug_toolbar')
 DEBUG_TOOLBAR_CONFIG = {
-    'INTERCEPT_REDIRECTS': True,
+    #'INTERCEPT_REDIRECTS': True,
     'SHOW_TOOLBAR_CALLBACK': lambda x: True,
     'HIDE_DJANGO_SQL': False,
     'TAG': 'div',
     'ENABLE_STACKTRACES': True,
-    'HIDDEN_STACKTRACE_MODULES': ('gunicorn', 'newrelic'),
+    #'HIDDEN_STACKTRACE_MODULES': ('gunicorn', 'newrelic'),
 }
