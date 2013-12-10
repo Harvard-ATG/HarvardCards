@@ -49,14 +49,14 @@
 	                    	<ul>
                                 {% for card in cards %}
 		                    	<li>
-			                    	<div class="showRevealWrapper">
-			                        	<h1>{{card.first_value}}</h1>
-			                            <!--<a href="#" class="reveal">Reveal</a>-->
-			                        </div>
+									{% for field in card.fields.show %}
+										{% include "_deck_card_fields.html" with field=field %}
+									{% endfor %}
+									<!--<a href="#" class="reveal">Reveal</a>-->
 									<div class="hideRevealHr"></div>
-			                        <div class="showRevealWrapper">
-			                        	<h1>{{card.first_label}}</h1>
-			                        </div>
+									{% for field in card.fields.reveal %}
+										{% include "_deck_card_fields.html" with field=field %}
+									{% endfor %}
 		                        </li>
 		                        {% endfor %}
 	                        </ul>
@@ -70,35 +70,8 @@
         </div><!-- contentWrapper (end) -->
         
 
-
-
 <script type="text/javascript">
-
-require(['models/Deck','models/Card'], function(Deck, Card){
-
-	var collection_id = '{{collection.id}}';
-	var deck_id = '{{deck.id}}';
-	var cards_in_deck = '{{cards|length}}';
-	if(collection_id == ''){
-		var msg = "No associated course id.";
-		alert(msg);
-		window.location = "/index/";
-	}
-	//var card = new Card(collection_id, deck_id);
-	//card.initFirstCard();
-	//card.initNewCard();
-
-	var deck = new Deck(collection_id, deck_id);
-	var card = new Card(collection_id, deck);
-
-	deck.collectionNav();
-	deck.deckLink();
-
-
-});
 require(['jquery', 'lib', 'appendAround'], function($, lib) {
-
-
 
 sliders = [];
 var sliderLength;
