@@ -116,10 +116,12 @@ require(['views/CollectionList'], function(CollectionList){
 });
 
 require(['jquery', 'lib'], function($, lib) {
+	var ArrowToggle = lib.ArrowToggle;
 	var Slider = lib.Slider;
 	var sliders = [];
 	var sliderLength;
 	var sliderObjExist = false;
+
 	$('.slider').each(function() {
 			if ( $(this).text() != '' ){
 					//create Slider objects
@@ -148,6 +150,8 @@ require(['jquery', 'lib'], function($, lib) {
 					}
 			}
 	}).resize();
+
+	$(document).on('ready', ArrowToggle('.deck'));
 });
 
 </script>
