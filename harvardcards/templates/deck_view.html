@@ -136,7 +136,7 @@ $(window).on("resize", function () {
 
 	//on first load show the first card
 	cardItems.eq(current).show();
-    document.getElementById(current+1).style.border="solid 0.375em #4d4d4d";
+	document.getElementById(current+1).className = "clicked"
 
 	//change main card based on thumbnail click
 	$('a.card').click(function(){
@@ -144,9 +144,11 @@ $(window).on("resize", function () {
 		if (i != current)
 		{
 			cardItems.eq(current).hide();
-			document.getElementById(current+1).style.border="solid 6px #d2d2d2";
+			document.getElementById(current+1).className = ""
+
+
 			cardItems.eq(i).show();
-            document.getElementById(i+1).style.border="solid 0.375em #4d4d4d";
+			document.getElementById(i+1).className = "clicked"
 			current = i;
 		}
 

@@ -430,7 +430,10 @@ ul#cards{
 		ul#cards li:hover{
 			border: solid 0.375em #4d4d4d;
 		}
-		
+
+	ul#cards li.clicked {
+			border: solid 0.375em #4d4d4d;
+	}
 div.deckNav{
 	display: block;
 	position: absolute;
