@@ -69,10 +69,10 @@
 		</div>
 		<div class="slider"><!--slider (start) -->
 			<ul class="courseDecks"><!-- courseDecks(start) -->
-				{% for deck in collection.deck_set.all %}
+				{% for deck in collection.decks %}
 				<li class="deck"><!-- deck (start) -->
 					<h2>{{ deck.title }}</h2>
-					<p><h3>{{ deck.decks_cards_set.count }}</h3> Cards</p>
+					<p><h3>{{ deck.num_cards }}</h3> Cards</p>
 					<p>Last modified</p>
 					<p class="lastUpdated">Now</p>
 					<a href="#" class="arrow arrowExpand"><img src="{{ STATIC_URL }}img/arrowUp.png"></a>
