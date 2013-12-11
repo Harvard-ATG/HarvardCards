@@ -19,7 +19,7 @@ def index(request, deck_id=None):
     collections = Collection.objects.all()
     deck = Deck.objects.get(id=deck_id)
     deck_cards = Decks_Cards.objects.filter(deck=deck).order_by('sort_order').prefetch_related('card')
-
+    current_collection = Collection.objects.get(id=deck.collection.id)
     cards = []
     for dcard in deck_cards:
         card_fields = {'show':[],'reveal':[]}
@@ -41,7 +41,8 @@ def index(request, deck_id=None):
     context = {
         "collections": collections,
         "deck": deck,
-        "cards": cards
+        "cards": cards,
+        "collection": current_collection
     }
 
     return render(request, "deck_view.html", context)
