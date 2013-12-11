@@ -54,11 +54,16 @@
 									{% for field in card.fields.reveal %}
 										{% include "_deck_card_fields.html" with field=field %}
 									{% endfor %}
-									<!--<a href="#" class="reveal">Reveal</a>-->
-									<div class="hideRevealHr"></div>
+									<div class="hideRevealHr">
+										{% if is_quiz_mode %}
+										<a href="#" class="reveal">Reveal</a>
+										{% endif %}
+									</div>
+									<div class="{% if is_quiz_mode %}hide{% endif %}">
 									{% for field in card.fields.show %}
-										{% include "_deck_card_fields.html" with field=field %}
+										{% include "_deck_card_fields.html" with field=field hide=is_quiz_mode%}
 									{% endfor %}
+									</div>
 		                        </li>
 		                        {% endfor %}
 	                        </ul>
@@ -130,6 +135,21 @@ $(window).on("resize", function () {
 	});
 
 }).resize();
+
+$('.reveal').click(function() {
+	var $show = $(this).parent().next();
+	if ($show.hasClass('show')){
+		$show.removeClass('show');
+		$show.addClass('hide');
+		$(this).text('Reveal');
+	}else{
+		$show.removeClass('hide');
+		$show.addClass('show');
+		$(this).text('Hide');
+	}
+	return false;
+});
+
 });
 
 </script>

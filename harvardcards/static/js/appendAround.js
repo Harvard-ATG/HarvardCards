@@ -1,3 +1,4 @@
+define(['jquery'], function(jQuery) { 
 /*! appendAround markup pattern. [c]2012, @scottjehl, Filament Group, Inc. MIT/GPL 
 how-to:
 	1. Insert potential element containers throughout the DOM
@@ -41,3 +42,4 @@ how-to:
 	  });
 	};
 }( jQuery ));
+});
