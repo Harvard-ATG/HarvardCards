@@ -16,14 +16,14 @@ def test2(request):
     return render(request, "decks/test2.html")
 
 def index(request, deck_id=None):
-    collections = Collection.objects.all()
+    collections = Collection.objects.all().prefetch_related('deck_set')
     deck = Deck.objects.get(id=deck_id)
-    deck_cards = Decks_Cards.objects.filter(deck=deck).order_by('sort_order').prefetch_related('card')
+    deck_cards = Decks_Cards.objects.filter(deck=deck).order_by('sort_order').prefetch_related('card__cards_fields_set__field')
     current_collection = Collection.objects.get(id=deck.collection.id)
     cards = []
     for dcard in deck_cards:
         card_fields = {'show':[],'reveal':[]}
-        for cfield in dcard.card.cards_fields_set.all().order_by('sort_order'):
+        for cfield in dcard.card.cards_fields_set.all():
             bucket = 'show'
             if cfield.field.display:
                 bucket = 'reveal'
