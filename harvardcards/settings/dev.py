@@ -15,8 +15,10 @@ DATABASES = {
 
 # Configuration for the django-debug-toolbar 
 # (pip install django-debug-toolbar)
-MIDDLEWARE_CLASSES.append('debug_toolbar.middleware.DebugToolbarMiddleware')
-INSTALLED_APPS.append('debug_toolbar')
+#
+# Uncomment these lines to enable the toolbar
+#MIDDLEWARE_CLASSES.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+#INSTALLED_APPS.append('debug_toolbar')
 DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': False,
     'SHOW_TOOLBAR_CALLBACK': lambda x: True,
