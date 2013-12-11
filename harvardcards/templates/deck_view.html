@@ -182,4 +182,17 @@ function checkKey(e) {
 document.onkeydown=checkKey;
 });
 </script>
+
+<script>
+require(['jquery', 'jquery.mousewheel'], function($) {
+$('#content').mousewheel(function(event) {
+
+      if (event.deltaX>0)
+        sliders[0].goToNext();
+      else
+        sliders[0].goToPrev();
+   });
+
+});
+</script>
 {% endblock %}
