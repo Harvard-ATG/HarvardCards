@@ -6,7 +6,7 @@ from django.core.exceptions import ViewDoesNotExist
 from django.utils import simplejson as json
 
 from django.forms.formsets import formset_factory
-from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards
+from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Users_Collections
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
 
 def test1(request):
@@ -20,6 +20,8 @@ def index(request, deck_id=None):
     deck = Deck.objects.get(id=deck_id)
     deck_cards = Decks_Cards.objects.filter(deck=deck).order_by('sort_order').prefetch_related('card__cards_fields_set__field')
     current_collection = Collection.objects.get(id=deck.collection.id)
+    user_collection_role = Users_Collections.get_role_buckets(request.user, collections)
+
     cards = []
     for dcard in deck_cards:
         card_fields = {'show':[],'reveal':[]}
@@ -39,6 +41,7 @@ def index(request, deck_id=None):
         })
 
     context = {
+        "user_collection_role": user_collection_role,
         "collections": collections,
         "deck": deck,
         "cards": cards,

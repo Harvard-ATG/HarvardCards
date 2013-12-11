@@ -16,9 +16,11 @@
                     <div class="courseHeader"><!-- courseHeader (start) -->
 
                         <h2 class="courseTitle">{{collection.title}}</h2><h3>{{deck.title}}</h3>
+						{% if collection.id in user_collection_role.ADMIN %}
                         <ul class="adminMenu adminMenuRight">
                             <li><a href="#">Delete</a></li>
                         </ul>
+						{% endif %}
                     </div><!-- courseHeader (end) -->
                     
                     <a href="#" id="addCard">Add Card</a>
