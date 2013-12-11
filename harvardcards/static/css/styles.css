@@ -617,7 +617,7 @@ div.deckNav{
 		}
 		
 	.openDeckMenu{
-		margin-top: -88px;
+		margin-top: -40px;
 		height: 144px;
 	}
 	
@@ -682,7 +682,7 @@ div.deckNav{
 	}
 	
 	.openDeckMenu{
-		margin-top: -88px;
+		margin-top: -40px;
 		height: 144px;
 	}
 	
@@ -760,7 +760,7 @@ div.deckNav{
 	}
 	
 	.openDeckMenu{
-		margin-top: -78px;
+		margin-top: -30px;
 		height: 134px;
 	}
 	
@@ -842,7 +842,7 @@ div.deckNav{
 	.sliderNav { display: none; }
 	
 	.openDeckMenu{
-		margin-top: -78px;
+		margin-top: -30px;
 		height: 134px;
 	}
 
@@ -917,7 +917,7 @@ div.deckNav{
 	.sliderNav { display: none; }
 	
 	.openDeckMenu{
-		margin-top: -78px;
+		margin-top: -30px;
 		height: 134px;
 	}
 }

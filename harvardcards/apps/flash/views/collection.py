@@ -28,8 +28,7 @@ def index(request):
             collection_decks.append({
                 'id': deck.id,
                 'title': deck.title,
-                'num_cards': deck.cards.count(), 
-                'last_updated': 'Now'
+                'num_cards': deck.cards.count()
             })
         collection_list.append({
             'id': collection.id,
