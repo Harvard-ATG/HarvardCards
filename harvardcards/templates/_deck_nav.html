@@ -1,0 +1,29 @@
+<div id="navigation"><!-- navigaton (start) -->
+	<nav>
+		<ul>
+			<li><a href="{% url 'index' %}">Home</a></li>
+		{% for c in collections %}
+			<li>
+			{% if c == collection %}
+				<a href="#" class = "active">{{ c.title|truncatechars:30 }}</a>
+			{% else %}
+				<a href="#">{{ c.title|truncatechars:30 }}</a>
+			{% endif %}
+			{% if c.deck_set.count > 0 %}
+				<ul>
+					{% for d in c.deck_set.all %}
+					<li>
+						{% if d == deck %}
+						<a href="{% url 'deckIndex' d.id %}" class = "active">{{ d.title|truncatechars:30}}</a>
+						{% else %}
+						<a href="{% url 'deckIndex' d.id %}">{{ d.title|truncatechars:30}}</a>
+						{% endif %}
+					</li>
+					{% endfor %}
+				</ul>
+			{% endif %}
+			</li>
+		{% endfor %}
+		</ul>
+	</nav>
+</div><!-- navigaton (end) -->

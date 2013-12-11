@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block main_content %}
+
 <div id="content"><!-- content (start) -->
 	<div class="courseWrapper addCourseWrapper"><!-- courseWrapper (start) -->
 			<div class="courseHeader"><!-- courseHeader (start) -->
@@ -81,7 +82,7 @@
 					<ul class="deckMenu">
 						<li class="arrowContainer"><a href="#" class="arrow arrowCollapse"><img src="{{ STATIC_URL }}img/arrowDown.png"></a></li>
 						<li><a class="viewReview" href="{% url 'deckIndex' deck.id %}">Review</a></li>
-						<li><a class="viewReview" href="{% url 'deckIndex' deck.id %}">Quiz</a></li>
+						<li><a class="viewReview" href="{% url 'deckIndex' deck.id %}?mode=quiz">Quiz</a></li>
 
 						{% if collection.id in user_collection_role.ADMIN %}
 						<li><a class="adminMenuBtn" href="#">Edit</a></li>
