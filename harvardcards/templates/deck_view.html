@@ -15,7 +15,7 @@
                 
                     <div class="courseHeader"><!-- courseHeader (start) -->
 
-                        <h2 class="courseTitle">{{collection.title}}</h2><h3>{{deck.title}}</h3>
+                        <h2 class="courseTitle">{{collections.title}}</h2><h3>{{deck.title}}</h3>
                         <ul class="adminMenu adminMenuRight">
                             <li><a href="#">Delete</a></li>
                         </ul>
@@ -49,12 +49,12 @@
 	                    	<ul>
                                 {% for card in cards %}
 		                    	<li>
-									{% for field in card.fields.show %}
+									{% for field in card.fields.reveal %}
 										{% include "_deck_card_fields.html" with field=field %}
 									{% endfor %}
 									<!--<a href="#" class="reveal">Reveal</a>-->
 									<div class="hideRevealHr"></div>
-									{% for field in card.fields.reveal %}
+									{% for field in card.fields.show %}
 										{% include "_deck_card_fields.html" with field=field %}
 									{% endfor %}
 		                        </li>

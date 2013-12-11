@@ -16,35 +16,35 @@ def test2(request):
     return render(request, "decks/test2.html")
 
 def index(request, deck_id=None):
-	collections = Collection.objects.all()
-	deck = Deck.objects.get(id=deck_id)
-	deck_cards = Decks_Cards.objects.filter(deck=deck).order_by('sort_order').prefetch_related('card')
+    collections = Collection.objects.all()
+    deck = Deck.objects.get(id=deck_id)
+    deck_cards = Decks_Cards.objects.filter(deck=deck).order_by('sort_order').prefetch_related('card')
 
-	cards = []
-	for dcard in deck_cards:
-		card_fields = {'show':[],'reveal':[]} 
-		for cfield in dcard.card.cards_fields_set.all().order_by('sort_order'):
-			bucket = 'show'
-			if cfield.field.display:
-				bucket = 'reveal'
-			card_fields[bucket].append({
-				'type': cfield.field.field_type,
-				'label': cfield.field.label,
-				'show_label': cfield.field.show_label,
-				'value': cfield.value,
-			})
-		cards.append({
-			'card_id': dcard.card.id,
-			'fields': card_fields
-		})
+    cards = []
+    for dcard in deck_cards:
+        card_fields = {'show':[],'reveal':[]}
+        for cfield in dcard.card.cards_fields_set.all().order_by('sort_order'):
+            bucket = 'show'
+            if cfield.field.display:
+                bucket = 'reveal'
+            card_fields[bucket].append({
+                'type': cfield.field.field_type,
+                'label': cfield.field.label,
+                'show_label': cfield.field.show_label,
+                'value': cfield.value,
+            })
+        cards.append({
+            'card_id': dcard.card.id,
+            'fields': card_fields
+        })
 
-	context = {
-		"collections": collections,
-		"deck": deck,
-		"cards": cards
-	}
-        
-	return render(request, "deck_view.html", context)
+    context = {
+        "collections": collections,
+        "deck": deck,
+        "cards": cards
+    }
+
+    return render(request, "deck_view.html", context)
 
 # 
 def create(request, deck_id=None):
