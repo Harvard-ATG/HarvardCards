@@ -8,74 +8,74 @@
 
 <link href='http://fonts.googleapis.com/css?family=Vollkorn' rel='stylesheet' type='text/css'>
 
-            
-            <div id="content"><!-- content (start) -->
-            
-            	<div class="courseWrapper"><!-- courseWrapper (start) -->
-                
-                    <div class="courseHeader"><!-- courseHeader (start) -->
 
-                        <h2 class="courseTitle">{{collection.title}}</h2><h3>{{deck.title}}</h3>
-						{% if collection.id in user_collection_role.ADMIN %}
-                        <ul class="adminMenu adminMenuRight">
-                            <li><a href="#">Delete</a></li>
-                        </ul>
-						{% endif %}
-                    </div><!-- courseHeader (end) -->
-                    
-                    <a href="#" id="addCard">Add Card</a>
-                    <div id="cardSlider">
-                        <div class="deckPrev"><a href="javascript:sliders[0].goToPrev()">&laquo; Prev</a></div>
-                        <div class="cardHolder">
+<div id="content"><!-- content (start) -->
 
-                            <ul id="cards">
-                                {% for card in cards %}
-                                <li id = {{forloop.counter}}><a class="card" href="#">{{card.card_id}}</a></li>
-                                {% endfor %}
-                            </ul>
+    <div class="courseWrapper"><!-- courseWrapper (start) -->
+
+        <div class="courseHeader"><!-- courseHeader (start) -->
+
+            <h2 class="courseTitle">{{collection.title}}</h2><h3>{{deck.title}}</h3>
+            {% if collection.id in user_collection_role.ADMIN %}
+            <ul class="adminMenu adminMenuRight">
+                <li><a href="#">Delete</a></li>
+            </ul>
+            {% endif %}
+        </div><!-- courseHeader (end) -->
+
+        <a href="#" id="addCard">Add Card</a>
+        <div id="cardSlider">
+            <div class="deckPrev"><a href="javascript:sliders[0].goToPrev()">&laquo; Prev</a></div>
+            <div class="cardHolder">
+
+                <ul id="cards">
+                    {% for card in cards %}
+                    <li id = {{forloop.counter}}><a class="card" href="#">{{card.card_id}}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="deckNext"><a href="javascript:sliders[0].goToNext()">Next &raquo;</a></div>
+            <!-- sliderNav (start) -->
+            <!--<div class="deckNav">
+                <ul class="deckNavNextPrev">
+                    <li class="deckPrev"><a href="javascript:sliders[0].goToPrev()">&laquo; Prev</a></li>
+                    <li class="deckNext"><a href="javascript:sliders[0].goToNext()">Next &raquo;</a></li>
+                </ul>
+            </div>-->
+            <!-- sliderNav (end) -->
+
+        </div>
+
+        <div id="singleCardHolder"><!-- singleCardHolder (start)-->
+            <div id="cardOverflow"><!-- cardOverflow (start) -->
+                <ul>
+                    {% for card in cards %}
+                    <li>
+                        {% for field in card.fields.reveal %}
+                            {% include "_deck_card_fields.html" with field=field %}
+                        {% endfor %}
+                        <div class="hideRevealHr">
+                            {% if is_quiz_mode %}
+                            <a href="#" class="reveal">Reveal</a>
+                            {% endif %}
                         </div>
-                        <div class="deckNext"><a href="javascript:sliders[0].goToNext()">Next &raquo;</a></div>
-                        <!-- sliderNav (start) -->
-                        <!--<div class="deckNav">
-                            <ul class="deckNavNextPrev">
-                                <li class="deckPrev"><a href="javascript:sliders[0].goToPrev()">&laquo; Prev</a></li>
-                                <li class="deckNext"><a href="javascript:sliders[0].goToNext()">Next &raquo;</a></li>
-                            </ul>
-                        </div>-->
-                        <!-- sliderNav (end) -->
+                        <div class="{% if is_quiz_mode %}hide{% endif %}">
+                        {% for field in card.fields.show %}
+                            {% include "_deck_card_fields.html" with field=field hide=is_quiz_mode%}
+                        {% endfor %}
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div><!-- cardOverflow (end) -->
+        </div><!-- singleCardHolder (end)-->
 
-                    </div>
-                    
-                    <div id="singleCardHolder"><!-- singleCardHolder (start)-->
-                    	<div id="cardOverflow"><!-- cardOverflow (start) -->
-	                    	<ul>
-                                {% for card in cards %}
-		                    	<li>
-									{% for field in card.fields.reveal %}
-										{% include "_deck_card_fields.html" with field=field %}
-									{% endfor %}
-									<div class="hideRevealHr">
-										{% if is_quiz_mode %}
-										<a href="#" class="reveal">Reveal</a>
-										{% endif %}
-									</div>
-									<div class="{% if is_quiz_mode %}hide{% endif %}">
-									{% for field in card.fields.show %}
-										{% include "_deck_card_fields.html" with field=field hide=is_quiz_mode%}
-									{% endfor %}
-									</div>
-		                        </li>
-		                        {% endfor %}
-	                        </ul>
-                        </div><!-- cardOverflow (end) -->
-                    </div><!-- singleCardHolder (end)-->
-                    
-                </div><!-- courseWrapper (end) -->
-                
-            </div><!-- content (end) -->
-            
-        </div><!-- contentWrapper (end) -->
-        
+    </div><!-- courseWrapper (end) -->
+
+</div><!-- content (end) -->
+
+</div><!-- contentWrapper (end) -->
+
 
 <script type="text/javascript">
 require(['jquery', 'lib', 'appendAround'], function($, lib) {
@@ -126,7 +126,6 @@ $(window).on("resize", function () {
 			cardItems.eq(current).hide();
 			document.getElementById(current+1).className = ""
 
-
 			cardItems.eq(i).show();
 			document.getElementById(i+1).className = "clicked"
 			current = i;
@@ -134,7 +133,9 @@ $(window).on("resize", function () {
 
 	});
 
+
 }).resize();
+
 
 $('.reveal').click(function() {
 	var $show = $(this).parent().next();
@@ -154,5 +155,31 @@ $('.reveal').click(function() {
 
 </script>
 
+<script>
+require(['jquery'], function($) {
 
+function checkKey(e) {
+
+    var event = window.event ? window.event : e;
+    if (true) {
+        current_card =$('li.clicked').attr('id');
+        if (event.keyCode == 37)
+        {
+            sliders[0].goToPrev();
+            next_card =Number(current_card) - 1;
+        }
+        if (event.keyCode == 39)
+        {
+            sliders[0].goToNext();
+            next_card = Number(current_card) + 1;
+        }
+        li_tag = 'li#'+next_card.toString();
+        $(li_tag).children().click();
+
+    }
+
+};
+document.onkeydown=checkKey;
+});
+</script>
 {% endblock %}
