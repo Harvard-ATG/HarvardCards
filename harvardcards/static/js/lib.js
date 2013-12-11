@@ -157,62 +157,47 @@ function RespondObj(sliderContext,liMargin,liToShow,totalLI,slideWindow, borderS
 	
 	
 
- 
-// JavaScript Document
-$(document).ready(function(e) {
-    
-	$('a.arrowExpand').click(function() {
-	   var ulDeckMenu = $(this).next();
-	   //console.log(ulDeckMenu);
-	   $(ulDeckMenu).toggle();
-	   $(this).hide();
-	   //adds the class that positions the open deck menu
-	   //inside the deck
-	   $(ulDeckMenu).addClass('openDeckMenu');
-	   return false;
-	});
- 
- 	$('a.arrowCollapse').click(function() {
-	   var ulDeckMenu = $(this).parent().parent();
-	   //console.log(ulDeckMenu);
-	   $(ulDeckMenu).toggle();
-	   $(this).parent().parent().parent().find('a.arrowExpand').show();
-	   
-	   //closes the admin menu by removing the css class
-	   //that opens it
-	   $(ulDeckMenu).removeClass('openDeckMenu');
-	   return false;
-	});
-  	
-	
-	/*var sliders = [];
-	var sliderObjExist = false;
-	$(window).on("resize", function () {
-		
-		$('.slider').each(function() {
-			if ( $(this).text() != '' ){
-				//create Slider objects
-				sliders.push(new Slider(this));
-				sliderObjExist = true;
-			}	
-		});
-		
-		if ( sliderObjExist )
-		{
-			if ($('.noslider').text() != ''){
-				//removing the size when going back into the noslider div
-				sliders[0].resetUL();
-			}else{
-				sliders[0].respond();
-			}
+var ArrowToggle = function(targetSelector) {
+
+	var expandAction = function() {
+		var $el = $(this).is('a.arrowExpand') ? $(this) : $(this).find('a.arrowExpand');
+		var $ulDeckMenu = $el.next();
+		if(!$ulDeckMenu.hasClass('openDeckMenu')) {
+		   $ulDeckMenu.toggle();
+		   $el.hide();
+		   //adds the class that positions the open deck menu
+		   //inside the deck
+		   $ulDeckMenu.addClass('openDeckMenu');
 		}
-	}).resize();*/
-	
-	
-});
+		return false;
+	};
+ 
+	var collapseAction = function() {
+		var $el = $(this).is('a.arrowCollapse') ? $(this) : $(this).find('a.arrowCollapse');
+		var $ulDeckMenu = $el.parent().parent();
+		if($ulDeckMenu.hasClass('openDeckMenu')) {
+		   $ulDeckMenu.toggle();
+		   $el.parent().parent().parent().find('a.arrowExpand').show();
+		   //closes the admin menu by removing the css class that opens it
+		   $ulDeckMenu.removeClass('openDeckMenu');
+		}
+		return false;
+	};
+
+	// Make sure this is wrapped in a $(document).ready()...
+	return function() {
+		$('a.arrowExpand').click(expandAction);
+		$('a.arrowCollapse').click(collapseAction);
+		$(targetSelector).on({
+			'mouseenter': expandAction,
+			'mouseleave': collapseAction
+		});
+	};
+};
 
 var exports = {
-	Slider: Slider
+	Slider: Slider,
+	ArrowToggle: ArrowToggle
 };
 
 return exports;

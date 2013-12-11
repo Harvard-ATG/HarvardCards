@@ -6,15 +6,43 @@ from django.core.exceptions import ViewDoesNotExist
 from django.utils import simplejson as json
 
 from django.forms.formsets import formset_factory
-from harvardcards.apps.flash.models import Collection, Deck, Field
+from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
 
 def index(request):
-    #return HttpResponse("Hello Werld. This is the HarvardCards Index.")
     collections = Collection.objects.all()
-    # can get decks in the template by using collection.deck_set.all
-    
-    return render(request, 'index.html', {"collections": collections})
+    user_collection_role = Users_Collections.get_role_buckets(request.user, collections)
+    decks = Deck.objects.all().prefetch_related('collection', 'cards')
+
+    decks_by_collection = {}
+    for deck in decks:
+        if deck.collection.id not in decks_by_collection:
+            decks_by_collection[deck.collection.id] = []
+        decks_by_collection[deck.collection.id].append(deck)
+
+
+    collection_list = []
+    for collection in collections:
+        collection_decks = []
+        for deck in decks_by_collection[collection.id]:
+            collection_decks.append({
+                'id': deck.id,
+                'title': deck.title,
+                'num_cards': deck.cards.count(), 
+                'last_updated': 'Now'
+            })
+        collection_list.append({
+            'id': collection.id,
+            'title':collection.title,
+            'decks': collection_decks
+        })
+
+    context = {
+        "collections": collection_list,
+        "user_collection_role": user_collection_role
+    }
+
+    return render(request, 'collection_index.html', context)
     
 def create(request, collection_id=None):
     # is it a post?

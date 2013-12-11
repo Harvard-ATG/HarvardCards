@@ -4,9 +4,9 @@
 		<ul>
 		{% for collection in collections %}
 			<li><a href="#">{{ collection.title|truncatechars:30 }}</a>
-			{% if collection.deck_set.count > 0 %}
+			{% if collection.decks|length > 0 %}
 				<ul>
-					{% for deck in collection.deck_set.all %}
+					{% for deck in collection.decks %}
 					<li><a href="{% url 'deckIndex' deck.id %}">{{ deck.title|truncatechars:30}}</a></li>
 					{% endfor %}
 				</ul>

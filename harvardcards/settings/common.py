@@ -55,12 +55,6 @@ MEDIA_ROOT = ''
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
 MEDIA_URL = ''
 
-INSTALLED_APPS = (
-    # Other apps here
-    # ...
-    'django.contrib.staticfiles',
-)
-
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
@@ -101,7 +95,7 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -109,7 +103,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-)
+]
 
 ROOT_URLCONF = 'harvardcards.urls'
 
@@ -127,7 +121,7 @@ TEMPLATE_DIRS.extend([
 	f for f in glob(path.join(APPS_ROOT, '*', 'templates')) if path.isdir(f)
 ])
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -141,7 +135,8 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
 	'harvardcards.apps.flash',
 	#'harvardcards.apps.jasmine',
-)
+]
+
 FIXTURE_DIRS = (
     'harvardcards.apps.flash.fixtures'
 
