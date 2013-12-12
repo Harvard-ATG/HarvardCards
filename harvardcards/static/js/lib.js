@@ -157,7 +157,7 @@ function RespondObj(sliderContext,liMargin,liToShow,totalLI,slideWindow, borderS
 	
 	
 
-var ArrowToggle = function(targetSelector) {
+var ArrowToggle = function(targetSelectorExpand, targetSelectorCollapse) {
 
 	var expandAction = function() {
 		var $el = $(this).is('a.arrowExpand') ? $(this) : $(this).find('a.arrowExpand');
@@ -188,8 +188,10 @@ var ArrowToggle = function(targetSelector) {
 	return function() {
 		$('a.arrowExpand').click(expandAction);
 		$('a.arrowCollapse').click(collapseAction);
-		$(targetSelector).on({
+		$(targetSelectorExpand).on({
 			'mouseenter': expandAction,
+		});
+		$(targetSelectorCollapse).on({
 			'mouseleave': collapseAction
 		});
 	};

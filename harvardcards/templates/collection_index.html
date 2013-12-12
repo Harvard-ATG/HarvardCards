@@ -8,11 +8,8 @@
 
 <div id="content"><!-- content (start) -->
 	<div class="courseWrapper addCourseWrapper"><!-- courseWrapper (start) -->
-			<div class="courseHeader"><!-- courseHeader (start) -->
+			<div class="courseHeader" id="addCourse"><!-- courseHeader (start) -->
 					<h2>Enter course name</h2>
-					<ul class="adminMenu">
-							<li><a href="#">Edit</a></li>
-					</ul>
 					<ul class="adminMenu adminMenuRight">
 							<li><a href="#" id="collection_cancel">Cancel</a></li>
 					</ul>
@@ -56,8 +53,9 @@
 
 	{% for collection in collections %}
 	<div class="courseWrapper"><!-- courseWrapper (start) -->
-		<div class="courseHeader"><!-- courseHeader (start) -->
-			<h2>{{ collection.title }}</h2>
+
+        <div class="courseHeader"><!-- courseHeader (start) -->
+			<a href="{% url 'collection_id' collection.id %}"><h2>{{ collection.title }}</h2></a>
 			{% if collection.id in user_collection_role.ADMIN %}
 			<ul class="adminMenu">
 				<li><a href="#">Edit</a></li>
@@ -71,6 +69,7 @@
 		<div class="slider" data-slider-type="decks"><!--slider (start) -->
 			<ul class="courseDecks"><!-- courseDecks(start) -->
 				{% for deck in collection.decks %}
+                {% if forloop.counter < 5 %}
 				<li class="deck"><!-- deck (start) -->
 					<h2>{{ deck.title }}</h2>
 					<p><h3>{{ deck.num_cards }}</h3> Cards</p>
@@ -88,9 +87,10 @@
 						<li><a class="adminMenuBtn" href="#">Edit</a></li>
 						<li><a class="adminMenuBtn" href="#">Delete</a></li>
 						{% endif %}
-					</ul>
-				</li><!-- deck (end) -->
-				{% endfor %}
+                        </ul>
+                    </li><!-- deck (end) -->
+                    {% endif %}
+				    {% endfor %}
 			</ul>
 		</div><!-- slider (end) -->
 		<div class="sliderNav"><!-- sliderNav (start) -->
@@ -113,8 +113,8 @@ require(['views/CollectionList'], function(CollectionList){
 					$add_collection_button: $('#addAcourse'),
 					$collection_cancel: $('#collection_cancel'),
 					$add_collection_content: $('.addCourseWrapper'),
-					$add_collection_title: $('.courseHeader h2'),
-			});        
+					$add_collection_title: $('#addCourse h2'),
+			});
 	});
 });
 
@@ -149,7 +149,7 @@ require(['jquery', 'lib'], function($, lib) {
 		}
 	}).resize();
 
-	$(document).on('ready', ArrowToggle('.deck'));
+	$(document).on('ready', ArrowToggle('a.arrow', '.deck'));
 
 	window.sliders = sliders;
 });
