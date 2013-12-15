@@ -75,7 +75,10 @@ h1, h2, h3, h4
 	
 	h2{ font-size: 1.875em; }
 	li.deck h2 { color: #293352; }
-	
+	.courseHeader a {
+		color:#4c4c4c !important;
+	}
+
 	/* fonts for deck view/review course headers only (start) */
 	h2.courseTitle{
 		background: url('/static/img/courseTitleBreadCrumb.png') no-repeat right 50%;
@@ -91,9 +94,7 @@ h1, h2, h3, h4
 		color: #a51c30;
 	}
 
-	.courseHeader a{
-	    color:#4c4c4c;
-	}
+	
 	/* fonts for deck view/review course headers only (end) */
 
 #singleCardHolder

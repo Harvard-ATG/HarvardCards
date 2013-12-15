@@ -185,8 +185,8 @@ document.onkeydown=checkKey;
 
 <script>
 require(['jquery', 'jquery.mousewheel'], function($) {
-$('#content').mousewheel(function(event) {
-
+$('#cardSlider').mousewheel(function(event) {
+		event.preventDefault();
       if (event.deltaX>0)
         sliders[0].goToNext();
       else
