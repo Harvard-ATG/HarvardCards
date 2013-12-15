@@ -1,61 +1,15 @@
 {% extends "__layout_left_sidebar.html" %}
 
 {% block sidebar_content %}
-	{% include "_collection_nav.html" with collection=collection %}
+	{% include "_current_collection_nav.html" with collection=collection %}
 {% endblock %}
 
 {% block main_content %}
 
 <div id="content"><!-- content (start) -->
-	<div class="courseWrapper addCourseWrapper"><!-- courseWrapper (start) -->
-			<div class="courseHeader" id="addCourse"><!-- courseHeader (start) -->
-					<h2>Enter course name</h2>
-					<ul class="adminMenu adminMenuRight">
-							<li><a href="#" id="collection_cancel">Cancel</a></li>
-					</ul>
-			</div><!-- courseHeader (end) -->
-
-		<!-- slider (start) -->
-		 <div class="slider" data-slider-type="templates">
-				 <ul class="templateDecks"><!-- templateDecks(start) -->
-				 <li class="deck"><!-- deck (start) -->
-					 <a class="template" href="#">
-							 <h2>Template 1</h2>
-					 </a>
-				 </li><!-- deck (end) -->
-				
-				 <li class="deck"><!-- deck (start) -->
-					 <a class="template" href="#">
-							 <h2>Template 2</h2>
-					 </a>
-				 </li><!-- deck (end) -->
-				
-				 <li class="deck"><!-- deck (start) -->
-					 <a class="template" href="#">
-							 <h2>Template 3</h2>
-					 </a>
-				 </li><!-- deck (end) -->
-				
-			 </ul><!-- templateDecks (end) -->
-		 </div>
-		 <!-- slider (end) -->
-		
-		 <!-- sliderNav (start) -->
-		 <div class="sliderNav">
-			 <ul class="sliderNavNextPrev">
-				 <li class="sliderPrev"><a href="javascript:sliders.templates[0].goToPrev()">&laquo; Prev</a></li>
-				 <li class="sliderNext"><a href="javascript:sliders.templates[0].goToNext()">Next &raquo;</a></li>
-				 <!--li><a href="javascript:sliders[0].respond()">.respond()</a></li-->
-			 </ul>
-							 </div>
-		 <!-- sliderNav (end) -->
-	 </div><!-- courseWrapper (end) -->
-
-	{% for collection in collections %}
 	<div class="courseWrapper"><!-- courseWrapper (start) -->
-
-        <div class="courseHeader"><!-- courseHeader (start) -->
-			<a href="{% url 'collection_id' collection.id %}"><h2>{{ collection.title }}</h2></a>
+		<div class="courseHeader"><!-- courseHeader (start) -->
+			<h2>{{ collection.title }}</h2>
 			{% if collection.id in user_collection_role.ADMIN %}
 			<ul class="adminMenu">
 				<li><a href="#">Edit</a></li>
@@ -69,7 +23,6 @@
 		<div class="slider" data-slider-type="decks"><!--slider (start) -->
 			<ul class="courseDecks"><!-- courseDecks(start) -->
 				{% for deck in collection.decks %}
-                {% if forloop.counter < 5 %}
 				<li class="deck"><!-- deck (start) -->
 					<h2>{{ deck.title }}</h2>
 					<p><h3>{{ deck.num_cards }}</h3> Cards</p>
@@ -89,7 +42,6 @@
 						{% endif %}
                         </ul>
                     </li><!-- deck (end) -->
-                    {% endif %}
 				    {% endfor %}
 			</ul>
 		</div><!-- slider (end) -->
@@ -101,19 +53,18 @@
 			</ul>
 		</div>
 	</div><!-- courseWrapper (end) -->
-	{% endfor %}
 </div><!-- content (end) -->
 {% endblock %}
 
 {% block javascript %}
 <script>
-require(['views/CollectionList'], function(CollectionList){                
+require(['views/CollectionList'], function(CollectionList){
 	$(document).ready(function(){
 			var collectionList = new CollectionList({
 					$add_collection_button: $('#addAcourse'),
 					$collection_cancel: $('#collection_cancel'),
 					$add_collection_content: $('.addCourseWrapper'),
-					$add_collection_title: $('#addCourse h2'),
+					$add_collection_title: $('.courseHeader h2'),
 			});
 	});
 });
@@ -121,7 +72,7 @@ require(['views/CollectionList'], function(CollectionList){
 require(['jquery', 'lib'], function($, lib) {
 	var ArrowToggle = lib.ArrowToggle;
 	var Slider = lib.Slider;
-	var sliders = {'decks':[],'templates':[]}; 
+	var sliders = {'decks':[],'templates':[]};
 	var sliderLength;
 
 	$('.slider').each(function() {
@@ -129,7 +80,7 @@ require(['jquery', 'lib'], function($, lib) {
 			if ($(this).text() != ''){
 					//create Slider objects
 					sliders[slider_type].push(new Slider(this));
-			}        
+			}
 	});
 
 	$(window).on("resize", function () {

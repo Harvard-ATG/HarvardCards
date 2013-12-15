@@ -3,13 +3,8 @@
 	<nav>
 		<ul>
 		{% for collection in collections %}
-			<li><a href="#">{{ collection.title|truncatechars:30 }}</a>
+			<li><a href="{% url 'collection_id' collection.id %}">{{ collection.title|truncatechars:30 }}</a>
 			{% if collection.decks|length > 0 %}
-				<ul>
-					{% for deck in collection.decks %}
-					<li><a href="{% url 'deckIndex' deck.id %}">{{ deck.title|truncatechars:30}}</a></li>
-					{% endfor %}
-				</ul>
 			{% endif %}
 			</li>
 		{% endfor %}

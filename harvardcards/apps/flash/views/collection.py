@@ -9,7 +9,7 @@ from django.forms.formsets import formset_factory
 from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
 
-def index(request):
+def index(request, collection_id=None):
     collections = Collection.objects.all()
     user_collection_role = Users_Collections.get_role_buckets(request.user, collections)
     decks = Deck.objects.all().prefetch_related('collection', 'cards')
@@ -41,7 +41,17 @@ def index(request):
         "user_collection_role": user_collection_role
     }
 
-    return render(request, 'collection_index.html', context)
+    if collection_id:
+        current_collection = collections.get(id=collection_id)
+        curr_collection = filter(lambda x: x['id']==current_collection.id, collection_list)
+        context = {
+        "collections": collection_list,
+        "user_collection_role": user_collection_role,
+        "collection": curr_collection[0]
+        }
+        return render(request, 'current_collection_view.html', context)
+    else:
+        return render(request, 'collection_index.html', context)
     
 def create(request, collection_id=None):
     # is it a post?
