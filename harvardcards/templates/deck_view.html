@@ -1,7 +1,7 @@
 {% extends "__layout_left_sidebar.html" %}
 
 {% block sidebar_content %}
-	{% include "_deck_nav.html" with collection=collection deck=deck %}
+	{% include "_deck_nav.html" with collection=collection deck=deck is_quiz_mode=is_quiz_mode %}
 {% endblock %}
 
 {% block main_content %}
