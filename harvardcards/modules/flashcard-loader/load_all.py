@@ -12,3 +12,5 @@ for file in os.listdir(path_folder_full):
         print "Now loading " + file + "...\n"
         os.system("python load_initial_data.py %s" %file)
         print "\n"
+
+os.system("python create_fixture.py")
