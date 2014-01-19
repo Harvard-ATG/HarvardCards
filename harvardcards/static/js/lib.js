@@ -29,19 +29,32 @@ Slider.prototype = {
 		
 		this.slideAmmount = 0;
 		this.slideUnit = '%';
-		
+		this.border = 0;
+		this.liMargin = 0;
 		this.respond();
 		
 	},
 
 	goTo: function(index) {
 		// filter invalid indices
-		if (index < 0 || index > this.li.length - 1 || index - 1 == this.clickCealing )
+
+		if (index < 0 || index > this.li.length-2)
 		return
-	
 		// move <ul> left
-		this.ul.style.left = '-' + (this.slideAmmount * index) + this.slideUnit;
-		
+		//this.ul.style.left = '-' + (this.slideAmmount * index) + this.slideUnit;
+        if (index == 0)
+            this.ul.style.left = index + this.slideUnit;
+        else if (index == this.li.length -2)
+        {
+            fullWidth = (this.li.length-3)*(this.slideAmmount + this.border) - this.liMargin;
+            addShift = fullWidth - this.liMargin - this.border/2 -  0.6*(this.slideAmmount -this.liMargin);
+            this.ul.style.left = '-' + addShift+ this.slideUnit;
+        }
+        else
+        {
+	        var shiftBy = (this.slideAmmount+this.border) *(index-2) + 0.68*(this.slideAmmount - this.liMargin + this.border);
+	    	this.ul.style.left = '-' + shiftBy + this.slideUnit;
+        }
 		this.currentIndex = index;
 		//console.log ('goTo: ' + this.currentIndex);
 	},
@@ -50,7 +63,15 @@ Slider.prototype = {
 		this.goTo(this.currentIndex - 1)
 		//console.log ('prev: ' + this.currentIndex);
 	},
-	
+	changeView: function(i) {
+        if (i <= 1)
+            this.goTo(0);
+        else if (i >= 2 && i < (this.li.length-2))
+            this.goTo(i);
+        else
+            this.goTo(this.li.length - 2);
+            //console.log ('prev: ' + this.currentIndex);
+	},
 	goToNext: function() {
 		this.goTo(this.currentIndex + 1)
 		//console.log ('next: ' + this.currentIndex);
@@ -61,9 +82,10 @@ Slider.prototype = {
 		//border width of scroller li
 		if (this.deckView)
 			borderAmmount = 12;
+
 		else
 			borderAmmount = 2;
-			
+		this.border = borderAmmount;
 		var sliderContext = $(this.ul).parent().width();
 		//total list item
 		var totalLI = this.li.length;
@@ -71,6 +93,7 @@ Slider.prototype = {
 		var liBorders = borderAmmount * totalLI;
 		//li margin only to be use with ipad
 		liMargin = 30;
+		this.liMargin = liMargin;
 		//li to show on ipad view
 		liToShow = this.liToShow;
 		

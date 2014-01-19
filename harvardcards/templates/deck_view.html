@@ -30,7 +30,7 @@
 
                 <ul id="cards">
                     {% for card in cards %}
-                    <li id = {{forloop.counter}}><a class="card" href="#">{{card.card_id}}</a></li>
+                    <li id = {{forloop.counter0}}><a class="card" href="#">{{card.card_id}}</a></li>
                     {% endfor %}
                 </ul>
             </div>
@@ -81,7 +81,7 @@
 require(['jquery', 'lib', 'appendAround'], function($, lib) {
 
 sliders = [];
-var sliderLength;
+sliderLength = $('#cards li').length;
 var sliderObjExist = false;
 var Slider = lib.Slider
 $('.cardHolder').each(function() {
@@ -116,7 +116,7 @@ $(window).on("resize", function () {
 
 	//on first load show the first card
 	cardItems.eq(current).show();
-	document.getElementById(current+1).className = "clicked"
+	document.getElementById(current).className = "clicked"
 
 	//change main card based on thumbnail click
 	$('a.card').click(function(){
@@ -124,10 +124,10 @@ $(window).on("resize", function () {
 		if (i != current)
 		{
 			cardItems.eq(current).hide();
-			document.getElementById(current+1).className = ""
-
+			document.getElementById(current).className = ""
+            sliders[0].changeView(i);
 			cardItems.eq(i).show();
-			document.getElementById(i+1).className = "clicked"
+			document.getElementById(i).className = "clicked"
 			current = i;
 		}
 
@@ -163,18 +163,19 @@ function checkKey(e) {
     var event = window.event ? window.event : e;
     if (true) {
         current_card =$('li.clicked').attr('id');
+
         if (event.keyCode == 37)
         {
-            sliders[0].goToPrev();
             next_card =Number(current_card) - 1;
         }
         if (event.keyCode == 39)
         {
-            sliders[0].goToNext();
             next_card = Number(current_card) + 1;
         }
-        li_tag = 'li#'+next_card.toString();
-        $(li_tag).children().click();
+        if (next_card >=0 && next_card < sliderLength){
+            li_tag = 'li#'+next_card.toString();
+            $(li_tag).children().click();
+        }
 
     }
 
