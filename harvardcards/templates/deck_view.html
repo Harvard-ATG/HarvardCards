@@ -99,7 +99,7 @@
 require(['jquery', 'lib', 'appendAround'], function($, lib) {
 
 sliders = [];
-sliderLength = $('#cards li').length;
+sliderLength = $('ul#cards li').size();
 var sliderObjExist = false;
 var Slider = lib.Slider
 $('.cardHolder').each(function() {
@@ -112,8 +112,8 @@ $('.cardHolder').each(function() {
 });
 
 function updateCardLoc(loc){
-    numCards = $('ul#cards li').size();
-	var location = Math.round((loc+1)/numCards*100) + '%  •  Card '+ (loc + 1) + ' of ' + numCards;
+    numCards = sliderLength;
+	var location = Math.round((loc+1)/sliderLength*100) + '%  •  Card '+ (loc + 1) + ' of ' + sliderLength;
 	$('#cardLoc').text(location);
 }
 var current = 0;
