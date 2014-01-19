@@ -356,7 +356,8 @@ ul.adminMenu
 	, .adminMenuBtn
 	, li.sliderPrev a
 	, li.sliderNext a
-	, a.reveal{
+	, a.reveal
+	, .controls div a{
 		display: inline-block;
 		padding: 0.5em 1em;
 		color: #444444;

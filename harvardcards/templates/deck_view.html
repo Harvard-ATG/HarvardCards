@@ -47,18 +47,21 @@
         </div>
 
         <div id="singleCardHolder"><!-- singleCardHolder (start)-->
-            <div class = "controls">
-              <div style='float: left;'>
-                <button id="first_card">First</button>
+            <div class = "controls" id="controlbar">
+              <div style='float: left;' id ='first'>
+                <a id="first_card" href="#">First</a>
               </div>
-              <div style='float: left;'>
-                <button id="previous_card">Previous</button>
+              <div style='float: left;' id="previous">
+                <a id="previous_card" href="#">Previous</a>
               </div>
-              <div style='float: right;'>
-                <button id="last_card">Last</button>
+              <div style ='float:left;' id="cardIndex">
+                <div style="text-align:center;" id="cardLoc"></div>
               </div>
-              <div style='float: right;'>
-                <button id="next_card">Next</button>
+              <div style='float: right;' id="last">
+                <a id="last_card" href="#">Last</a>
+              </div>
+              <div style='float: right;' id="next">
+                <a id="next_card" href="#">Next</a>
               </div>
 
             </div>
@@ -108,10 +111,15 @@ $('.cardHolder').each(function() {
 	}
 });
 
+function updateCardLoc(loc){
+    numCards = $('ul#cards li').size();
+	var location = Math.round((loc+1)/numCards*100) + '%  •  Card '+ (loc + 1) + ' of ' + numCards;
+	$('#cardLoc').text(location);
+}
 var current = 0;
 $(window).on("resize", function () {
-
-
+    spaceBtwControls = $('#controlbar').width()- $('#first').width()-$('#last').width()-$('#next').width()-$('#previous').width();
+    $('#cardIndex').width(spaceBtwControls + 'px');
 	if ( sliderObjExist )
 	{
 		//console.log($('.sliderNav').css('display'));
@@ -131,6 +139,7 @@ $(window).on("resize", function () {
 
 	//on first load show the first card
 	cardItems.eq(current).show();
+    updateCardLoc(0);
 	document.getElementById(current).className = "clicked"
 
 	//change main card based on thumbnail click
@@ -142,6 +151,7 @@ $(window).on("resize", function () {
 			document.getElementById(current).className = ""
             sliders[0].changeView(i);
 			cardItems.eq(i).show();
+			updateCardLoc(i);
 			document.getElementById(i).className = "clicked"
 			current = i;
 		}
@@ -174,7 +184,6 @@ $('.reveal').click(function() {
 require(['jquery'], function($) {
 function changeCard(num){
         current_card =$('li.clicked').attr('id');
-
         if (num === -1)
         {
             next_card =Number(current_card) - 1;
@@ -195,6 +204,16 @@ $('#previous_card').click(function() {
 $('#next_card').click(function() {
     changeCard(1);
 });
+
+$('#first_card').click(function() {
+    var first_card = $('ul#cards').children().first();
+    first_card.children().click();
+});
+
+$('#last_card').click(function() {
+    var first_card = $('ul#cards').children().last();
+    first_card.children().click();
+});
 function checkKey(e) {
 
     var event = window.event ? window.event : e;
@@ -203,7 +222,6 @@ function checkKey(e) {
             $('#previous_card').click()
         if (event.keyCode == 39)
             $('#next_card').click()
-
     }
 
 };
@@ -212,6 +230,7 @@ document.onkeydown=checkKey;
 </script>
 
 <script>
+// scroll through the slider using horizontal mousewheel/touchpad
 require(['jquery', 'jquery.mousewheel'], function($) {
 $('#cardSlider').mousewheel(function(event) {
 		event.preventDefault();
