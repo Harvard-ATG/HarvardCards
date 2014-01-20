@@ -38,13 +38,13 @@ Slider.prototype = {
 	goTo: function(index) {
 		// filter invalid indices
 
-		if (index < 0 || index > this.li.length-2)
+		if (index < 0 || index > this.li.length-1)
 		return
 		// move <ul> left
 		//this.ul.style.left = '-' + (this.slideAmmount * index) + this.slideUnit;
         if (index == 0)
             this.ul.style.left = index + this.slideUnit;
-        else if (index == this.li.length -2)
+        else if (index == this.li.length -1 || index == this.li.length -2)
         {
             fullWidth = (this.li.length-3)*(this.slideAmmount + this.border) - this.liMargin;
             addShift = fullWidth - this.liMargin - this.border/2 -  0.6*(this.slideAmmount -this.liMargin);
@@ -62,6 +62,8 @@ Slider.prototype = {
 	goToPrev: function() {
 	    if (this.currentIndex == 2)
 		    this.goTo(this.currentIndex - 2)
+		else if (this.currentIndex == this.li.length-1)
+		    this.goTo(this.currentIndex - 2)
         else
 	    	this.goTo(this.currentIndex - 1)
 		//console.log ('prev: ' + this.currentIndex);
@@ -69,10 +71,8 @@ Slider.prototype = {
 	changeView: function(i) {
         if (i <= 1)
             this.goTo(0);
-        else if (i >= 2 && i < (this.li.length-2))
-            this.goTo(i);
         else
-            this.goTo(this.li.length - 2);
+            this.goTo(i);
             //console.log ('prev: ' + this.currentIndex);
 	},
 	goToNext: function() {
@@ -96,6 +96,8 @@ Slider.prototype = {
         if (next_card >=0 && next_card < this.li.length){
             $(this.li[next_card].children).click();
         }
+        else
+            this.goTo(current_card);
 	},
 
     firstCard: function(){

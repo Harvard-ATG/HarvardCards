@@ -202,10 +202,7 @@ $(window).on("resize", function () {
 
 	//on first load show the first card
 	cardItems.eq(current).show();
-	if(current == sliderLength-1)
-	    sliders[0].goTo(current-1);
-	else
-	    sliders[0].goTo(current);
+	sliders[0].goTo(current);
 
     updateCardLoc(current);
 	document.getElementById(current).className = "clicked"
@@ -225,6 +222,8 @@ $(window).on("resize", function () {
 			document.getElementById(i).className = "clicked"
 			current = i;
 		}
+        else if (i===0 || i===sliderLength-1)
+            sliders[0].goTo(i)
 
 	});
 
