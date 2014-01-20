@@ -33,16 +33,11 @@
                     {% for card in cards %}
                     <li id = {{forloop.counter0}}><a class="card" href="#">
                         <div>
-                        {% for field in card.fields.reveal %}
-                            {% include "_deck_card_fields.html" with field=field %}
-                        {% endfor %}
-                        <div class="hideRevealHr">
-                            {% if is_quiz_mode %}
-                            <a href="#" class="reveal">Reveal</a>
-                            {% endif %}
+                            {% for field in card.fields.reveal %}
+                                {% include "_deck_card_fields.html" with field=field %}
+                            {% endfor %}
                         </div>
-
-                    </div></a></li>
+                    </a></li>
                     {% endfor %}
                 </ul>
             </div>
