@@ -72,7 +72,7 @@
             <div id="cardOverflow"><!-- cardOverflow (start) -->
                 <ul id="allCards" style="display:none;">
                     {% for card in cards %}
-                    <li>
+                    <li style="display:none;">
                         {% for field in card.fields.reveal %}
                             {% include "_deck_card_fields.html" with field=field %}
                         {% endfor %}
@@ -105,7 +105,6 @@ sliders = [];
 sliderLength = $('ul#cards li').size();
 
 $( "#slider" ).slider({
-        value: 0,
         min: 0,
         max: sliderLength-1,
         step: 1,
@@ -160,18 +159,22 @@ $(window).on("resize", function () {
 
 	//on first load show the first card
 	cardItems.eq(current).show();
-    updateCardLoc(0);
+    updateCardLoc(current);
 	document.getElementById(current).className = "clicked"
 
 	//change main card based on thumbnail click
 	$('a.card').click(function(){
 		var i = $(this).parent().index();
+
 		if (i != current)
 		{
 			cardItems.eq(current).hide();
+			console.log(cardItems.eq(current))
 			document.getElementById(current).className = ""
             sliders[0].changeView(i);
 			cardItems.eq(i).show();
+			console.log(cardItems.eq(i))
+
 			updateCardLoc(i);
 			document.getElementById(i).className = "clicked"
 			current = i;
