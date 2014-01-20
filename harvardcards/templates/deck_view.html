@@ -188,37 +188,20 @@ $('.reveal').click(function() {
 
 <script>
 require(['jquery', 'jquery.mousewheel'], function($) {
-function changeCard(num){
-        current_card =$('li.clicked').attr('id');
-        if (num === -1)
-        {
-            next_card =Number(current_card) - 1;
-        }
-        if (num === 1)
-        {
-            next_card = Number(current_card) + 1;
-        }
-        if (next_card >=0 && next_card < sliderLength){
-            li_tag = 'li#'+next_card.toString();
-            $(li_tag).children().click();
-        }
 
-}
 $('#previous_card').click(function() {
-    changeCard(-1);
+    sliders[0].changeCard(-1);
 });
 $('#next_card').click(function() {
-    changeCard(1);
+    sliders[0].changeCard(1);
 });
 
 $('#first_card').click(function() {
-    var first_card = $('ul#cards').children().first();
-    first_card.children().click();
+    sliders[0].firstCard();
 });
 
 $('#last_card').click(function() {
-    var first_card = $('ul#cards').children().last();
-    first_card.children().click();
+    sliders[0].lastCard();
 });
 
 // scroll through the slider using horizontal mousewheel/touchpad

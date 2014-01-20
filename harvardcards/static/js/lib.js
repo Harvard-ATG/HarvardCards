@@ -10,8 +10,8 @@ Slider.prototype = {
 		if (!this.ul){
 			return;
 		}
+
 		this.li = this.ul.children
-		
 		this.currentIndex = 0
 		//for ipad sliding, we want ot set a cealing for clicks
 		//so it stops at the last li and not click onto empty space 
@@ -76,7 +76,32 @@ Slider.prototype = {
 		this.goTo(this.currentIndex + 1)
 		//console.log ('next: ' + this.currentIndex);
 	},
-	
+
+	changeCard: function(num){
+        current_card =$('li.clicked').attr('id');
+        if (num === -1)
+        {
+            next_card =Number(current_card) - 1;
+        }
+        if (num === 1)
+        {
+            next_card = Number(current_card) + 1;
+        }
+        if (next_card >=0 && next_card < this.li.length){
+            $(this.li[next_card].children).click();
+        }
+	},
+
+    firstCard: function(){
+        var first_card = this.li[0];
+        $(first_card.children).click();
+    },
+
+    lastCard: function(){
+        var last_card = this.li[this.li.length-1];
+        $(last_card.children).click();
+    },
+
 	respond: function(){
 		var ulwidth, rspLiWidth, liMargin, ipad, liToShow, borderAmmount;
 		//border width of scroller li
