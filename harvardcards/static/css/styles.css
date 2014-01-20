@@ -423,6 +423,7 @@ ul#cards{
 		border:solid 6px #d2d2d2;
 	}
 		ul#cards li div{
+		height: 2em;
 		background-color: #f3f3f1;
 
 	}

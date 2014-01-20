@@ -32,11 +32,9 @@
                 <ul id="cards">
                     {% for card in cards %}
                     <li id = {{forloop.counter0}}><a class="card" href="#">
-                        <div>
                             {% for field in card.fields.reveal %}
-                                {% include "_deck_card_fields.html" with field=field %}
+                                {% include "_deck_slider_card_fields.html" with field=field %}
                             {% endfor %}
-                        </div>
                     </a></li>
                     {% endfor %}
                 </ul>
@@ -235,11 +233,14 @@ $('#last_card').click(function() {
 // scroll through the slider using horizontal mousewheel/touchpad
 
 $('#cardSlider').mousewheel(function(event) {
-	  event.preventDefault();
-      if (event.deltaX>0)
+      if (event.deltaX>0){
+        event.preventDefault();
         sliders[0].goToNext();
-      else
+      }
+      else if (event.deltaX<0){
+      	event.preventDefault();
         sliders[0].goToPrev();
+      }
 });
 
 function checkKey(e) {
