@@ -417,12 +417,15 @@ ul#cards{
 	ul#cards li{
 		display: inline-block;
 		width: 19%;
-		/*background-color: green;*/
+		background-color: #f3f3f1;
 		margin-right: 1%;
 		float: left;
-		border:solid 6px #d2d2d2
+		border:solid 6px #d2d2d2;
 	}
-	
+		ul#cards li div{
+		background-color: #f3f3f1;
+
+	}
 		a.card {
 			display: block;
 			width: 100%;
