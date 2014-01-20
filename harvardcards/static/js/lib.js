@@ -102,7 +102,10 @@ Slider.prototype = {
         var first_card = this.li[0];
         $(first_card.children).click();
     },
-
+    goToCard: function(i){
+        var card = this.li[i];
+        $(card.children).click();
+    },
     lastCard: function(){
         var last_card = this.li[this.li.length-1];
         $(last_card.children).click();

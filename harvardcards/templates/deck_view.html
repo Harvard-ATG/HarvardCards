@@ -7,6 +7,7 @@
 {% block main_content %}
 
 <link href='http://fonts.googleapis.com/css?family=Vollkorn' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
 
 
 <div id="content"><!-- content (start) -->
@@ -47,6 +48,9 @@
         </div>
 
         <div id="singleCardHolder"><!-- singleCardHolder (start)-->
+            <div id="slider"></div>
+            <br />
+
             <div class = "controls" id="controlbar">
               <div style='float: left;' id ='first'>
                 <a id="first_card" href="#">First</a>
@@ -96,16 +100,25 @@
 
 
 <script type="text/javascript">
-require(['jquery', 'lib', 'appendAround'], function($, lib) {
-
+require(['jquery', 'lib', 'appendAround', 'jqueryui'], function($, lib) {
 sliders = [];
 sliderLength = $('ul#cards li').size();
+
+$( "#slider" ).slider({
+        value: 0,
+        min: 0,
+        max: sliderLength-1,
+        step: 1,
+        slide:function(event, ui){sliders[0].goToCard(ui.value)}
+});
+
+
 var sliderObjExist = false;
-var Slider = lib.Slider;
+var Slider1 = lib.Slider;
 $('.cardHolder').each(function() {
 	if ( $(this).text() != '' ){
 		//create Slider objects
-		sliders.push(new Slider(this,true));
+		sliders.push(new Slider1(this,true));
 		//sliders[i].respond();
 		sliderObjExist = true;
 	}
@@ -118,9 +131,11 @@ function updateCardLoc(loc){
     numCards = sliderLength;
 	var location = Math.round((loc+1)/sliderLength*100) + '%  •  Card '+ (loc + 1) + ' of ' + sliderLength;
 	$('#cardLoc').text(location);
+	$( "#slider" ).slider( "value", loc );
 }
 
 var current = 0;
+
 $(window).on("resize", function () {
     // to display the card location between the control buttons
     spaceBtwControls = $('#controlbar').width()- $('#first').width()-$('#last').width()-$('#next').width()-$('#previous').width();
