@@ -60,7 +60,10 @@ Slider.prototype = {
 	},
 	
 	goToPrev: function() {
-		this.goTo(this.currentIndex - 1)
+	    if (this.currentIndex == 2)
+		    this.goTo(this.currentIndex - 2)
+        else
+	    	this.goTo(this.currentIndex - 1)
 		//console.log ('prev: ' + this.currentIndex);
 	},
 	changeView: function(i) {
@@ -73,7 +76,10 @@ Slider.prototype = {
             //console.log ('prev: ' + this.currentIndex);
 	},
 	goToNext: function() {
-		this.goTo(this.currentIndex + 1)
+	    if (this.currentIndex == 0)
+	        this.goTo(this.currentIndex + 2)
+	    else
+		    this.goTo(this.currentIndex + 1)
 		//console.log ('next: ' + this.currentIndex);
 	},
 
@@ -135,7 +141,7 @@ Slider.prototype = {
 			this.clickCealing = respUnits.clickCealing;
 			
 			ipad = true;
-			this.goTo(0);//reset index
+			this.goTo(this.currentIndex);//reset index
 		}
 		else
 		{
