@@ -26,7 +26,7 @@
         <a href="#" id="addCard">Add Card</a>
         <div id="cardSlider">
             <div class="deckPrev"><a href="javascript:sliders[0].goToPrev()">&laquo; Prev</a></div>
-            <div class="cardHolder">
+            <div class="cardHolder" id="holder" style="display:none;">
 
                 <ul id="cards">
                     {% for card in cards %}
@@ -66,7 +66,7 @@
 
             </div>
             <div id="cardOverflow"><!-- cardOverflow (start) -->
-                <ul>
+                <ul id="allCards" style="display:none;">
                     {% for card in cards %}
                     <li>
                         {% for field in card.fields.reveal %}
@@ -110,6 +110,8 @@ $('.cardHolder').each(function() {
 		sliderObjExist = true;
 	}
 });
+document.getElementById("holder").style.display="block";
+document.getElementById("allCards").style.display="block";
 
 function updateCardLoc(loc){
     numCards = sliderLength;
