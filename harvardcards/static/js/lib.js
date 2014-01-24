@@ -216,7 +216,11 @@ function RespondObj(sliderContext,liMargin,liToShow,totalLI,slideWindow, borderS
 	//set a max for ipad
 	this.clickCealing = totalLI - slideWindow;
 }
-	
+
+/* 
+	takes in mq = media query to be checked
+	returns true/false
+*/	
 function checkMediaQuery(mq)
 {
 	var mediaQuery = window.matchMedia(mq)
@@ -239,7 +243,6 @@ function getCSSprop(ele, prop)
 	else
 		return value;
 }
-
 	
 
 var ArrowToggle = function(targetSelectorExpand, targetSelectorCollapse) {
