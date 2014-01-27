@@ -1,9 +1,9 @@
 [
     {
-        "pk": 14, 
+        "pk": 28, 
         "model": "flash.Deck", 
         "fields": {
-            "collection": 4, 
+            "collection": 8, 
             "title": "Bases"
         }
     }
