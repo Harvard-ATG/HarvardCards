@@ -19,6 +19,7 @@ Slider.prototype = {
 		if (!this.ul){
 			return;
 		}
+		
 		//set the li's
 		this.li = this.ul.children
 		//get the border width for the li's
@@ -42,45 +43,90 @@ Slider.prototype = {
 		
 		this.slideAmmount = 0;
 		this.slideUnit = '%';
-		
-		//this.respond(); //this making the method go twice removed for now
-		
-		/*console.log(
-			'this.currentIndex = ' + this.currentIndex + ' ' +
-			'this.liborder = ' + this.liborder + ' ' +
-			'this.deckView = ' + this.deckView + ' ' +
-			'this.liToShow = ' + this.liToShow + ' ' +
-			'this.slideWindow = ' + this.slideWindow + ' ' +
-			'this.totalLi = ' + this.totalLi + ' ' +
-			'this.clickCealing = ' + this.clickCealing + ' ' +
-			'this.slideAmmount = ' + this.slideAmmount + ' ' +
-			'this.slideUnit = ' + this.slideUnit
-		);*/
-		
+		this.border = 0;
+		this.liMargin = 0;
+		this.respond();
 	},
 
 	goTo: function(index) {
 		// filter invalid indices
-		if (index < 0 || index > this.li.length - 1 || index - 1 == this.clickCealing )
+
+		if (index < 0 || index > this.li.length-1)
 		return
-		
+
 		// move <ul> left
-		this.ul.style.left = '-' + (this.slideAmmount * index) + this.slideUnit;
-		
+		//this.ul.style.left = '-' + (this.slideAmmount * index) + this.slideUnit;
+        if (index == 0)
+            this.ul.style.left = index + this.slideUnit;
+        else if (index == this.li.length -1 || index == this.li.length -2)
+        {
+            fullWidth = (this.li.length-3)*(this.slideAmmount + this.border) - this.liMargin;
+            addShift = fullWidth - this.liMargin - this.border/2 -  0.6*(this.slideAmmount -this.liMargin);
+            this.ul.style.left = '-' + addShift+ this.slideUnit;
+        }
+        else
+        {
+	        var shiftBy = (this.slideAmmount+this.border) *(index-2) + 0.68*(this.slideAmmount - this.liMargin + this.border);
+	    	this.ul.style.left = '-' + shiftBy + this.slideUnit;
+        }
 		this.currentIndex = index;
 		//console.log ('goTo: ' + this.currentIndex);
 	},
 	
 	goToPrev: function() {
-		this.goTo(this.currentIndex - 1)
+	    if (this.currentIndex == 2)
+		    this.goTo(this.currentIndex - 2)
+		else if (this.currentIndex == this.li.length-1)
+		    this.goTo(this.currentIndex - 2)
+        else
+	    	this.goTo(this.currentIndex - 1)
 		//console.log ('prev: ' + this.currentIndex);
 	},
-	
+	changeView: function(i) {
+        if (i <= 1)
+            this.goTo(0);
+        else
+            this.goTo(i);
+            //console.log ('prev: ' + this.currentIndex);
+	},
 	goToNext: function() {
-		this.goTo(this.currentIndex + 1)
+	    if (this.currentIndex == 0)
+	        this.goTo(this.currentIndex + 2)
+	    else
+		    this.goTo(this.currentIndex + 1)
 		//console.log ('next: ' + this.currentIndex);
 	},
-	
+
+	changeCard: function(num){
+        current_card =$('li.clicked').attr('id');
+        if (num === -1)
+        {
+            next_card =Number(current_card) - 1;
+        }
+        if (num === 1)
+        {
+            next_card = Number(current_card) + 1;
+        }
+        if (next_card >=0 && next_card < this.li.length){
+            $(this.li[next_card].children).click();
+        }
+        else
+            this.goTo(current_card);
+	},
+
+    firstCard: function(){
+        var first_card = this.li[0];
+        $(first_card.children).click();
+    },
+    goToCard: function(i){
+        var card = this.li[i];
+        $(card.children).click();
+    },
+    lastCard: function(){
+        var last_card = this.li[this.li.length-1];
+        $(last_card.children).click();
+    },
+
 	respond: function(){
 		//iphone portrait	= screen and (min-width: 320px)
 		//iphone landscape	= screen and (min-width: 480px)
@@ -123,6 +169,7 @@ Slider.prototype = {
 		var liBorders = borderAmmount * totalLI;
 		//set a li margin only to be use with ipad
 		liMargin = 30;
+		this.liMargin = liMargin;
 		//li to show on ipad view
 		//liToShow = this.liToShow;
 		

@@ -55,7 +55,7 @@
 	<div class="courseWrapper"><!-- courseWrapper (start) -->
 
         <div class="courseHeader"><!-- courseHeader (start) -->
-			<a href="{% url 'collection_id' collection.id %}"><h2>{{ collection.title }}</h2></a>
+			<a href="{% url 'collection_id' collection.id %}" title="Click to view all decks"><h2  class="courseTitle">{{ collection.title }}</h2><h3>{{collection.decks|length}} Decks</h3></a>
 			{% if collection.id in user_collection_role.ADMIN %}
 			<ul class="adminMenu">
 				<li><a href="#">Edit</a></li>

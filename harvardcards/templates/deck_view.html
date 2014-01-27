@@ -6,6 +6,7 @@
 
 {% block main_content %}
 
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
 <link href='http://fonts.googleapis.com/css?family=Vollkorn' rel='stylesheet' type='text/css'>
 
 
@@ -21,16 +22,27 @@
                 <li><a href="#">Delete</a></li>
             </ul>
             {% endif %}
+            <div style='float: right;'>
+                {% if is_quiz_mode %}
+                <a href="{% url 'deckIndex' deck.id %}" onclick="location.href=this.href+'?cardLoc='+(current+1);return false;">Switch to Review Mode</a>
+                {% else %}
+                <a href="{% url 'deckIndex' deck.id %}?mode=quiz" onclick="location.href=this.href+'&cardLoc='+(current+1);return false;">Switch to Quiz Mode</a>
+                {% endif %}
+            </div>
         </div><!-- courseHeader (end) -->
 
         <a href="#" id="addCard">Add Card</a>
         <div id="cardSlider">
             <div class="deckPrev"><a href="javascript:sliders[0].goToPrev()">&laquo; Prev</a></div>
-            <div class="cardHolder">
+            <div class="cardHolder" id="holder" style="display:none;">
 
                 <ul id="cards">
                     {% for card in cards %}
-                    <li id = {{forloop.counter}}><a class="card" href="#">{{card.card_id}}</a></li>
+                    <li id = {{forloop.counter0}}><a class="card" href="#">
+                            {% for field in card.fields.reveal %}
+                                {% include "_deck_slider_card_fields.html" with field=field %}
+                            {% endfor %}
+                    </a></li>
                     {% endfor %}
                 </ul>
             </div>
@@ -47,10 +59,31 @@
         </div>
 
         <div id="singleCardHolder"><!-- singleCardHolder (start)-->
+            <div id="slider"></div>
+            <br />
+
+            <div class = "controls" id="controlbar">
+              <div style='float: left;' id ='first'>
+                <a id="first_card" href="#">First</a>
+              </div>
+              <div style='float: left;' id="previous">
+                <a id="previous_card" href="#">Previous</a>
+              </div>
+              <div style ='float:left;' id="cardIndex">
+                <div style="text-align:center;" id="cardLoc"></div>
+              </div>
+              <div style='float: right;' id="last">
+                <a id="last_card" href="#">Last</a>
+              </div>
+              <div style='float: right;' id="next">
+                <a id="next_card" href="#">Next</a>
+              </div>
+
+            </div>
             <div id="cardOverflow"><!-- cardOverflow (start) -->
-                <ul>
+                <ul id="allCards" style="display:none;">
                     {% for card in cards %}
-                    <li>
+                    <li style="display:none;">
                         {% for field in card.fields.reveal %}
                             {% include "_deck_card_fields.html" with field=field %}
                         {% endfor %}
@@ -78,24 +111,77 @@
 
 
 <script type="text/javascript">
-require(['jquery', 'lib', 'appendAround'], function($, lib) {
+require(['jquery', 'lib', 'appendAround', 'jqueryui'], function($, lib) {
+function parseURLParams(url) {
+    var queryStart = url.indexOf("?") + 1,
+        queryEnd   = url.indexOf("#") + 1 || url.length + 1,
+        query = url.slice(queryStart, queryEnd - 1),
+        pairs = query.replace(/\+/g, " ").split("&"),
+        parms = {}, i, n, v, nv;
 
+    if (query === url || query === "") {
+        return;
+    }
+
+    for (i = 0; i < pairs.length; i++) {
+        nv = pairs[i].split("=");
+        n = decodeURIComponent(nv[0]);
+        v = decodeURIComponent(nv[1]);
+
+        if (!parms.hasOwnProperty(n)) {
+            parms[n] = [];
+        }
+
+        parms[n].push(nv.length === 2 ? v : null);
+    }
+    return parms;
+}
+
+var pathname = $(location).attr('href');
+var urlPar = parseURLParams(pathname);
+current = 0;
+if(typeof(urlPar) != "undefined"){
+if(typeof(urlPar["cardLoc"]) != "undefined"){current = Number(urlPar["cardLoc"][0])-1}
+}
 sliders = [];
-var sliderLength;
+sliderLength = $('ul#cards li').size();
+
+$( "#slider" ).slider({
+        orientation: "horizontal",
+        min: 0,
+        range: "min",
+        max: sliderLength-1,
+        step: 1,
+        slide:function(event, ui){sliders[0].goToCard(ui.value)}
+});
+
+
 var sliderObjExist = false;
-var Slider = lib.Slider
+var Slider1 = lib.Slider;
 $('.cardHolder').each(function() {
 	if ( $(this).text() != '' ){
 		//create Slider objects
-		sliders.push(new Slider(this,true));
+		sliders.push(new Slider1(this,true));
 		//sliders[i].respond();
 		sliderObjExist = true;
 	}
 });
 
-var current = 0;
-$(window).on("resize", function () {
+document.getElementById("holder").style.display="block";
+document.getElementById("allCards").style.display="block";
 
+function updateCardLoc(loc){
+    numCards = sliderLength;
+	var location = Math.round((loc+1)/sliderLength*100) + '%  •  Card '+ (loc + 1) + ' of ' + sliderLength;
+	$('#cardLoc').text(location);
+	$( "#slider" ).slider( "value", loc );
+}
+
+
+$(window).on("resize", function () {
+    // to display the card location between the control buttons
+    spaceBtwControls = $('#controlbar').width()- $('#first').width()-$('#last').width()-$('#next').width()-$('#previous').width();
+    $('#cardIndex').width(spaceBtwControls + 'px');
 
 	if ( sliderObjExist )
 	{
@@ -116,20 +202,28 @@ $(window).on("resize", function () {
 
 	//on first load show the first card
 	cardItems.eq(current).show();
-	document.getElementById(current+1).className = "clicked"
+	sliders[0].goTo(current);
+
+    updateCardLoc(current);
+	document.getElementById(current).className = "clicked"
 
 	//change main card based on thumbnail click
 	$('a.card').click(function(){
 		var i = $(this).parent().index();
+
 		if (i != current)
 		{
 			cardItems.eq(current).hide();
-			document.getElementById(current+1).className = ""
-
+			document.getElementById(current).className = "";
+            sliders[0].changeView(i);
 			cardItems.eq(i).show();
-			document.getElementById(i+1).className = "clicked"
+
+			updateCardLoc(i);
+			document.getElementById(i).className = "clicked"
 			current = i;
 		}
+        else if (i===0 || i===sliderLength-1)
+            sliders[0].goTo(i)
 
 	});
 
@@ -151,48 +245,59 @@ $('.reveal').click(function() {
 	return false;
 });
 
+
+
 });
 
-</script>
-
-<script>
-require(['jquery'], function($) {
-
-function checkKey(e) {
-
-    var event = window.event ? window.event : e;
-    if (true) {
-        current_card =$('li.clicked').attr('id');
-        if (event.keyCode == 37)
-        {
-            sliders[0].goToPrev();
-            next_card =Number(current_card) - 1;
-        }
-        if (event.keyCode == 39)
-        {
-            sliders[0].goToNext();
-            next_card = Number(current_card) + 1;
-        }
-        li_tag = 'li#'+next_card.toString();
-        $(li_tag).children().click();
-
-    }
-
-};
-document.onkeydown=checkKey;
-});
 </script>
 
 <script>
 require(['jquery', 'jquery.mousewheel'], function($) {
+
+$('#previous_card').click(function() {
+    sliders[0].changeCard(-1);
+    return false;
+});
+$('#next_card').click(function() {
+    sliders[0].changeCard(1);
+    return false;
+});
+
+$('#first_card').click(function() {
+    sliders[0].firstCard();
+    return false;
+});
+
+$('#last_card').click(function() {
+    sliders[0].lastCard();
+    return false;
+});
+
+// scroll through the slider using horizontal mousewheel/touchpad
+
 $('#cardSlider').mousewheel(function(event) {
-		event.preventDefault();
-      if (event.deltaX>0)
+      if (event.deltaX>0){
+        event.preventDefault();
         sliders[0].goToNext();
-      else
+      }
+      else if (event.deltaX<0){
+      	event.preventDefault();
         sliders[0].goToPrev();
-   });
+      }
+});
+
+function checkKey(e) {
+    var event = window.event ? window.event : e;
+    if (true) {
+        if (event.keyCode == 37)
+            $('#previous_card').click()
+        if (event.keyCode == 39)
+            $('#next_card').click()
+    }
+};
+document.onkeydown=checkKey;
 
 });
 </script>
+
 {% endblock %}
