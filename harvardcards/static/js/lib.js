@@ -50,12 +50,16 @@ Slider.prototype = {
 
 	goTo: function(index) {
 		// filter invalid indices
-
-		if (index < 0 || index > this.li.length-1)
+		if (index < 0 || index > this.li.length - 1 || index - 1 == this.clickCealing )
 		return
-
+		
 		// move <ul> left
-		//this.ul.style.left = '-' + (this.slideAmmount * index) + this.slideUnit;
+		this.ul.style.left = '-' + (this.slideAmmount * index) + this.slideUnit;
+		
+		this.currentIndex = index;
+		
+		console.log(this.ul);
+		/*
         if (index == 0)
             this.ul.style.left = index + this.slideUnit;
         else if (index == this.li.length -1 || index == this.li.length -2)
@@ -70,34 +74,38 @@ Slider.prototype = {
 	    	this.ul.style.left = '-' + shiftBy + this.slideUnit;
         }
 		this.currentIndex = index;
-		//console.log ('goTo: ' + this.currentIndex);
+		*/
 	},
 	
 	goToPrev: function() {
+	    this.goTo(this.currentIndex - 1)
+	    /*
 	    if (this.currentIndex == 2)
 		    this.goTo(this.currentIndex - 2)
 		else if (this.currentIndex == this.li.length-1)
 		    this.goTo(this.currentIndex - 2)
         else
 	    	this.goTo(this.currentIndex - 1)
-		//console.log ('prev: ' + this.currentIndex);
+		*/
 	},
-	changeView: function(i) {
+	/*changeView: function(i) {
         if (i <= 1)
             this.goTo(0);
         else
             this.goTo(i);
             //console.log ('prev: ' + this.currentIndex);
-	},
+	},*/
 	goToNext: function() {
+		this.goTo(this.currentIndex + 1)
+	    /*
 	    if (this.currentIndex == 0)
 	        this.goTo(this.currentIndex + 2)
 	    else
 		    this.goTo(this.currentIndex + 1)
-		//console.log ('next: ' + this.currentIndex);
+		*/
 	},
 
-	changeCard: function(num){
+	/*changeCard: function(num){
         current_card =$('li.clicked').attr('id');
         if (num === -1)
         {
@@ -125,7 +133,7 @@ Slider.prototype = {
     lastCard: function(){
         var last_card = this.li[this.li.length-1];
         $(last_card.children).click();
-    },
+    },*/
 
 	respond: function(){
 		//iphone portrait	= screen and (min-width: 320px)

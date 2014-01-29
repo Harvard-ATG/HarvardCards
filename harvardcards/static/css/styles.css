@@ -382,10 +382,16 @@ ul.adminMenu
 			float: right;
 		}
 	
+	.disable{
+		-webkit-opacity: 0.25;
+		-moz-opacity: 0.25;
+		opacity: 0.25;
+	}
 /********** admin menus i.e edit/delete/share (end) *************/
 
 /********** cards inside a deck view (start) *************/
-#cardSlider{
+#cardSlider
+, #cardSliderNotAdmin{
 	display: inline-block;
 	float: left;
 	background-color: #f3f3f1;
@@ -423,20 +429,35 @@ ul#cards{
 		float: left;
 		border:solid 6px #d2d2d2;
 	}
-		ul#cards li div{
+	
+	/*ul#cards li div{
 		height: 2em;
 		background-color: #f3f3f1;
 
-	}
-		a.card {
+	}*/
+		/*a.card {*/
+		ul#cards li a{
 			display: block;
 			width: 100%;
-			padding: 0.8em 0%;
-			height: 4.3375em;
 			text-align: center;
 			color: #a51c30;
 			text-decoration: none;
 		}
+			a.card{
+				padding: 0.8em 0%;
+				height: 4.3375em;
+			}
+			
+			a.image{
+				padding: 0;
+				height: 5.9375em;
+			}
+			
+			ul#cards li a img{
+				max-height: 100%;
+				max-width: 100%;
+				padding:0;
+			}
 		
 		ul#cards li:hover{
 			border: solid 0.375em #4d4d4d;
@@ -550,6 +571,7 @@ div.deckNav{
 	}
 /*full card (end) */
 
+
 /********** cards inside a deck view (end) *************/
 @media screen and (min-width: 320px){
 /* 
@@ -640,7 +662,8 @@ div.deckNav{
 	/********** slider (end) *************/
 	
 	
-#cardSlider{
+#cardSlider
+, #cardSliderNotAdmin{
 	margin-left: 0;
 	width: 90.046296296296%;
 }
@@ -698,7 +721,8 @@ div.deckNav{
 	}
 	
 	
-#cardSlider{
+#cardSlider
+, #cardSliderNotAdmin{
 	margin-left: 0;
 	width: 90.046296296296%;
 }
@@ -776,7 +800,8 @@ div.deckNav{
 	}
 	
 
-#cardSlider{
+#cardSlider
+, #cardSliderNotAdmin{
 	margin-left: 0;
 	width: 90.046296296296%;
 }
@@ -858,10 +883,21 @@ div.deckNav{
 	}
 
 
-#cardSlider{
-	margin-left: 1.634320735444%;
-	width: 75.647090735224%;
-}
+	#cardSlider{
+		margin-left: 1.634320735444%;
+		width: 75.647090735224%;
+	}
+	
+	#cardSliderNotAdmin{
+		display: inline-block;
+		float: left;
+		background-color: #f3f3f1;
+		border: solid 1px #e1dfdf;
+		padding: 0.5em 4.75%;
+		position: relative;
+		margin:0;
+		width: 90.046296296296%;
+	}
 
 }
 

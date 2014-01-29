@@ -30,15 +30,18 @@
                 {% endif %}
             </div>
         </div><!-- courseHeader (end) -->
-
-        <a href="#" id="addCard">Add Card</a>
+		{% if user.is_authenticated %}
+        	<a href="#" id="addCard">Add Card</a>
         <div id="cardSlider">
+        {% else %}
+        <div id="cardSliderNotAdmin">
+        {% endif %}
             <div class="deckPrev"><a href="javascript:sliders[0].goToPrev()">&laquo; Prev</a></div>
             <div class="cardHolder" id="holder" style="display:none;">
 
                 <ul id="cards">
                     {% for card in cards %}
-                    <li id = {{forloop.counter0}}><a class="card" href="#">
+                    <li id = {{forloop.counter0}}><a class="image" href="#">
                             {% for field in card.fields.reveal %}
                                 {% include "_deck_slider_card_fields.html" with field=field %}
                             {% endfor %}
