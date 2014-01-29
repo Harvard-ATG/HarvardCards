@@ -4,6 +4,8 @@ import os
 
 STATIC_URL = '/~harvardcards/static/'
 
+FORCE_SCRIPT_NAME = '/~harvardcards/index.py'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
