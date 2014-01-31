@@ -25,18 +25,8 @@ Slider.prototype = {
 		//get the border width for the li's
 		this.liborder = getCSSprop($(this.li),'border-left-width');
 		
-		this.currentIndex = 0
-
-		//for ipad sliding, we want to set a cealing for clicks
-		//so it stops at the last li and not click onto empty space 
-		/*if ( checkMediaQuery("screen and (min-width: 768px)") ){
-			this.deckView = true;
-			this.liToShow = 4;
-			this.slideWindow = 4;
-		}else{
-			this.liToShow = 3;
-			this.slideWindow = 3;
-		}*/
+		this.currentIndex = 0;
+		
 		
 		this.totalLi = this.li.length;
 		this.clickCealing;
@@ -48,10 +38,16 @@ Slider.prototype = {
 		
 		//show the first card on load
 		this.showCard(0);
+		//give the first card an active class
+		$(this.li).eq(0).addClass('cardActive');
 		
 		this.respond();
 	},
-
+	
+	hello: function(){
+		console.log('hi');
+	},
+	
 	goTo: function(index) {
 		// filter invalid indices
 		if (index < 0 || index > this.li.length - 1 )
@@ -129,15 +125,23 @@ Slider.prototype = {
 	goToLast: function(){
 		
 		this.hideCard(this.currentIndex);
-		
 		this.showCard(this.totalLi-1);
+		
 		this.goTo(this.totalLi-1);
 	},
+	
 	showCard: function(index){
 		$('ul#allCards li').eq(index).removeClass('hide').addClass('show');
 	},
+	
 	hideCard: function(index){
 		$('ul#allCards li').eq(index).removeClass('show').addClass('hide');
+	},
+	
+	goToCard: function(card){
+		this.hideCard(this.currentIndex);
+		this.showCard(card);
+		this.currentIndex = card;
 	},
 	/*changeCard: function(num){
         current_card =$('li.clicked').attr('id');

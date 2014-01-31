@@ -465,7 +465,8 @@ ul#cards{
 				padding:0;
 			}
 		
-		ul#cards li:hover{
+		ul#cards li:hover
+		, ul#cards li.cardActive{
 			border: solid 0.375em #4d4d4d;
 		}
 
