@@ -36,36 +36,33 @@
         {% else %}
         <div id="cardSliderNotAdmin">
         {% endif %}
-            <div class="deckPrev"><a href="javascript:sliders[0].goToPrev()">&laquo; Prev</a></div>
-            <div class="cardHolder" id="holder" style="display:none;">
+            <div class="sliderBtns deckPrev">
+            	<a href="javascript:sliders[0].goToPrev()"><i class="fa fa-angle-left"></i><span>Prev</span></a>
+            	<a href="javascript:sliders[0].goToFirst()"><i class="fa fa-angle-double-left"></i><span>First</span></a>
+            </div>
+            <div class="cardHolder" id="holder">
 
                 <ul id="cards">
                     {% for card in cards %}
-                    <li id = {{forloop.counter0}}><a class="image" href="#">
-                            {% for field in card.fields.reveal %}
-                                {% include "_deck_slider_card_fields.html" with field=field %}
-                            {% endfor %}
-                    </a></li>
+                    <li id = {{forloop.counter0}} >
+	                    <a class="image" href="#">
+	                            {% for field in card.fields.reveal %}
+	                                {% include "_deck_slider_card_fields.html" with field=field %}
+	                            {% endfor %}
+	                    </a>
+                    </li>
                     {% endfor %}
                 </ul>
             </div>
-            <div class="deckNext"><a href="javascript:sliders[0].goToNext()">Next &raquo;</a></div>
-            <!-- sliderNav (start) -->
-            <!--<div class="deckNav">
-                <ul class="deckNavNextPrev">
-                    <li class="deckPrev"><a href="javascript:sliders[0].goToPrev()">&laquo; Prev</a></li>
-                    <li class="deckNext"><a href="javascript:sliders[0].goToNext()">Next &raquo;</a></li>
-                </ul>
-            </div>-->
-            <!-- sliderNav (end) -->
-
+            <div class="sliderBtns deckNext">
+            	<a href="javascript:sliders[0].goToNext()"><i class="fa fa-angle-right"></i><span>Next</span></a>
+            	<a href="javascript:sliders[0].goToLast()"><i class="fa fa-angle-double-right"></i><span>Last</span></a>
+            </div>
         </div>
 
         <div id="singleCardHolder"><!-- singleCardHolder (start)-->
-            <div id="slider"></div>
-            <br />
-
-            <div class = "controls" id="controlbar">
+            <!--div id="slider"></div-->
+            <!--div class = "controls" id="controlbar">
               <div style='float: left;' id ='first'>
                 <a id="first_card" href="#">First</a>
               </div>
@@ -82,11 +79,11 @@
                 <a id="next_card" href="#">Next</a>
               </div>
 
-            </div>
+            </div-->
             <div id="cardOverflow"><!-- cardOverflow (start) -->
-                <ul id="allCards" style="display:none;">
+                <ul id="allCards">
                     {% for card in cards %}
-                    <li style="display:none;">
+                    <li class="hide">
                         {% for field in card.fields.reveal %}
                             {% include "_deck_card_fields.html" with field=field %}
                         {% endfor %}
@@ -169,10 +166,10 @@ $('.cardHolder').each(function() {
 		sliderObjExist = true;
 	}
 });
-
-document.getElementById("holder").style.display="block";
-document.getElementById("allCards").style.display="block";
-
+/* //RM
+	document.getElementById("holder").style.display="block";
+	document.getElementById("allCards").style.display="block";
+*/
 function updateCardLoc(loc){
     numCards = sliderLength;
 	var location = Math.round((loc+1)/sliderLength*100) + '%  •  Card '+ (loc + 1) + ' of ' + sliderLength;
@@ -192,7 +189,7 @@ $(window).on("resize", function () {
 		sliders[0].respond();
 
 	}
-
+/* //RM
 	var cardHolder = $('#singleCardHolder');
 	var holderWidth = Math.round(cardHolder.width());
 	var cardItems = $('#singleCardHolder ul li');
@@ -209,9 +206,9 @@ $(window).on("resize", function () {
 
     updateCardLoc(current);
 	document.getElementById(current).className = "clicked"
-
+*/
 	//change main card based on thumbnail click
-	$('a.card').click(function(){
+	$('a.image').click(function(){
 		var i = $(this).parent().index();
 
 		if (i != current)
@@ -254,7 +251,7 @@ $('.reveal').click(function() {
 
 </script>
 
-<script>
+<script type="text/javascript">
 require(['jquery', 'jquery.mousewheel'], function($) {
 
 $('#previous_card').click(function() {

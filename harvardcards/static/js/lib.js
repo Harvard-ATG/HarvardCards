@@ -45,12 +45,16 @@ Slider.prototype = {
 		this.slideUnit = '%';
 		this.border = 0;
 		this.liMargin = 0;
+		
+		//show the first card on load
+		this.showCard(0);
+		
 		this.respond();
 	},
 
 	goTo: function(index) {
 		// filter invalid indices
-		if (index < 0 || index > this.li.length - 1 || index - 1 == this.clickCealing )
+		if (index < 0 || index > this.li.length - 1 )
 		return
 		
 		// move <ul> left
@@ -58,7 +62,7 @@ Slider.prototype = {
 		
 		this.currentIndex = index;
 		
-		console.log(this.ul);
+		
 		/*
         if (index == 0)
             this.ul.style.left = index + this.slideUnit;
@@ -78,7 +82,13 @@ Slider.prototype = {
 	},
 	
 	goToPrev: function() {
-	    this.goTo(this.currentIndex - 1)
+	    if ( this.deckView && this.currentIndex > 0 )
+		{
+			this.hideCard(this.currentIndex);
+			this.showCard(this.currentIndex - 1);
+		}
+	    this.goTo(this.currentIndex - 1);
+	    
 	    /*
 	    if (this.currentIndex == 2)
 		    this.goTo(this.currentIndex - 2)
@@ -96,7 +106,13 @@ Slider.prototype = {
             //console.log ('prev: ' + this.currentIndex);
 	},*/
 	goToNext: function() {
-		this.goTo(this.currentIndex + 1)
+		this.goTo(this.currentIndex + 1);
+		
+		if ( this.deckView )
+		{
+			this.hideCard(this.currentIndex - 1);
+			this.showCard(this.currentIndex);
+		}
 	    /*
 	    if (this.currentIndex == 0)
 	        this.goTo(this.currentIndex + 2)
@@ -104,7 +120,25 @@ Slider.prototype = {
 		    this.goTo(this.currentIndex + 1)
 		*/
 	},
-
+	goToFirst: function(){
+		this.hideCard(this.currentIndex);
+		this.showCard(0);
+		
+		this.goTo(0);
+	},
+	goToLast: function(){
+		
+		this.hideCard(this.currentIndex);
+		
+		this.showCard(this.totalLi-1);
+		this.goTo(this.totalLi-1);
+	},
+	showCard: function(index){
+		$('ul#allCards li').eq(index).removeClass('hide').addClass('show');
+	},
+	hideCard: function(index){
+		$('ul#allCards li').eq(index).removeClass('show').addClass('hide');
+	},
 	/*changeCard: function(num){
         current_card =$('li.clicked').attr('id');
         if (num === -1)
