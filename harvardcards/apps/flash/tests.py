@@ -73,13 +73,19 @@ class ApiTest(TestCase):
         # Every test needs access to the request factory.
         self.factory = RequestFactory()
         self.client = Client()
-        
 
     def test_deleteCollection(self):
         collection = Collection.objects.create(title='a', description='aaa')
-        self.assertEqual(api.deleteCollection(collection.id), 'true')
-        
+        self.assertEqual(api.deleteCollection(collection.id), True)
+
     def test_getCollection(self):
         collection = Collection.objects.create(title='getCollectionTest', description='asdfasdfasdf')
-        gottenCollection = json.loads(api.getCollection(collection.id))
-        #self.assertEqual(gottenCollection.title, 'getCollectionTest')
+        gottenCollection = api.getCollection(collection.id)
+        self.assertEqual(gottenCollection.title, 'getCollectionTest')
+
+    def test_getDecksByCollection(self):
+        collection = Collection.objects.create(title='a', description='aaa')
+        deck1 = Deck.objects.create(title='d1', collection=collection)
+        deck2 = Deck.objects.create(title='d2', collection=collection)
+        decksByCollection = api.getDecksByCollection()
+        self.assertEqual(decksByCollection[collection.id].__len__(), 2)
