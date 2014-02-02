@@ -8,18 +8,13 @@ from django.utils import simplejson as json
 from django.forms.formsets import formset_factory
 from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
+from harvardcards.apps.flash import api
 
 def index(request, collection_id=None):
     collections = Collection.objects.all()
     user_collection_role = Users_Collections.get_role_buckets(request.user, collections)
-    decks = Deck.objects.all().prefetch_related('collection', 'cards')
 
-    decks_by_collection = {}
-    for deck in decks:
-        if deck.collection.id not in decks_by_collection:
-            decks_by_collection[deck.collection.id] = []
-        decks_by_collection[deck.collection.id].append(deck)
-
+    decks_by_collection = api.getDecksByCollection()
 
     collection_list = []
     for collection in collections:
@@ -107,8 +102,6 @@ def create(request, collection_id=None):
                 # so you have to do it directly at the model
                 f.collection = collection
                 f.save()
-                
-                
 
             return redirect(index)
         else:
@@ -131,8 +124,9 @@ def delete(request):
     returnValue = "false"
     if request.GET['id']:
         collection_id = request.GET['id']
-        Collection.objects.filter(id=collection_id).delete()
-        if not Collection.objects.filter(id=collection_id):
+        api.deleteCollection()
+        #if not Collection.objects.filter(id=collection_id):
+        if not getCollection(collection_id):
             returnValue = "true"
     
     return HttpResponse('{"success": %s}' % returnValue, mimetype="application/json")
