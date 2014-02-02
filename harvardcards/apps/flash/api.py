@@ -1,4 +1,5 @@
 from django.utils import simplejson as json
+from django.core import serializers
 
 from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field
 
@@ -13,10 +14,15 @@ def getDecksByCollection():
         
 def deleteCollection(collection_id):
     Collection.objects.filter(id=collection_id).delete()
+    if not Collection.objects.filter(id=collection_id):
+        return json.dumps(True)
+    else:
+        return json.dumps(False)
+    
 
 def getCollection(collection_id):
     collection = Collection.objects.filter(id=collection_id)
     if not collection:
         return False
     else:
-        return json.dump(Collection.objects.filter(id=collection_id))
+        return serializers.serialize('json', collection)

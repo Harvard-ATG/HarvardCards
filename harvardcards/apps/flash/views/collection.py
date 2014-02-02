@@ -124,10 +124,7 @@ def delete(request):
     returnValue = "false"
     if request.GET['id']:
         collection_id = request.GET['id']
-        api.deleteCollection()
-        #if not Collection.objects.filter(id=collection_id):
-        if not getCollection(collection_id):
-            returnValue = "true"
+        returnValue = api.deleteCollection()
     
     return HttpResponse('{"success": %s}' % returnValue, mimetype="application/json")
     
