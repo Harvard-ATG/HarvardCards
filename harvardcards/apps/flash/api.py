@@ -27,3 +27,16 @@ def getCollection(collection_id):
     else:
         return collection[0]
 
+def getFieldList(collection_id):
+    collection = Collection.objects.get(id=collection_id)
+    fields = collection.field_set.all().order_by('sort_order')
+    field_list = []
+    for field in fields:
+        f = {}
+        f['label'] = field.label
+        f['id'] = field.id
+        f['field_type'] = field.field_type
+        f['sort_order'] = field.sort_order
+        f['display'] = field.display
+        field_list.append(f)
+    return field_list

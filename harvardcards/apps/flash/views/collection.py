@@ -130,20 +130,7 @@ def delete(request):
     
 def fields(request):
     if 'collection_id' in request.POST:
-        collection_id = request.POST['collection_id']
-        collection = Collection.objects.get(id=collection_id)
-        fields = collection.field_set.all().order_by('sort_order')
-        errorMsg = '';
-        field_list = []
-        for field in fields:
-            f = {}
-            f['label'] = field.label
-            f['id'] = field.id
-            f['field_type'] = field.field_type
-            f['sort_order'] = field.sort_order
-            f['display'] = field.display
-            field_list.append(f)
-            
+        field_list = api.getFieldList(request.POST['collection_id'])           
         fields_json = json.dumps(field_list)
         return HttpResponse('{"success": true, "fields": %s}' % fields_json, mimetype="application/json")
         
