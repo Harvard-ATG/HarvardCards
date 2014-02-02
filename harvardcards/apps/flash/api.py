@@ -15,9 +15,9 @@ def getDecksByCollection():
 def deleteCollection(collection_id):
     Collection.objects.filter(id=collection_id).delete()
     if not Collection.objects.filter(id=collection_id):
-        return json.dumps(True)
+        return True
     else:
-        return json.dumps(False)
+        return False
     
 
 def getCollection(collection_id):
@@ -25,4 +25,5 @@ def getCollection(collection_id):
     if not collection:
         return False
     else:
-        return serializers.serialize('json', collection)
+        return collection[0]
+
