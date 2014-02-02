@@ -89,3 +89,10 @@ class ApiTest(TestCase):
         deck2 = Deck.objects.create(title='d2', collection=collection)
         decksByCollection = api.getDecksByCollection()
         self.assertEqual(decksByCollection[collection.id].__len__(), 2)
+        
+    def test_getFieldList(self):
+        collection = Collection.objects.create(title='a', description='aaa')
+        field1 = Field.objects.create(label='f1', field_type='T', show_label=True, display=True, sort_order=1, collection=collection)
+        field2 = Field.objects.create(label='f2', field_type='I', show_label=True, display=True, sort_order=2, collection=collection)
+        field_list = api.getFieldList(collection.id)
+        self.assertEqual(field_list.__len__(), 2)
