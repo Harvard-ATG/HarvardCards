@@ -12,6 +12,7 @@ from django.test.client import RequestFactory, Client
 from harvardcards.apps.flash.models import Collection, Deck, Field
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
 from harvardcards.apps.flash.views.collection import *
+from harvardcards.apps.flash import api
 
 class CollectionTest(TestCase):
     def setUp(self):
@@ -67,4 +68,18 @@ class CollectionTest(TestCase):
         form1 = CollectionForm({})
         self.assertEqual(form1.is_valid(), False)
 
+class ApiTest(TestCase):
+    def setUp(self):
+        # Every test needs access to the request factory.
+        self.factory = RequestFactory()
+        self.client = Client()
+        
 
+    def test_deleteCollection(self):
+        collection = Collection.objects.create(title='a', description='aaa')
+        self.assertEqual(api.deleteCollection(collection.id), 'true')
+        
+    def test_getCollection(self):
+        collection = Collection.objects.create(title='getCollectionTest', description='asdfasdfasdf')
+        gottenCollection = json.loads(api.getCollection(collection.id))
+        #self.assertEqual(gottenCollection.title, 'getCollectionTest')
