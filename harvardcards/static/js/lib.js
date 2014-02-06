@@ -25,18 +25,8 @@ Slider.prototype = {
 		//get the border width for the li's
 		this.liborder = getCSSprop($(this.li),'border-left-width');
 		
-		this.currentIndex = 0
-
-		//for ipad sliding, we want to set a cealing for clicks
-		//so it stops at the last li and not click onto empty space 
-		/*if ( checkMediaQuery("screen and (min-width: 768px)") ){
-			this.deckView = true;
-			this.liToShow = 4;
-			this.slideWindow = 4;
-		}else{
-			this.liToShow = 3;
-			this.slideWindow = 3;
-		}*/
+		this.currentIndex = 0;
+		
 		
 		this.totalLi = this.li.length;
 		this.clickCealing;
@@ -45,17 +35,31 @@ Slider.prototype = {
 		this.slideUnit = '%';
 		this.border = 0;
 		this.liMargin = 0;
+		
+		//show the first card on load
+		this.showCard(0);
+		//give the first card an active class
+		$(this.li).eq(0).addClass('cardActive');
+		
 		this.respond();
 	},
-
+	
+	hello: function(){
+		console.log('hi');
+	},
+	
 	goTo: function(index) {
 		// filter invalid indices
-
-		if (index < 0 || index > this.li.length-1)
+		if (index < 0 || index > this.li.length - 1 )
 		return
-
+		
 		// move <ul> left
-		//this.ul.style.left = '-' + (this.slideAmmount * index) + this.slideUnit;
+		this.ul.style.left = '-' + (this.slideAmmount * index) + this.slideUnit;
+		
+		this.currentIndex = index;
+		
+		
+		/*
         if (index == 0)
             this.ul.style.left = index + this.slideUnit;
         else if (index == this.li.length -1 || index == this.li.length -2)
@@ -70,34 +74,76 @@ Slider.prototype = {
 	    	this.ul.style.left = '-' + shiftBy + this.slideUnit;
         }
 		this.currentIndex = index;
-		//console.log ('goTo: ' + this.currentIndex);
+		*/
 	},
 	
 	goToPrev: function() {
+	    if ( this.deckView && this.currentIndex > 0 )
+		{
+			this.hideCard(this.currentIndex);
+			this.showCard(this.currentIndex - 1);
+		}
+	    this.goTo(this.currentIndex - 1);
+	    
+	    /*
 	    if (this.currentIndex == 2)
 		    this.goTo(this.currentIndex - 2)
 		else if (this.currentIndex == this.li.length-1)
 		    this.goTo(this.currentIndex - 2)
         else
 	    	this.goTo(this.currentIndex - 1)
-		//console.log ('prev: ' + this.currentIndex);
+		*/
 	},
-	changeView: function(i) {
+	/*changeView: function(i) {
         if (i <= 1)
             this.goTo(0);
         else
             this.goTo(i);
             //console.log ('prev: ' + this.currentIndex);
-	},
+	},*/
 	goToNext: function() {
+		this.goTo(this.currentIndex + 1);
+		
+		if ( this.deckView )
+		{
+			this.hideCard(this.currentIndex - 1);
+			this.showCard(this.currentIndex);
+		}
+	    /*
 	    if (this.currentIndex == 0)
 	        this.goTo(this.currentIndex + 2)
 	    else
 		    this.goTo(this.currentIndex + 1)
-		//console.log ('next: ' + this.currentIndex);
+		*/
 	},
-
-	changeCard: function(num){
+	goToFirst: function(){
+		this.hideCard(this.currentIndex);
+		this.showCard(0);
+		
+		this.goTo(0);
+	},
+	goToLast: function(){
+		
+		this.hideCard(this.currentIndex);
+		this.showCard(this.totalLi-1);
+		
+		this.goTo(this.totalLi-1);
+	},
+	
+	showCard: function(index){
+		$('ul#allCards li').eq(index).removeClass('hide').addClass('show');
+	},
+	
+	hideCard: function(index){
+		$('ul#allCards li').eq(index).removeClass('show').addClass('hide');
+	},
+	
+	goToCard: function(card){
+		this.hideCard(this.currentIndex);
+		this.showCard(card);
+		this.currentIndex = card;
+	},
+	/*changeCard: function(num){
         current_card =$('li.clicked').attr('id');
         if (num === -1)
         {
@@ -125,7 +171,7 @@ Slider.prototype = {
     lastCard: function(){
         var last_card = this.li[this.li.length-1];
         $(last_card.children).click();
-    },
+    },*/
 
 	respond: function(){
 		//iphone portrait	= screen and (min-width: 320px)

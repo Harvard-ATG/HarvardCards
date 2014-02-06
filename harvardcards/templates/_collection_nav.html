@@ -1,7 +1,7 @@
 <div id="navigation"><!-- navigaton (start) -->
 	<a href="#" id="addAcourse">Add a course</a>
-	<nav>
-		<ul>
+	<nav class="desktopNav" data-set="mobileNav">
+		<ul class="appNav">
 		{% for collection in collections %}
 			<li><a href="{% url 'collection_id' collection.id %}">{{ collection.title|truncatechars:30 }}</a>
 			{% if collection.decks|length > 0 %}

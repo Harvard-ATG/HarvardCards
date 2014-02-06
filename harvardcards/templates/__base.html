@@ -7,6 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Vollkorn">
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/styles.css">
 	{% block css %}{% endblock %}
 
@@ -38,7 +39,11 @@
 
 		{% block footer %}{% endblock %}
 	</div>
-
+	<div class="footerNav" data-set="mobileNav"></div>
+	<script type="text/javascript">
+		require(['jquery', 'appendAround'], function($) {
+		});
+	</script>
 	<script type="text/javascript">
 	require(['jquery', 'jquery.cookie'], function($) {
 		var csrftoken = $.cookie('csrftoken');
@@ -54,6 +59,8 @@
 				}
 			}
 		});
+		
+		$( ".appNav" ).appendAround();
 	});
 	</script>
 

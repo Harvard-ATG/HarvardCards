@@ -165,7 +165,8 @@ h1, h2, h3, h4
 	/*background-color: #0CF;*/
 }
 
-	#navigation nav > ul a{
+	#navigation nav > ul a
+	, .footerNav ul li a{
 		font-family: 'Vollkorn', Times, serif;
 		font-size: 1.25em;
 		color: #4c4c4c;
@@ -175,14 +176,17 @@ h1, h2, h3, h4
 		width:90%;
 		padding: 0.25em 0 0.25em 10%;
 	}
-		#navigation nav > ul a:hover {
-			background: url('/static/img/mainNavHover.png') no-repeat left top;
+		#navigation nav > ul a:hover
+		, .footerNav ul li a:hover {
+			background: url('/static/img/mainNavHover.png') repeat-y left top;
 		}
-		#navigation nav > ul a.active {
-			background: url('/static/img/mainNavActive.png') no-repeat left top;
+		#navigation nav > ul a.active
+		, .footerNav ul li a.active {
+			background: url('/static/img/mainNavActive.png') repeat-y left top;
 		}
 	
-	#navigation nav ul ul a{
+	#navigation nav ul ul a
+	, .footerNav ul ul li a{
 		font-family: Arial, Helvetica, san-serif;
 		font-size: 0.75em;
 		font-weight: bold;
@@ -192,11 +196,13 @@ h1, h2, h3, h4
 		padding: 0.75em 0 0.15em 20%;
 	}
 	
-		#navigation nav ul ul a:hover{
+		#navigation nav ul ul a:hover
+		, .footerNav ul ul li a:hover{
 			background: transparent url('/static/img/subNavHover.png') no-repeat 1.5em 1em;
 		}
-		#navigation nav ul ul a.active{
-			background: transparent url('/static/img/subNavActive.png') no-repeat 1.5em 1em !important;
+		#navigation nav ul ul a.active
+		, .footerNav ul ul li a.active{
+			background: transparent url('/static/img/subNavActive.png') no-repeat 1.5em 1em;
 		}
 /********** main nav (end) *************/		
 
@@ -382,10 +388,16 @@ ul.adminMenu
 			float: right;
 		}
 	
+	.disable{
+		-webkit-opacity: 0.25;
+		-moz-opacity: 0.25;
+		opacity: 0.25;
+	}
 /********** admin menus i.e edit/delete/share (end) *************/
 
 /********** cards inside a deck view (start) *************/
-#cardSlider{
+#cardSlider
+, #cardSliderNotAdmin{
 	display: inline-block;
 	float: left;
 	background-color: #f3f3f1;
@@ -423,22 +435,38 @@ ul#cards{
 		float: left;
 		border:solid 6px #d2d2d2;
 	}
-		ul#cards li div{
+	
+	/*ul#cards li div{
 		height: 2em;
 		background-color: #f3f3f1;
 
-	}
-		a.card {
+	}*/
+		/*a.card {*/
+		ul#cards li a{
 			display: block;
 			width: 100%;
-			padding: 0.8em 0%;
-			height: 4.3375em;
 			text-align: center;
 			color: #a51c30;
 			text-decoration: none;
 		}
+			a.card{
+				padding: 0.8em 0%;
+				height: 4.3375em;
+			}
+			
+			a.image{
+				padding: 0;
+				height: 5.9375em;
+			}
+			
+			ul#cards li a img{
+				max-height: 100%;
+				max-width: 100%;
+				padding:0;
+			}
 		
-		ul#cards li:hover{
+		ul#cards li:hover
+		, ul#cards li.cardActive{
 			border: solid 0.375em #4d4d4d;
 		}
 
@@ -458,46 +486,62 @@ div.deckNav{
 		display: inline-block;
 	}
 	
+	.sliderBtns{
+		position: absolute;
+		top: 0;
+		padding-top: 0.5em;
+		width: 4.75%;
+	}
+	
 	li.deckPrev
 	, div.deckPrev{
 		float: left;
-		position: absolute;
-		top: 0;
 		left: 0;
-		padding-top: 0.5em;
 	}
 	
 		div.deckPrev a:hover
 		, div.deckNext a:hover{
 			background-color: #d2d2d2;
+			color: #a51c30;
 		}
+			
+			.sliderBtns a {
+				display: block;
+				width: 100%;
+				text-align: center;
+				font-size: 2em;
+				padding: 0.25em 0;
+				color: #4c4c4c;
+			}
+			
+			.sliderBtns a span{ 
+				position: absolute;
+				left: -3000px;
+			}
 	
-		li.deckPrev a
+		/*li.deckPrev a
 		, div.deckPrev a{				
 			background: transparent url('/static/img/deckNavPrev.png') no-repeat center 50%;
 			text-indent: -30000px;
 			display: inline-block;
 			height: 106px;
 			width: 40px;
-		}
+		}*/
 	
 	li.deckNext
 	, div.deckNext{
 		float: right;
-		position: absolute;
-		top: 0;
 		right: 0;
-		padding-top: 0.5em;
 	}
 	
-		li.deckNext a
+		/*li.deckNext a
 		, div.deckNext a{
 			background: transparent url('/static/img/courseTitleBreadCrumb.png') no-repeat center 50%;
 			text-indent: -30000px;
 			display: inline-block;
 			height: 106px;
 			width: 40px;
-		}
+		}*/
 		
 /*full card (start) */
 #singleCardHolder{
@@ -522,7 +566,7 @@ div.deckNav{
 	width: 100%;
 	float: left;
 }
-
+	
 	.showRevealWrapper{
 		width: 98%;
 		display: inline-block;
@@ -541,16 +585,61 @@ div.deckNav{
 		padding: 0.25em 0;
 	}
 	
-	.hide{
+	#singleCardHolder ul li.hide{
 		display: none;
 	}
 	
-	.show{
+	#singleCardHolder ul li.show{
 		display: block;
 	}
 /*full card (end) */
-
 /********** cards inside a deck view (end) *************/
+
+/* mobile nav icon (start) */
+a#mobileMenu{
+	float: left;
+	display: block;
+	padding: 1.25em 1em 0.25em 0.5em;
+	color: #a51c30;
+}
+/* mobile nav icon (end) */
+
+	.footerNav {
+		display:block; 
+		float: left;
+		width: 100%;
+	}
+	
+	.desktopNav { display:none; }
+
+	.footerNav ul
+	, .footerNav ul li{
+		width: 100%;
+		border-top: solid 1px #e1dfdf;
+	}
+
+	.footerNav ul li a{
+		width: 90%;
+		padding: 0.5em 5%;
+		display: inline-block;
+	}
+	
+		.footerNav ul ul li{
+			border-top: 0;
+		}
+		
+		.footerNav ul ul li a{
+			padding-bottom: 0.75em;
+			padding-left: 8%;
+			padding-right: 8%;
+			width: 84%;
+		}
+		
+		.footerNav ul ul li a:hover
+		, .footerNav ul ul li a.active{
+			background-position: 4% 0.95em;
+		}
+
 @media screen and (min-width: 320px){
 /* 
 * iPhone portrait
@@ -640,10 +729,13 @@ div.deckNav{
 	/********** slider (end) *************/
 	
 	
-#cardSlider{
-	margin-left: 0;
-	width: 90.046296296296%;
-}
+	#cardSlider
+	, #cardSliderNotAdmin{
+		margin-left: 0;
+		width: 90.046296296296%;
+	}
+
+		
 	
 }
 @media screen and (min-width: 480px){
@@ -698,7 +790,8 @@ div.deckNav{
 	}
 	
 	
-#cardSlider{
+#cardSlider
+, #cardSliderNotAdmin{
 	margin-left: 0;
 	width: 90.046296296296%;
 }
@@ -776,10 +869,27 @@ div.deckNav{
 	}
 	
 
-#cardSlider{
-	margin-left: 0;
-	width: 90.046296296296%;
-}
+	#cardSlider
+	, #cardSliderNotAdmin{
+		margin-left: 0;
+		width: 90.046296296296%;
+	}
+	
+	.footerNav ul li a{
+		padding: 0.5em 2%;
+		width: 96%;
+	}
+	
+	.footerNav ul ul li a{
+		padding-left: 5%;
+		padding-right: 5%;
+		width: 90%;
+	}
+	
+	.footerNav ul ul li a:hover
+	,.footerNav ul ul li a.active {
+		background-position: 3% 0.95em;
+	}
 
 }
 @media screen and (min-width: 1024px){
@@ -858,11 +968,32 @@ div.deckNav{
 	}
 
 
-#cardSlider{
-	margin-left: 1.634320735444%;
-	width: 75.647090735224%;
-}
+	#cardSlider{
+		margin-left: 1.634320735444%;
+		width: 75.647090735224%;
+	}
+	
+	#cardSliderNotAdmin{
+		display: inline-block;
+		float: left;
+		background-color: #f3f3f1;
+		border: solid 1px #e1dfdf;
+		padding: 0.5em 4.75%;
+		position: relative;
+		margin:0;
+		width: 90.046296296296%;
+	}
 
+	/* mobile nav icon (start) */
+	a#mobileMenu{
+		float: left;
+		display: none;
+	}
+	/* mobile nav icon (end) */
+	
+	.footerNav { display:none; }
+	
+	.desktopNav { display:block; }
 }
 
 @media screen and (min-width: 1280px){
