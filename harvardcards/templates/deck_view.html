@@ -40,11 +40,11 @@
             	<a href="javascript:sliders[0].goToPrev()"><i class="fa fa-angle-left"></i><span>Prev</span></a>
             	<a href="javascript:sliders[0].goToFirst()"><i class="fa fa-angle-double-left"></i><span>First</span></a>
             </div>
-            <div class="cardHolder" id="holder">
+            <div class="cardHolder" id="holder" style="display:none;">
 
                 <ul id="cards">
                     {% for card in cards %}
-                    <li id = {{forloop.counter0}} >
+                    <li id = {{forloop.counter0}}>
 	                    <a class="image" href="javascript:sliders[0].goToCard({{forloop.counter0}})">
 	                            {% for field in card.fields.reveal %}
 	                                {% include "_deck_slider_card_fields.html" with field=field %}
@@ -166,10 +166,13 @@ $('.cardHolder').each(function() {
 		sliderObjExist = true;
 	}
 });
-/* //RM
-	document.getElementById("holder").style.display="block";
-	document.getElementById("allCards").style.display="block";
-*/
+
+// fixes the reorganization of slider
+document.getElementById("holder").style.display="block";
+document.getElementById("allCards").style.display="block";
+
+
+
 function updateCardLoc(loc){
     numCards = sliderLength;
 	var location = Math.round((loc+1)/sliderLength*100) + '%  •  Card '+ (loc + 1) + ' of ' + sliderLength;

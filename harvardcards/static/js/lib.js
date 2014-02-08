@@ -82,6 +82,7 @@ Slider.prototype = {
 		{
 			this.hideCard(this.currentIndex);
 			this.showCard(this.currentIndex - 1);
+			this.changeHighlight(this.currentIndex, this.currentIndex-1);
 		}
 	    this.goTo(this.currentIndex - 1);
 	    
@@ -108,6 +109,7 @@ Slider.prototype = {
 		{
 			this.hideCard(this.currentIndex - 1);
 			this.showCard(this.currentIndex);
+			this.changeHighlight(this.currentIndex - 1, this.currentIndex);
 		}
 	    /*
 	    if (this.currentIndex == 0)
@@ -116,17 +118,23 @@ Slider.prototype = {
 		    this.goTo(this.currentIndex + 1)
 		*/
 	},
+	changeHighlight: function(current, newcard){
+        document.getElementById(current).className = "";
+		document.getElementById(newcard).className = "clicked";
+
+	},
 	goToFirst: function(){
 		this.hideCard(this.currentIndex);
 		this.showCard(0);
-		
+		this.changeHighlight(this.currentIndex, 0);
 		this.goTo(0);
 	},
 	goToLast: function(){
 		
 		this.hideCard(this.currentIndex);
 		this.showCard(this.totalLi-1);
-		
+		this.changeHighlight(this.currentIndex, this.totalLi-1);
+
 		this.goTo(this.totalLi-1);
 	},
 	
@@ -141,6 +149,7 @@ Slider.prototype = {
 	goToCard: function(card){
 		this.hideCard(this.currentIndex);
 		this.showCard(card);
+		this.changeHighlight(this.currentIndex, card);
 		this.currentIndex = card;
 	},
 	/*changeCard: function(num){
