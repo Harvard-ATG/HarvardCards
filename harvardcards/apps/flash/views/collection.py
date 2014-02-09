@@ -112,7 +112,7 @@ def create(request, collection_id=None):
 
             return redirect(index)
         else:
-            return render(request, 'collections/create.html')
+            return render(index)
     
     # is it an edit?
     elif collection_id:

@@ -19,12 +19,13 @@
             <h2 class="courseTitle">{{collection.title}}</h2><h3>{{deck.title}}</h3>
             {% if collection.id in user_collection_role.ADMIN %}
             <ul class="adminMenu adminMenuRight">
+                <li><a href="#">Edit</a></li>
                 <li><a href="#">Delete</a></li>
                 <li>
                 {% if is_quiz_mode %}
-                <a href="{% url 'deckIndex' deck.id %}" onclick="location.href=this.href+'?cardLoc='+(current+1);return false;">Switch to Review Mode</a>
+                <a href="{% url 'deckIndex' deck.id %}" onclick="location.href=this.href+'?cardLoc='+(current+1);return false;">Review Mode</a>
                 {% else %}
-                <a href="{% url 'deckIndex' deck.id %}?mode=quiz" onclick="location.href=this.href+'&cardLoc='+(current+1);return false;">Switch to Quiz Mode</a>
+                <a href="{% url 'deckIndex' deck.id %}?mode=quiz" onclick="location.href=this.href+'&cardLoc='+(current+1);return false;">Quiz Mode</a>
                 {% endif %}
                 </div>
             </ul>

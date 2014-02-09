@@ -8,18 +8,20 @@
 
 <div id="content"><!-- content (start) -->
 	<div class="courseWrapper addCourseWrapper"><!-- courseWrapper (start) -->
+        <form action="" method="POST" id="collectionform">
+            {% csrf_token %}
 			<div class="courseHeader" id="addCourse"><!-- courseHeader (start) -->
 					<h2 id="courseTitle">Enter course name</h2>
 					<ul class="adminMenu adminMenuRight">
 							<li><a href="#" id="collection_cancel">Cancel</a></li>
 					</ul>
 			</div><!-- courseHeader (end) -->
-
+        <input id="course_title" name="title" type="hidden" />
 		<!-- slider (start) -->
 		 <div class="slider" data-slider-type="templates">
 				 <ul class="templateDecks"><!-- templateDecks(start) -->
 				 <li class="deck"><!-- deck (start) -->
-					 <a class="template" href="#">
+					 <a class="template" href="#" id="temp1">
 							 <h2>Template 1</h2>
 					 </a>
 				 </li><!-- deck (end) -->
@@ -39,7 +41,7 @@
 			 </ul><!-- templateDecks (end) -->
 		 </div>
 		 <!-- slider (end) -->
-		
+		</form>
 		 <!-- sliderNav (start) -->
 		 <div class="sliderNav">
 			 <ul class="sliderNavNextPrev">
@@ -118,6 +120,14 @@ require(['views/CollectionList'], function(CollectionList){
 });
 
 require(['jquery', 'lib'], function($, lib) {
+
+    document.getElementById('temp1').onclick = function() {
+        var gh = document.getElementById("courseTitle");
+        document.getElementById("course_title").value = gh.innerText || gh.textContent;
+        document.getElementById('collectionform').submit();
+        return false;
+    };
+
 	var ArrowToggle = lib.ArrowToggle;
 	var Slider = lib.Slider;
 	var sliders = {'decks':[],'templates':[]}; 
