@@ -601,6 +601,14 @@ div.deckNav{
 		display: block;
 
 	}
+	.hide{
+		display: none;
+	}
+
+	.show{
+		display: block;
+
+	}
 /*full card (end) */
 /********** cards inside a deck view (end) *************/
 
