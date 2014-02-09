@@ -20,15 +20,16 @@
             {% if collection.id in user_collection_role.ADMIN %}
             <ul class="adminMenu adminMenuRight">
                 <li><a href="#">Delete</a></li>
-            </ul>
-            {% endif %}
-            <div style='float: right;'>
+                <li>
                 {% if is_quiz_mode %}
                 <a href="{% url 'deckIndex' deck.id %}" onclick="location.href=this.href+'?cardLoc='+(current+1);return false;">Switch to Review Mode</a>
                 {% else %}
                 <a href="{% url 'deckIndex' deck.id %}?mode=quiz" onclick="location.href=this.href+'&cardLoc='+(current+1);return false;">Switch to Quiz Mode</a>
                 {% endif %}
-            </div>
+                </div>
+            </ul>
+            {% endif %}
+
         </div><!-- courseHeader (end) -->
 		{% if user.is_authenticated %}
         	<a href="#" id="addCard">Add Card</a>
@@ -60,7 +61,42 @@
             </div>
         </div>
 
+
+
+
+        <div id="cardform"><!-- singleCardHolder (start)-->
+            <div class="courseWrapper addCourseWrapper" id="addCardForm">
+                <div class="courseHeader"><!-- courseHeader (start) -->
+					<h2>Create a New Card</h2>
+                    <ul class="adminMenu adminMenuRight">
+							<li><a href="#" id="card_cancel">Cancel</a></li>
+					</ul>
+			    </div><!-- courseHeader (end) -->
+                <div style="display:none;" id="readroot">
+                    Value: <input type="text">
+                    Label: <input type="text">
+                    <select name="Field Type">
+                    <option value="Text" selected>Text</option>
+                    <option value="Image">Image</option>
+                    <option value="Video">Video</option>
+                    <option value="Audio">Audio</option>
+                    </select>
+                    <input type="checkbox" name="showLabel" value="showLabel">Show Label
+                    <input type="checkbox" name="display" value="display">Display
+                    <input type="button" value="Remove Field" onclick="this.parentNode.parentNode.removeChild(this.parentNode);" style="float:right;" />
+                    <br />
+                </div>
+                <form method="post" id="addcardform">
+                    {% csrf_token %}
+                    <span id="writeroot"></span>
+                    <input type="button" id="moreFields" value="Add another field" />
+                    <input type="submit" value="Create" />
+                </form>
+            </div>
+        </div>
+
         <div id="singleCardHolder"><!-- singleCardHolder (start)-->
+
             <!--div id="slider"></div-->
             <!--div class = "controls" id="controlbar">
               <div style='float: left;' id ='first'>
@@ -112,6 +148,38 @@
 
 <script type="text/javascript">
 require(['jquery', 'lib', 'appendAround', 'jqueryui'], function($, lib) {
+$('#addCard').click(function(){
+    document.getElementById('cardform').style.display="block";
+    document.getElementById('addCardForm').style.display="block";
+    return false;
+});
+$('#card_cancel').click(function(){
+    document.getElementById('cardform').style.display="none";
+    document.getElementById('addCardForm').style.display="none";
+    return false;
+});
+var counter = 0;
+
+function moreFields() {
+	counter++;
+	var newFields = document.getElementById('readroot').cloneNode(true);
+	newFields.id = '';
+	newFields.style.display = 'block';
+	var newField = newFields.childNodes;
+	for (var i=0;i<newField.length;i++) {
+		var theName = newField[i].name
+		if (theName)
+			newField[i].name = theName + counter;
+	}
+	var insertHere = document.getElementById('writeroot');
+	insertHere.parentNode.insertBefore(newFields,insertHere);
+}
+$('#moreFields').click(function(){
+    moreFields();
+    return false;
+});
+window.onload = moreFields;
+
 function parseURLParams(url) {
     var queryStart = url.indexOf("?") + 1,
         queryEnd   = url.indexOf("#") + 1 || url.length + 1,

@@ -334,7 +334,7 @@ a#addCard{
 
 /********** hp course ROW (end) *************/
 /********** admin menus i.e edit/delete/share (start) ***********/
-ul.adminMenu 
+ul.adminMenu
 , ul.sliderNavNextPrev{
 	display: inline-block;
 	float: left;
@@ -354,9 +354,9 @@ ul.adminMenu
 		
 	ul.adminMenu li {
 		display: inline-block;
-		margin-right: 0.5em;
+		margin-right: 0.25em;
 	}
-		ul.adminMenuRight li { margin: 0; } /*no margin needed for right hand menu*/
+		/*ul.adminMenuRight li { margin: 0; } no margin needed for right hand menu*/
 	
 	ul.adminMenu li a
 	, .adminMenuBtn
@@ -553,7 +553,15 @@ div.deckNav{
 	margin-top: 1em;
 	border: solid 1px #eae9e8;
 }
-
+#cardform{
+	width: 94.5%;
+	display: none;
+	background: #f3f3f1;
+	float: left;
+	padding: 2.5%;
+	margin-top: 1em;
+	border: solid 1px #eae9e8;
+}
 #cardOverflow{
 	display: inline-block;
 	width: 100%;

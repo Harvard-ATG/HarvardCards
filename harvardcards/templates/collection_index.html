@@ -9,7 +9,7 @@
 <div id="content"><!-- content (start) -->
 	<div class="courseWrapper addCourseWrapper"><!-- courseWrapper (start) -->
 			<div class="courseHeader" id="addCourse"><!-- courseHeader (start) -->
-					<h2>Enter course name</h2>
+					<h2 id="courseTitle">Enter course name</h2>
 					<ul class="adminMenu adminMenuRight">
 							<li><a href="#" id="collection_cancel">Cancel</a></li>
 					</ul>
@@ -55,13 +55,12 @@
 	<div class="courseWrapper"><!-- courseWrapper (start) -->
 
         <div class="courseHeader"><!-- courseHeader (start) -->
-			<a href="{% url 'collection_id' collection.id %}" title="Click to view all decks"><h2  class="courseTitle">{{ collection.title }}</h2><h3>{{collection.decks|length}} Decks</h3></a>
-			{% if collection.id in user_collection_role.ADMIN %}
-			<ul class="adminMenu">
-				<li><a href="#">Edit</a></li>
-				<li><a href="#">Share</a></li>
-			</ul>
+			<a href="{% url 'collection_id' collection.id %}" title="Click to view all decks" style="float:left;"><h2  class="courseTitle">{{ collection.title }}</h2><h3>{{collection.decks|length}} Decks</h3></a>
+
+            {% if collection.id in user_collection_role.ADMIN %}
+
 			<ul class="adminMenu adminMenuRight">
+                <li><a href="#">Share</a></li>
 				<li><a href="#">Delete</a></li>
 			</ul>
 			{% endif %}

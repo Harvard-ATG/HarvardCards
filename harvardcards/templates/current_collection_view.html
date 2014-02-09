@@ -12,14 +12,26 @@
 			<h2>{{ collection.title }}</h2>
 			{% if collection.id in user_collection_role.ADMIN %}
 			<ul class="adminMenu">
-				<li><a href="#">Edit</a></li>
-				<li><a href="#">Share</a></li>
+                <li><a href="#">Edit</a></li>
+				<li><a href="#" id="addDeck">Add Deck</a></li>
 			</ul>
 			<ul class="adminMenu adminMenuRight">
+                <li><a href="#">Share</a></li>
 				<li><a href="#">Delete</a></li>
 			</ul>
 			{% endif %}
 		</div>
+        <div class="courseWrapper addCourseWrapper" id="addDeckForm"><!-- courseWrapper (start) -->
+			<div class="courseHeader"><!-- courseHeader (start) -->
+					<h2 id="deckTitle">Enter deck name</h2>
+                	<ul class="adminMenu">
+							<li><a href="#" id="deck_submit">Create</a></li>
+					</ul>
+					<ul class="adminMenu adminMenuRight">
+							<li><a href="#" id="deck_cancel">Cancel</a></li>
+					</ul>
+			</div><!-- courseHeader (end) -->
+        </div>
 		<div class="slider" data-slider-type="decks"><!--slider (start) -->
 			<ul class="courseDecks"><!-- courseDecks(start) -->
 				{% for deck in collection.decks %}
@@ -59,6 +71,15 @@
 {% block javascript %}
 <script type="text/javascript">
 require(['views/CollectionList'], function(CollectionList){
+$('#addDeck').click(function(){
+    document.getElementById('addDeckForm').style.display="block";
+    return false;
+});
+$('#deck_cancel').click(function(){
+    document.getElementById('addDeckForm').style.display="none";
+    return false;
+});
+
 	$(document).ready(function(){
 			var collectionList = new CollectionList({
 					$add_collection_button: $('#addAcourse'),
