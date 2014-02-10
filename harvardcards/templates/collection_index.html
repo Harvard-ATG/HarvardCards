@@ -67,6 +67,8 @@
 			</ul>
 			{% endif %}
 		</div>
+                        {% if collection.decks|length %}
+
 		<div class="slider" data-slider-type="decks"><!--slider (start) -->
 			<ul class="courseDecks"><!-- courseDecks(start) -->
 				{% for deck in collection.decks %}
@@ -87,20 +89,23 @@
 						{% if collection.id in user_collection_role.ADMIN %}
 						<li><a class="adminMenuBtn" href="#">Edit</a></li>
 						<li><a class="adminMenuBtn" href="#">Delete</a></li>
-						{% endif %}
+                        {% endif %}
                         </ul>
                     </li><!-- deck (end) -->
                     {% endif %}
 				    {% endfor %}
 			</ul>
 		</div><!-- slider (end) -->
-		<div class="sliderNav"><!-- sliderNav (start) -->
+
+        <div class="sliderNav"><!-- sliderNav (start) -->
 			<ul class="sliderNavNextPrev">
 				<li class="sliderPrev"><a href="javascript:sliders.decks[{{forloop.counter0}}].goToPrev()">&laquo; Prev</a></li>
 				<li class="sliderNext"><a href="javascript:sliders.decks[{{forloop.counter0}}].goToNext()">Next &raquo;</a></li>
 				<!--li><a href="javascript:sliders[2].respond()">.respond()</a></li-->
 			</ul>
 		</div>
+        								{% endif %}
+
 	</div><!-- courseWrapper (end) -->
 	{% endfor %}
 </div><!-- content (end) -->
