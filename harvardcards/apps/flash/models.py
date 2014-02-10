@@ -12,7 +12,8 @@ class Collection(models.Model):
 
     def __unicode__(self):
         return self.title
-
+    def get_absolute_url(self):
+        return "/collection/%i" % self.id
     def export(self):
         return repr(dict(title=self.title, description=self.description))
 

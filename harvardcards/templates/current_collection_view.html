@@ -22,8 +22,11 @@
 			{% endif %}
 		</div>
         <div class="courseWrapper addCourseWrapper" id="addDeckForm"><!-- courseWrapper (start) -->
+        <form action="/deck/create/" method="POST" id="deckform">
+            {% csrf_token %}
 			<div class="courseHeader"><!-- courseHeader (start) -->
 					<h2 id="deckTitle">Enter the new deck's name</h2>
+                    <input id="course_title" name="title" type="hidden" />
                 	<ul class="adminMenu">
 							<li><a href="#" id="deck_submit">Create</a></li>
 					</ul>
@@ -31,6 +34,7 @@
 							<li><a href="#" id="deck_cancel">Cancel</a></li>
 					</ul>
 			</div><!-- courseHeader (end) -->
+        </form>
         </div>
 		<div class="slider" data-slider-type="decks"><!--slider (start) -->
 			<ul class="courseDecks"><!-- courseDecks(start) -->
