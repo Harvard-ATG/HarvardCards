@@ -26,7 +26,8 @@
             {% csrf_token %}
 			<div class="courseHeader"><!-- courseHeader (start) -->
 					<h2 id="deckTitle">Enter the new deck's name</h2>
-                    <input id="course_title" name="title" type="hidden" />
+                    <input id="deck_title" name="title" type="hidden" />
+                    <input id="collection_id" name="collection_id" type="hidden" />
                 	<ul class="adminMenu">
 							<li><a href="#" id="deck_submit">Create</a></li>
 					</ul>
@@ -75,6 +76,25 @@
 {% block javascript %}
 <script type="text/javascript">
 require(['views/CollectionList'], function(CollectionList){
+
+function extractCollectionId(){
+    var pathname = $(location).attr('href');
+    var res = String(pathname.match('[^/]+$'));
+    if (res.slice(-1)=="#")
+        res = res.slice(0, -1);
+    return res;
+};
+
+
+document.getElementById('deck_submit').onclick = function() {
+        document.getElementById("collection_id").value = extractCollectionId();
+
+        var gh = document.getElementById("deckTitle");
+        document.getElementById("deck_title").value = gh.innerText || gh.textContent;
+        document.getElementById('deckform').submit();
+        return false;
+    };
+
 $('#addDeck').click(function(){
     document.getElementById('addDeckForm').style.display="block";
     return false;
