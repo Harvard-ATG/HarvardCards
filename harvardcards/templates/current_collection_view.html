@@ -86,15 +86,16 @@ function extractCollectionId(){
 };
 
 
-document.getElementById('deck_submit').onclick = function() {
+document.getElementById('deck_submit').onclick = function(){
+        setInterval(function() {
         document.getElementById("collection_id").value = extractCollectionId();
 
         var gh = document.getElementById("deckTitle");
         document.getElementById("deck_title").value = gh.innerText || gh.textContent;
         document.getElementById('deckform').submit();
         return false;
+    }, 1000);
     };
-
 $('#addDeck').click(function(){
     document.getElementById('addDeckForm').style.display="block";
     return false;
