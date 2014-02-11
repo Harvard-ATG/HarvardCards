@@ -17,10 +17,10 @@ def create(request):
         
         if 'deck_id' in request.POST:
             deck_id = request.POST['deck_id']
-        
-            if 'card_id' in request.POST:
 
-            
+            if 'max_card_id' in request.POST:
+
+                card_id = int(request.POST['max_card_id']) + 1
                 if 'fields' in request.POST:
 
                     if request.POST['card_id'] != '':
@@ -57,7 +57,7 @@ def create(request):
                 else:
                     errorMsg = "Field data not provided."
             else:
-                errorMsg = "card_id not provided"
+                errorMsg = "max_card_id not provided"
         else:
             errorMsg = "deck_id not provided"
         

@@ -74,8 +74,8 @@
 					</ul>
 			    </div><!-- courseHeader (end) -->
                 <div style="display:none;" id="readroot">
-                    Value: <input type="text">
                     Label: <input type="text">
+                    Value: <input type="text">
                     <select name="Field Type">
                     <option value="Text" selected>Text</option>
                     <option value="Image">Image</option>
@@ -93,6 +93,9 @@
                     {% csrf_token %}
                     <span id="writeroot"></span>
                     <input id="deck_id" name="deck_id" type="hidden" />
+                    <input id="collection_id" name="collection_id" type="hidden" value="{{collection.id}}" />
+                    <input id="max_card_id" name="max_card_id" type="hidden" value="{{cards|length}}" />
+
                     <ul class="adminMenu">
                             <li><a href="#" id="moreFields">Add another field</a></li>
                         	<li><a href="#" id="card_create">Create</a></li>
