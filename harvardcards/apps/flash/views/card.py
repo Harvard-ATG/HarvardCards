@@ -32,8 +32,28 @@ def create(request):
                     card = Card(collection=collection, sort_order=collection_sort_order)
                     card.save()
 
+                    for i in range(0, int(request.POST['num_fields'])):
+                        numfield = str(i+1)
+                        value = request.POST['Value'+numfield]
+                        if request.POST.get('Label'+numfield, 0):
+                            label = request.POST['Label'+numfield]
+                        else:
+                            label = ''
 
+                        field_type = request.POST['Field Type'+numfield]
+                        if request.POST.get('display'+numfield, 0):
+                            display = True
+                        else:
+                            display = False
+                        if request.POST.get('showLabel'+numfield, 0):
+                            show_label = True
+                        else:
+                            show_label = False
+                        fd = Field(field_type=field_type, show_label= show_label, collection= collection, label= label, sort_order= i+1, display=display)
+                        fd.save()
 
+                        cardfield = Cards_Fields(value=value, field = fd, card = card, sort_order = i+1)
+                        cardfield.save()
                     # data = json.loads(request.POST['fields'])
                     # # run through the field data to create/edit new Cards_Fields
                     # fc_sort_order = 0
@@ -52,7 +72,10 @@ def create(request):
                     # card_data['card_id'] = card.id
                     # #card_data['first_label'] = data[0].label
                     # card_data['first_value'] = data[0]['value']
-                    path = '/deck/'+str(deck_id)+'?cardLoc='+str(card_id)
+                    if request.POST['quiz_mode']=='True':
+                        path = '/deck/'+str(deck_id)+'?mode=quiz&cardLoc='+str(card_id)
+                    else:
+                        path = '/deck/'+str(deck_id)+'?cardLoc='+str(card_id)
                     return redirect(path)
                     
                 else:

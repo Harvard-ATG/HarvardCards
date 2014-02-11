@@ -33,33 +33,35 @@
 
         </div><!-- courseHeader (end) -->
 		{% if user.is_authenticated %}
-        	<a href="#" id="addCard">Add Card</a>
+        <a href="#" id="addCard">Add Card</a>
         <div id="cardSlider">
         {% else %}
         <div id="cardSliderNotAdmin">
         {% endif %}
-            <div class="sliderBtns deckPrev">
-            	<a href="javascript:sliders[0].goToPrev()"><i class="fa fa-angle-left"></i><span>Prev</span></a>
-            	<a href="javascript:sliders[0].goToFirst()"><i class="fa fa-angle-double-left"></i><span>First</span></a>
-            </div>
-            <div class="cardHolder" id="holder" style="display:none;">
+        {% if cards|length %}
+        <div class="sliderBtns deckPrev">
+            <a href="javascript:sliders[0].goToPrev()"><i class="fa fa-angle-left"></i><span>Prev</span></a>
+            <a href="javascript:sliders[0].goToFirst()"><i class="fa fa-angle-double-left"></i><span>First</span></a>
+        </div>
+        <div class="cardHolder" id="holder" style="display:none;">
 
-                <ul id="cards">
-                    {% for card in cards %}
-                    <li id = {{forloop.counter0}}>
-	                    <a class="image" href="javascript:sliders[0].goToCard({{forloop.counter0}}); current = {{forloop.counter0}}">
-	                            {% for field in card.fields.reveal %}
-	                                {% include "_deck_slider_card_fields.html" with field=field %}
-	                            {% endfor %}
-	                    </a>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="sliderBtns deckNext">
-            	<a href="javascript:sliders[0].goToNext()"><i class="fa fa-angle-right"></i><span>Next</span></a>
-            	<a href="javascript:sliders[0].goToLast()"><i class="fa fa-angle-double-right"></i><span>Last</span></a>
-            </div>
+            <ul id="cards">
+                {% for card in cards %}
+                <li id = {{forloop.counter0}}>
+                    <a class="image" href="javascript:sliders[0].goToCard({{forloop.counter0}}); current = {{forloop.counter0}}">
+                            {% for field in card.fields.reveal %}
+                                {% include "_deck_slider_card_fields.html" with field=field %}
+                            {% endfor %}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="sliderBtns deckNext">
+            <a href="javascript:sliders[0].goToNext()"><i class="fa fa-angle-right"></i><span>Next</span></a>
+            <a href="javascript:sliders[0].goToLast()"><i class="fa fa-angle-double-right"></i><span>Last</span></a>
+        </div>
+        {% endif %}
         </div>
 
 
@@ -74,18 +76,18 @@
 					</ul>
 			    </div><!-- courseHeader (end) -->
                 <div style="display:none;" id="readroot">
-                    Label: <input type="text">
-                    Value: <input type="text">
+                    Label: <input type="text" name="Label">
+                    Value: <input type="text" name="Value">
                     <select name="Field Type">
-                    <option value="Text" selected>Text</option>
-                    <option value="Image">Image</option>
-                    <option value="Video">Video</option>
-                    <option value="Audio">Audio</option>
+                    <option value="T" selected>Text</option>
+                    <option value="I">Image</option>
+                    <option value="V">Video</option>
+                    <option value="A">Audio</option>
                     </select>
                     <input type="checkbox" name="showLabel" value="showLabel">Show Label
                     <input type="checkbox" name="display" value="display">Display
                     <ul class="adminMenu adminMenuRight">
-                            <li><a href="#" onclick="this.parentNode.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode.parentNode);return false;">Remove Field</a></li>
+                            <li><a href="#" onclick="this.parentNode.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode.parentNode);counter=counter-1;return false;">Remove Field</a></li>
 					</ul>
                     <br />
                 </div>
@@ -96,6 +98,7 @@
                     <input id="collection_id" name="collection_id" type="hidden" value="{{collection.id}}" />
                     <input id="max_card_id" name="max_card_id" type="hidden" value="{{cards|length}}" />
                     <input id="num_fields" name="num_fields" type="hidden" />
+                    <input id="quiz_mode" name="quiz_mode" type="hidden" value="{{is_quiz_mode}}" />
 
                     <ul class="adminMenu">
                             <li><a href="#" id="moreFields">Add another field</a></li>
@@ -148,8 +151,7 @@
                 </ul>
             </div><!-- cardOverflow (end) -->
         </div><!-- singleCardHolder (end)-->
-
-    </div><!-- courseWrapper (end) -->
+\    </div><!-- courseWrapper (end) -->
 
 </div><!-- content (end) -->
 
@@ -158,7 +160,7 @@
 
 <script type="text/javascript">
 require(['jquery', 'lib', 'appendAround', 'jqueryui'], function($, lib) {
-var counter = 0;
+counter = 0;
 
 function moreFields() {
 	counter++;
@@ -191,7 +193,8 @@ function extractDeckId(){
 document.getElementById('card_create').onclick = function(){
         document.getElementById("deck_id").value = extractDeckId();
         document.getElementById("num_fields").value = counter;
-        document.getElementById('addcardform').submit();
+        if(counter!=0)
+            document.getElementById('addcardform').submit();
         return false;
     };
 
