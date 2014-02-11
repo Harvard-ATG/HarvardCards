@@ -21,41 +21,42 @@ def create(request):
             if 'max_card_id' in request.POST:
 
                 card_id = int(request.POST['max_card_id']) + 1
-                if 'fields' in request.POST:
+                if 'num_fields' in request.POST:
 
-                    if request.POST['card_id'] != '':
-                        card = Card.objects.get(id=request.POST['card_id'])
-                    else: 
-                        collection = Collection.objects.get(id=collection_id)
-                        # TODO: sort_order
-                        card = Card(collection=collection, sort_order=0)
-                        card.save()
-
-
-
-                    data = json.loads(request.POST['fields'])
-                    # run through the field data to create/edit new Cards_Fields
-                    fc_sort_order = 0
-                    for d in data:
-                        field = Field.objects.get(id=d['field_id'])
-                        fc = Cards_Fields(value=d['value'], field=field, card=card, sort_order=fc_sort_order)
-                        fc.save();
-                        fc_sort_order += 1
-                    
-                    # create decks_cards connection
+                    # if request.POST['card_id'] != '':
+                    #     card = Card.objects.get(id=request.POST['card_id'])
+                    # else:
+                    collection = Collection.objects.get(id=collection_id)
                     # TODO: sort_order
+                    collection_sort_order =  len(Card.objects.filter(collection_id=collection_id)) + 1
+                    card = Card(collection=collection, sort_order=collection_sort_order)
+                    card.save()
+
+
+
+                    # data = json.loads(request.POST['fields'])
+                    # # run through the field data to create/edit new Cards_Fields
+                    # fc_sort_order = 0
+                    # for d in data:
+                    #     field = Field.objects.get(id=d['field_id'])
+                    #     fc = Cards_Fields(value=d['value'], field=field, card=card, sort_order=fc_sort_order)
+                    #     fc.save();
+                    #     fc_sort_order += 1
+                    #
+                    # # create decks_cards connection
+                    # # TODO: sort_order
                     deck = Deck.objects.get(id=deck_id)
-                    dc = Decks_Cards(deck=deck, card=card, sort_order=0)
+                    dc = Decks_Cards(deck=deck, card=card, sort_order=card_id)
                     dc.save()
-                    card_data = {}
-                    card_data['card_id'] = card.id
-                    #card_data['first_label'] = data[0].label
-                    card_data['first_value'] = data[0]['value']
-                    
-                    return HttpResponse('{"success": true, "card_data": %s}' % json.dumps(card_data), mimetype="application/json")
+                    # card_data = {}
+                    # card_data['card_id'] = card.id
+                    # #card_data['first_label'] = data[0].label
+                    # card_data['first_value'] = data[0]['value']
+                    path = '/deck/'+str(deck_id)+'?cardLoc='+str(card_id)
+                    return redirect(path)
                     
                 else:
-                    errorMsg = "Field data not provided."
+                    errorMsg = "num_fields not provided."
             else:
                 errorMsg = "max_card_id not provided"
         else:

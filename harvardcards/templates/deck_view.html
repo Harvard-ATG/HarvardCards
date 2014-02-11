@@ -47,7 +47,7 @@
                 <ul id="cards">
                     {% for card in cards %}
                     <li id = {{forloop.counter0}}>
-	                    <a class="image" href="javascript:sliders[0].goToCard({{forloop.counter0}})">
+	                    <a class="image" href="javascript:sliders[0].goToCard({{forloop.counter0}}); current = {{forloop.counter0}}">
 	                            {% for field in card.fields.reveal %}
 	                                {% include "_deck_slider_card_fields.html" with field=field %}
 	                            {% endfor %}
@@ -95,6 +95,7 @@
                     <input id="deck_id" name="deck_id" type="hidden" />
                     <input id="collection_id" name="collection_id" type="hidden" value="{{collection.id}}" />
                     <input id="max_card_id" name="max_card_id" type="hidden" value="{{cards|length}}" />
+                    <input id="num_fields" name="num_fields" type="hidden" />
 
                     <ul class="adminMenu">
                             <li><a href="#" id="moreFields">Add another field</a></li>
@@ -157,30 +158,6 @@
 
 <script type="text/javascript">
 require(['jquery', 'lib', 'appendAround', 'jqueryui'], function($, lib) {
-function extractDeckId(){
-    var pathname = $(location).attr('href');
-    var res = String(pathname.match('[^/]+$'));
-    res = res.match('([0-9]+).*');
-    res = res.slice(1);
-    return res;
-};
-
-document.getElementById('card_create').onclick = function(){
-        document.getElementById("deck_id").value = extractDeckId();
-        document.getElementById('addcardform').submit();
-        return false;
-    };
-
-$('#addCard').click(function(){
-    document.getElementById('cardform').style.display="block";
-    document.getElementById('addCardForm').style.display="block";
-    return false;
-});
-$('#card_cancel').click(function(){
-    document.getElementById('cardform').style.display="none";
-    document.getElementById('addCardForm').style.display="none";
-    return false;
-});
 var counter = 0;
 
 function moreFields() {
@@ -202,6 +179,33 @@ $('#moreFields').click(function(){
     return false;
 });
 window.onload = moreFields;
+
+function extractDeckId(){
+    var pathname = $(location).attr('href');
+    var res = String(pathname.match('[^/]+$'));
+    res = res.match('([0-9]+).*');
+    res = res.slice(1);
+    return res;
+};
+
+document.getElementById('card_create').onclick = function(){
+        document.getElementById("deck_id").value = extractDeckId();
+        document.getElementById("num_fields").value = counter;
+        document.getElementById('addcardform').submit();
+        return false;
+    };
+
+$('#addCard').click(function(){
+    document.getElementById('cardform').style.display="block";
+    document.getElementById('addCardForm').style.display="block";
+    return false;
+});
+$('#card_cancel').click(function(){
+    document.getElementById('cardform').style.display="none";
+    document.getElementById('addCardForm').style.display="none";
+    return false;
+});
+
 
 function parseURLParams(url) {
     var queryStart = url.indexOf("?") + 1,
@@ -257,7 +261,7 @@ $('.cardHolder').each(function() {
 		sliderObjExist = true;
 	}
 });
-
+sliders[0].goToCard(current);
 // fixes the reorganization of slider
 document.getElementById("holder").style.display="block";
 document.getElementById("allCards").style.display="block";
