@@ -84,14 +84,19 @@
                     </select>
                     <input type="checkbox" name="showLabel" value="showLabel">Show Label
                     <input type="checkbox" name="display" value="display">Display
-                    <input type="button" value="Remove Field" onclick="this.parentNode.parentNode.removeChild(this.parentNode);" style="float:right;" />
+                    <ul class="adminMenu adminMenuRight">
+                            <li><a href="#" onclick="this.parentNode.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode.parentNode);return false;">Remove Field</a></li>
+					</ul>
                     <br />
                 </div>
-                <form method="post" id="addcardform">
+                <form method="post" id="addcardform" action="/card/create/">
                     {% csrf_token %}
                     <span id="writeroot"></span>
-                    <input type="button" id="moreFields" value="Add another field" />
-                    <input type="submit" value="Create" />
+                    <input id="deck_id" name="deck_id" type="hidden" />
+                    <ul class="adminMenu">
+                            <li><a href="#" id="moreFields">Add another field</a></li>
+                        	<li><a href="#" id="card_create">Create</a></li>
+					</ul>
                 </form>
             </div>
         </div>
@@ -149,6 +154,20 @@
 
 <script type="text/javascript">
 require(['jquery', 'lib', 'appendAround', 'jqueryui'], function($, lib) {
+function extractDeckId(){
+    var pathname = $(location).attr('href');
+    var res = String(pathname.match('[^/]+$'));
+    res = res.match('([0-9]+).*');
+    res = res.slice(1);
+    return res;
+};
+
+document.getElementById('card_create').onclick = function(){
+        document.getElementById("deck_id").value = extractDeckId();
+        document.getElementById('addcardform').submit();
+        return false;
+    };
+
 $('#addCard').click(function(){
     document.getElementById('cardform').style.display="block";
     document.getElementById('addCardForm').style.display="block";

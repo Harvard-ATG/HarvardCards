@@ -80,8 +80,8 @@ require(['views/CollectionList'], function(CollectionList){
 function extractCollectionId(){
     var pathname = $(location).attr('href');
     var res = String(pathname.match('[^/]+$'));
-    if (res.slice(-1)=="#")
-        res = res.slice(0, -1);
+    res = res.match('([0-9]+).*');
+    res = res.slice(1);
     return res;
 };
 
