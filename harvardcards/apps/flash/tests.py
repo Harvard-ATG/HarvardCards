@@ -70,7 +70,7 @@ class CollectionTest(TestCase):
 
 class ApiTest(TestCase):
     def setUp(self):
-        # Every test needs access to the request factory.
+        """ Every test needs access to the request factory. """
         self.factory = RequestFactory()
         self.client = Client()
 

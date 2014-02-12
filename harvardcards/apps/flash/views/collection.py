@@ -11,6 +11,7 @@ from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
 from harvardcards.apps.flash import api
 
 def index(request, collection_id=None):
+    """main landing page"""
     collections = Collection.objects.all()
     user_collection_role = Users_Collections.get_role_buckets(request.user, collections)
 
@@ -49,6 +50,7 @@ def index(request, collection_id=None):
         return render(request, 'collection_index.html', context)
     
 def create(request, collection_id=None):
+    """create a collection"""
     # is it a post?
     message = '';
     if request.method == 'POST':

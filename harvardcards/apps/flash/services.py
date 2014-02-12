@@ -4,6 +4,7 @@ from django.core import serializers
 from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field
 
 def getDecksByCollection():
+    """gets the decks associated with a collection"""
     decks = Deck.objects.all().prefetch_related('collection', 'cards')
     decks_by_collection = {}
     for deck in decks:
@@ -13,6 +14,7 @@ def getDecksByCollection():
     return decks_by_collection
         
 def deleteCollection(collection_id):
+    """delete a collection"""
     Collection.objects.filter(id=collection_id).delete()
     if not Collection.objects.filter(id=collection_id):
         return True
@@ -21,6 +23,7 @@ def deleteCollection(collection_id):
     
 
 def getCollection(collection_id):
+    """get a collection object from its id"""
     collection = Collection.objects.filter(id=collection_id)
     if not collection:
         return False
@@ -28,6 +31,7 @@ def getCollection(collection_id):
         return collection[0]
 
 def getFieldList(collection_id):
+    """get the fields associated with the collection"""
     collection = Collection.objects.get(id=collection_id)
     fields = collection.field_set.all().order_by('sort_order')
     field_list = []
