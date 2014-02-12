@@ -9,8 +9,6 @@ urlpatterns = patterns('',
     url(r'^$', 'harvardcards.apps.flash.views.collection.index', name='index'),
     url(r'^collection/create/$', 'harvardcards.apps.flash.views.collection.create', name='createCollection'),
     url(r'^collection/create/(?P<collection_id>\d+)$', 'harvardcards.apps.flash.views.collection.create', name='createCollection'),
-    url(r'^collection/delete/$', 'harvardcards.apps.flash.views.collection.delete', name='deleteCollection'),
-    url(r'^collection/fields/$', 'harvardcards.apps.flash.views.collection.fields', name='fieldsCollection'),
     url(r'^collection/$', 'harvardcards.apps.flash.views.collection.index', name='collection_id'),
     url(r'^collection/(?P<collection_id>\d+)$', 'harvardcards.apps.flash.views.collection.index', name='collection_id'),
 
@@ -28,6 +26,11 @@ urlpatterns = patterns('',
     url(r'^login/$', 'django_openid_auth.views.login_begin', name='login'),
     url(r'^login-complete/$', 'django_openid_auth.views.login_complete', name='login-complete'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/',}, name='logout'),
+    
+    # API
+    url(r'^collection/fields/$', 'harvardcards.apps.flash.views.api.collection.fields', name='fieldsCollection'),
+    url(r'^collection/delete/$', 'harvardcards.apps.flash.views.api.collection.delete', name='deleteCollection'),
+    
 	
 	# url(r'^$', 'HarvardCards.views.home', name='home'),
     # url(r'^HarvardCards/', include('harvardcards.foo.urls')),
