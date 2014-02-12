@@ -11,7 +11,6 @@ from harvardcards.apps.flash.forms import FieldForm
 
 def create(request):
     errorMsg = ''
-    print request.POST
     if 'collection_id' in request.POST:
         collection_id = request.POST['collection_id']
         
