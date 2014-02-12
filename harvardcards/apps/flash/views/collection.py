@@ -8,18 +8,14 @@ from django.utils import simplejson as json
 from django.forms.formsets import formset_factory
 from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
+from harvardcards.apps.flash import services
 
 def index(request, collection_id=None):
+    """main landing page"""
     collections = Collection.objects.all()
     user_collection_role = Users_Collections.get_role_buckets(request.user, collections)
-    decks = Deck.objects.all().prefetch_related('collection', 'cards')
 
-    decks_by_collection = {}
-    for deck in decks:
-        if deck.collection.id not in decks_by_collection:
-            decks_by_collection[deck.collection.id] = []
-        decks_by_collection[deck.collection.id].append(deck)
-
+    decks_by_collection = services.getDecksByCollection()
 
     collection_list = []
     for collection in collections:
@@ -54,6 +50,7 @@ def index(request, collection_id=None):
         return render(request, 'collection_index.html', context)
     
 def create(request, collection_id=None):
+    """create a collection"""
     # is it a post?
     message = '';
     if request.method == 'POST':
@@ -107,8 +104,6 @@ def create(request, collection_id=None):
                 # so you have to do it directly at the model
                 f.collection = collection
                 f.save()
-                
-                
 
             return redirect(index)
         else:
@@ -126,38 +121,3 @@ def create(request, collection_id=None):
             
     else:
         return render(request, 'collections/create.html')
-
-def delete(request):
-    returnValue = "false"
-    if request.GET['id']:
-        collection_id = request.GET['id']
-        Collection.objects.filter(id=collection_id).delete()
-        if not Collection.objects.filter(id=collection_id):
-            returnValue = "true"
-    
-    return HttpResponse('{"success": %s}' % returnValue, mimetype="application/json")
-    
-def fields(request):
-    if 'collection_id' in request.POST:
-        collection_id = request.POST['collection_id']
-        collection = Collection.objects.get(id=collection_id)
-        fields = collection.field_set.all().order_by('sort_order')
-        errorMsg = '';
-        field_list = []
-        for field in fields:
-            f = {}
-            f['label'] = field.label
-            f['id'] = field.id
-            f['field_type'] = field.field_type
-            f['sort_order'] = field.sort_order
-            f['display'] = field.display
-            field_list.append(f)
-            
-        fields_json = json.dumps(field_list)
-        return HttpResponse('{"success": true, "fields": %s}' % fields_json, mimetype="application/json")
-        
-    else:
-        errorMsg = "No collection_id specified."
-        for key, value in request.POST.iteritems():
-            errorMsg += "<br>" + key + " => " + value
-    return HttpResponse('{"success": true, "error": "%s"}' % errorMsg, mimetype="application/json")
