@@ -15,7 +15,7 @@
     <div class="courseWrapper"><!-- courseWrapper (start) -->
 
         <div class="courseHeader"><!-- courseHeader (start) -->
-
+			<a href="#" id="contentHere" title="Content Starts">Main content below</a>
             <h2 class="courseTitle">{{collection.title}}</h2><h3>{{deck.title}}</h3>
             {% if collection.id in user_collection_role.ADMIN %}
             <ul class="adminMenu adminMenuRight">
@@ -32,20 +32,20 @@
         </div><!-- courseHeader (end) -->
 		{% if user.is_authenticated %}
         	<a href="#" id="addCard">Add Card</a>
-        <div id="cardSlider">
+        <div id="cardSlider" role="scrollbar" aria-orientation="horizontal">
         {% else %}
-        <div id="cardSliderNotAdmin">
+        <div id="cardSliderNotAdmin" role="scrollbar" tabindex="0" aria-orientation="horizontal">
         {% endif %}
             <div class="sliderBtns deckPrev">
-            	<a href="javascript:sliders[0].goToPrev()"><i class="fa fa-angle-left"></i><span>Prev</span></a>
-            	<a href="javascript:sliders[0].goToFirst()"><i class="fa fa-angle-double-left"></i><span>First</span></a>
+            	<a id="prevCard" href="javascript:sliders[0].goToPrev()"><i class="fa fa-angle-left"></i><span>Previous</span></a>
+            	<a id="firstCard" href="javascript:sliders[0].goToFirst()"><i class="fa fa-angle-double-left"></i><span>First</span></a>
             </div>
             <div class="cardHolder" id="holder">
 
                 <ul id="cards">
                     {% for card in cards %}
-                    <li id = {{forloop.counter0}} >
-	                    <a class="image" href="javascript:sliders[0].goToCard({{forloop.counter0}})">
+                    <li role="presentation" id = {{forloop.counter0}} >
+	                    <a class="card image" href="javascript:sliders[0].goToCard({{forloop.counter0}})" role="tab" tabindex="-1">
 	                            {% for field in card.fields.reveal %}
 	                                {% include "_deck_slider_card_fields.html" with field=field %}
 	                            {% endfor %}
@@ -59,31 +59,22 @@
             	<a href="javascript:sliders[0].goToLast()"><i class="fa fa-angle-double-right"></i><span>Last</span></a>
             </div>
         </div>
+		<div id="counterHolder" class="">
+        	<div id="counter"></div>
+        </div>
+        <div class="fullcardBtns">
+        	<a id="" href="javascript:fullCardSlider[0].goToPrev()"><i class="fa fa-angle-left"></i><span>Previous</span></a>
+        	<a id="" href="javascript:fullCardSlider[0].goToFirst()"><i class="fa fa-angle-double-left"></i><span>First</span></a>
+			
+			<a href="javascript:fullCardSlider[0].goToNext()"><i class="fa fa-angle-right"></i><span>Next</span></a>
+        	<a href="javascript:fullCardSlider[0].goToLast()"><i class="fa fa-angle-double-right"></i><span>Last</span></a>
 
+        </div>
         <div id="singleCardHolder"><!-- singleCardHolder (start)-->
-            <!--div id="slider"></div-->
-            <!--div class = "controls" id="controlbar">
-              <div style='float: left;' id ='first'>
-                <a id="first_card" href="#">First</a>
-              </div>
-              <div style='float: left;' id="previous">
-                <a id="previous_card" href="#">Previous</a>
-              </div>
-              <div style ='float:left;' id="cardIndex">
-                <div style="text-align:center;" id="cardLoc"></div>
-              </div>
-              <div style='float: right;' id="last">
-                <a id="last_card" href="#">Last</a>
-              </div>
-              <div style='float: right;' id="next">
-                <a id="next_card" href="#">Next</a>
-              </div>
-
-            </div-->
-            <div id="cardOverflow"><!-- cardOverflow (start) -->
+            <div id="cardOverflow" class="test"><!-- cardOverflow (start) -->
                 <ul id="allCards">
                     {% for card in cards %}
-                    <li class="hide">
+                    <li class="hide" role="tabpanel">
                         {% for field in card.fields.reveal %}
                             {% include "_deck_card_fields.html" with field=field %}
                         {% endfor %}
@@ -144,6 +135,7 @@ if(typeof(urlPar) != "undefined"){
 if(typeof(urlPar["cardLoc"]) != "undefined"){current = Number(urlPar["cardLoc"][0])-1}
 }
 sliders = [];
+fullCardSlider = [];
 sliderLength = $('ul#cards li').size();
 
 $( "#slider" ).slider({
@@ -155,17 +147,28 @@ $( "#slider" ).slider({
         slide:function(event, ui){sliders[0].goToCard(ui.value)}
 });
 
-
 var sliderObjExist = false;
 var Slider1 = lib.Slider;
 $('.cardHolder').each(function() {
 	if ( $(this).text() != '' ){
 		//create Slider objects
-		sliders.push(new Slider1(this,true));
+		sliders.push(new Slider1(this,true,false));
 		//sliders[i].respond();
 		sliderObjExist = true;
 	}
 });
+
+
+$('.test').each(function() {
+	if ( $(this).text() != '' ){
+		//create Slider objects
+		fullCardSlider.push(new Slider1(this,true,true));
+		//sliders[i].respond();
+		sliderObjExist = true;
+	}
+});
+console.log(fullCardSlider);
+
 /* //RM
 	document.getElementById("holder").style.display="block";
 	document.getElementById("allCards").style.display="block";
@@ -187,6 +190,7 @@ $(window).on("resize", function () {
 	{
 		//console.log($('.sliderNav').css('display'));
 		sliders[0].respond();
+		fullCardSlider[0].respond();
 
 	}
 /* //RM
@@ -231,6 +235,40 @@ $(window).on("resize", function () {
 }).resize();
 
 
+/* accessibility (start) */
+$('body').attr('role', 'application');
+
+/* get the id of the key been pressed */
+var getElementId = function($){
+	return $.attr("id");
+}
+
+$('a').keydown(function(event){
+	
+	//console.log(event.keyCode);
+	switch(event.keyCode)
+	{
+		case 9: //tab key
+			//console.log($(this).attr('id'));
+		break;
+		case 13://enter key
+			//$('#content').attr({ "role":"widget", "tabindex": "0" });
+			//console.log(getLinkId($(this)));
+			/*if (getElementId($this) == 'prevCard')
+			{
+				sliders[0].goToPrev();
+			}
+			else if (getLinkId($this) == 'firstCard')
+			{
+				sliders[0].goToFirstCard();
+			}*/
+		break;
+	}
+	
+});
+/* accessibility (end) */
+
+
 $('.reveal').click(function() {
 	var $show = $(this).parent().next();
 	if ($show.hasClass('show')){
@@ -254,6 +292,7 @@ $('.reveal').click(function() {
 <script type="text/javascript">
 require(['jquery', 'jquery.mousewheel'], function($) {
 
+/*
 $('#previous_card').click(function() {
     sliders[0].changeCard(-1);
     return false;
@@ -272,7 +311,7 @@ $('#last_card').click(function() {
     sliders[0].lastCard();
     return false;
 });
-
+*/
 // scroll through the slider using horizontal mousewheel/touchpad
 
 $('#cardSlider').mousewheel(function(event) {
@@ -290,9 +329,9 @@ function checkKey(e) {
     var event = window.event ? window.event : e;
     if (true) {
         if (event.keyCode == 37)
-            $('#previous_card').click()
+            sliders[0].goToPrev()
         if (event.keyCode == 39)
-            $('#next_card').click()
+            sliders[0].goToNext()    
     }
 };
 document.onkeydown=checkKey;

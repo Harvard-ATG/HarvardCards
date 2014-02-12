@@ -64,6 +64,8 @@ body{
 	color: #4c4c4c;
 }
 
+img { max-width: 100% }
+
 /* FONTS */
 h1, h2, h3, h4
 , a#addAcourse
@@ -158,7 +160,17 @@ h1, h2, h3, h4
 		/*background-color: #C99;*/
 	}
 	
+	#contentHere{
+		position: absolute;
+		text-indent: -3000px;
+	}
+	
 /********** main nav (start) *************/
+.skipNav{
+	/*position: absolute;
+	text-indent: -3000px;*/
+}
+
 #navigation{
 	float: left;
 	width: 16.666666666667%;
@@ -186,23 +198,23 @@ h1, h2, h3, h4
 		}
 	
 	#navigation nav ul ul a
-	, .footerNav ul ul li a{
+	, .footerNav ul ul li a
+	, .contentFont{
 		font-family: Arial, Helvetica, san-serif;
-		font-size: 0.75em;
-		font-weight: bold;
+		font-size: 0.9em;
 		color: #4c4c4c;
 		text-decoration: none;
 		width: 80%;
-		padding: 0.75em 0 0.15em 20%;
+		padding: 0.3em 0 0.3em 20%;
 	}
 	
 		#navigation nav ul ul a:hover
 		, .footerNav ul ul li a:hover{
-			background: transparent url('/static/img/subNavHover.png') no-repeat 1.5em 1em;
+			background: transparent url('/static/img/subNavHover.png') no-repeat 2em 0.65em;
 		}
 		#navigation nav ul ul a.active
 		, .footerNav ul ul li a.active{
-			background: transparent url('/static/img/subNavActive.png') no-repeat 1.5em 1em;
+			background: transparent url('/static/img/subNavActive.png') no-repeat 2em 0.65em;
 		}
 /********** main nav (end) *************/		
 
@@ -227,7 +239,13 @@ a#addCard{
 	float: left;
 }
 /********** hp course ROW (start) ***********/
-.courseWrapper{ display: inline-block; width: 100%; margin-bottom: 1em;}	
+.courseWrapper{ 
+	display: inline-block; 
+	width: 100%; 
+	margin-bottom: 1em;
+	/*position: relative;*/
+}
+	
 .courseHeader{
 	width: 100%;
 	border-bottom: solid 2px #4c4c4c;
@@ -448,6 +466,7 @@ ul#cards{
 			text-align: center;
 			color: #a51c30;
 			text-decoration: none;
+			overflow: hidden;
 		}
 			a.card{
 				padding: 0.8em 0%;
@@ -461,7 +480,6 @@ ul#cards{
 			
 			ul#cards li a img{
 				max-height: 100%;
-				max-width: 100%;
 				padding:0;
 			}
 		
@@ -549,10 +567,27 @@ div.deckNav{
 	display: inline-block;
 	background: #f3f3f1;
 	float: left;
-	padding: 2.5%;
+	padding: 2.5% 2.5% 2.5% 2.5%;
 	margin-top: 1em;
 	border: solid 1px #eae9e8;
 }
+	#counterHolder{
+		display: block;
+		/*position: absolute;*/
+		padding: 0;
+		background-color: #A51C30;
+		text-align: center;
+		font-size: 1em;
+		top: 11.825em;
+		right: 50%;
+		font-family: Arial,Helvetica,san-serif;
+		font-size: 1em;
+		color: #fff;
+	}
+		#counter{
+			display: block;
+			padding: 1em 0.5em;
+		}
 
 #cardOverflow{
 	display: inline-block;
@@ -560,10 +595,9 @@ div.deckNav{
 	overflow: hidden;
 }
 
-#singleCardHolder ul
-, #singleCardHolder ul li{
-	display: inline-block;
-	width: 100%;
+#singleCardHolder ul li{
+	/*display: inline-block;
+	width: 100%;*/
 	float: left;
 }
 	
@@ -637,7 +671,7 @@ a#mobileMenu{
 		
 		.footerNav ul ul li a:hover
 		, .footerNav ul ul li a.active{
-			background-position: 4% 0.95em;
+			background-position: 4% 0.65em;
 		}
 
 @media screen and (min-width: 320px){
@@ -690,6 +724,14 @@ a#mobileMenu{
 	}
 	
 	/********** slider (start) *************/
+	.test > ul{
+		position: relative;
+		-webkit-transition: 0.5s left;
+		-moz-transition: 0.5s left;
+		-ms-transition: 0.5s left;
+		-o-transition: 0.5s left;
+	}
+	
 	
 	.slider {
 	  width: 90%; 
@@ -697,8 +739,8 @@ a#mobileMenu{
 	  overflow: hidden;
 	  margin: 0 5%;
 	}
-	  .slider > ul {
-		/* styled by JS to match the added width and height of all <li>â€™s */
+	  .slider > ul{
+		/* styled by JS to match the added width and height of all <li>s */
 		position: relative;
 		-webkit-transition: 0.5s left;
 		-moz-transition: 0.5s left;
@@ -888,7 +930,7 @@ a#mobileMenu{
 	
 	.footerNav ul ul li a:hover
 	,.footerNav ul ul li a.active {
-		background-position: 3% 0.95em;
+		background-position: 3% 0.65em;
 	}
 
 }
@@ -994,6 +1036,13 @@ a#mobileMenu{
 	.footerNav { display:none; }
 	
 	.desktopNav { display:block; }
+}
+
+@media screen and (min-width: 1024px){
+	#navigation nav ul ul a.active, .footerNav ul ul li a.active
+	, #navigation nav ul ul a:hover, .footerNav ul ul li a:hover{
+		background-position: 1.5em 0.65em;
+	}
 }
 
 @media screen and (min-width: 1280px){

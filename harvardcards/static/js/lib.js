@@ -3,16 +3,18 @@ define(['jquery'], function($) {
 var Slider = function() { this.initialize.apply(this, arguments) }
 Slider.prototype = {
 
-	initialize: function(slider,deckView) {
+	initialize: function(slider,deckView,fullCard) {
 		//to force scroller on view and review modes thumbnails
 		//regardles of monitor size. Homepage or "dashboard" set to false
-		if (typeof deckView === "undefined")
+		if (typeof deckView === "undefined" || typeof fullCard === "undefined")
 		{
 			this.deckView = false;
+			this.fullCard = false;
 		}
 		else
 		{
 			this.deckView = deckView;
+			this.fullCard = fullCard;
 		}
 		
 		this.ul = slider.children[0]
@@ -41,11 +43,7 @@ Slider.prototype = {
 		//give the first card an active class
 		$(this.li).eq(0).addClass('cardActive');
 		
-		this.respond();
-	},
-	
-	hello: function(){
-		console.log('hi');
+	    this.respond();
 	},
 	
 	goTo: function(index) {
@@ -58,7 +56,7 @@ Slider.prototype = {
 		
 		this.currentIndex = index;
 		
-		
+		this.cardCounter();
 		/*
         if (index == 0)
             this.ul.style.left = index + this.slideUnit;
@@ -131,10 +129,16 @@ Slider.prototype = {
 	},
 	
 	showCard: function(index){
+		//mark the current thumb as checked
+		$(this.li).eq(index).addClass('cardActive');
+		
 		$('ul#allCards li').eq(index).removeClass('hide').addClass('show');
 	},
 	
 	hideCard: function(index){
+		$(this.li).eq(index).removeClass('cardActive');
+		document.getElementById(index).children[0].blur();
+		
 		$('ul#allCards li').eq(index).removeClass('show').addClass('hide');
 	},
 	
@@ -142,6 +146,16 @@ Slider.prototype = {
 		this.hideCard(this.currentIndex);
 		this.showCard(card);
 		this.currentIndex = card;
+		
+		this.cardCounter();
+	},
+	
+	cardCounter: function(){
+		if ( this.deckView )
+		{
+		var counter = document.getElementById("counter");
+		counter.innerHTML = (this.currentIndex + 1) + "/" + this.totalLi;
+		}
 	},
 	/*changeCard: function(num){
         current_card =$('li.clicked').attr('id');
@@ -221,7 +235,7 @@ Slider.prototype = {
 		
 		//var mq = window.matchMedia("(min-width: 768px) and (max-width: 1024px)");
 		
-		if (twoCards || threeCards || fourCards || this.deckView) //(mq.matches || this.deckView)
+		if ((twoCards || threeCards || fourCards || this.deckView) && !(this.fullCard)) //(mq.matches || this.deckView)
 		{
 			var respUnits = new RespondObj(sliderContext,liMargin,liToShow,this.totalLi,slideWindow, borderAmmount);
 			/*console.log('sliderContext = ' + sliderContext);
@@ -241,6 +255,7 @@ Slider.prototype = {
 			
 			ipad = true;
 			this.goTo(this.currentIndex);//stay in current index when flipping screen
+			console.log('hi');
 		}
 		else if (oneCard)
 		{
@@ -255,6 +270,19 @@ Slider.prototype = {
 			this.clickCealing = this.totalLi - 1;
 			ipad = false;
 			this.goTo(this.currentIndex);//stay in current index when flipping screen
+		}
+		else if ((oneCard || twoCards || threeCards || this.deckView) && (this.fullCard))
+		{
+			//give the UL a new width to accomodate all the li's plus their margins
+			ulwidth = (sliderContext * totalLI);
+			this.ul.style.width = ( ulwidth + liBorders ) + 'px';
+			rspLiWidth = sliderContext-2 + 'px';//width of li
+			//ammount to slide: in this 100 since ther is only one card
+			this.slideAmmount = 100;
+			this.slideUnit = '%';
+			
+			this.clickCealing = this.totalLi - 1;
+			console.log('ho');
 		}
 		
 		var lastLI = totalLI - 1;
