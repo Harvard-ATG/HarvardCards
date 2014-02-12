@@ -119,23 +119,3 @@ def create(request, collection_id=None):
             
     else:
         return render(request, 'collections/create.html')
-
-def delete(request):
-    returnValue = "false"
-    if request.GET['id']:
-        collection_id = request.GET['id']
-        returnValue = api.deleteCollection()
-    
-    return HttpResponse('{"success": %s}' % returnValue, mimetype="application/json")
-    
-def fields(request):
-    if 'collection_id' in request.POST:
-        field_list = api.getFieldList(request.POST['collection_id'])           
-        fields_json = json.dumps(field_list)
-        return HttpResponse('{"success": true, "fields": %s}' % fields_json, mimetype="application/json")
-        
-    else:
-        errorMsg = "No collection_id specified."
-        for key, value in request.POST.iteritems():
-            errorMsg += "<br>" + key + " => " + value
-    return HttpResponse('{"success": true, "error": "%s"}' % errorMsg, mimetype="application/json")
