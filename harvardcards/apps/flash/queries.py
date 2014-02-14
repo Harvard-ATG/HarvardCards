@@ -1,3 +1,8 @@
+""" 
+This module contains common queries that return a result and DO NOT change the
+observable state of the system (are free of side effects).
+"""
+
 from harvardcards.apps.flash.models import Collection, Deck
 
 def getDecksByCollection():
