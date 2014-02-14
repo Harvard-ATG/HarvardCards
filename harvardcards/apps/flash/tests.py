@@ -78,6 +78,12 @@ class ServicesTest(TestCase):
         collection = Collection.objects.create(title='a', description='aaa')
         self.assertEqual(services.deleteCollection(collection.id), True)
 
+class QueriesTest(TestCase):
+    def setUp(self):
+        """ Every test needs access to the request factory. """
+        self.factory = RequestFactory()
+        self.client = Client()
+
     def test_getCollection(self):
         collection = Collection.objects.create(title='getCollectionTest', description='asdfasdfasdf')
         gottenCollection = queries.getCollection(collection.id)
