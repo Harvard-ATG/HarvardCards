@@ -8,7 +8,7 @@ from django.utils import simplejson as json
 from django.forms.formsets import formset_factory
 from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
-from harvardcards.apps.flash import services
+from harvardcards.apps.flash import services, queries
 
 def delete(request):
     """delete a collection"""
@@ -22,7 +22,7 @@ def delete(request):
 def fields(request):
     """list the fields of a collection"""
     if 'collection_id' in request.POST:
-        field_list = services.getFieldList(request.POST['collection_id'])           
+        field_list = queries.getFieldList(request.POST['collection_id'])           
         fields_json = json.dumps(field_list)
         return HttpResponse('{"success": true, "fields": %s}' % fields_json, mimetype="application/json")
         

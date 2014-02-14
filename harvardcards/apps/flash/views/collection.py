@@ -8,14 +8,14 @@ from django.utils import simplejson as json
 from django.forms.formsets import formset_factory
 from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
-from harvardcards.apps.flash import services
+from harvardcards.apps.flash import services, queries
 
 def index(request, collection_id=None):
     """main landing page"""
     collections = Collection.objects.all()
     user_collection_role = Users_Collections.get_role_buckets(request.user, collections)
 
-    decks_by_collection = services.getDecksByCollection()
+    decks_by_collection = queries.getDecksByCollection()
 
     collection_list = []
     for collection in collections:
