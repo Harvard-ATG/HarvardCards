@@ -24,7 +24,7 @@ urlpatterns = patterns('',
     url(r'^card/fieldEdit/$', 'harvardcards.apps.flash.views.card.fieldEdit', name='editCardField'),
     
     url(r'^login/$', 'django_openid_auth.views.login_begin', name='login'),
-    url(r'^login-complete/$', 'django_openid_auth.views.login_complete', name='login-complete'),
+    url(r'^login-complete/$', 'django_openid_auth.views.login_complete', name='openid-complete'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/',}, name='logout'),
     
     # API
