@@ -12,7 +12,7 @@ class CollectionForm(ModelForm):
 class FieldForm(ModelForm):
     class Meta:
         model = Field
-        fields = ['field_type', 'sort_order', 'display', 'label']
+        fields = ['field_type', 'display', 'label']
 
 class DeckForm(ModelForm):
     class Meta:
