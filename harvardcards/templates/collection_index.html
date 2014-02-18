@@ -129,14 +129,15 @@ require(['views/CollectionList'], function(CollectionList){
 
 require(['jquery', 'lib'], function($, lib) {
 
-    document.getElementById('temp1').onclick = function(){
+    $('#temp1').click(function(){
         setInterval(function() {
-            var gh = document.getElementById("courseTitle");
-            document.getElementById("course_title").value = gh.innerText || gh.textContent;
-            document.getElementById('collectionform').submit();
+            var gh = $("#courseTitle");
+            $("#course_title").val(gh.text());
+            $('#collectionform').submit();
             return false;
         }, 1000);
-    };
+    });
+
 	var ArrowToggle = lib.ArrowToggle;
 	var Slider = lib.Slider;
 	var sliders = {'decks':[],'templates':[]}; 

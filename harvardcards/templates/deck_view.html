@@ -23,9 +23,9 @@
                 <li><a href="#">Delete</a></li>
                 <li>
                 {% if is_quiz_mode %}
-                <a href="{% url 'deckIndex' deck.id %}" onclick="location.href=this.href+'?cardLoc='+(current+1);return false;">Review Mode</a>
+                <a href="{% url 'deckIndex' deck.id %}" id="reviewM">Review Mode</a>
                 {% else %}
-                <a href="{% url 'deckIndex' deck.id %}?mode=quiz" onclick="location.href=this.href+'&cardLoc='+(current+1);return false;">Quiz Mode</a>
+                <a href="{% url 'deckIndex' deck.id %}?mode=quiz" id="quizM">Quiz Mode</a>
                 {% endif %}
                 </div>
             </ul>
@@ -40,15 +40,15 @@
         {% endif %}
         {% if cards|length %}
         <div class="sliderBtns deckPrev">
-            <a href="javascript:sliders[0].goToPrev()"><i class="fa fa-angle-left"></i><span>Prev</span></a>
-            <a href="javascript:sliders[0].goToFirst()"><i class="fa fa-angle-double-left"></i><span>First</span></a>
+            <a id="previous_card" href="#"><i class="fa fa-angle-left"></i><span>Prev</span></a>
+            <a id="first_card" href="#"><i class="fa fa-angle-double-left"></i><span>First</span></a>
         </div>
         <div class="cardHolder" id="holder" style="display:none;">
 
             <ul id="cards">
                 {% for card in cards %}
                 <li id = {{forloop.counter0}}>
-                    <a class="image" href="javascript:sliders[0].goToCard({{forloop.counter0}}); current = {{forloop.counter0}}">
+                    <a class="image" href="#">
                             {% for field in card.fields.reveal %}
                                 {% include "_deck_slider_card_fields.html" with field=field %}
                             {% endfor %}
@@ -58,8 +58,8 @@
             </ul>
         </div>
         <div class="sliderBtns deckNext">
-            <a href="javascript:sliders[0].goToNext()"><i class="fa fa-angle-right"></i><span>Next</span></a>
-            <a href="javascript:sliders[0].goToLast()"><i class="fa fa-angle-double-right"></i><span>Last</span></a>
+            <a id="next_card" href="#"><i class="fa fa-angle-right"></i><span>Next</span></a>
+            <a id="last_card" href="#"><i class="fa fa-angle-double-right"></i><span>Last</span></a>
         </div>
         {% endif %}
         </div>
@@ -87,7 +87,7 @@
                     <input type="checkbox" name="showLabel" value="showLabel">Show Label
                     <input type="checkbox" name="display" value="display">Display
                     <ul class="adminMenu adminMenuRight">
-                            <li><a href="#" onclick="this.parentNode.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode.parentNode);counter=counter-1;return false;">Remove Field</a></li>
+                            <li><a href="#" class = "moreField">Remove Field</a></li>
 					</ul>
                     <br />
                 </div>
@@ -151,7 +151,7 @@
                 </ul>
             </div><!-- cardOverflow (end) -->
         </div><!-- singleCardHolder (end)-->
-\    </div><!-- courseWrapper (end) -->
+     </div><!-- courseWrapper (end) -->
 
 </div><!-- content (end) -->
 
@@ -161,6 +161,9 @@
 <script type="text/javascript">
 require(['jquery', 'lib', 'appendAround', 'jqueryui'], function($, lib) {
 counter = 0;
+
+
+
 
 function moreFields() {
 	counter++;
@@ -175,12 +178,43 @@ function moreFields() {
 	}
 	var insertHere = document.getElementById('writeroot');
 	insertHere.parentNode.insertBefore(newFields,insertHere);
+	$('.moreField').each(function(){
+        $(this).bind('click',function(){
+            console.log(this.parentNode);
+            this.parentNode.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode.parentNode);
+            counter=counter-1;
+            return false;
+        })
+	})
 }
-$('#moreFields').click(function(){
+
+
+
+$(document).ready(function(){
     moreFields();
-    return false;
+    $('#cards').children().each(
+    function(){
+        $(this).bind('click',function(){
+            current = Number($(this).attr('id'));
+            sliders[0].goToCard(current);
+            return false;
+        })
+    });
+
+    $('#reviewM').click(function(){
+        location.href=this.href+'?cardLoc='+(current+1);
+        return false;
+    });
+    $('#quizM').click(function(){
+        location.href=this.href+'&cardLoc='+(current+1);
+        return false;
+    });
+   $('#moreFields').click(function(){
+        moreFields();
+        return false;
+    });
+
 });
-window.onload = moreFields;
 
 function extractDeckId(){
     var pathname = $(location).attr('href');
@@ -190,22 +224,22 @@ function extractDeckId(){
     return res;
 };
 
-document.getElementById('card_create').onclick = function(){
-        document.getElementById("deck_id").value = extractDeckId();
-        document.getElementById("num_fields").value = counter;
+$('#card_create').click(function(){
+        $("#deck_id").val(extractDeckId());
+        $("#num_fields").val(counter);
         if(counter!=0)
-            document.getElementById('addcardform').submit();
+            $('#addcardform').submit();
         return false;
-    };
+});
 
 $('#addCard').click(function(){
-    document.getElementById('cardform').style.display="block";
-    document.getElementById('addCardForm').style.display="block";
+    $('#cardform').css("display","block");
+    $('#addCardForm').css("display","block");
     return false;
 });
 $('#card_cancel').click(function(){
-    document.getElementById('cardform').style.display="none";
-    document.getElementById('addCardForm').style.display="none";
+    $('#cardform').css("display","none");
+    $('#addCardForm').css("display","none");
     return false;
 });
 
@@ -266,8 +300,8 @@ $('.cardHolder').each(function() {
 });
 sliders[0].goToCard(current);
 // fixes the reorganization of slider
-document.getElementById("holder").style.display="block";
-document.getElementById("allCards").style.display="block";
+$("#holder").css("display","block");
+$("#allCards").css("display","block");
 
 
 
@@ -356,21 +390,25 @@ $('.reveal').click(function() {
 require(['jquery', 'jquery.mousewheel'], function($) {
 
 $('#previous_card').click(function() {
-    sliders[0].changeCard(-1);
+    if (current != 0){current = current - 1}
+    sliders[0].goToPrev();
     return false;
 });
 $('#next_card').click(function() {
-    sliders[0].changeCard(1);
+    if (current != sliderLength - 1){current = current + 1}
+    sliders[0].goToNext();
     return false;
 });
 
 $('#first_card').click(function() {
-    sliders[0].firstCard();
+    sliders[0].goToFirst();
+    current = 0;
     return false;
 });
 
 $('#last_card').click(function() {
-    sliders[0].lastCard();
+    sliders[0].goToLast();
+    current = sliderLength - 1;
     return false;
 });
 
@@ -379,11 +417,11 @@ $('#last_card').click(function() {
 $('#cardSlider').mousewheel(function(event) {
       if (event.deltaX>0){
         event.preventDefault();
-        sliders[0].goToNext();
+        $('#next_card').click();
       }
       else if (event.deltaX<0){
       	event.preventDefault();
-        sliders[0].goToPrev();
+        $('#previous_card').click();
       }
 });
 
@@ -391,9 +429,9 @@ function checkKey(e) {
     var event = window.event ? window.event : e;
     if (true) {
         if (event.keyCode == 37)
-            sliders[0].goToPrev()
+            $('#previous_card').click();
         if (event.keyCode == 39)
-            sliders[0].goToNext()
+            $('#next_card').click();
     }
 };
 document.onkeydown=checkKey;

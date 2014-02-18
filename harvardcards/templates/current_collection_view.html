@@ -86,22 +86,23 @@ function extractCollectionId(){
 };
 
 
-document.getElementById('deck_submit').onclick = function(){
+$('#deck_submit').bind('click', function(){
         setInterval(function() {
-        document.getElementById("collection_id").value = extractCollectionId();
+        $("#collection_id").val(extractCollectionId());
 
-        var gh = document.getElementById("deckTitle");
-        document.getElementById("deck_title").value = gh.innerText || gh.textContent;
-        document.getElementById('deckform').submit();
+        var gh = $("#deckTitle");
+        $("#deck_title").val(gh.text());
+        $('#deckform').submit();
         return false;
     }, 1000);
-    };
+    });
+
 $('#addDeck').click(function(){
-    document.getElementById('addDeckForm').style.display="block";
+    $('#addDeckForm').css("display","block");
     return false;
 });
 $('#deck_cancel').click(function(){
-    document.getElementById('addDeckForm').style.display="none";
+    $('#addDeckForm').css("display","none");
     return false;
 });
 
