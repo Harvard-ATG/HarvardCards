@@ -111,7 +111,7 @@
                 </form>
             </div>
         </div>
-        <div id="singleCardHolder"><!-- singleCardHolder (start)-->
+        <div id="singleCardHolder" style="{%if cards|length == 0%} border:none; background: inherit;{%endif%}"><!-- singleCardHolder (start)-->
 
             <!--div id="slider"></div-->
             <!--div class = "controls" id="controlbar">
@@ -197,8 +197,7 @@ function moreFields() {
 
 $(document).ready(function(){
     moreFields();
-    if (sliderLength){
-        $('#cards').children().each(
+    $('#cards').children().each(
         function(){
             $(this).bind('click',function(){
                 current = Number($(this).attr('id'));
@@ -206,7 +205,7 @@ $(document).ready(function(){
                 return false;
             })
         });
-    }
+
     $('#reviewM').click(function(){
         location.href=this.href+'?cardLoc='+(current+1);
         return false;
@@ -219,14 +218,15 @@ $(document).ready(function(){
         moreFields();
         return false;
     });
-    $('#addCard').click(function(){
+
+
+});
+
+$('#addCard').click(function(){
         $('#cardform').css("display","block");
         $('#addCardForm').css("display","block");
         return false;
     });
-
-});
-
 function extractDeckId(){
     var pathname = $(location).attr('href');
     var res = String(pathname.match('[^/]+$'));
@@ -309,11 +309,11 @@ $('.cardHolder').each(function() {
 		sliderObjExist = true;
 	}
 });
-if (sliderLength !=0){
-    sliders[0].goToCard(current);
-    // fixes the reorganization of slider
-    $("#holder").css("display","block");
-}
+
+sliders[0].goToCard(current);
+// fixes the reorganization of slider
+$("#holder").css("display","block");
+
 
 
 function updateCardLoc(loc){
