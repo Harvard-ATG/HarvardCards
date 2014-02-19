@@ -20,12 +20,13 @@ def index(request, collection_id=None):
     collection_list = []
     for collection in collections:
         collection_decks = []
-        for deck in decks_by_collection[collection.id]:
-            collection_decks.append({
-                'id': deck.id,
-                'title': deck.title,
-                'num_cards': deck.cards.count()
-            })
+        if collection.id in decks_by_collection:
+            for deck in decks_by_collection[collection.id]:
+                collection_decks.append({
+                    'id': deck.id,
+                    'title': deck.title,
+                    'num_cards': deck.cards.count()
+                })
         collection_list.append({
             'id': collection.id,
             'title':collection.title,
