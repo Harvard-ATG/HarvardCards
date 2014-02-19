@@ -42,7 +42,7 @@
 				{% for deck in collection.decks %}
 				<li class="deck"><!-- deck (start) -->
 					<h2>{{ deck.title }}</h2>
-					<p><h3>{{ deck.num_cards }}</h3> Cards</p>
+					<p><h3>{{ deck.num_cards }}</h3> {% if deck.num_cards == 1 %}Card {% else %}Cards{% endif %}</p>
 					<!--
 					<p>Last modified</p>
 					<p class="lastUpdated">Now</p>

@@ -61,6 +61,10 @@
             <a id="next_card" href="#"><i class="fa fa-angle-right"></i><span>Next</span></a>
             <a id="last_card" href="#"><i class="fa fa-angle-double-right"></i><span>Last</span></a>
         </div>
+        {% else %}
+        <div class="emptySlider">
+            <h3>Empty Deck - Click on “Add Card” to start adding cards to your deck</h3>
+        </div>
         {% endif %}
         </div>
 
@@ -107,7 +111,6 @@
                 </form>
             </div>
         </div>
-
         <div id="singleCardHolder"><!-- singleCardHolder (start)-->
 
             <!--div id="slider"></div-->
@@ -151,6 +154,8 @@
                 </ul>
             </div><!-- cardOverflow (end) -->
         </div><!-- singleCardHolder (end)-->
+
+
      </div><!-- courseWrapper (end) -->
 
 </div><!-- content (end) -->
@@ -192,15 +197,16 @@ function moreFields() {
 
 $(document).ready(function(){
     moreFields();
-    $('#cards').children().each(
-    function(){
-        $(this).bind('click',function(){
-            current = Number($(this).attr('id'));
-            sliders[0].goToCard(current);
-            return false;
-        })
-    });
-
+    if (sliderLength){
+        $('#cards').children().each(
+        function(){
+            $(this).bind('click',function(){
+                current = Number($(this).attr('id'));
+                sliders[0].goToCard(current);
+                return false;
+            })
+        });
+    }
     $('#reviewM').click(function(){
         location.href=this.href+'?cardLoc='+(current+1);
         return false;
@@ -211,6 +217,11 @@ $(document).ready(function(){
     });
    $('#moreFields').click(function(){
         moreFields();
+        return false;
+    });
+    $('#addCard').click(function(){
+        $('#cardform').css("display","block");
+        $('#addCardForm').css("display","block");
         return false;
     });
 
@@ -232,11 +243,7 @@ $('#card_create').click(function(){
         return false;
 });
 
-$('#addCard').click(function(){
-    $('#cardform').css("display","block");
-    $('#addCardForm').css("display","block");
-    return false;
-});
+
 $('#card_cancel').click(function(){
     $('#cardform').css("display","none");
     $('#addCardForm').css("display","none");
@@ -268,16 +275,20 @@ function parseURLParams(url) {
     }
     return parms;
 }
-
+sliders = [];
+sliderLength = $('ul#cards li').size();
 var pathname = $(location).attr('href');
 var urlPar = parseURLParams(pathname);
 current = 0;
 if(typeof(urlPar) != "undefined"){
-if(typeof(urlPar["cardLoc"]) != "undefined"){current = Number(urlPar["cardLoc"][0])-1}
+    if(typeof(urlPar["cardLoc"]) != "undefined"){
+        var k = Number(urlPar["cardLoc"][0])-1;
+        if (k>=0 && k<=sliderLength-1){
+            current=k;
+        }
+    }
 }
-sliders = [];
-sliderLength = $('ul#cards li').size();
-
+/*
 $( "#slider" ).slider({
         orientation: "horizontal",
         min: 0,
@@ -287,7 +298,7 @@ $( "#slider" ).slider({
         slide:function(event, ui){sliders[0].goToCard(ui.value)}
 });
 
-
+*/
 var sliderObjExist = false;
 var Slider1 = lib.Slider;
 $('.cardHolder').each(function() {
@@ -298,11 +309,11 @@ $('.cardHolder').each(function() {
 		sliderObjExist = true;
 	}
 });
-sliders[0].goToCard(current);
-// fixes the reorganization of slider
-$("#holder").css("display","block");
-$("#allCards").css("display","block");
-
+if (sliderLength !=0){
+    sliders[0].goToCard(current);
+    // fixes the reorganization of slider
+    $("#holder").css("display","block");
+}
 
 
 function updateCardLoc(loc){
