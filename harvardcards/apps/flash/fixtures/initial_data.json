@@ -88,6 +88,72 @@
         }
     },
     {
+        "pk": 9, 
+        "model": "flash.field", 
+        "fields": {
+            "field_type": "T", 
+            "show_label": false, 
+            "label": "Word", 
+            "display": true,
+            "sort_order": 1
+        }
+    },
+    {
+        "pk": 10, 
+        "model": "flash.field", 
+        "fields": {
+            "field_type": "T", 
+            "show_label": true, 
+            "label": "Definition", 
+            "display": false,
+            "sort_order": 2
+        }
+    },
+    {
+        "pk": 11, 
+        "model": "flash.field", 
+        "fields": {
+            "field_type": "T", 
+            "show_label": true, 
+            "label": "Pronunciation", 
+            "display": false,
+            "sort_order": 3
+        }
+    },
+    {
+        "pk": 12, 
+        "model": "flash.field", 
+        "fields": {
+            "field_type": "T", 
+            "show_label": true, 
+            "label": "Gender", 
+            "display": false,
+            "sort_order": 4
+        }
+    },
+    {
+        "pk": 13,
+        "model": "flash.field", 
+        "fields": {
+            "field_type": "T", 
+            "show_label": true, 
+            "label": "Example", 
+            "display": false,
+            "sort_order": 5
+        }
+    },
+    {
+        "pk": 14,
+        "model": "flash.field", 
+        "fields": {
+            "field_type": "T", 
+            "show_label": true, 
+            "label": "Notes", 
+            "display": false,
+            "sort_order": 6
+        }
+    },
+    {
         "pk": 1,
         "model": "flash.CardTemplate",
         "fields": {
@@ -101,6 +167,14 @@
         "fields": {
             "title": "Art History",
             "description": "Art History flashcard template."
+        }
+    },
+    {
+        "pk": 3,
+        "model": "flash.CardTemplate",
+        "fields": {
+            "title": "Russian",
+            "description": "Russian vocabulary flashcard template."
         }
     },
     {
@@ -165,6 +239,54 @@
         "fields": {
             "card_template": 2,
             "field": 8
+        }
+    },
+    {
+        "pk": 9,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 3,
+            "field": 9
+        }
+    },
+    {
+        "pk": 10,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 3,
+            "field": 10 
+        }
+    },
+    {
+        "pk": 11,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 3,
+            "field": 11
+        }
+    },
+    {
+        "pk": 12,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 3,
+            "field": 12 
+        }
+    },
+    {
+        "pk": 13,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 3,
+            "field": 13 
+        }
+    },
+    {
+        "pk": 14,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 3,
+            "field": 14 
         }
     }
 ]
