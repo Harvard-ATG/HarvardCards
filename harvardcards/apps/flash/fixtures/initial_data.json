@@ -1,0 +1,170 @@
+[
+    {
+        "pk": 1, 
+        "model": "flash.field", 
+        "fields": {
+            "field_type": "T", 
+            "show_label": false, 
+            "label": "Term", 
+            "display": true,
+            "sort_order": 1
+        }
+    },
+    {
+        "pk": 2, 
+        "model": "flash.field", 
+        "fields": {
+            "field_type": "T", 
+            "show_label": false, 
+            "label": "Definition", 
+            "display": false,
+            "sort_order": 2
+        }
+    },
+    {
+        "pk": 3, 
+        "model": "flash.field", 
+        "fields": {
+            "field_type": "I", 
+            "show_label": false, 
+            "label": "Image", 
+            "display": true,
+            "sort_order": 1
+        }
+    },
+    {
+        "pk": 4, 
+        "model": "flash.field", 
+        "fields": {
+            "field_type": "T", 
+            "show_label": true, 
+            "label": "Artist", 
+            "display": false,
+            "sort_order": 2
+        }
+    },
+    {
+        "pk": 5, 
+        "model": "flash.field", 
+        "fields": {
+            "field_type": "T", 
+            "show_label": true, 
+            "label": "Date", 
+            "display": false,
+            "sort_order": 3
+        }
+    },
+    {
+        "pk": 6, 
+        "model": "flash.field", 
+        "fields": {
+            "field_type": "T", 
+            "show_label": true, 
+            "label": "Title", 
+            "display": false,
+            "sort_order": 4
+        }
+    },
+    {
+        "pk": 7, 
+        "model": "flash.field", 
+        "fields": {
+            "field_type": "T", 
+            "show_label": true, 
+            "label": "Materials", 
+            "display": false,
+            "sort_order": 5
+        }
+    },
+    {
+        "pk": 8, 
+        "model": "flash.field", 
+        "fields": {
+            "field_type": "T", 
+            "show_label": true, 
+            "label": "Location", 
+            "display": false,
+            "sort_order": 6
+        }
+    },
+    {
+        "pk": 1,
+        "model": "flash.CardTemplate",
+        "fields": {
+            "title": "Default",
+            "description": "Default flashcards with a term on the front and a definition on the back."
+        }
+    },
+    {
+        "pk": 2,
+        "model": "flash.CardTemplate",
+        "fields": {
+            "title": "Art History",
+            "description": "Art History flashcard template."
+        }
+    },
+    {
+        "pk": 1,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 1,
+            "field": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 1,
+            "field": 2
+        }
+    },
+    {
+        "pk": 3,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 2,
+            "field": 3
+        }
+    },
+    {
+        "pk": 4,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 2,
+            "field": 4
+        }
+    },
+    {
+        "pk": 5,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 2,
+            "field": 5
+        }
+    },
+    {
+        "pk": 6,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 2,
+            "field": 6
+        }
+    },
+    {
+        "pk": 7,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 2,
+            "field": 7
+        }
+    },
+    {
+        "pk": 8,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 2,
+            "field": 8
+        }
+    }
+]

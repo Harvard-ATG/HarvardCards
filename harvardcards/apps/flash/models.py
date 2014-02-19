@@ -12,6 +12,7 @@ class Field(models.Model):
     field_type = models.CharField(max_length=1, choices=FIELD_TYPES)
     show_label = models.BooleanField()
     display = models.BooleanField()
+    sort_order = models.IntegerField()
 
     def __unicode__(self):
         return self.label
@@ -25,7 +26,7 @@ class CardTemplate(models.Model):
     fields = models.ManyToManyField(Field, through='CardTemplates_Fields')
 
     def __unicode__(self):
-        return "CardTemplate: " + str(self.id) + "; Title: " + str(self.title) + "; Description: " + str(self.description)
+        return "CardTemplate: " + str(self.id) + "; Title: " + str(self.title)
 
 class Collection(models.Model):
     title = models.CharField(max_length=200)
@@ -78,7 +79,6 @@ class Cards_Fields(models.Model):
     card = models.ForeignKey(Card)
     field = models.ForeignKey(Field)
     value = models.CharField(max_length=500)
-    sort_order = models.IntegerField()
 
     class Meta:
         verbose_name = 'Card Fields'
@@ -90,14 +90,13 @@ class Cards_Fields(models.Model):
 class CardTemplates_Fields(models.Model):
     card_template = models.ForeignKey(CardTemplate)
     field = models.ForeignKey(Field)
-    sort_order = models.IntegerField()
 
     class Meta:
-        verbose_name = 'Card Fields'
-        verbose_name_plural = 'Card Fields'
+        verbose_name = 'Card Template Fields'
+        verbose_name_plural = 'Card Template Fields'
 
     def __unicode__(self):
-        return self.value
+        return "CardTemplate: " + str(self.card_template.id) + "; Field: " + str(self.field.id)
 
 #class User(models.Model):
 #    name = models.CharField(max_length=200)
