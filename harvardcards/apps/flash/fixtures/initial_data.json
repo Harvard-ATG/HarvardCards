@@ -154,6 +154,50 @@
         }
     },
     {
+        "pk": 15,
+        "model": "flash.field", 
+        "fields": {
+            "field_type": "T", 
+            "show_label": false, 
+            "label": "Character", 
+            "display": true,
+            "sort_order": 1
+        }
+    },
+    {
+        "pk": 16,
+        "model": "flash.field", 
+        "fields": {
+            "field_type": "T", 
+            "show_label": true, 
+            "label": "Definition(s)", 
+            "display": false,
+            "sort_order": 2
+        }
+    },
+    {
+        "pk": 17,
+        "model": "flash.field", 
+        "fields": {
+            "field_type": "T", 
+            "show_label": true, 
+            "label": "Pinyin", 
+            "display": false,
+            "sort_order": 3
+        }
+    },
+    {
+        "pk": 18,
+        "model": "flash.field", 
+        "fields": {
+            "field_type": "T", 
+            "show_label": true, 
+            "label": "Source(s)", 
+            "display": false,
+            "sort_order": 4
+        }
+    },
+    {
         "pk": 1,
         "model": "flash.CardTemplate",
         "fields": {
@@ -175,6 +219,14 @@
         "fields": {
             "title": "Russian",
             "description": "Russian vocabulary flashcard template."
+        }
+    },
+    {
+        "pk": 4,
+        "model": "flash.CardTemplate",
+        "fields": {
+            "title": "Chinese",
+            "description": "Chinese vocabulary flashcard template."
         }
     },
     {
@@ -287,6 +339,38 @@
         "fields": {
             "card_template": 3,
             "field": 14 
+        }
+    },
+    {
+        "pk": 15,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 4,
+            "field": 15 
+        }
+    },
+    {
+        "pk": 16,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 4,
+            "field": 16 
+        }
+    },
+    {
+        "pk": 17,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 4,
+            "field": 17 
+        }
+    },
+    {
+        "pk": 18,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 4,
+            "field": 18 
         }
     }
 ]
