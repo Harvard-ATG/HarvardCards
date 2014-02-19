@@ -107,12 +107,7 @@ Slider.prototype = {
 			this.hideCard(this.currentIndex - 1);
 			this.showCard(this.currentIndex);
 		}
-	    /*
-	    if (this.currentIndex == 0)
-	        this.goTo(this.currentIndex + 2)
-	    else
-		    this.goTo(this.currentIndex + 1)
-		*/
+	    
 	},
 	goToFirst: function(){
 		this.hideCard(this.currentIndex);
@@ -157,35 +152,6 @@ Slider.prototype = {
 		counter.innerHTML = (this.currentIndex + 1) + "/" + this.totalLi;
 		}
 	},
-	/*changeCard: function(num){
-        current_card =$('li.clicked').attr('id');
-        if (num === -1)
-        {
-            next_card =Number(current_card) - 1;
-        }
-        if (num === 1)
-        {
-            next_card = Number(current_card) + 1;
-        }
-        if (next_card >=0 && next_card < this.li.length){
-            $(this.li[next_card].children).click();
-        }
-        else
-            this.goTo(current_card);
-	},
-
-    firstCard: function(){
-        var first_card = this.li[0];
-        $(first_card.children).click();
-    },
-    goToCard: function(i){
-        var card = this.li[i];
-        $(card.children).click();
-    },
-    lastCard: function(){
-        var last_card = this.li[this.li.length-1];
-        $(last_card.children).click();
-    },*/
 
 	respond: function(){
 		//iphone portrait	= screen and (min-width: 320px)
@@ -255,7 +221,6 @@ Slider.prototype = {
 			
 			ipad = true;
 			this.goTo(this.currentIndex);//stay in current index when flipping screen
-			console.log('hi');
 		}
 		else if (oneCard)
 		{
@@ -282,7 +247,6 @@ Slider.prototype = {
 			this.slideUnit = '%';
 			
 			this.clickCealing = this.totalLi - 1;
-			console.log('ho');
 		}
 		
 		var lastLI = totalLI - 1;

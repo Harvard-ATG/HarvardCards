@@ -59,9 +59,7 @@
             	<a href="javascript:sliders[0].goToLast()"><i class="fa fa-angle-double-right"></i><span>Last</span></a>
             </div>
         </div>
-		<div id="counterHolder" class="">
-        	<div id="counter"></div>
-        </div>
+		
         <div class="fullcardBtns">
         	<a id="" href="javascript:fullCardSlider[0].goToPrev()"><i class="fa fa-angle-left"></i><span>Previous</span></a>
         	<a id="" href="javascript:fullCardSlider[0].goToFirst()"><i class="fa fa-angle-double-left"></i><span>First</span></a>
@@ -71,6 +69,9 @@
 
         </div>
         <div id="singleCardHolder"><!-- singleCardHolder (start)-->
+        	<div id="counterHolder" class="">
+	        	<div id="counter"></div>
+	        </div>
             <div id="cardOverflow" class="test"><!-- cardOverflow (start) -->
                 <ul id="allCards">
                     {% for card in cards %}

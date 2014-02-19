@@ -243,7 +243,6 @@ a#addCard{
 	display: inline-block; 
 	width: 100%; 
 	margin-bottom: 1em;
-	/*position: relative;*/
 }
 	
 .courseHeader{
@@ -309,15 +308,20 @@ a#addCard{
 		/* arrows (end) */
 		
 		ul.deckMenu{
-			display: none;
+			/*display: none;*/
+			display: inline-block;
+			width: 100%;
+			bottom: 0;
+			position: absolute;
+			left: 0;
 		}
 		
 			ul.deckMenu li{
 				width: 50%;
 				float: left;
 				display: inline-block;
-				background-image: none;
-				background-color: #f8f8f7;
+				background: none;
+				/*background-color: #f8f8f7;*/
 				border: 0;
 				margin:0;
 			}
@@ -328,18 +332,17 @@ a#addCard{
 			}
 			
 			.viewReview{
-				background: #4e84c4 url('/static/img/viewReviewArrow.jpg') no-repeat 90% 50%;
-				padding: 0.5em 0.85em;
+				padding: 0 0 0 0.25em;
 				display: inline-block;
-				-webkit-border-radius: 12px; 
-				-moz-border-radius: 12px; 
-				border-radius: 12px;
-				color: #f3f3f1;
+				color: #4e84c4;
 				font-family: 'League Gothic';
-				font-size: 1.25em;
-				text-transform: uppercase;
+				font-size: 1.75em;
 				text-decoration: none;
 			}
+			
+				a.viewReview:hover{
+					color: #a51c30;
+				}
 			
 		.openDeckMenu{
 			width: 100%;
@@ -570,16 +573,17 @@ div.deckNav{
 	padding: 2.5% 2.5% 2.5% 2.5%;
 	margin-top: 1em;
 	border: solid 1px #eae9e8;
+	position: relative;
 }
 	#counterHolder{
 		display: block;
-		/*position: absolute;*/
+		position: absolute;
 		padding: 0;
 		background-color: #A51C30;
 		text-align: center;
 		font-size: 1em;
-		top: 11.825em;
-		right: 50%;
+		left: 0;
+		z-index: 1;
 		font-family: Arial,Helvetica,san-serif;
 		font-size: 1em;
 		color: #fff;
@@ -619,13 +623,7 @@ div.deckNav{
 		padding: 0.25em 0;
 	}
 	
-	#singleCardHolder ul li.hide{
-		display: none;
-	}
 	
-	#singleCardHolder ul li.show{
-		display: block;
-	}
 /*full card (end) */
 /********** cards inside a deck view (end) *************/
 
@@ -719,7 +717,7 @@ a#mobileMenu{
 	ul.deckMenu li { 
 		margin: 0;
 		width: 50%;
-		padding: 0 0 0.25em 0;
+		padding: 0;
 		display: inline-block;
 	}
 	
@@ -777,7 +775,15 @@ a#mobileMenu{
 		width: 90.046296296296%;
 	}
 
-		
+	/* in moblie mode - use visibility for cars on the main
+	   content area so they can slide */
+	#singleCardHolder ul li.hide{
+		visibility: visible;
+	}
+	
+	#singleCardHolder ul li.show{
+		visibility: visible;
+	}	
 	
 }
 @media screen and (min-width: 480px){
@@ -816,7 +822,7 @@ a#mobileMenu{
 	ul.deckMenu li { 
 		margin: 0;
 		width: 50%;
-		padding: 0 0 0.25em 0;
+		padding: 0;
 		display: inline-block;
 	}
 	
@@ -894,7 +900,7 @@ a#mobileMenu{
 	
 	ul.deckMenu li { 
 		width: 50%;
-		padding: 0 0 0.25em 0;
+		padding: 0;
 		display: inline-block;
 		margin: 0;
 	}
@@ -997,7 +1003,7 @@ a#mobileMenu{
 	
 	ul.deckMenu li { 
 		width: 50%;
-		padding: 0 0 0.25em 0;
+		padding: 0;
 		display: inline-block;
 		margin: 0;
 	}
@@ -1036,6 +1042,16 @@ a#mobileMenu{
 	.footerNav { display:none; }
 	
 	.desktopNav { display:block; }
+	
+	/* in desktop mode - hide show cars on the main
+	   content area instead of sliding */
+	#singleCardHolder ul li.hide{
+		display: none;
+	}
+	
+	#singleCardHolder ul li.show{
+		display: block;
+	}
 }
 
 @media screen and (min-width: 1024px){
@@ -1100,7 +1116,7 @@ a#mobileMenu{
 	
 	ul.deckMenu li { 
 		width: 50%;
-		padding: 0 0 0.25em 0;
+		padding: 0;
 		margin: 0;
 		display: inline-block;
 	}
