@@ -8,7 +8,10 @@ from django.utils import simplejson as json
 from django.forms.formsets import formset_factory
 from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
-from harvardcards.apps.flash import services, queries
+from harvardcards.apps.flash import forms, services, queries
+
+import xlrd, xlwt
+import StringIO
 
 def index(request, collection_id=None):
     """main landing page"""
@@ -122,3 +125,50 @@ def create(request, collection_id=None):
             
     else:
         return render(request, 'collections/create.html')
+
+def upload_deck(request, collection_id=None):
+    '''
+    Uploads a deck of cards from an excel spreadsheet.
+    '''
+    collection = Collection.objects.get(id=collection_id)
+
+    if request.method == 'POST':
+        form = forms.DeckImportForm(request.POST)
+        if form.is_valid():
+            return redirect('index')
+    else:
+        form = forms.DeckImportForm()
+
+    context = {
+        "form": form, 
+        "collection": collection 
+    }
+
+    return render(request, 'collections/upload_deck.html', context)
+
+def download_template(request, collection_id=None):
+    '''
+    Downloads an excel spreadsheet that may be used as a template for uploading
+    a deck of cards.
+    '''
+    collection = Collection.objects.get(id=collection_id)
+    card_template_fields = collection.card_template.fields.all().order_by('sort_order')
+
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=flashcards_template.xls'
+
+    output = StringIO.StringIO()
+    workbook = xlwt.Workbook(encoding='utf8')
+    worksheet = workbook.add_sheet('sheet1')
+
+    row = 0
+    for idx, field in enumerate(card_template_fields):
+        col = idx
+        worksheet.write(row, col, label=field.label)
+
+    workbook.save(output)
+    response.write(output.getvalue())
+    output.close()
+
+    return response
+

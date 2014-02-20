@@ -1,0 +1,13 @@
+{% extends "__layout_left_sidebar.html" %}
+
+{% block sidebar_content %}
+	{% include "_collection_nav.html" with collection=collection %}
+{% endblock %}
+
+{% block main_content %}
+<form action="/contact/" method="post" {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit" />
+</form>
+{% endblock %}
+
