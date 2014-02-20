@@ -2,6 +2,7 @@
 This module contains services and commands that may change the state of the system
 (i.e. called for their side effects).
 """
+from django.db import transaction
 
 from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Cards_Fields
 from harvardcards.apps.flash import utils 
@@ -13,6 +14,7 @@ def delete_collection(collection_id):
         return True
     return False
     
+@transaction.commit_on_success
 def handle_uploaded_deck(collection_id, deck_title, uploaded_file):
     """Handles an uploaded deck by parsing the rows as cards and the columns as fields."""
 
