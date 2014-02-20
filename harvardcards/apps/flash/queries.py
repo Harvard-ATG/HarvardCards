@@ -3,7 +3,7 @@ This module contains common queries that return a result and DO NOT change the
 observable state of the system (are free of side effects).
 """
 
-from harvardcards.apps.flash.models import Collection, Deck
+from harvardcards.apps.flash.models import Collection, Deck, Decks_Cards
 
 def getDecksByCollection():
     """gets the decks associated with a collection"""
@@ -37,3 +37,27 @@ def getFieldList(collection_id):
         f['display'] = field.display
         field_list.append(f)
     return field_list
+
+def getDeckCardsList(deck_id):
+
+    deck = Deck.objects.get(id=deck_id)
+    deck_cards = Decks_Cards.objects.filter(deck=deck).order_by('sort_order').prefetch_related('card__cards_fields_set__field')
+
+    card_list = []
+    for dcard in deck_cards:
+        card_fields = []
+        for cfield in dcard.card.cards_fields_set.all():
+            card_fields.append({
+                'field_id': cfield.field.id,
+                'type': cfield.field.field_type,
+                'label': cfield.field.label,
+                'show_label': cfield.field.show_label,
+                'display': cfield.field.display,
+                'value': cfield.value,
+            })
+        card_list.append({
+            "card_id": dcard.card.id,
+            "fields": card_fields,
+        })
+
+    return card_list

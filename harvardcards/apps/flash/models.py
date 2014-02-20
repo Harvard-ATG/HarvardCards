@@ -14,6 +14,11 @@ class Field(models.Model):
     display = models.BooleanField()
     sort_order = models.IntegerField()
 
+    class Meta:
+        verbose_name = 'Field'
+        verbose_name_plural = 'Fields'
+        ordering = ["sort_order"]
+
     def __unicode__(self):
         return self.label
 
@@ -71,6 +76,7 @@ class Decks_Cards(models.Model):
     class Meta:
         verbose_name = 'Deck Cards'
         verbose_name_plural = 'Deck Cards'
+        ordering = ["sort_order"]
 
     def __unicode__(self):
         return "Deck: " + str(self.deck.title) + "; Card: " + str(self.card.id)

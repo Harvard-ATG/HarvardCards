@@ -2,7 +2,8 @@
 This module conatins helper functions and utilities.
 """
 
-from harvardcards.apps.flash.models import Collection
+from harvardcards.apps.flash.models import Collection, Deck
+from harvardcards.apps.flash import queries
 
 # For treating strings like files
 import StringIO
@@ -44,6 +45,31 @@ def create_deck_template_file(card_template):
     row = 0
     for idx, field in enumerate(card_template_fields):
         worksheet.write(row, idx, label=field.label)
+
+    workbook.save(output)
+    file_output = output.getvalue()
+    output.close()
+
+    return file_output
+
+def create_deck_file(deck_id):
+    """Creates a spreadsheet template for uploading a deck of cards."""
+
+    deck = Deck.objects.get(id=deck_id)
+
+    output = StringIO.StringIO()
+    workbook = xlwt.Workbook(encoding='utf8')
+    worksheet = workbook.add_sheet('sheet1')
+    card_list = queries.getDeckCardsList(deck_id)
+
+    row = 0
+    for card in card_list:
+        if row == 0:
+            for idx, field in enumerate(card['fields']):
+                worksheet.write(row, idx, label=field['label'])
+        row = row + 1
+        for idx, field in enumerate(card['fields']):
+            worksheet.write(row, idx, label=field['value'])
 
     workbook.save(output)
     file_output = output.getvalue()
