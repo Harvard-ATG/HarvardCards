@@ -8,10 +8,7 @@ from django.utils import simplejson as json
 from django.forms.formsets import formset_factory
 from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
-from harvardcards.apps.flash import forms, services, queries
-
-import xlrd, xlwt
-import StringIO
+from harvardcards.apps.flash import forms, services, queries, utils
 
 def index(request, collection_id=None):
     """main landing page"""
@@ -23,7 +20,7 @@ def index(request, collection_id=None):
     collection_list = []
     for collection in collections:
         collection_decks = []
-        if collection.id in decks_by_collection:
+        if decks_by_collection.get(collection.id, 0):
             for deck in decks_by_collection[collection.id]:
                 collection_decks.append({
                     'id': deck.id,
@@ -133,9 +130,11 @@ def upload_deck(request, collection_id=None):
     collection = Collection.objects.get(id=collection_id)
 
     if request.method == 'POST':
-        form = forms.DeckImportForm(request.POST)
+        form = forms.DeckImportForm(request.POST, request.FILES)
         if form.is_valid():
-            return redirect('index')
+            result = services.handle_uploaded_deck(collection_id, form.cleaned_data['deck_title'], request.FILES['file'])
+            if result['success']:
+                return redirect('deckIndex', result['deck_id'])
     else:
         form = forms.DeckImportForm()
 
@@ -152,23 +151,12 @@ def download_template(request, collection_id=None):
     a deck of cards.
     '''
     collection = Collection.objects.get(id=collection_id)
-    card_template_fields = collection.card_template.fields.all().order_by('sort_order')
 
     response = HttpResponse(content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename=flashcards_template.xls'
 
-    output = StringIO.StringIO()
-    workbook = xlwt.Workbook(encoding='utf8')
-    worksheet = workbook.add_sheet('sheet1')
-
-    row = 0
-    for idx, field in enumerate(card_template_fields):
-        col = idx
-        worksheet.write(row, col, label=field.label)
-
-    workbook.save(output)
-    response.write(output.getvalue())
-    output.close()
+    file_output = utils.create_deck_template_file(collection.card_template)
+    response.write(file_output)
 
     return response
 

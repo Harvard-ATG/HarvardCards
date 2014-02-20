@@ -26,7 +26,7 @@ def getCollection(collection_id):
 def getFieldList(collection_id):
     """get the fields associated with the collection"""
     collection = Collection.objects.get(id=collection_id)
-    fields = collection.field_set.all().order_by('sort_order')
+    fields = collection.card_template.fields.all().order_by('sort_order')
     field_list = []
     for field in fields:
         f = {}

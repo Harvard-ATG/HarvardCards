@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block main_content %}
-<form action="/contact/" method="post" {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>{% csrf_token %}
+<form action="{% url 'collectionUploadDeck' collection.id %}" method="post" {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>{% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Submit" />
 </form>
