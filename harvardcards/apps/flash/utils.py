@@ -10,13 +10,12 @@ import StringIO
 # For excel reading/writing
 import xlrd, xlwt
 
-def parse_deck_template_file(card_template, uploaded_file):
+def parse_deck_template_file(card_template, file_contents):
     """Parses a spreadsheet into a list of cards."""
 
     fields = card_template.fields.all().order_by('sort_order')
     nfields = len(fields)
 
-    file_contents = uploaded_file.read()
     workbook = xlrd.open_workbook(file_contents=file_contents)
     sheet = workbook.sheet_by_index(0)
 

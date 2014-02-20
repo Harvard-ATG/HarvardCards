@@ -20,7 +20,8 @@ def handle_uploaded_deck(collection_id, deck_title, uploaded_file):
     collection_n = collection.card_set.count()
     deck_n = 0
 
-    parsed_cards = utils.parse_deck_template_file(collection.card_template, uploaded_file)
+    file_contents = uploaded_file.read()
+    parsed_cards = utils.parse_deck_template_file(collection.card_template, file_contents)
 
     deck = Deck(title=deck_title, collection=collection)
     deck.save()
