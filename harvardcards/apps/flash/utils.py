@@ -21,7 +21,7 @@ def parse_deck_template_file(card_template, file_contents):
 
     cards = []
     for row_index in range(sheet.nrows):
-        if row_index == 1:
+        if row_index == 0:
             continue # Skip header row
         card = []
         for col_index in range(nfields):
