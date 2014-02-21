@@ -113,7 +113,13 @@
                 </form>
             </div>
         </div-->
-        <div id="cardForm" class="editCardMode">
+        <form id="cardForm" class="editCardMode" method="POST" action="/card/create/">
+            {% csrf_token %}
+            <input id="deck_id" name="deck_id" type="hidden" />
+            <input id="collection_id" name="collection_id" type="hidden" value="{{collection.id}}" />
+            <input id="max_card_id" name="max_card_id" type="hidden" value="{{cards|length}}" />
+            <input id="num_fields" name="num_fields" type="hidden" />
+            <input id="quiz_mode" name="quiz_mode" type="hidden" value="{{is_quiz_mode}}" />
             <div class="editFields">
                 <h2>Card front</h2>
                 <i class="fa fa-font fa-2x pull-left"></i>
@@ -146,9 +152,9 @@
                     <input id="audio" class="formEle form" type="text" placeholder="Click to chose an audio file">
                 </fieldset>
             </div>
-            <button class="adminMenuBtn saveBtn" type="button">Save</button>
+            <button class="adminMenuBtn saveBtn" type="button" id="card_create">Save</button>
             <button class="adminMenuBtn cancelBtn" type="button" id="card_cancel">Cancel</button>
-        </div>
+        </form>
 
 
         <div id="singleCardHolder" style="{%if cards|length == 0%} border:none; background: inherit;{%endif%}"><!-- singleCardHolder (start)-->
@@ -199,7 +205,6 @@
 
 <script type="text/javascript">
 require(['jquery', 'lib', 'appendAround', 'jqueryui'], function($, lib) {
-counter = 0;
 
 // http://www.quirksmode.org/dom/domform.html
 
@@ -272,9 +277,7 @@ function extractDeckId(){
 
 $('#card_create').click(function(){
         $("#deck_id").val(extractDeckId());
-        $("#num_fields").val(counter);
-        if(counter!=0)
-            $('#addcardform').submit();
+        $('#cardForm').submit();
         return false;
 });
 
@@ -447,7 +450,7 @@ $('#full_screen').click(function() {
         $("#full_screen").text(txt2);
     }
     else{
-        $("#wrapper").children().not("#singleCardHolder").show();
+        $("#wrapper").children().not("#cardForm").show();
         $("#navigation").show();
         $("#appTitle").show();
         $("#singleCardHolder").css('margin-left','0');
@@ -458,6 +461,11 @@ $('#full_screen').click(function() {
 
 
 $('#shuffle_cards').click(function() {
+    var cards  = $('#cards');
+    var child = cards.children();
+    while (child.length) {
+        cards.append(child.splice(Math.floor(Math.random() *  child.length), 1));
+    }
     return false;
 });
 
@@ -467,8 +475,8 @@ $('#play_cards').click(function(){
     var txt2 = 'Pause';
     if ($("#play_cards").text() == txt1){
         myintrval = setInterval(function(){
-            if (current >= sliderLength)
-                clearInterval(myintrval);
+            if (current >= sliderLength-1)
+                $('#play_cards').click();
             $('#next_card').click();
         }, 5000);
         $("#play_cards").text(txt2);
