@@ -211,6 +211,9 @@ $(document).ready(function(){
     });
 
 
+
+
+
 });
 
 $('#addCard').click(function(){
@@ -407,6 +410,30 @@ $('#full_screen').click(function() {
         $("#appTitle").show();
         $("#singleCardHolder").css('margin-left','0');
         $("#full_screen").text(txt1);
+    }
+    return false;
+});
+
+
+$('#shuffle_cards').click(function() {
+    return false;
+});
+
+
+$('#play_cards').click(function(){
+    var txt1 = 'Play';
+    var txt2 = 'Pause';
+    if ($("#play_cards").text() == txt1){
+        myintrval = setInterval(function(){
+            if (current >= sliderLength)
+                clearInterval(myintrval);
+            $('#next_card').click();
+        }, 5000);
+        $("#play_cards").text(txt2);
+    }
+    else{
+        clearInterval(myintrval);
+        $("#play_cards").text(txt1);
     }
     return false;
 });

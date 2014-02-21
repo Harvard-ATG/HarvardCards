@@ -130,7 +130,7 @@ require(['views/CollectionList'], function(CollectionList){
 require(['jquery', 'lib'], function($, lib) {
 
     $('#temp1').click(function(){
-        setInterval(function() {
+        setTimeout(function() {
             var gh = $("#courseTitle");
             $("#course_title").val(gh.text());
             $('#collectionform').submit();
