@@ -14,29 +14,33 @@ def delete_collection(collection_id):
         return True
     return False
     
-@transaction.commit_on_success
-def handle_uploaded_deck(collection_id, deck_title, uploaded_file):
-    """Handles an uploaded deck by parsing the rows as cards and the columns as fields."""
-
+def handle_uploaded_deck_file(collection_id, deck_title, uploaded_file):
+    """Handles an uploaded deck."""
     collection = Collection.objects.get(id=collection_id)
-    collection_n = collection.card_set.count()
-    deck_n = 0
-
     file_contents = uploaded_file.read()
     parsed_cards = utils.parse_deck_template_file(collection.card_template, file_contents)
+    deck = create_deck_with_cards(collection_id, deck_title, parsed_cards)
 
-    deck = Deck(title=deck_title, collection=collection)
-    deck.save()
+    return deck
 
-    for parsed_card in parsed_cards:
-        collection_n = collection_n + 1
-        deck_n = deck_n + 1
-        card = Card(collection=collection, sort_order=collection_n)
-        card.save()
-        for field in parsed_card:
-            card_fields = Cards_Fields(card=card, field=field['field'], value=field['value'])
-            card_fields.save()
-        deck_cards = Decks_Cards(deck=deck, card=card, sort_order=deck_n)
-        deck_cards.save()
+@transaction.commit_on_success
+def add_cards_to_deck(deck, card_list):
+    """Adds a list of cards with fields to a deck."""
+    card_sort_order = deck.collection.card_set.count()
+    deck_sort_order = deck.cards.count()
+    for card_item in card_list:
+        card_sort_order = card_sort_order + 1
+        deck_sort_order = deck_sort_order + 1
+        card = Card.objects.create(collection=deck.collection, sort_order=card_sort_order)
+        Decks_Cards.objects.create(deck=deck, card=card, sort_order=deck_sort_order)
+        for field in card_item:
+            Cards_Fields.objects.create(card=card, field=field['field'], value=field['value'])
+    return deck
 
-    return {"success":True, "deck_id":deck.id}
+@transaction.commit_on_success
+def create_deck_with_cards(collection_id, deck_title, card_list):
+    """Creates and populates a new deck with cards."""
+    collection = Collection.objects.get(id=collection_id)
+    deck = Deck.objects.create(title=deck_title, collection=collection)
+    add_cards_to_deck(deck, card_list)
+    return deck

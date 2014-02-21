@@ -27,19 +27,16 @@ def getFieldList(collection_id):
     """get the fields associated with the collection"""
     collection = Collection.objects.get(id=collection_id)
     fields = collection.card_template.fields.all().order_by('sort_order')
-    field_list = []
-    for field in fields:
-        f = {}
-        f['label'] = field.label
-        f['id'] = field.id
-        f['field_type'] = field.field_type
-        f['sort_order'] = field.sort_order
-        f['display'] = field.display
-        field_list.append(f)
-    return field_list
+    return [{
+        'id': field.id,
+        'label': field.label,
+        'show_label': field.show_label,
+        'field_type': field.field_type,
+        'sort_order': field.sort_order,
+        'display': field.display,
+    } for field in fields]
 
 def getDeckCardsList(deck_id):
-
     deck = Deck.objects.get(id=deck_id)
     deck_cards = Decks_Cards.objects.filter(deck=deck).order_by('sort_order').prefetch_related('card__cards_fields_set__field')
 

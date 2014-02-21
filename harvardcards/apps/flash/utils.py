@@ -13,7 +13,6 @@ import xlrd, xlwt
 
 def parse_deck_template_file(card_template, file_contents):
     """Parses a spreadsheet into a list of cards."""
-
     fields = card_template.fields.all().order_by('sort_order')
     nfields = len(fields)
 
@@ -35,7 +34,7 @@ def parse_deck_template_file(card_template, file_contents):
     return cards
 
 def create_deck_template_file(card_template):
-    """Creates a spreadsheet template for uploading a deck of cards."""
+    """Creates a spreadsheet template for populating a deck of cards."""
     card_template_fields = card_template.fields.all().order_by('sort_order')
 
     output = StringIO.StringIO()
@@ -53,8 +52,7 @@ def create_deck_template_file(card_template):
     return file_output
 
 def create_deck_file(deck_id):
-    """Creates a spreadsheet template for uploading a deck of cards."""
-
+    """Creates a spreadsheet containing a deck of cards."""
     deck = Deck.objects.get(id=deck_id)
 
     output = StringIO.StringIO()
