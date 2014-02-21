@@ -12,24 +12,23 @@
 
 <div id="content"><!-- content (start) -->
 
-    <div class="courseWrapper"><!-- courseWrapper (start) -->
+    <div class="courseWrapper" id = "wrapper"><!-- courseWrapper (start) -->
 
         <div class="courseHeader"><!-- courseHeader (start) -->
 
             <h2 class="courseTitle">{{collection.title}}</h2><h3>{{deck.title}}</h3>
-            {% if collection.id in user_collection_role.ADMIN %}
             <ul class="adminMenu adminMenuRight">
+                {% if collection.id in user_collection_role.ADMIN %}
                 <li><a href="#">Edit</a></li>
                 <li><a href="#">Delete</a></li>
+                {% endif %}
                 <li>
                 {% if is_quiz_mode %}
                 <a href="{% url 'deckIndex' deck.id %}" id="reviewM">Review Mode</a>
                 {% else %}
                 <a href="{% url 'deckIndex' deck.id %}?mode=quiz" id="quizM">Quiz Mode</a>
                 {% endif %}
-                </div>
             </ul>
-            {% endif %}
 
         </div><!-- courseHeader (end) -->
 		{% if user.is_authenticated %}
@@ -114,24 +113,17 @@
         <div id="singleCardHolder" style="{%if cards|length == 0%} border:none; background: inherit;{%endif%}"><!-- singleCardHolder (start)-->
 
             <!--div id="slider"></div-->
-            <!--div class = "controls" id="controlbar">
-              <div style='float: left;' id ='first'>
-                <a id="first_card" href="#">First</a>
+            <div class = "controls" id="controlbar">
+              <div style='float: right;' id="shuffle">
+                <a id="shuffle_cards" href="#">Shuffle</a>
               </div>
-              <div style='float: left;' id="previous">
-                <a id="previous_card" href="#">Previous</a>
+              <div style='float: right;' id="play">
+                <a id="play_cards" href="#">Play</a>
               </div>
-              <div style ='float:left;' id="cardIndex">
-                <div style="text-align:center;" id="cardLoc"></div>
+              <div style='float: right;' id="full">
+                <a id="full_screen" href="#">Full Screen</a>
               </div>
-              <div style='float: right;' id="last">
-                <a id="last_card" href="#">Last</a>
-              </div>
-              <div style='float: right;' id="next">
-                <a id="next_card" href="#">Next</a>
-              </div>
-
-            </div-->
+            </div>
             <div id="cardOverflow"><!-- cardOverflow (start) -->
                 <ul id="allCards">
                     {% for card in cards %}
@@ -167,8 +159,7 @@
 require(['jquery', 'lib', 'appendAround', 'jqueryui'], function($, lib) {
 counter = 0;
 
-
-
+// http://www.quirksmode.org/dom/domform.html
 
 function moreFields() {
 	counter++;
@@ -250,7 +241,7 @@ $('#card_cancel').click(function(){
     return false;
 });
 
-
+// stackoverflow
 function parseURLParams(url) {
     var queryStart = url.indexOf("?") + 1,
         queryEnd   = url.indexOf("#") + 1 || url.length + 1,
@@ -399,6 +390,26 @@ $('.reveal').click(function() {
 
 <script type="text/javascript">
 require(['jquery', 'jquery.mousewheel'], function($) {
+
+$('#full_screen').click(function() {
+    var txt1 = 'Full Screen';
+    var txt2 = 'Exit Full Screen';
+    if ($("#full_screen").text() == txt1){
+        $("#wrapper").children().not("#singleCardHolder").hide();
+        $("#navigation").hide();
+        $("#appTitle").hide();
+        $("#singleCardHolder").css('margin-left','8.5%');
+        $("#full_screen").text(txt2);
+    }
+    else{
+        $("#wrapper").children().not("#singleCardHolder").show();
+        $("#navigation").show();
+        $("#appTitle").show();
+        $("#singleCardHolder").css('margin-left','0');
+        $("#full_screen").text(txt1);
+    }
+    return false;
+});
 
 $('#previous_card').click(function() {
     if (current != 0){current = current - 1}
