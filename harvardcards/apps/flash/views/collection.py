@@ -127,6 +127,7 @@ def upload_deck(request, collection_id=None):
     '''
     Uploads a deck of cards from an excel spreadsheet.
     '''
+    collections = Collection.objects.all().prefetch_related('deck_set')
     collection = Collection.objects.get(id=collection_id)
 
     if request.method == 'POST':
@@ -139,7 +140,8 @@ def upload_deck(request, collection_id=None):
 
     context = {
         "form": form, 
-        "collection": collection 
+        "collection": collection,
+        "collections": collections
     }
 
     return render(request, 'collections/upload_deck.html', context)
@@ -158,4 +160,3 @@ def download_template(request, collection_id=None):
     response.write(file_output)
 
     return response
-
