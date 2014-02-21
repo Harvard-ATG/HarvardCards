@@ -8,7 +8,7 @@ from django.utils import simplejson as json
 from django.forms.formsets import formset_factory
 from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
-from harvardcards.apps.flash import services, queries
+from harvardcards.apps.flash import forms, services, queries, utils
 
 def index(request, collection_id=None):
     """main landing page"""
@@ -129,3 +129,41 @@ def create(request, collection_id=None):
             
     else:
         return render(request, 'collections/create.html')
+
+def upload_deck(request, collection_id=None):
+    '''
+    Uploads a deck of cards from an excel spreadsheet.
+    '''
+    collections = Collection.objects.all().prefetch_related('deck_set')
+    collection = Collection.objects.get(id=collection_id)
+
+    if request.method == 'POST':
+        form = forms.DeckImportForm(request.POST, request.FILES)
+        if form.is_valid():
+            deck = services.handle_uploaded_deck_file(collection_id, form.cleaned_data['deck_title'], request.FILES['file'])
+            return redirect('deckIndex', deck.id)
+    else:
+        form = forms.DeckImportForm()
+
+    context = {
+        "form": form, 
+        "collection": collection,
+        "collections": collections
+    }
+
+    return render(request, 'collections/upload_deck.html', context)
+
+def download_template(request, collection_id=None):
+    '''
+    Downloads an excel spreadsheet that may be used as a template for uploading
+    a deck of cards.
+    '''
+    collection = Collection.objects.get(id=collection_id)
+
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=flashcards_template.xls'
+
+    file_output = utils.create_deck_template_file(collection.card_template)
+    response.write(file_output)
+
+    return response

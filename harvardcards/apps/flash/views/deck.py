@@ -8,6 +8,7 @@ from django.utils import simplejson as json
 from django.forms.formsets import formset_factory
 from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Users_Collections
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
+from harvardcards.apps.flash import queries, utils
 
 def test1(request):
     return render(request, "decks/test1.html")
@@ -98,3 +99,15 @@ def delete(request):
     
     return HttpResponse('{"success": %s}' % returnValue, mimetype="application/json")
   
+def download_deck(request, deck_id=None):
+    '''
+    Downloads an excel spreadsheet of a deck of cards.
+    '''
+
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=flashcards.xls'
+
+    file_output = utils.create_deck_file(deck_id) 
+    response.write(file_output)
+
+    return response

@@ -1,0 +1,20 @@
+{% extends "__layout_left_sidebar.html" %}
+
+{% block sidebar_content %}
+	{% include "_current_collection_nav.html" with collection=collection collections=collections %}
+{% endblock %}
+
+{% block main_content %}
+<div id="content"><!-- content (start) -->
+    <div class="courseWrapper">
+        <div class="courseHeader">
+            <h2>Upload Deck</h2>
+        </div>
+        <form action="{% url 'collectionUploadDeck' collection.id %}" method="post" {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>{% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit" />
+        </form>
+</div>
+</div>
+{% endblock %}
+
