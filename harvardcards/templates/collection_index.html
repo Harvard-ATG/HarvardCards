@@ -72,16 +72,13 @@
                 {% if forloop.counter < 5 %}
 				<li class="deck"><!-- deck (start) -->
 					<h2>{{ deck.title }}</h2>
-					<p><h3>{{ deck.num_cards }}</h3> Cards</p>
-					<!--
-					<p>Last modified</p>
-					<p class="lastUpdated">Now</p>
-					-->
-					<a href="#" class="arrow arrowExpand"><img src="{{ STATIC_URL }}img/arrowUp.png"></a>
+					<h3>{{ deck.num_cards }}</h3> <p>Cards</p>
+					
+					<!--a href="#" class="arrow arrowExpand"><img src="{{ STATIC_URL }}img/arrowUp.png"></a-->
 					<ul class="deckMenu">
-						<li class="arrowContainer"><a href="#" class="arrow arrowCollapse"><img src="{{ STATIC_URL }}img/arrowDown.png"></a></li>
-						<li><a class="viewReview" href="{% url 'deckIndex' deck.id %}">Review</a></li>
-						<li><a class="viewReview" href="{% url 'deckIndex' deck.id %}?mode=quiz">Quiz</a></li>
+						<!--li class="arrowContainer"><a href="#" class="arrow arrowCollapse"><img src="{{ STATIC_URL }}img/arrowDown.png"></a></li-->
+						<li><a class="viewReview" href="{% url 'deckIndex' deck.id %}"><i class="fa fa-angle-right"></i>Review</a></li>
+						<li><a class="viewReview" href="{% url 'deckIndex' deck.id %}?mode=quiz"><i class="fa fa-angle-right"></i>Quiz</a></li>
 
 						{% if collection.id in user_collection_role.ADMIN %}
 						<li><a class="adminMenuBtn" href="#">Edit</a></li>
@@ -280,7 +277,7 @@ require(['jquery', 'lib'], function($, lib) {
 					TOUCH EVENTS FOR DASHBAORD (END)
 *************************************************************************/
 	
-	$(document).on('ready', ArrowToggle('a.arrow', '.deck'));
+	//$(document).on('ready', ArrowToggle('a.arrow', '.deck'));
 
 	window.sliders = sliders;
 });
