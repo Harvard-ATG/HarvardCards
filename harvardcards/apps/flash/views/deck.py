@@ -78,7 +78,9 @@ def create(request, deck_id=None):
                 deck.id = deck_id
             deck.save()
             if deck:
-                return HttpResponse('{"success": true, "id": %s}' % deck.id, mimetype="application/json")
+                #return HttpResponse('{"success": true, "id": %s}' % deck.id, mimetype="application/json")
+                object = Deck.objects.get(id = deck.id)
+                return redirect(object)
             else:
                 errorMsg = 'Failure to save.'
         else:
