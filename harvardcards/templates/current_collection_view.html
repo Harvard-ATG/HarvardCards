@@ -86,34 +86,36 @@ function extractCollectionId(){
 };
 
 
-$('#deck_submit').bind('click', function(){
-        setTimeout(function() {
-        $("#collection_id").val(extractCollectionId());
 
-        var gh = $("#deckTitle");
-        $("#deck_title").val(gh.text());
-        $('#deckform').submit();
-        return false;
-    }, 1000);
-    });
 
-$('#addDeck').click(function(){
-    $('#addDeckForm').css("display","block");
-    return false;
+$(document).ready(function(){
+        var collectionList = new CollectionList({
+                $add_collection_button: $('#addAcourse'),
+                $collection_cancel: $('#collection_cancel'),
+                $add_collection_content: $('.addCourseWrapper'),
+                $add_collection_title: $('.courseHeader h2'),
+        });
+
+        $('#deck_submit').bind('click', function(){
+            setTimeout(function() {
+            $("#collection_id").val(extractCollectionId());
+
+            var gh = $("#deckTitle");
+            $("#deck_title").val(gh.text());
+            $('#deckform').submit();
+            return false;
+        }, 1000);
+        });
+
+        $('#addDeck').click(function(){
+            $('#addDeckForm').css("display","block");
+            return false;
+        });
+        $('#deck_cancel').click(function(){
+            $('#addDeckForm').css("display","none");
+            return false;
+        });
 });
-$('#deck_cancel').click(function(){
-    $('#addDeckForm').css("display","none");
-    return false;
-});
-
-	$(document).ready(function(){
-			var collectionList = new CollectionList({
-					$add_collection_button: $('#addAcourse'),
-					$collection_cancel: $('#collection_cancel'),
-					$add_collection_content: $('.addCourseWrapper'),
-					$add_collection_title: $('.courseHeader h2'),
-			});
-	});
 });
 
 require(['jquery', 'lib'], function($, lib) {

@@ -42,6 +42,9 @@
             <a id="previous_card" href="#"><i class="fa fa-angle-left"></i><span>Prev</span></a>
             <a id="first_card" href="#"><i class="fa fa-angle-double-left"></i><span>First</span></a>
         </div>
+        <div class="emptySlider" id="initDeck">
+            <h3>Loading the deck...</h3>
+        </div>
         <div class="cardHolder" id="holder" style="display:none;">
 
             <ul id="cards">
@@ -70,14 +73,14 @@
 
 
 
-        <div id="cardform"><!-- singleCardHolder (start)-->
+        <!--div id="cardform">
             <div class="courseWrapper addCourseWrapper" id="addCardForm">
-                <div class="courseHeader"><!-- courseHeader (start) -->
+                <div class="courseHeader">
 					<h2>Create a New Card</h2>
                     <ul class="adminMenu adminMenuRight">
 							<li><a href="#" id="card_cancel">Cancel</a></li>
 					</ul>
-			    </div><!-- courseHeader (end) -->
+			    </div>
                 <div style="display:none;" id="readroot">
                     Label: <input type="text" name="Label">
                     Value: <input type="text" name="Value">
@@ -109,9 +112,47 @@
 					</ul>
                 </form>
             </div>
+        </div-->
+        <div id="cardForm" class="editCardMode">
+            <div class="editFields">
+                <h2>Card front</h2>
+                <i class="fa fa-font fa-2x pull-left"></i>
+                <fieldset>
+                    <label for="term">Term</label>
+                    <input id="term" class="formEle form" type="text" placeholder="Enter term">
+                </fieldset>
+                <i class="fa fa-align-left fa-2x pull-left"></i>
+                <fieldset>
+                    <label for="definition">Definition</label>
+                    <textarea id="definition" class="formEle" placeholder="Enter definition"></textarea>
+                </fieldset>
+                <i class="fa fa-film fa-2x pull-left"></i>
+                <fieldset>
+                    <label for="videoURL">Video</label>
+                    <input id="videoURL" class="formEle" type="text" placeholder="Video URL">
+                </fieldset>
+            </div>
+            <div class="hideRevealHr"></div>
+            <div class="editFields">
+                <h2>Card back</h2>
+                <i class="fa fa-picture-o fa-2x pull-left"></i>
+                <fieldset>
+                    <label for="image">Image</label>
+                    <input id="image" class="formEle form" type="text" placeholder="Click to chose an image">
+                </fieldset>
+                <i class="fa fa-microphone fa-2x pull-left"></i>
+                <fieldset>
+                    <label for="audio">Audio</label>
+                    <input id="audio" class="formEle form" type="text" placeholder="Click to chose an audio file">
+                </fieldset>
+            </div>
+            <button class="adminMenuBtn saveBtn" type="button">Save</button>
+            <button class="adminMenuBtn cancelBtn" type="button" id="card_cancel">Cancel</button>
         </div>
-        <div id="singleCardHolder" style="{%if cards|length == 0%} border:none; background: inherit;{%endif%}"><!-- singleCardHolder (start)-->
 
+
+        <div id="singleCardHolder" style="{%if cards|length == 0%} border:none; background: inherit;{%endif%}"><!-- singleCardHolder (start)-->
+            {% if cards|length %}
             <!--div id="slider"></div-->
             <div class = "controls" id="controlbar">
               <div style='float: right;' id="shuffle">
@@ -124,6 +165,7 @@
                 <a id="full_screen" href="#">Full Screen</a>
               </div>
             </div>
+            {% endif %}
             <div id="cardOverflow"><!-- cardOverflow (start) -->
                 <ul id="allCards">
                     {% for card in cards %}
@@ -187,7 +229,7 @@ function moreFields() {
 
 
 $(document).ready(function(){
-    moreFields();
+    //moreFields();
     $('#cards').children().each(
         function(){
             $(this).bind('click',function(){
@@ -217,8 +259,7 @@ $(document).ready(function(){
 });
 
 $('#addCard').click(function(){
-        $('#cardform').css("display","block");
-        $('#addCardForm').css("display","block");
+        $('#cardForm').css("display","block");
         return false;
     });
 function extractDeckId(){
@@ -239,8 +280,7 @@ $('#card_create').click(function(){
 
 
 $('#card_cancel').click(function(){
-    $('#cardform').css("display","none");
-    $('#addCardForm').css("display","none");
+    $('#cardForm').css("display","none");
     return false;
 });
 
@@ -306,6 +346,8 @@ $('.cardHolder').each(function() {
 
 sliders[0].goToCard(current);
 // fixes the reorganization of slider
+$("#initDeck").css("display","none");
+
 $("#holder").css("display","block");
 
 

@@ -96,8 +96,9 @@ h1, h2, h3, h4
 
 
 	/* fonts for deck view/review course headers only (end) */
-
-#singleCardHolder
+#cardForm
+, #cardForm h1
+, #singleCardHolder
 , #singleCardHolder h1
 , .emptySlider h3{
 	font-family: 'Vollkorn', Times, serif;
@@ -545,7 +546,7 @@ div.deckNav{
 		}*/
 
 /*full card (start) */
-#singleCardHolder{
+#singleCardHolder, #cardForm{
 	width: 94.5%;
 	display: inline-block;
 	background: #f3f3f1;
@@ -554,14 +555,8 @@ div.deckNav{
 	margin-top: 1em;
 	border: solid 1px #eae9e8;
 }
-#cardform{
-	width: 94.5%;
-	display: none;
-	background: #f3f3f1;
-	float: left;
-	padding: 2.5%;
-	margin-top: 1em;
-	border: solid 1px #eae9e8;
+#cardForm{
+	display:none;
 }
 #cardOverflow{
 	display: inline-block;
@@ -570,13 +565,15 @@ div.deckNav{
 }
 
 #singleCardHolder ul
-, #singleCardHolder ul li{
+, #singleCardHolder ul li
+, #cardForm ul
+, #cardForm ul li{
 	display: inline-block;
 	width: 100%;
 	float: left;
 }
 
-	.showRevealWrapper{
+	.showRevealWrapper, .editFields{
 		width: 98%;
 		display: inline-block;
 		background-color: #fff;
@@ -594,10 +591,12 @@ div.deckNav{
 		padding: 0.25em 0;
 	}
 
-	#singleCardHolder ul li.hide{
+	#singleCardHolder ul li.hide,
+	#cardForm ul li.hide{
 		display: none;
 	}
 
+	#singleCardHolder ul li.show,
 	#singleCardHolder ul li.show{
 		display: block;
 
