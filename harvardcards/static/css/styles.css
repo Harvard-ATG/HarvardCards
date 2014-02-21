@@ -332,15 +332,12 @@ a#addCard{
 			}
 
 			.viewReview{
-				padding: 0 0 0 0.25em;
-				display: inline-block;
-				-webkit-border-radius: 12px;
-				-moz-border-radius: 12px;
-				border-radius: 12px;
-				color: #f3f3f1;
-				font-family: 'League Gothic';
-				font-size: 1.75em;
-				text-decoration: none;
+                padding: 0 0 0 0.25em;
+                display: inline-block;
+                color: #4e84c4;
+                font-family: 'League Gothic';
+                font-size: 1.75em;
+                text-decoration: none;
 			}
 			a.viewReview:hover{
 				color: #a51c30;
