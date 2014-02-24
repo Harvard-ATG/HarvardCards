@@ -31,7 +31,7 @@ class CardTemplate(models.Model):
     fields = models.ManyToManyField(Field, through='CardTemplates_Fields')
 
     def __unicode__(self):
-        return "CardTemplate: " + str(self.id) + "; Title: " + str(self.title)
+        return self.title
 
 class Collection(models.Model):
     title = models.CharField(max_length=200)
@@ -48,6 +48,10 @@ class Collection(models.Model):
 
     def export(self):
         return repr(dict(title=self.title, description=self.description))
+
+    def get_absolute_url(self):
+        from django.core.urlresolvers import reverse
+        return reverse('collection_id', args=[str(self.id)])
 
 class Card(models.Model):
     collection = models.ForeignKey(Collection)
@@ -67,6 +71,10 @@ class Deck(models.Model):
 
     def export(self):
         return repr(dict(title=self.title, collection=self.collection.id, id=self.id))
+
+    def get_absolute_url(self):
+        from django.core.urlresolvers import reverse
+        return reverse('deckIndex', args=[str(self.id)])
 
 class Decks_Cards(models.Model):
     deck = models.ForeignKey(Deck)
@@ -121,7 +129,7 @@ class Users_Collections(models.Model):
     date_joined = models.DateField()
 
     def __unicode__(self):
-        return "User Collections: " + "user=" + str(self.user.pk) + "collection=" + str(self.collection.pk) + "role=" + str(self.role)
+        return "User: " + str(self.user.id) + " Collection: " + str(self.collection.title) + " Role: " + str(self.role)
 
     @classmethod
     def get_role_buckets(self, user, collections):

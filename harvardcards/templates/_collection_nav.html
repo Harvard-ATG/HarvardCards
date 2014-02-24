@@ -1,5 +1,5 @@
 <div id="navigation"><!-- navigaton (start) -->
-	<a href="#" id="addAcourse">Add a course</a>
+    <a href="{% url 'collectionCreate' %}" id="addAcourse">Add a course</a>
 	<nav class="desktopNav" data-set="mobileNav">
 		<ul class="appNav">
 		{% for collection in collections %}

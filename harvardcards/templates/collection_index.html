@@ -1,58 +1,12 @@
 {% extends "__layout_left_sidebar.html" %}
 
 {% block sidebar_content %}
-	{% include "_collection_nav.html" with collection=collection %}
+	{% include "_collection_nav.html" with collections=collections %}
 {% endblock %}
 
 {% block main_content %}
 
 <div id="content"><!-- content (start) -->
-	<div class="courseWrapper addCourseWrapper"><!-- courseWrapper (start) -->
-        <form action="/collection/create/" method="POST" id="collectionform">
-            {% csrf_token %}
-			<div class="courseHeader" id="addCourse"><!-- courseHeader (start) -->
-					<h2 id="courseTitle">Enter course name</h2>
-					<ul class="adminMenu adminMenuRight">
-							<li><a href="#" id="collection_cancel">Cancel</a></li>
-					</ul>
-			</div><!-- courseHeader (end) -->
-        <input id="course_title" name="title" type="hidden" />
-		<!-- slider (start) -->
-		 <div class="slider" data-slider-type="templates">
-				 <ul class="templateDecks"><!-- templateDecks(start) -->
-				 <li class="deck"><!-- deck (start) -->
-					 <a class="template" href="#" id="temp1">
-							 <h2>Template 1 Create</h2>
-					 </a>
-				 </li><!-- deck (end) -->
-				
-				 <li class="deck"><!-- deck (start) -->
-					 <a class="template" href="#">
-							 <h2>Template 2</h2>
-					 </a>
-				 </li><!-- deck (end) -->
-				
-				 <li class="deck"><!-- deck (start) -->
-					 <a class="template" href="#">
-							 <h2>Template 3</h2>
-					 </a>
-				 </li><!-- deck (end) -->
-				
-			 </ul><!-- templateDecks (end) -->
-		 </div>
-		 <!-- slider (end) -->
-		</form>
-		 <!-- sliderNav (start) -->
-		 <div class="sliderNav">
-			 <ul class="sliderNavNextPrev">
-				 <li class="sliderPrev"><a href="javascript:sliders.templates[0].goToPrev()">&laquo; Prev</a></li>
-				 <li class="sliderNext"><a href="javascript:sliders.templates[0].goToNext()">Next &raquo;</a></li>
-				 <!--li><a href="javascript:sliders[0].respond()">.respond()</a></li-->
-			 </ul>
-							 </div>
-		 <!-- sliderNav (end) -->
-	 </div><!-- courseWrapper (end) -->
-
 	{% for collection in collections %}
 	<div class="courseWrapper"><!-- courseWrapper (start) -->
 
@@ -65,7 +19,6 @@
             {% if collection.id in user_collection_role.ADMIN %}
 
 			<ul class="adminMenu adminMenuRight">
-                <li><a href="#">Share</a></li>
                 <li><a href="{% url 'collectionDelete' collection.id %}">Delete</a></li>
 			</ul>
 			{% endif %}
@@ -116,27 +69,7 @@
 
 {% block javascript %}
 <script type="text/javascript">
-require(['views/CollectionList'], function(CollectionList){                
-	$(document).ready(function(){
-		var collectionList = new CollectionList({
-			$add_collection_button: $('#addAcourse'),
-			$collection_cancel: $('#collection_cancel'),
-			$add_collection_content: $('.addCourseWrapper'),
-			$add_collection_title: $('#addCourse h2'),
-		});
-	});
-});
-
 require(['jquery', 'lib', 'Slider'], function($, lib, Slider) {
-
-    $('#temp1').click(function(){
-        setTimeout(function() {
-            var gh = $("#courseTitle");
-            $("#course_title").val(gh.text());
-            $('#collectionform').submit();
-            return false;
-        }, 1000);
-    });
 
 	var ArrowToggle = lib.ArrowToggle;
 	//var Slider = Slider;

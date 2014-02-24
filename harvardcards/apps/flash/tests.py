@@ -32,40 +32,22 @@ class CollectionTest(TestCase):
         #self.assertTemplateUsed(response, 'index.html')
 
     def test_collection_get(self):
-        url = reverse('createCollection')
+        url = reverse('collection_id')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        #TODO why is this failing?
-	    #This is failing because we don't have a separate template for add a course now
 
-        #self.assertTemplateUsed(response, 'collections/create.html')
+    def test_collection_create(self):
+        url = reverse('collectionCreate')
+        post_data = {'title':'foobar', 'card_template':'1'}
 
-    @unittest.skip("failing but not fixing yet because likely changing in another branch")
-    def test_collection_post(self):
-        # there should be no collections at the start
-        len_collection1 = len(Collection.objects.all())
-        #self.assertEqual(len_collection1, 0)
-
-        # url for create collection
-        url = reverse('createCollection')
-
-        # sample post data
-        post_data = {'field_data': '[{"field_type":"T","label":"","sort_order":0,"display":true},{"field_type":"I","label":"","sort_order":1,"display":true},{"field_type":"T","label":"","sort_order":2,"display":false}]', 'csrfmiddlewaretoken': '38vLxTwts8C4pUcFqoOgQAq3eXgAdpro', 'field_type1': 'text', 'description': 'lots of math', 'title': 'math 454'}
-
-        # response of posting the data at url
+        len_collections_before = len(Collection.objects.filter(title__exact=post_data['title']))
         response = self.client.post(url, post_data)
-        # should redirect to index
-        #self.assertEqual(response.status_code, 302)
-        #self.assertTemplateNotUsed(response,'index.html')
+        len_collections_after = len(Collection.objects.filter(title__exact=post_data['title']))
 
-        # number of collections should be 1 now
-        len_collection2 = len(Collection.objects.all())
-        #self.assertEqual(len_collection2, 1)
-        #self.assertEqual(len_collection2-len_collection1, 1)
+        self.assertEqual(len_collections_before + 1, len_collections_after)
 
     def test_collection_form(self):
-        post_data = {'field_data': '[{"field_type":"T","label":"","sort_order":0,"display":true},{"field_type":"I","label":"","sort_order":1,"display":true},{"field_type":"T","label":"","sort_order":2,"display":false}]', 'csrfmiddlewaretoken': '38vLxTwts8C4pUcFqoOgQAq3eXgAdpro', 'field_type1': 'text', 'description': 'lots of math', 'title': 'math 454'}
-        # testing the form
+        post_data = {'title':'foobar', 'card_template':'1'}
         form = CollectionForm(post_data)
         self.assertEqual(form.is_valid(), True)
         form1 = CollectionForm({})
