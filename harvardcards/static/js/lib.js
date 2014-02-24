@@ -41,7 +41,6 @@ var ArrowToggle = function(targetSelectorExpand, targetSelectorCollapse) {
 };
 
 var exports = {
-	Slider: Slider,
 	ArrowToggle: ArrowToggle
 };
 
