@@ -59,22 +59,6 @@ define(['jquery', 'lib'], function($, lib) {
 			this.currentIndex = index;
 		
 			this.cardCounter();
-			/*
-	        if (index == 0)
-	            this.ul.style.left = index + this.slideUnit;
-	        else if (index == this.li.length -1 || index == this.li.length -2)
-	        {
-	            fullWidth = (this.li.length-3)*(this.slideAmmount + this.border) - this.liMargin;
-	            addShift = fullWidth - this.liMargin - this.border/2 -  0.6*(this.slideAmmount -this.liMargin);
-	            this.ul.style.left = '-' + addShift+ this.slideUnit;
-	        }
-	        else
-	        {
-		        var shiftBy = (this.slideAmmount+this.border) *(index-2) + 0.68*(this.slideAmmount - this.liMargin + this.border);
-		    	this.ul.style.left = '-' + shiftBy + this.slideUnit;
-	        }
-			this.currentIndex = index;
-			*/
 		},
 	
 		goToPrev: function() {
@@ -86,22 +70,7 @@ define(['jquery', 'lib'], function($, lib) {
 			}
 		    this.goTo(this.currentIndex - 1);
 	    
-		    /*
-		    if (this.currentIndex == 2)
-			    this.goTo(this.currentIndex - 2)
-			else if (this.currentIndex == this.li.length-1)
-			    this.goTo(this.currentIndex - 2)
-	        else
-		    	this.goTo(this.currentIndex - 1)
-			*/
 		},
-		/*changeView: function(i) {
-	        if (i <= 1)
-	            this.goTo(0);
-	        else
-	            this.goTo(i);
-	            //console.log ('prev: ' + this.currentIndex);
-		},*/
 		goToNext: function() {
 			this.goTo(this.currentIndex + 1);
 		
@@ -215,20 +184,12 @@ define(['jquery', 'lib'], function($, lib) {
 			if ((twoCards || threeCards || fourCards || this.deckView) && !(this.fullCard)) //(mq.matches || this.deckView)
 			{
 				var respUnits = new RespondObj(sliderContext,liMargin,liToShow,this.totalLi,slideWindow, borderAmmount);
-				/*console.log('sliderContext = ' + sliderContext);
-				console.log('liMargin = ' + liMargin);
-				console.log('liToShow = ' + liToShow);
-				console.log('this.totalLi = ' + this.totalLi);
-				console.log('this.slideWindow = ' + this.slideWindow);
-				console.log('borderAmmount = ' + borderAmmount);
-				console.log('deckView = ' + this.deckView);*/
 			
 				rspLiWidth = respUnits.rspLiWidthAndUnit;
 				this.slideAmmount = respUnits.slideAmmount;
 				this.slideUnit = respUnits.slideUnit;
 				this.ul.style.width = respUnits.ulWidth;
 				this.clickCealing = respUnits.clickCealing;
-				//console.log('slideAmmount = ' + respUnits.slideAmmount);
 			
 				ipad = true;
 				this.goTo(this.currentIndex);//stay in current index when flipping screen
@@ -278,16 +239,6 @@ define(['jquery', 'lib'], function($, lib) {
 			}
 			//end for
 		
-			/*console.log('rspLiWidth: ' + rspLiWidth + 
-						' this.slideAmmount: ' + this.slideAmmount +
-						' liMargin: ' + liMargin + 
-						' this.slideUnit: ' + this.slideUnit + 
-						' this.ul.style.width: ' + this.ul.style.width + 
-						' rspLiWidth: ' + rspLiWidth + 
-						' this.clickCealing: ' + this.clickCealing + 
-						' rspLiWidth: ' + rspLiWidth);*/
-			//return;
-			//console.log(document.body.clientWidth + ' window.innerWidth: ' + window.innerWidth);
 		},
 		resetUL: function(){
 			$(this.ul).removeAttr('style');
