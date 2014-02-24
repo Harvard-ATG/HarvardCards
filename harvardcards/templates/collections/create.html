@@ -1,7 +1,7 @@
 {% extends "__layout_left_sidebar.html" %}
 
 {% block sidebar_content %}
-	{% include "_collection_nav.html" with collection=collection collections=collections %}
+	{% include "_collection_nav.html" with collections=collections %}
 {% endblock %}
 
 {% block main_content %}
@@ -11,7 +11,16 @@
             <h2>Add course</h2>
         </div>
         <form action="{% url 'collectionCreate' %}" method="post">{% csrf_token %}
-            {{ collection_form.as_p }}
+            <p>
+                {{ collection_form.title.errors }}
+                <label for="id_title">Title:</label>
+                {{ collection_form.title }}
+            </p>
+            <p>
+                {{ collection_form.card_template.errors }}
+                <label for="id_card_template">Template:</label>
+                {{ collection_form.card_template }}
+            </p>
             <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
             <a href="{% url 'index' %}" class="adminMenuBtn cancelBtn">Cancel</a>
         </form>

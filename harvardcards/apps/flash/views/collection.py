@@ -86,7 +86,7 @@ def upload_deck(request, collection_id=None):
         form = forms.DeckImportForm(request.POST, request.FILES)
         if form.is_valid():
             deck = services.handle_uploaded_deck_file(collection_id, form.cleaned_data['deck_title'], request.FILES['file'])
-            return redirect('deckIndex', deck.id)
+            return redirect(deck)
     else:
         form = forms.DeckImportForm()
 
