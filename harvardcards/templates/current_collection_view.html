@@ -75,27 +75,7 @@
 
 {% block javascript %}
 <script type="text/javascript">
-require(['views/CollectionList'], function(CollectionList){
-
-function extractCollectionId(){
-    var pathname = $(location).attr('href');
-    var res = String(pathname.match('[^/]+$'));
-    res = res.match('([0-9]+).*');
-    res = res.slice(1);
-    return res;
-};
-
-
-
-
 $(document).ready(function(){
-        var collectionList = new CollectionList({
-                $add_collection_button: $('#addAcourse'),
-                $collection_cancel: $('#collection_cancel'),
-                $add_collection_content: $('.addCourseWrapper'),
-                $add_collection_title: $('.courseHeader h2'),
-        });
-
         $('#deck_submit').bind('click', function(){
             setTimeout(function() {
             $("#collection_id").val(extractCollectionId());
