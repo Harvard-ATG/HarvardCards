@@ -1,0 +1,29 @@
+{% extends "__layout_left_sidebar.html" %}
+
+{% block sidebar_content %}
+	{% include "_current_collection_nav.html" with collection=collection collections=collections %}
+{% endblock %}
+
+{% block main_content %}
+<div id="content">
+    <div class="courseWrapper">
+        <div class="courseHeader">
+            <h2>Edit course</h2>
+        </div>
+        <form action="{% url 'collectionEdit' collection.id %}" method="post">{% csrf_token %}
+            <p>
+                {{ collection_form.title.errors }}
+                <label for="id_title">Title:</label>
+                {{ collection_form.title }}
+            </p>
+            <p>
+                {{ collection_form.card_template.errors }}
+                <label for="id_card_template">Template:</label>
+                {{ collection_form.card_template }}
+            </p>
+            <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
+            <a href="{% url 'index' %}" class="adminMenuBtn cancelBtn">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
