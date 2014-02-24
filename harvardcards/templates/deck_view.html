@@ -213,7 +213,7 @@
 
 
 <script type="text/javascript">
-require(['jquery', 'lib', 'appendAround', 'jqueryui'], function($, lib) {
+require(['jquery', 'lib', 'Slider', 'appendAround', 'jqueryui'], function($, lib, Slider) {
 
 // http://www.quirksmode.org/dom/domform.html
 
@@ -350,7 +350,7 @@ $( "#slider" ).slider({
 
 */
 var sliderObjExist = false;
-var Slider1 = lib.Slider;
+var Slider1 = Slider;
 $('.cardHolder').each(function() {
 	if ( $(this).text() != '' ){
 		//create Slider objects
@@ -393,7 +393,6 @@ $(window).on("resize", function () {
 	{
 		//console.log($('.sliderNav').css('display'));
 		sliders[0].respond();
-		fullCardSlider[0].respond();
 
 	}
 /* //RM
