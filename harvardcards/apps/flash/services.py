@@ -9,7 +9,8 @@ from harvardcards.apps.flash import utils
 
 def delete_collection(collection_id):
     """Deletes a collection and returns true on success, false otherwise."""
-    Collection.objects.filter(id=collection_id).delete()
+    collection = Collection.objects.get(id=collection_id)
+    collection.delete()
     if not Collection.objects.filter(id=collection_id):
         return True
     return False
