@@ -66,7 +66,7 @@
 
 			<ul class="adminMenu adminMenuRight">
                 <li><a href="#">Share</a></li>
-				<li><a href="#">Delete</a></li>
+                <li><a href="{% url 'collectionDelete' collection.id %}">Delete</a></li>
 			</ul>
 			{% endif %}
 		</div>
@@ -118,19 +118,19 @@
 <script type="text/javascript">
 require(['views/CollectionList'], function(CollectionList){                
 	$(document).ready(function(){
-			var collectionList = new CollectionList({
-					$add_collection_button: $('#addAcourse'),
-					$collection_cancel: $('#collection_cancel'),
-					$add_collection_content: $('.addCourseWrapper'),
-					$add_collection_title: $('#addCourse h2'),
-			});
+		var collectionList = new CollectionList({
+			$add_collection_button: $('#addAcourse'),
+			$collection_cancel: $('#collection_cancel'),
+			$add_collection_content: $('.addCourseWrapper'),
+			$add_collection_title: $('#addCourse h2'),
+		});
 	});
 });
 
-require(['jquery', 'lib'], function($, lib) {
+require(['jquery', 'lib', 'Slider'], function($, lib, Slider) {
 
 	var ArrowToggle = lib.ArrowToggle;
-	var Slider = lib.Slider;
+	//var Slider = Slider;
 	var sliders = {'decks':[],'templates':[]}; 
 	var sliderLength;
 

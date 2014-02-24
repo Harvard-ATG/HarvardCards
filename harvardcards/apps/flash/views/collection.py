@@ -75,6 +75,11 @@ def create(request):
 
     return render(request, 'collections/create.html', context)
 
+def delete(request, collection_id=None):
+    """Deletes a collection."""
+    services.delete_collection(collection_id)
+    return redirect('index')
+
 def upload_deck(request, collection_id=None):
     '''
     Uploads a deck of cards from an excel spreadsheet.
