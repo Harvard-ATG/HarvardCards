@@ -7,10 +7,11 @@ admin.autodiscover()
 urlpatterns = patterns('',
     #url(r'^$', 'harvardcards.apps.flash.views.site.splash', name='splash'),
     url(r'^$', 'harvardcards.apps.flash.views.collection.index', name='index'),
-    url(r'^collection/create/$', 'harvardcards.apps.flash.views.collection.create', name='collectionCreate'),
-    url(r'^collection/create/(?P<collection_id>\d+)$', 'harvardcards.apps.flash.views.collection.create', name='collectionCreate'),
+
     url(r'^collection/$', 'harvardcards.apps.flash.views.collection.index', name='collection_id'),
+    url(r'^collection/create/$', 'harvardcards.apps.flash.views.collection.create', name='collectionCreate'),
     url(r'^collection/(?P<collection_id>\d+)$', 'harvardcards.apps.flash.views.collection.index', name='collection_id'),
+    url(r'^collection/(?P<collection_id>\d+)/edit$', 'harvardcards.apps.flash.views.collection.edit', name='collectionEdit'),
     url(r'^collection/(?P<collection_id>\d+)/upload', 'harvardcards.apps.flash.views.collection.upload_deck', name='collectionUploadDeck'),
     url(r'^collection/(?P<collection_id>\d+)/download-template', 'harvardcards.apps.flash.views.collection.download_template', name='collectionDownloadTemplate'),
     url(r'^collection/(?P<collection_id>\d+)/delete', 'harvardcards.apps.flash.views.collection.delete', name='collectionDelete'),

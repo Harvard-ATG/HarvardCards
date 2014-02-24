@@ -75,6 +75,28 @@ def create(request):
 
     return render(request, 'collections/create.html', context)
 
+def edit(request, collection_id=None):
+    """Edits a collection."""
+    collections = Collection.objects.all()
+    collection = Collection.objects.get(id=collection_id)
+
+    if request.method == 'POST':
+        collection_form = CollectionForm(request.POST, instance=collection)
+        if collection_form.is_valid():
+            collection = collection_form.save()
+            return redirect(collection)
+    else:
+        collection_form = CollectionForm(instance=collection)
+        
+    context = {
+        "collection_form": collection_form, 
+        "collections": collections,
+        "collection": collection
+    }
+
+    return render(request, 'collections/edit.html', context)
+    
+
 def delete(request, collection_id=None):
     """Deletes a collection."""
     services.delete_collection(collection_id)
