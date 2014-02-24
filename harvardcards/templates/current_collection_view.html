@@ -17,7 +17,7 @@
 			</ul>
 			<ul class="adminMenu adminMenuRight">
                 <li><a href="#">Share</a></li>
-				<li><a href="#">Delete</a></li>
+                <li><a href="{% url 'collectionDelete' collection.id %}">Delete</a></li>
 			</ul>
 			{% endif %}
 		</div>
