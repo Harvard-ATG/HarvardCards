@@ -1,7 +1,7 @@
 {% extends "__layout_left_sidebar.html" %}
 
 {% block sidebar_content %}
-	{% include "_collection_nav.html" with collection=collection %}
+	{% include "_collection_nav.html" with collection=collection collections=collections %}
 {% endblock %}
 
 {% block main_content %}
@@ -128,15 +128,6 @@ require(['views/CollectionList'], function(CollectionList){
 });
 
 require(['jquery', 'lib'], function($, lib) {
-
-    $('#temp1').click(function(){
-        setTimeout(function() {
-            var gh = $("#courseTitle");
-            $("#course_title").val(gh.text());
-            $('#collectionform').submit();
-            return false;
-        }, 1000);
-    });
 
 	var ArrowToggle = lib.ArrowToggle;
 	var Slider = lib.Slider;

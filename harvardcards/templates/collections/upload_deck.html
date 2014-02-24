@@ -12,9 +12,10 @@
         </div>
         <form action="{% url 'collectionUploadDeck' collection.id %}" method="post" {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>{% csrf_token %}
             {{ form.as_p }}
-            <input type="submit" value="Submit" />
+            <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
+            <a href="{% url 'index' %}" class="adminMenuBtn cancelBtn">Cancel</a>
         </form>
-</div>
+    </div>
 </div>
 {% endblock %}
 

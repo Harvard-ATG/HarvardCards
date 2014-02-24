@@ -56,79 +56,24 @@ def index(request, collection_id=None):
     else:
         return render(request, 'collection_index.html', context)
     
-def create(request, collection_id=None):
-    """create a collection"""
-    # is it a post?
-    message = '';
+def create(request):
+    """Creates a collection."""
+    collections = Collection.objects.all()
+
     if request.method == 'POST':
-
-        #for key in request.POST:
-        #    value = request.POST[key]
-        #    message += "{0} => {1}<br>".format(key, value)
-        #return HttpResponse(message)
-        
-        if 'collection_id' in request.POST:
-            collection = Collection.objects.get(id=request.POST['collection_id'])
-            collectionForm = CollectionForm(request.POST, instance=collection)
-            
-        else:
-            collectionForm = CollectionForm(request.POST)
-
-        if collectionForm.is_valid():
-            collection = collectionForm.save()
-            #
-            # # create the formset from the base fieldform
-            # #FieldFormSet = formset_factory(FieldForm)
-            # # decode json
-            # data = json.loads(request.POST['field_data'])
-            # #return HttpResponse(repr(data))
-            #
-            # # is it an edit?
-            # # get all ids from data
-            # editList = []
-            # for d in data:
-            #     if 'id' in d:
-            #         editList.append(d['id']);
-            # if len(editList):
-            #     # then run through all ids in the db
-            #     # if they are not in edit list, delete them
-            #     existingFields = Field.objects.filter(collection=collection.id)
-            #     for ef in existingFields:
-            #         if ef.id not in editList:
-            #             ef.delete()
-            #
-            #
-            # # run through field_data
-            # for d in data:
-            #     if 'id' in d:
-            #         field = Field.objects.get(id=d['id'])
-            #         fieldForm = FieldForm(d, instance=field)
-            #     else:
-            #         fieldForm = FieldForm(d)
-            #
-            #     f = fieldForm.save(commit=False)
-            #     # this is how relationships have to be done -- forms cannot handle this
-            #     # so you have to do it directly at the model
-            #     f.collection = collection
-            #     f.save()
-                                
-            object = Collection.objects.get(id = collection.id)
-            return redirect(object)
-        else:
-            return render(index)
-    
-    # is it an edit?
-    elif collection_id:
-        collection = Collection.objects.get(id=collection_id)
-        fields = collection.field_set.all().order_by('sort_order')
-        if collection:
-            return render(request, 'collections/create.html', {"collection": collection, "fields": fields})
-        else:
-            raise ViewDoesNotExist("Course does not exist.")
-    
-            
+        collection_form = CollectionForm(request.POST)
+        if collection_form.is_valid():
+            collection = collection_form.save()
+            return redirect(collection)
     else:
-        return render(request, 'collections/create.html')
+        collection_form = CollectionForm()
+        
+    context = {
+        "collection_form": collection_form, 
+        "collections": collections
+    }
+
+    return render(request, 'collections/create.html', context)
 
 def upload_deck(request, collection_id=None):
     '''
