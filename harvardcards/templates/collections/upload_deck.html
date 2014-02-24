@@ -10,6 +10,11 @@
         <div class="courseHeader">
             <h2>Upload Deck</h2>
         </div>
+
+        <div style="margin: 0 0 1em 0">
+            <b>Instructions:</b> use the <a href="{% url 'collectionDownloadTemplate' collection.id %}">flashcard template</a>, an Excel spreadsheet, to create your deck and then upload it using the form.
+        </div>
+
         <form action="{% url 'collectionUploadDeck' collection.id %}" method="post" {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>{% csrf_token %}
             {{ form.as_p }}
             <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
