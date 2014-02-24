@@ -24,8 +24,10 @@ define(['jquery', 'lib'], function($, lib) {
 		
 			//set the li's
 			this.li = this.ul.children
-			//get the border width for the li's
-			this.liborder = getCSSprop($(this.li),'border-left-width');
+			// get the border width for the li's
+			// parseInt removes the px, toString makes sure it's a string
+			this.liborder = parseInt($(this.li).css('border-left-width')).toString();
+			
 		
 			this.currentIndex = 0;
 		
@@ -338,7 +340,6 @@ define(['jquery', 'lib'], function($, lib) {
 			return value;
 	}
 
-
-return Slider;
+	return Slider;
 
 });
