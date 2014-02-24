@@ -131,6 +131,7 @@ def create(request, collection_id=None):
         return render(request, 'collections/create.html')
 
 def delete(request, collection_id=None):
+    """Deletes a collection."""
     services.delete_collection(collection_id)
     return redirect('index')
 
