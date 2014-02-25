@@ -1,10 +1,43 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+class Field(models.Model):
+    label = models.CharField(max_length=200, blank=True)
+    FIELD_TYPES = (
+        ('T', 'Text'),
+        ('I', 'Image'),
+        ('A', 'Audio'),
+        ('V', 'Video')        
+    )
+    field_type = models.CharField(max_length=1, choices=FIELD_TYPES)
+    show_label = models.BooleanField()
+    display = models.BooleanField()
+    sort_order = models.IntegerField()
+
+    class Meta:
+        verbose_name = 'Field'
+        verbose_name_plural = 'Fields'
+        ordering = ["sort_order"]
+
+    def __unicode__(self):
+        return self.label
+
+    def export(self):
+        return repr(dict(label=self.label, field_type=self.field_type, display=self.display))
+
+class CardTemplate(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    fields = models.ManyToManyField(Field, through='CardTemplates_Fields')
+
+    def __unicode__(self):
+        return self.title
+
 class Collection(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     users = models.ManyToManyField(User, through='Users_Collections')
+    card_template = models.ForeignKey(CardTemplate)
 
     class Meta:
         verbose_name = 'Collection'
@@ -16,25 +49,9 @@ class Collection(models.Model):
     def export(self):
         return repr(dict(title=self.title, description=self.description))
 
-class Field(models.Model):
-    label = models.CharField(max_length=200, blank=True)
-    FIELD_TYPES = (
-        ('T', 'Text'),
-        ('I', 'Image'),
-        ('A', 'Audio'),
-        ('V', 'Video')        
-    )
-    field_type = models.CharField(max_length=1, choices=FIELD_TYPES)
-    show_label = models.BooleanField()
-    collection = models.ForeignKey(Collection)
-    display = models.BooleanField()
-    sort_order = models.IntegerField()
-
-    def __unicode__(self):
-        return self.label
-
-    def export(self):
-        return repr(dict(label=self.label, field_type=self.field_type, sort_order=self.sort_order, display=self.display))
+    def get_absolute_url(self):
+        from django.core.urlresolvers import reverse
+        return reverse('collectionIndex', args=[str(self.id)])
 
 class Card(models.Model):
     collection = models.ForeignKey(Collection)
@@ -43,6 +60,57 @@ class Card(models.Model):
 
     def __unicode__(self):
         return "Card: " + str(self.id) + "; Collection: " + str(self.collection.title)
+
+class Deck(models.Model):
+    title = models.CharField(max_length=200)
+    collection = models.ForeignKey(Collection)
+    cards = models.ManyToManyField(Card, through='Decks_Cards')
+
+    def __unicode__(self):
+        return self.title
+
+    def export(self):
+        return repr(dict(title=self.title, collection=self.collection.id, id=self.id))
+
+    def get_absolute_url(self):
+        from django.core.urlresolvers import reverse
+        return reverse('deckIndex', args=[str(self.id)])
+
+class Decks_Cards(models.Model):
+    deck = models.ForeignKey(Deck)
+    card = models.ForeignKey(Card)
+    sort_order = models.IntegerField()
+
+    class Meta:
+        verbose_name = 'Deck Cards'
+        verbose_name_plural = 'Deck Cards'
+        ordering = ["sort_order"]
+
+    def __unicode__(self):
+        return "Deck: " + str(self.deck.title) + "; Card: " + str(self.card.id)
+
+class Cards_Fields(models.Model):
+    card = models.ForeignKey(Card)
+    field = models.ForeignKey(Field)
+    value = models.CharField(max_length=500)
+
+    class Meta:
+        verbose_name = 'Card Fields'
+        verbose_name_plural = 'Card Fields'
+
+    def __unicode__(self):
+        return self.value
+
+class CardTemplates_Fields(models.Model):
+    card_template = models.ForeignKey(CardTemplate)
+    field = models.ForeignKey(Field)
+
+    class Meta:
+        verbose_name = 'Card Template Fields'
+        verbose_name_plural = 'Card Template Fields'
+
+    def __unicode__(self):
+        return "CardTemplate: " + str(self.card_template.id) + "; Field: " + str(self.field.id)
 
 #class User(models.Model):
 #    name = models.CharField(max_length=200)
@@ -61,7 +129,7 @@ class Users_Collections(models.Model):
     date_joined = models.DateField()
 
     def __unicode__(self):
-        return "User Collections: " + "user=" + str(self.user.pk) + "collection=" + str(self.collection.pk) + "role=" + str(self.role)
+        return "User: " + str(self.user.id) + " Collection: " + str(self.collection.title) + " Role: " + str(self.role)
 
     @classmethod
     def get_role_buckets(self, user, collections):
@@ -86,39 +154,3 @@ class Users_Collections(models.Model):
             role_buckets[role_map[role]].append(collection.id)
 
         return role_buckets
-
-class Deck(models.Model):
-    title = models.CharField(max_length=200)
-    collection = models.ForeignKey(Collection)
-    cards = models.ManyToManyField(Card, through='Decks_Cards')
-
-    def __unicode__(self):
-        return self.title
-
-    def export(self):
-        return repr(dict(title=self.title, collection=self.collection.id, id=self.id))
-
-class Decks_Cards(models.Model):
-    deck = models.ForeignKey(Deck)
-    card = models.ForeignKey(Card)
-    sort_order = models.IntegerField()
-
-    class Meta:
-        verbose_name = 'Deck Cards'
-        verbose_name_plural = 'Deck Cards'
-
-    def __unicode__(self):
-        return "Deck: " + str(self.deck.title) + "; Card: " + str(self.card.id)
-
-class Cards_Fields(models.Model):
-    value = models.CharField(max_length=500)
-    card = models.ForeignKey(Card)
-    field = models.ForeignKey(Field)
-    sort_order = models.IntegerField()
-
-    class Meta:
-        verbose_name = 'Card Fields'
-        verbose_name_plural = 'Card Fields'
-
-    def __unicode__(self):
-        return self.value

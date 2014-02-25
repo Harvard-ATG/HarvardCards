@@ -8,7 +8,7 @@ from django.utils import simplejson as json
 from django.forms.formsets import formset_factory
 from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
-from harvardcards.apps.flash import services, queries
+from harvardcards.apps.flash import forms, services, queries, utils
 
 def index(request, collection_id=None):
     """main landing page"""
@@ -20,17 +20,24 @@ def index(request, collection_id=None):
     collection_list = []
     for collection in collections:
         collection_decks = []
-        for deck in decks_by_collection[collection.id]:
-            collection_decks.append({
-                'id': deck.id,
-                'title': deck.title,
-                'num_cards': deck.cards.count()
+        if decks_by_collection.get(collection.id, 0):
+            for deck in decks_by_collection[collection.id]:
+                collection_decks.append({
+                    'id': deck.id,
+                    'title': deck.title,
+                    'num_cards': deck.cards.count()
+                })
+            collection_list.append({
+                'id': collection.id,
+                'title':collection.title,
+                'decks': collection_decks
             })
-        collection_list.append({
-            'id': collection.id,
-            'title':collection.title,
-            'decks': collection_decks
-        })
+        else:
+            collection_list.append({
+                'id': collection.id,
+                'title':collection.title,
+                'decks': []
+            })
 
     context = {
         "collections": collection_list,
@@ -49,75 +56,86 @@ def index(request, collection_id=None):
     else:
         return render(request, 'collection_index.html', context)
     
-def create(request, collection_id=None):
-    """create a collection"""
-    # is it a post?
-    message = '';
+def create(request):
+    """Creates a collection."""
+    collections = Collection.objects.all()
+
     if request.method == 'POST':
-
-        #for key in request.POST:
-        #    value = request.POST[key]
-        #    message += "{0} => {1}<br>".format(key, value)
-        #return HttpResponse(message)
-        
-        if 'collection_id' in request.POST:
-            collection = Collection.objects.get(id=request.POST['collection_id'])
-            collectionForm = CollectionForm(request.POST, instance=collection)
-            
-        else:
-            collectionForm = CollectionForm(request.POST)
-
-        if collectionForm.is_valid():
-            collection = collectionForm.save()
-
-            # create the formset from the base fieldform
-            #FieldFormSet = formset_factory(FieldForm)
-            # decode json
-            data = json.loads(request.POST['field_data'])            
-            #return HttpResponse(repr(data))
-
-            # is it an edit?
-            # get all ids from data
-            editList = []
-            for d in data:
-                if 'id' in d:
-                    editList.append(d['id']);
-            if len(editList):
-                # then run through all ids in the db
-                # if they are not in edit list, delete them
-                existingFields = Field.objects.filter(collection=collection.id)
-                for ef in existingFields:
-                    if ef.id not in editList:
-                        ef.delete()
-                
-
-            # run through field_data
-            for d in data:
-                if 'id' in d:
-                    field = Field.objects.get(id=d['id'])
-                    fieldForm = FieldForm(d, instance=field)
-                else:
-                    fieldForm = FieldForm(d)
-                
-                f = fieldForm.save(commit=False)
-                # this is how relationships have to be done -- forms cannot handle this
-                # so you have to do it directly at the model
-                f.collection = collection
-                f.save()
-
-            return redirect(index)
-        else:
-            return render(request, 'collections/create.html')
-    
-    # is it an edit?
-    elif collection_id:
-        collection = Collection.objects.get(id=collection_id)
-        fields = collection.field_set.all().order_by('sort_order')
-        if collection:
-            return render(request, 'collections/create.html', {"collection": collection, "fields": fields})
-        else:
-            raise ViewDoesNotExist("Course does not exist.")
-    
-            
+        collection_form = CollectionForm(request.POST)
+        if collection_form.is_valid():
+            collection = collection_form.save()
+            return redirect(collection)
     else:
-        return render(request, 'collections/create.html')
+        collection_form = CollectionForm()
+        
+    context = {
+        "collection_form": collection_form, 
+        "collections": collections
+    }
+
+    return render(request, 'collections/create.html', context)
+
+def edit(request, collection_id=None):
+    """Edits a collection."""
+    collections = Collection.objects.all()
+    collection = Collection.objects.get(id=collection_id)
+
+    if request.method == 'POST':
+        collection_form = CollectionForm(request.POST, instance=collection)
+        if collection_form.is_valid():
+            collection = collection_form.save()
+            return redirect(collection)
+    else:
+        collection_form = CollectionForm(instance=collection)
+        
+    context = {
+        "collection_form": collection_form, 
+        "collections": collections,
+        "collection": collection
+    }
+
+    return render(request, 'collections/edit.html', context)
+    
+
+def delete(request, collection_id=None):
+    """Deletes a collection."""
+    services.delete_collection(collection_id)
+    return redirect('index')
+
+def upload_deck(request, collection_id=None):
+    '''
+    Uploads a deck of cards from an excel spreadsheet.
+    '''
+    collections = Collection.objects.all().prefetch_related('deck_set')
+    collection = Collection.objects.get(id=collection_id)
+
+    if request.method == 'POST':
+        form = forms.DeckImportForm(request.POST, request.FILES)
+        if form.is_valid():
+            deck = services.handle_uploaded_deck_file(collection_id, form.cleaned_data['deck_title'], request.FILES['file'])
+            return redirect(deck)
+    else:
+        form = forms.DeckImportForm()
+
+    context = {
+        "form": form, 
+        "collection": collection,
+        "collections": collections
+    }
+
+    return render(request, 'collections/upload_deck.html', context)
+
+def download_template(request, collection_id=None):
+    '''
+    Downloads an excel spreadsheet that may be used as a template for uploading
+    a deck of cards.
+    '''
+    collection = Collection.objects.get(id=collection_id)
+
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=flashcards_template.xls'
+
+    file_output = utils.create_deck_template_file(collection.card_template)
+    response.write(file_output)
+
+    return response

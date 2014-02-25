@@ -6,16 +6,18 @@
                     {% for c in collections %}
                         <li>
                             {% if c == collection %}
-                                <a href="{% url 'collection_id' c.id %}" class = "active">{{ c.title|truncatechars:30 }}</a>
+                                <a href="{% url 'collectionIndex' c.id %}" class = "active">{{ c.title|truncatechars:30 }}</a>
                             {% else %}
-                                <a href="{% url 'collection_id' c.id %}">{{ c.title|truncatechars:30 }}</a>
+                                <a href="{% url 'collectionIndex' c.id %}">{{ c.title|truncatechars:30 }}</a>
                             {% endif %}
-                            {% if c.decks|length > 0 %}
-                                <ul>
-                                        {% for deck in c.decks %}
-                                        <li><a href="{% url 'deckIndex' deck.id %}">{{ deck.title|truncatechars:30}}</a></li>
-                                        {% endfor %}
-                                </ul>
+                            {% if c == collection %}
+                                {% if c.decks|length > 0 %}
+                                    <ul>
+                                            {% for deck in c.decks %}
+                                            <li><a href="{% url 'deckIndex' deck.id %}">{{ deck.title|truncatechars:30}}</a></li>
+                                            {% endfor %}
+                                    </ul>
+                                {% endif %}
                             {% endif %}
                         </li>
                     {% endfor %}

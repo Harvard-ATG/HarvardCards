@@ -1,424 +1,66 @@
-{% extends "__base.html" %}
+{% extends "__layout_left_sidebar.html" %}
 
-{% block content %}
-<style>
-.row-fluid {
-	width: 100%;
-}
-section.well-dark {
-	background-color: #DDDDDD;
-	border-radius: 10px;
-	padding: 10px;
-	min-width: 400px;
-	margin: 10px;
-}
-.editable {
-	font-size: 35px;
-}
-.options {
-	padding: 8px;
-}
-.options li {
-	margin: 4px;
-}
-.mysortable {
-	border: dotted black 1px;
-}
-.hide-bar {
-	height: 25px;
-	width: 100%;
-	background-color: #000;
-}
-li.hidden {
-	background-color: #CCC;
-}
-</style>
-<form id="collection_form" method="POST">{% csrf_token %}
-<div class="row-fluid">
-	<section class="well-dark span8 offset2">
-		<div class="form-horizontal row-fluid" method="POST">
-			<div class="span6" style="height: 100%">
-				{% if True %}
-				<input type="text" name="title" value="{{ collection.title }}" placeholder="Course name"/>
-				{% else %}
-				<div type="text" id="inputTitle" name="title" style="font-size: 35px">Title</div>
-				{% endif %}
-			</div>
-			<div class="span6" style="height: 100%">
-				{% if True %}
-				<textarea name="description" placeholder="Description">{{ collection.description }}</textarea>
-				{% else %}
-				<div id="inputDescription" name="description">Description</div>
-				{% endif %}
-			</div>
+{% block sidebar_content %}
+	{% include "_collection_nav.html" with collections=collections %}
+{% endblock %}
 
-		</div>		
-	</section>
+{% block main_content %}
+<div id="content">
+    <div class="courseWrapper">
+        <div class="courseHeader">
+            <h2>Add course</h2>
+        </div>
+        <form action="{% url 'collectionCreate' %}" method="post">{% csrf_token %}
+            <p>
+                {{ collection_form.title.errors }}
+                <label for="id_title">Title:</label>
+                {{ collection_form.title }}
+            </p>
+            <p>
+                {{ collection_form.card_template.errors }}
+                <label for="id_card_template">Template:</label>
+                {{ collection_form.card_template }}
+            </p>
+            <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
+            <a href="{% url 'index' %}" class="adminMenuBtn cancelBtn">Cancel</a>
+        </form>
+    </div>
 </div>
-<div id="wizarddd" class="row-fluid">
-	<section class="well-dark span8 offset2">
-		<div class="row-fluid">
-			<div id="template1_btn" class="template-btn well span4">
-				Template 1
-			</div>
-			<div id="template2_btn" class="template-btn well span4">
-				Template 2
-			</div>
-			<div id="template3_btn" class="template-btn well span4">
-				Template 3
-			</div>
-		</div>
-	</section>
-</div>
-<script>
-$(document).ready(function(){
-	
-	$('#inputTitle').editable(function(value, settings){
-		return value;
-	}, { 
-		tooltip   : 'Click to edit...',
-		cssclass: 'editable',
-		style: 'inherit',
-		onblur: 'submit',
-		callback: function(value, settings){
-			// TODO save
-		}
-	});
-	$('#inputDescription').editable(function(value, settings){
-		return value.replace(/\n/gi, "<br/>");
-	}, {
-		type      : 'textarea',
-		rows: 10,
-		//cancel    : 'Cancel',
-		//submit    : 'OK',
-		tooltip   : 'Click to edit...',
-		onblur: 'submit'
-	});
-	
-	$('.template-btn').click(function(){
-		//var template_url = '/collection/wizarddd';
-		//$('#wizarddd').load(template_url);
-		// hide the options
-		$('#wizarddd').addClass('hide');
-		//show the selected..
-		if($(this).attr("id") == 'template1_btn'){
-			$('#template1').removeClass('hide');
-			$('#template1').addClass('active-template');
-		}
-		if($(this).attr("id") == 'template2_btn'){
-			$('#template2').removeClass('hide');
-			$('#template2').addClass('active-template');
-		}
-		if($(this).attr("id") == 'template3_btn'){
-			$('#template3').removeClass('hide');
-			$('#template3').addClass('active-template');
-		}
-		$('#save_zone').removeClass('hide');
-//		console.log(this);
-	});
-	
+{% endblock %}
 
-});
-</script>
-
-
-<div id="template1" class="well hide">
-	<ul class="inline options">
-		<li id="draggableText" class="draggable ui-state-highlight textDrag">Text</li>
-		<li id="draggableSound" class="draggable ui-state-highlight textDrag">Sound</li>
-		<li id="draggableImage" class="draggable ui-state-highlight imgDrag">Image</li>
-		<li id="draggableVideo" class="draggable ui-state-highlight textDrag">Video</li>
-	</ul>
-	<ul id="sortable" class="unstyled sortable">
-		<li class="mysortable collection-type-text">
-			<span class="mylabel">+label</span>
-			<input type="text"/>
-			<i class="icon-align-justify"></i>
-			<i class="icon-remove-sign remove-field"></i>
-			<input type="hidden" name="field_type1" value="text"/>
-		</li>
-		<li class="mysortable collection-type-img">
-			<div class="mylabel">+label</div>
-			<img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRd-pVDClrxvD-0hOaXVw2gDkHLy2Vi7rGulqTtNyg29_4shOoF"/>
-			<i class="icon-align-justify"></i>
-			<i class="icon-remove-sign remove-field"></i>
-		</li>
-		<li class="hide-bar"></i>
-		<li class="mysortable collection-type-text hidden">
-			<span class="mylabel"></span>
-			<input type="text"/>
-			<i class="icon-align-justify"></i>
-			<i class="icon-remove-sign remove-field"></i>
-		</li>
-	</ul>
-	
-</div>
-
-<div id="template2" class="well hide">
-	<ul class="inline options">
-		<li id="draggableText" class="draggable ui-state-highlight textDrag">Text</li>
-		<li id="draggableSound" class="draggable ui-state-highlight textDrag">Sound</li>
-		<li id="draggableImage" class="draggable ui-state-highlight imgDrag">Image</li>
-		<li id="draggableVideo" class="draggable ui-state-highlight textDrag">Video</li>
-	</ul>
-	<ul id="sortable" class="unstyled sortable">
-		<li class="mysortable collection-type-text">
-			<span class="mylabel">+label</span>
-			<input type="text"/>
-			<i class="icon-align-justify"></i>
-			<i class="icon-remove-sign"></i>
-		</li>
-		<li class="mysortable collection-type-img">
-			<div class="mylabel">+label</div>
-			<img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRd-pVDClrxvD-0hOaXVw2gDkHLy2Vi7rGulqTtNyg29_4shOoF"/>
-			<i class="icon-align-justify"></i>
-			<i class="icon-remove-sign"></i>
-		</li>
-		<li class="mysortable collection-type-text">
-			<span class="mylabel"></span>
-			<input type="text"/>
-			<i class="icon-align-justify"></i>
-			<i class="icon-remove-sign"></i>
-		</li>
-	</ul>
-	
-</div>
-
-<div id="template3" class="well hide">
-	<ul class="inline options">
-		<li id="draggableText" class="draggable ui-state-highlight textDrag">Text</li>
-		<li id="draggableSound" class="draggable ui-state-highlight textDrag">Sound</li>
-		<li id="draggableImage" class="draggable ui-state-highlight imgDrag">Image</li>
-		<li id="draggableVideo" class="draggable ui-state-highlight textDrag">Video</li>
-	</ul>
-	<ul id="sortable" class="unstyled sortable">
-		<li class="mysortable collection-type-text">
-			<span class="mylabel">+label</span>
-			<input type="text"/>
-			<i class="icon-align-justify"></i>
-			<i class="icon-remove-sign"></i>
-		</li>
-		<li class="mysortable collection-type-img">
-			<div class="mylabel">+label</div>
-			<img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRd-pVDClrxvD-0hOaXVw2gDkHLy2Vi7rGulqTtNyg29_4shOoF"/>
-			<i class="icon-align-justify"></i>
-			<i class="icon-remove-sign"></i>
-		</li>
-		<li class="mysortable collection-type-text">
-			<span class="mylabel"></span>
-			<input type="text"/>
-			<i class="icon-align-justify"></i>
-			<i class="icon-remove-sign"></i>
-		</li>
-	</ul>
-</div>
-
-<div id="edit-template" class="well hide">
-	<ul class="inline options">
-		<li id="draggableText" class="draggable ui-state-highlight textDrag">Text</li>
-		<li id="draggableSound" class="draggable ui-state-highlight textDrag">Sound</li>
-		<li id="draggableImage" class="draggable ui-state-highlight imgDrag">Image</li>
-		<li id="draggableVideo" class="draggable ui-state-highlight textDrag">Video</li>
-	</ul>
-	<ul id="sortable" class="unstyled sortable">
-
-	</ul>
-</div>
-{% if collection %}
-<input type="hidden" name="collection_id" value="{{ collection.id }}"/>
-{% endif %}
-
-<div id="save_zone" class="well hide">
-	<button id="save_btn" type="button" class='btn btn-success'>Save</button>
-	<button id="cancel_btn" type="button" class='btn'>Cancel</button>
-</div>
-
+{% block NOT_USED %}
+<!-- slider (start) -->
+ <div class="slider" data-slider-type="templates">
+         <ul class="templateDecks"><!-- templateDecks(start) -->
+         <li class="deck"><!-- deck (start) -->
+             <a class="template" href="#" id="temp1">
+                     <h2>Template 1 Create</h2>
+             </a>
+         </li><!-- deck (end) -->
+        
+         <li class="deck"><!-- deck (start) -->
+             <a class="template" href="#">
+                     <h2>Template 2</h2>
+             </a>
+         </li><!-- deck (end) -->
+        
+         <li class="deck"><!-- deck (start) -->
+             <a class="template" href="#">
+                     <h2>Template 3</h2>
+             </a>
+         </li><!-- deck (end) -->
+        
+     </ul><!-- templateDecks (end) -->
+ </div>
+ <!-- slider (end) -->
 </form>
-
-<script>
-var textItem = '<span class="mylabel">+label</span> '
-			+ '<input type="text"/> '
-			+ '<i class="icon-align-justify"></i> '
-			+ '<i class="icon-remove-sign remove-field"></i> ';
-var imgItem = '<div class="mylabel">+label</div> '
-			+'<img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRd-pVDClrxvD-0hOaXVw2gDkHLy2Vi7rGulqTtNyg29_4shOoF"/> '
-			+'<i class="icon-align-justify"></i> '
-			+'<i class="icon-remove-sign remove-field"></i> ';
-var hideBar = '<li class="hide-bar"> </i> ';
-
-
-
-var fields = [];
-{% for f in fields %}
-fields.push({
-	id: '{{ f.id }}',
-	label: '{{ f.label }}',
-	field_type: '{{ f.field_type }}',
-	sort_order: {{ f.sort_order }},
-	display: {% if f.display %}true{% else %}false{% endif %}
-});
-{% endfor %}
-console.log(fields);
-
-
-setEditables = function(){
-	$('.mylabel').editable(function(value, settings){
-		return value;
-	}, { 
-		tooltip   : 'Click to edit...',
-		placeholder: '+label',
-		cssclass: 'editable',
-		style: 'inherit',
-		onblur: 'submit'
-	});
-}
-
-styleHidden = function(){
-	var display = true;
-	$('.active-template .mysortable').each(function(index){
-		if($(this).prev().hasClass('hide-bar')){
-			display = false;
-		}
-		if(display){
-			$(this).removeClass('hidden');
-		} else {
-			$(this).addClass('hidden');
-		}
-	});
-}
-
-$(document).ready(function(){
-	
-	if(fields.length > 0){
-		// then it's an edit, and the templates shouldn't be shown
-		$('#wizarddd').addClass('hide');
-		$('#edit-template').removeClass('hide');
-		$('#edit-template').addClass('active-template');
-		var display = true;
-		fields.forEach(function(f){
-			var spot = $('#edit-template .sortable');
-			var label = '';
-			if(f.label == '') { label = '+label'; } else { label = f.label; }
-			var fullTextItem = '<li data-field_id="'+f.id+'" class="mysortable collection-type-text"> '
-				+ '<span class="mylabel">'+label+'</span> '
-				+ '<input type="text"/> '
-				+ '<i class="icon-align-justify"></i> '
-				+ '<i class="icon-remove-sign remove-field"></i> '
-				+ '</li> ';
-			var fullImgItem = '<li data-field_id="'+f.id+'" class="mysortable collection-type-img">'
-				+ '<div class="mylabel">'+label+'</div> '
-				+ '<img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRd-pVDClrxvD-0hOaXVw2gDkHLy2Vi7rGulqTtNyg29_4shOoF"/> '
-				+ '<i class="icon-align-justify"></i> '
-				+ '<i class="icon-remove-sign remove-field"></i> '
-				+ '</li> ';
-			var item = '';
-			if(f.field_type == 'T')
-				item = fullTextItem;
-			else if(f.field_type == 'I')
-				item = fullImgItem;			
-		
-			if(display && !f.display){
-				display = false;
-				spot.append(hideBar);
-			}
-			spot.append(item);
-	
-		});
-		setEditables();
-		styleHidden();
-		$('#save_zone').removeClass('hide');
-		
-	} 
-	
-	
-	
-	$('.sortable').sortable({
-		revert: true,
-		update: function(event, ui){
-			if($(ui.item).hasClass('mysortable')){
-
-			} else if($(ui.item).hasClass('hide-bar')){
-				
-			} else {
-				$(ui.item).removeClass('ui-state-highlight');
-				$(ui.item).addClass('mysortable');
-
-				if($(ui.item).hasClass('textDrag')){
-					$(ui.item).addClass('collection-type-text');
-					$(ui.item).html(textItem);					
-				}
-				if($(ui.item).hasClass('imgDrag')){
-					$(ui.item).addClass('collection-type-img');
-					$(ui.item).html(imgItem);
-				}
-				setEditables();
-			}
-			styleHidden();
-		}
-	});
-	$('.draggable').draggable({
-        connectToSortable: ".sortable",
-        helper: "clone",
-        revert: "invalid"
-	});
-	// initial setup
-	setEditables();
-	
-	$('.remove-field').click(function(){
-		$(this).parent().remove();
-	});
-
-	$('#save_btn').click(function(){
-		// create the field data json
-		// get the active template class
-		// get all mysortables...
-		var data = [];
-		var sort_order = 0;
-		var display = true;
-		$('.active-template .mysortable').each(function(index){
-			if($(this).hasClass('hide-bar'))
-				return true;
-			if($(this).prev().hasClass('hide-bar'))
-				display = false;
-			
-			data[index] = {};
-			if($(this).data("field_id") !== ''){
-				data[index]['id'] = $(this).data("field_id");
-			}
-			
-			// type
-			if($(this).hasClass('collection-type-text')){
-				data[index]['field_type'] = 'T';
-			}
-			if($(this).hasClass('collection-type-img'))
-				data[index]['field_type'] = 'I';
-			
-			// label
-			var label = $(this).children('.mylabel').text();
-			if(label != '+label' && label != '')
-				data[index]['label'] = label;
-			else 
-				data[index]['label'] = '';
-			
-			// sort_order
-			data[index]['sort_order'] = sort_order++;
-			
-			// display
-			data[index]['display'] = display;
-				
-		});
-		var json = JSON.stringify(data);
-
-		var input = $("<input>").attr("type", "hidden").attr("name", "field_data").val(json);
-		$('#collection_form').append($(input));
-		
-		$('#collection_form').submit();
-	});
-	
-	$('#cancel_btn').click(function(){
-		window.location = "/index";
-	});
-	
-});
-</script>
+ <!-- sliderNav (start) -->
+ <div class="sliderNav">
+     <ul class="sliderNavNextPrev">
+         <li class="sliderPrev"><a href="javascript:sliders.templates[0].goToPrev()">&laquo; Prev</a></li>
+         <li class="sliderNext"><a href="javascript:sliders.templates[0].goToNext()">Next &raquo;</a></li>
+         <!--li><a href="javascript:sliders[0].respond()">.respond()</a></li-->
+     </ul>
+                     </div>
+ <!-- sliderNav (end) -->
 {% endblock %}

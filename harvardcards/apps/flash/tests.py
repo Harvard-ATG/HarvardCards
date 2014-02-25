@@ -9,10 +9,12 @@ from django.core.urlresolvers import reverse
 from django.forms.formsets import formset_factory
 from django.test.client import RequestFactory, Client
 
-from harvardcards.apps.flash.models import Collection, Deck, Field
+from harvardcards.apps.flash.models import Collection, Deck, Field, CardTemplate, CardTemplates_Fields
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
 from harvardcards.apps.flash.views.collection import *
 from harvardcards.apps.flash import services, queries
+
+import unittest
 
 class CollectionTest(TestCase):
     def setUp(self):
@@ -30,39 +32,22 @@ class CollectionTest(TestCase):
         #self.assertTemplateUsed(response, 'index.html')
 
     def test_collection_get(self):
-        url = reverse('createCollection')
+        url = reverse('collectionIndex')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        #TODO why is this failing?
-	    #This is failing because we don't have a separate template for add a course now
 
-        #self.assertTemplateUsed(response, 'collections/create.html')
+    def test_collection_create(self):
+        url = reverse('collectionCreate')
+        post_data = {'title':'foobar', 'card_template':'1'}
 
-    def test_collection_post(self):
-        # there should be no collections at the start
-        len_collection1 = len(Collection.objects.all())
-        #self.assertEqual(len_collection1, 0)
-
-        # url for create collection
-        url = reverse('createCollection')
-
-        # sample post data
-        post_data = {'field_data': '[{"field_type":"T","label":"","sort_order":0,"display":true},{"field_type":"I","label":"","sort_order":1,"display":true},{"field_type":"T","label":"","sort_order":2,"display":false}]', 'csrfmiddlewaretoken': '38vLxTwts8C4pUcFqoOgQAq3eXgAdpro', 'field_type1': 'text', 'description': 'lots of math', 'title': 'math 454'}
-
-        # response of posting the data at url
+        len_collections_before = len(Collection.objects.filter(title__exact=post_data['title']))
         response = self.client.post(url, post_data)
-        # should redirect to index
-        #self.assertEqual(response.status_code, 302)
-        #self.assertTemplateNotUsed(response,'index.html')
+        len_collections_after = len(Collection.objects.filter(title__exact=post_data['title']))
 
-        # number of collections should be 1 now
-        len_collection2 = len(Collection.objects.all())
-        #self.assertEqual(len_collection2, 1)
-        #self.assertEqual(len_collection2-len_collection1, 1)
+        self.assertEqual(len_collections_before + 1, len_collections_after)
 
     def test_collection_form(self):
-        post_data = {'field_data': '[{"field_type":"T","label":"","sort_order":0,"display":true},{"field_type":"I","label":"","sort_order":1,"display":true},{"field_type":"T","label":"","sort_order":2,"display":false}]', 'csrfmiddlewaretoken': '38vLxTwts8C4pUcFqoOgQAq3eXgAdpro', 'field_type1': 'text', 'description': 'lots of math', 'title': 'math 454'}
-        # testing the form
+        post_data = {'title':'foobar', 'card_template':'1'}
         form = CollectionForm(post_data)
         self.assertEqual(form.is_valid(), True)
         form1 = CollectionForm({})
@@ -73,32 +58,77 @@ class ServicesTest(TestCase):
         """ Every test needs access to the request factory. """
         self.factory = RequestFactory()
         self.client = Client()
+        self.card_template = CardTemplate.objects.get(pk=1)
 
     def test_deleteCollection(self):
-        collection = Collection.objects.create(title='a', description='aaa')
-        self.assertEqual(services.deleteCollection(collection.id), True)
+        collection = Collection.objects.create(title='a', description='aaa', card_template=self.card_template)
+        self.assertEqual(services.delete_collection(collection.id), True)
+
+    def test_deleteDeck(self):
+        card_template = CardTemplate.objects.create(title='b', description='bbb')
+        collection = Collection.objects.create(title='a', description='aaa', card_template=card_template)
+        deck = Deck.objects.create(title='a', collection=collection)
+        self.assertEqual(services.delete_deck(deck.id), True)
 
 class QueriesTest(TestCase):
     def setUp(self):
         """ Every test needs access to the request factory. """
         self.factory = RequestFactory()
         self.client = Client()
+        self.card_template = CardTemplate.objects.get(pk=1)
 
     def test_getCollection(self):
-        collection = Collection.objects.create(title='getCollectionTest', description='asdfasdfasdf')
+        collection = Collection.objects.create(title='getCollectionTest', description='asdfasdfasdf', card_template=self.card_template)
         gottenCollection = queries.getCollection(collection.id)
         self.assertEqual(gottenCollection.title, 'getCollectionTest')
 
     def test_getDecksByCollection(self):
-        collection = Collection.objects.create(title='a', description='aaa')
+        collection = Collection.objects.create(title='a', description='aaa', card_template=self.card_template)
         deck1 = Deck.objects.create(title='d1', collection=collection)
         deck2 = Deck.objects.create(title='d2', collection=collection)
         decksByCollection = queries.getDecksByCollection()
-        self.assertEqual(decksByCollection[collection.id].__len__(), 2)
+        self.assertEqual(2, len(decksByCollection[collection.id]))
         
     def test_getFieldList(self):
-        collection = Collection.objects.create(title='a', description='aaa')
-        field1 = Field.objects.create(label='f1', field_type='T', show_label=True, display=True, sort_order=1, collection=collection)
-        field2 = Field.objects.create(label='f2', field_type='I', show_label=True, display=True, sort_order=2, collection=collection)
+        card_template = CardTemplate.objects.create(title='b', description='bbb')
+        collection = Collection.objects.create(title='a', description='aaa', card_template=card_template)
+        field1 = Field.objects.create(label='f1', field_type='T', show_label=True, display=True, sort_order=1)
+        field2 = Field.objects.create(label='f2', field_type='I', show_label=True, display=True, sort_order=2)
+        for f in [field1, field2]:
+            CardTemplates_Fields.objects.create(card_template=card_template, field=f)
+
         field_list = queries.getFieldList(collection.id)
-        self.assertEqual(field_list.__len__(), 2)
+        self.assertEqual(2, len(field_list))
+        for idx, f in enumerate([field1, field2]):
+            self.assertEqual(f.label, field_list[idx]['label'])
+            self.assertEqual(f.field_type, field_list[idx]['field_type'])
+            self.assertEqual(f.show_label, field_list[idx]['show_label'])
+            self.assertEqual(f.display, field_list[idx]['display'])
+            self.assertEqual(f.sort_order, field_list[idx]['sort_order'])
+
+    def test_getDeckCardsList(self):
+        card_template = CardTemplate.objects.create(title='b', description='bbb')
+        collection = Collection.objects.create(title='a', description='aaa', card_template=card_template)
+        field1 = Field.objects.create(label='f1', field_type='T', show_label=True, display=True, sort_order=1)
+        field2 = Field.objects.create(label='f2', field_type='I', show_label=True, display=True, sort_order=2)
+        for f in [field1, field2]:
+            CardTemplates_Fields.objects.create(card_template=card_template, field=f)
+
+        card_list = [
+            [{"field":field1,"value":"a"},{"field":field2,"value":"a"}],
+            [{"field":field1,"value":"bb"},{"field":field2,"value":"bb"}],
+            [{"field":field1,"value":"ccc"},{"field":field2,"value":"ccc"}],
+        ]
+        deck_title = "my_deck_title"
+        deck = services.create_deck_with_cards(collection.id, deck_title, card_list)
+
+        self.assertEqual(deck_title, deck.title)
+        self.assertEqual(len(card_list), deck.cards.count())
+
+    def test_getDeckCollectionId(self):
+        card_template = CardTemplate.objects.create(title='b', description='bbb')
+        collection = Collection.objects.create(title='a', description='aaa', card_template=card_template)
+        deck = Deck.objects.create(title='a', collection=collection)
+        collection_id = queries.getDeckCollectionId(deck.id)
+
+        self.assertEqual(collection.id, collection_id)

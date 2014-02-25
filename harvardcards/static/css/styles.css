@@ -21,8 +21,8 @@ b, u, i, center,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
 	margin: 0;
@@ -33,7 +33,7 @@ time, mark, audio, video {
 	vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
+article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
@@ -74,7 +74,7 @@ h1, h2, h3, h4
 }
 	h1{ font-size: 3em; }
 	h1#appTitle { padding: 0.25em 0; }
-	
+
 	h2{ font-size: 1.875em; }
 	li.deck h2 { color: #293352; }
 	.courseHeader a {
@@ -89,18 +89,22 @@ h1, h2, h3, h4
 		padding-right: 0.5em;
 		margin-right: 0.25em;
 	}
-	
+
+    h2.courseTitle > a { text-decoration: none }
+
 	.courseHeader h3 {
 		display:inline-block;
 		font-size: 1.5625em;
 		color: #a51c30;
 	}
 
-	
-	/* fonts for deck view/review course headers only (end) */
 
-#singleCardHolder
-, #singleCardHolder h1{
+	/* fonts for deck view/review course headers only (end) */
+#cardForm
+, #cardForm h1
+, #singleCardHolder
+, #singleCardHolder h1
+, .emptySlider h3{
 	font-family: 'Vollkorn', Times, serif;
 }
 /* FONTS (end) */
@@ -122,7 +126,7 @@ h1, h2, h3, h4
 	.section img{
 		padding: 0.375em 0;
 	}
-	
+
 	ul#userInfo{
 		float: right;
 		display: inline-block;
@@ -131,7 +135,7 @@ h1, h2, h3, h4
 		font-size: 0.75em;
 		display: none;
 	}
-	
+
 		ul#userInfo li{
 			display: inline-block;
 			list-style: none;
@@ -139,7 +143,7 @@ h1, h2, h3, h4
 			ul#userInfo li span{
 				padding: 0 0.5em;
 			}
-		
+
 		ul#userInfo li a{
 			display: inline-block;
 			padding: 1.11em 1em ;
@@ -153,18 +157,17 @@ h1, h2, h3, h4
 .contentWrapper{
 	display: inline-block;
 }
-	
+
 	#content{
 		float: left;
 		display: inline-block;
 		/*background-color: #C99;*/
 	}
-	
 	#contentHere{
 		position: absolute;
 		text-indent: -3000px;
 	}
-	
+
 /********** main nav (start) *************/
 .skipNav{
 	/*position: absolute;
@@ -196,7 +199,7 @@ h1, h2, h3, h4
 		, .footerNav ul li a.active {
 			background: url('/static/img/mainNavActive.png') repeat-y left top;
 		}
-	
+
 	#navigation nav ul ul a
 	, .footerNav ul ul li a
 	, .contentFont{
@@ -207,7 +210,7 @@ h1, h2, h3, h4
 		width: 80%;
 		padding: 0.3em 0 0.3em 20%;
 	}
-	
+
 		#navigation nav ul ul a:hover
 		, .footerNav ul ul li a:hover{
 			background: transparent url('/static/img/subNavHover.png') no-repeat 2em 0.65em;
@@ -216,7 +219,7 @@ h1, h2, h3, h4
 		, .footerNav ul ul li a.active{
 			background: transparent url('/static/img/subNavActive.png') no-repeat 2em 0.65em;
 		}
-/********** main nav (end) *************/		
+/********** main nav (end) *************/
 
 a#addAcourse
 , a#addCard{
@@ -244,7 +247,6 @@ a#addCard{
 	width: 100%; 
 	margin-bottom: 1em;
 }
-	
 .courseHeader{
 	width: 100%;
 	border-bottom: solid 2px #4c4c4c;
@@ -284,29 +286,29 @@ a#addCard{
 				color: #A51C30;
 			}
 	/* template deck (end) */
-		li.deck { height: 167px; } 
-		
+		li.deck { height: 167px; }
+
 		ul.courseDecks h2
 		, ul.templateDecks h2 { padding: 0.25em 0; }
 		ul.courseDecks h3{display: inline;}
 		p.lastUpdated { font-style: italic; margin-bottom: 1em; }
-	
-	
+
+
 		/* arrows (start) */
 		.arrow{
 			display: inline-block;
 			float: right;
 			background-color: #f3f3f3;
 		}
-		
-		.arrowExpand { 
+
+		.arrowExpand {
 			border-top: solid 1px #e1dfdf;
 			position: absolute;
 			bottom: 0;
 			right: 0;
 		}
 		/* arrows (end) */
-		
+
 		ul.deckMenu{
 			/*display: none;*/
 			display: inline-block;
@@ -315,7 +317,7 @@ a#addCard{
 			position: absolute;
 			left: 0;
 		}
-		
+
 			ul.deckMenu li{
 				width: 50%;
 				float: left;
@@ -325,24 +327,23 @@ a#addCard{
 				border: 0;
 				margin:0;
 			}
-			
+
 			ul.deckMenu li.arrowContainer{
 				width: 100%;
 				border-bottom: 0;
 			}
-			
+
 			.viewReview{
-				padding: 0 0 0 0.25em;
-				display: inline-block;
-				color: #4e84c4;
-				font-family: 'League Gothic';
-				font-size: 1.75em;
-				text-decoration: none;
+                padding: 0 0 0 0.25em;
+                display: inline-block;
+                color: #4e84c4;
+                font-family: 'League Gothic';
+                font-size: 1.75em;
+                text-decoration: none;
 			}
-			
-				a.viewReview:hover{
-					color: #a51c30;
-				}
+			a.viewReview:hover{
+				color: #a51c30;
+			}
 			
 		.openDeckMenu{
 			width: 100%;
@@ -355,7 +356,7 @@ a#addCard{
 
 /********** hp course ROW (end) *************/
 /********** admin menus i.e edit/delete/share (start) ***********/
-ul.adminMenu 
+ul.adminMenu
 , ul.sliderNavNextPrev{
 	display: inline-block;
 	float: left;
@@ -372,13 +373,13 @@ ul.adminMenu
 		float: right;
 		margin-right: 0em;
 	}
-		
+
 	ul.adminMenu li {
 		display: inline-block;
-		margin-right: 0.5em;
+		margin-right: 0.25em;
 	}
-		ul.adminMenuRight li { margin: 0; } /*no margin needed for right hand menu*/
-	
+		/*ul.adminMenuRight li { margin: 0; } no margin needed for right hand menu*/
+
 	ul.adminMenu li a
 	, .adminMenuBtn
 	, li.sliderPrev a
@@ -393,10 +394,10 @@ ul.adminMenu
 		font-family: Arial, Helvetica, sans-serif;
 		font-weight:700;
 		font-size: 0.75em;
-		background-color: #f5f5f5; 
-		background-image: url('/static/img/adminMenuFallBackImg.jpg'); 
+		background-color: #f5f5f5;
+		background-image: url('/static/img/adminMenuFallBackImg.jpg');
 		background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f1f1f1), to(#f5f5f5));
-		background-image: -webkit-linear-gradient(top, #f1f1f1, #f5f5f5); 
+		background-image: -webkit-linear-gradient(top, #f1f1f1, #f5f5f5);
 		background-image:    -moz-linear-gradient(top, #f1f1f1, #f5f5f5);
 		background-image:     -ms-linear-gradient(top, #f1f1f1, #f5f5f5);
 		background-image:      -o-linear-gradient(top, #f1f1f1, #f5f5f5);
@@ -408,7 +409,7 @@ ul.adminMenu
 		li.sliderNext {
 			float: right;
 		}
-	
+
 	.disable{
 		-webkit-opacity: 0.25;
 		-moz-opacity: 0.25;
@@ -457,7 +458,7 @@ ul#cards{
 		float: left;
 		border:solid 6px #d2d2d2;
 	}
-	
+
 	/*ul#cards li div{
 		height: 2em;
 		background-color: #f3f3f1;
@@ -476,17 +477,17 @@ ul#cards{
 				padding: 0.8em 0%;
 				height: 4.3375em;
 			}
-			
+
 			a.image{
 				padding: 0;
 				height: 5.9375em;
 			}
-			
+
 			ul#cards li a img{
 				max-height: 100%;
 				padding:0;
 			}
-		
+
 		ul#cards li:hover
 		, ul#cards li.cardActive{
 			border: solid 0.375em #4d4d4d;
@@ -507,26 +508,26 @@ div.deckNav{
 	ul.deckNavNextPrev li{
 		display: inline-block;
 	}
-	
+
 	.sliderBtns{
 		position: absolute;
 		top: 0;
 		padding-top: 0.5em;
 		width: 4.75%;
 	}
-	
+
 	li.deckPrev
 	, div.deckPrev{
 		float: left;
 		left: 0;
 	}
-	
+
 		div.deckPrev a:hover
 		, div.deckNext a:hover{
 			background-color: #d2d2d2;
 			color: #a51c30;
 		}
-			
+
 			.sliderBtns a {
 				display: block;
 				width: 100%;
@@ -535,27 +536,27 @@ div.deckNav{
 				padding: 0.25em 0;
 				color: #4c4c4c;
 			}
-			
-			.sliderBtns a span{ 
+
+			.sliderBtns a span{
 				position: absolute;
 				left: -3000px;
 			}
-	
+
 		/*li.deckPrev a
-		, div.deckPrev a{				
+		, div.deckPrev a{
 			background: transparent url('/static/img/deckNavPrev.png') no-repeat center 50%;
 			text-indent: -30000px;
 			display: inline-block;
 			height: 106px;
 			width: 40px;
 		}*/
-	
+
 	li.deckNext
 	, div.deckNext{
 		float: right;
 		right: 0;
 	}
-	
+
 		/*li.deckNext a
 		, div.deckNext a{
 			background: transparent url('/static/img/courseTitleBreadCrumb.png') no-repeat center 50%;
@@ -564,9 +565,9 @@ div.deckNav{
 			height: 106px;
 			width: 40px;
 		}*/
-		
+
 /*full card (start) */
-#singleCardHolder{
+#singleCardHolder, #cardForm{
 	width: 94.5%;
 	display: inline-block;
 	background: #f3f3f1;
@@ -600,13 +601,16 @@ div.deckNav{
 	overflow: hidden;
 }
 
-#singleCardHolder ul li{
-	/*display: inline-block;
-	width: 100%;*/
+#singleCardHolder ul
+, #singleCardHolder ul li
+, #cardForm ul
+, #cardForm ul li{
+	display: inline-block;
+	width: 100%;
 	float: left;
 }
-	
-	.showRevealWrapper{
+
+	.showRevealWrapper, .editFields{
 		width: 98%;
 		display: inline-block;
 		background-color: #fff;
@@ -614,7 +618,7 @@ div.deckNav{
 		text-align: center;
 		padding: 1.25em 1%;
 	}
-	
+
 	.hideRevealHr{
 		width: 100%;
 		background: transparent url('/static/img/hideRevealLine.png') repeat left top;
@@ -623,8 +627,24 @@ div.deckNav{
 		text-align: center;
 		padding: 0.25em 0;
 	}
-	
-	
+	#singleCardHolder ul li.hide,
+	#cardForm ul li.hide{
+		display: none;
+	}
+
+	#singleCardHolder ul li.show,
+	#singleCardHolder ul li.show{
+		display: block;
+
+	}
+	.hide{
+		display: none;
+	}
+
+	.show{
+		display: block;
+
+	}
 /*full card (end) */
 /********** cards inside a deck view (end) *************/
 
@@ -638,11 +658,11 @@ a#mobileMenu{
 /* mobile nav icon (end) */
 
 	.footerNav {
-		display:block; 
+		display:block;
 		float: left;
 		width: 100%;
 	}
-	
+
 	.desktopNav { display:none; }
 
 	.footerNav ul
@@ -656,18 +676,18 @@ a#mobileMenu{
 		padding: 0.5em 5%;
 		display: inline-block;
 	}
-	
+
 		.footerNav ul ul li{
 			border-top: 0;
 		}
-		
+
 		.footerNav ul ul li a{
 			padding-bottom: 0.75em;
 			padding-left: 8%;
 			padding-right: 8%;
 			width: 84%;
 		}
-		
+
 		.footerNav ul ul li a:hover
 		, .footerNav ul ul li a.active{
 			background-position: 4% 0.65em;
@@ -710,29 +730,29 @@ a#mobileMenu{
 		float:right;
 	}
 @media screen and (min-width: 320px){
-/* 
+/*
 * iPhone portrait
 */
 	/*body{ background-color: blue; background-image:none; }*/
-	
+
 	.section{
 		padding: 0 1%;
 		width: 98%;
 	}
-	
+
 	.contentWrapper{
 		width: 100%;
 		/*background-color:#990066;*/
 	}
-	
+
 	#navigation
 	, a#addCard { display: none; }
-	
-	#content{	
+
+	#content{
 		width: 100%;
 		padding: 0%;
 	}
-	
+
 	ul.courseDecks li{
 		width: 90%;
 		padding: 0;
@@ -740,24 +760,24 @@ a#mobileMenu{
 		/*margin: 0 5%;*/
 		float: left;
 	}
-	
+
 	.arrow{
 		width: 25%;/* today */
 		border-left: solid 1px #e1dfdf;
 		padding: 1em 0;
 	}
-	
+
 	.arrowExpand { border-top: solid 1px #e1dfdf;}
-	
+
 	.arrowCollapse { border-bottom: solid 1px #e1dfdf; }
-	
-	ul.deckMenu li { 
+
+	ul.deckMenu li {
 		margin: 0;
 		width: 50%;
 		padding: 0;
 		display: inline-block;
 	}
-	
+
 	/********** slider (start) *************/
 	.test > ul{
 		position: relative;
@@ -766,10 +786,8 @@ a#mobileMenu{
 		-ms-transition: 0.5s left;
 		-o-transition: 0.5s left;
 	}
-	
-	
 	.slider {
-	  width: 90%; 
+	  width: 90%;
 	  /*height: 300px;*/
 	  overflow: hidden;
 	  margin: 0 5%;
@@ -781,31 +799,31 @@ a#mobileMenu{
 		-moz-transition: 0.5s left;
 		-ms-transition: 0.5s left;
 		-o-transition: 0.5s left;
-	 
+
 		list-style: none;
 		margin: 0; padding: 0;
 	  }
 		.slider > ul > li
 		, li.deck {
 		  /*float: left;
-		  width: 400px; 
+		  width: 400px;
 		  height: 300px;
 		  margin: 0 ;*/
 		}
-		
+
 	.openDeckMenu{
 		margin-top: -40px;
 		height: 144px;
 	}
-	
+
 	.sliderNav{
 		display: inline-block;
 		width: 90%;
 		margin-top: 1em;
 	}
 	/********** slider (end) *************/
-	
-	
+
+
 	#cardSlider
 	, #cardSliderNotAdmin{
 		margin-left: 0;
@@ -821,10 +839,9 @@ a#mobileMenu{
 	#singleCardHolder ul li.show{
 		visibility: visible;
 	}	
-	
 }
 @media screen and (min-width: 480px){
-/* 
+/*
 * iPhone landscape
 */
 	/*body{ background-color: yellow; background-image:none; }*/
@@ -834,47 +851,47 @@ a#mobileMenu{
 	}
 	#navigation
 	, a#addCard { display: none; }
-	
-	#content{	
+
+	#content{
 		width: 100%;
 		padding: 0%;
 	}
-	
+
 	ul.courseDecks li{
 		width: 90%;
 		padding: 0;
 		display: inline-block;
 		/*margin: 0 5%;*/
 	}
-	
+
 	.arrow{
 		width: 25%;/* today */
 		padding: 1em 0;
 	}
-	
+
 	.arrowExpand { border-top: solid 1px #e1dfdf;}
-	
+
 	.arrowCollapse { border-bottom: solid 1px #e1dfdf; }
-	
-	ul.deckMenu li { 
+
+	ul.deckMenu li {
 		margin: 0;
 		width: 50%;
 		padding: 0;
 		display: inline-block;
 	}
-	
-	.sliderNav { 
+
+	.sliderNav {
 		display: inline-block;
 		width: 90%;
 		margin-top: 1em;
 	}
-	
+
 	.openDeckMenu{
 		margin-top: -40px;
 		height: 144px;
 	}
-	
-	
+
+
 #cardSlider
 , #cardSliderNotAdmin{
 	margin-left: 0;
@@ -883,94 +900,94 @@ a#mobileMenu{
 
 }
 @media screen and (min-width: 768px){
-/* 
+/*
 * iPad Portrait
 */
 	/*body{ background-color: orange; background-image:none;}*/
-	
+
 	.section{
 		padding: 0 1%;
 		width: 98%;
 	}
-	
+
 	ul#userInfo{
 		display: block;
 	}
-	
+
 	#navigation
 	, a#addCard { display: none; }
-	
-	#content{	
+
+	#content{
 		width: 100%;
 		padding: 0%;
 	}
-	
+
 	ul.courseDecks li{
 		width: 30%;
 		padding: 0;
 		margin: 0 3.5% 1em 0;
 		display: inline-block;
 	}
-	
+
 		ul.courseDecks li.deck:nth-child(3n){ /*every third child */
 			margin-right: 0;
 		}
 		/*every 3+1 so each new row starting from 1*/
 		ul.courseDecks li.deck:nth-child(3n+1){
-			clear:left;						
+			clear:left;
 		}
-	
+
 	.arrow{
 		padding: 5% 0%;
 		width: 25%;
 	}
-	
-	.arrowExpand { 
+
+	.arrowExpand {
 		border-top: solid 1px #e1dfdf;
 		border-left: solid 1px #e1dfdf;
 	}
-	
+
 	.arrowCollapse{
 		border-left: solid 1px #e1dfdf;
 		border-bottom: solid 1px #e1dfdf;
 	}
-	
-	ul.deckMenu li { 
+
+	ul.deckMenu li {
 		width: 50%;
 		padding: 0;
 		display: inline-block;
 		margin: 0;
 	}
-	
-	.sliderNav { 
-		display: inline-block; 
+
+	.sliderNav {
+		display: inline-block;
 		width: 90%;
 		margin-top: 1em;
 	}
-	
+
 	.openDeckMenu{
 		margin-top: -30px;
 		height: 134px;
 	}
-	
+
 
 	#cardSlider
 	, #cardSliderNotAdmin{
 		margin-left: 0;
 		width: 90.046296296296%;
 	}
-	
+
 	.footerNav ul li a{
 		padding: 0.5em 2%;
 		width: 96%;
 	}
-	
+
 	.footerNav ul ul li a{
 		padding-left: 5%;
 		padding-right: 5%;
 		width: 90%;
 	}
-	
+
 	.footerNav ul ul li a:hover
 	,.footerNav ul ul li a.active {
 		background-position: 3% 0.65em;
@@ -998,75 +1015,75 @@ a#mobileMenu{
 	}
 }
 @media screen and (min-width: 1024px){
-/* 
+/*
  * this break point is for normal size desktop view so it's all fluid
 */
 	/*body{ background-color: gray; background-image:none;}*/
-	
+
 	.section{
 		padding: 0 1%;
 		width: 98%;
 	}
-	
+
 	ul#userInfo{
 		display: block;
 	}
-	
+
 	#navigation
 	, a#addCard { display: inline-block; }
-	
-	#content{	
+
+	#content{
 		width: 80.333333333333%;
 		padding-left: 3%;
 	}
-	
+
 	ul.courseDecks li
 	, ul.templateDecks li{
 		width: 21.744791666667%;
 		margin: 0 3.5% 1em 0;
 		display: inline-block;
 	}
-	
+
 		ul.courseDecks li.deck:nth-child(3n){ /*every fourth child */
 			margin-right: 3.5%;
 		}
 		/*every 4+1 so each new row starting from 1*/
 		ul.courseDecks li.deck:nth-child(3n+1){
-			clear:none;						
+			clear:none;
 		}
-	
+
 		ul.courseDecks li.deck:nth-child(4n){ /*every fourth child */
 			margin-right: 0;
 		}
 		/*every 4+1 so each new row starting from 1*/
 		ul.courseDecks li.deck:nth-child(4n+1){
-			clear:left;						
+			clear:left;
 		}
-	
+
 	.arrow{
 		padding: 5% 0%;
 		width: 30%;
 	}
-	
-	.arrowExpand { 
+
+	.arrowExpand {
 		border-top: solid 1px #e1dfdf;
 		border-left: solid 1px #e1dfdf;
 	}
-	
+
 	.arrowCollapse{
 		border-left: solid 1px #e1dfdf;
 		border-bottom: solid 1px #e1dfdf;
 	}
-	
-	ul.deckMenu li { 
+
+	ul.deckMenu li {
 		width: 50%;
 		padding: 0;
 		display: inline-block;
 		margin: 0;
 	}
-	
+
 	.sliderNav { display: none; }
-	
+
 	.openDeckMenu{
 		margin-top: -30px;
 		height: 134px;
@@ -1077,7 +1094,6 @@ a#mobileMenu{
 		margin-left: 1.634320735444%;
 		width: 75.647090735224%;
 	}
-	
 
 	#cardSliderNotAdmin{
 		/*display: inline-block;*/
@@ -1096,9 +1112,9 @@ a#mobileMenu{
 		display: none;
 	}
 	/* mobile nav icon (end) */
-	
+
 	.footerNav { display:none; }
-	
+
 	.desktopNav { display:block; }
 }
 
@@ -1110,67 +1126,67 @@ a#mobileMenu{
 }
 
 @media screen and (min-width: 1280px){
-/*  
+/*
  * for desktop that has huge monitors will fix the width at 1280px
-*/	
+*/
 	/*body{ background-color: green;  background-image:none;}*/
-	
+
 	/*#fc_header { background-color: red; }*/
-	
+
 	.section{
 		/*padding: 0 16px;*/
 		width: 1253px;
 		margin: 0 auto;
 	}
-	
+
 	ul#userInfo{
 		display: block;
 	}
-	
+
 	.contentWrapper{
 		width: 100%;
 		/*background-color:#990066;*/
 	}
-	
+
 	#navigation
 	, a#addCard { display: inline-block; }
-	
-	#content{	
+
+	#content{
 		width: 80.333333333333%;
 		padding-left: 3%;
 	}
-	
+
 	ul.courseDecks li
 	, ul.templateDecks li{
 		width: 21.744791666667%;
 		margin: 0 3.5% 1em 0;
 		display: inline-block;
 	}
-	
+
 	.arrow{
 		padding: 5% 0%;
 		width: 30%;
 	}
-	
-	.arrowExpand { 
+
+	.arrowExpand {
 		border-left: solid 1px #e1dfdf;
 		border-top: solid 1px #e1dfdf;
 	}
-	
+
 	.arrowCollapse{
 		border-left: solid 1px #e1dfdf;
 		border-bottom: solid 1px #e1dfdf;
 	}
-	
-	ul.deckMenu li { 
+
+	ul.deckMenu li {
 		width: 50%;
 		padding: 0;
 		margin: 0;
 		display: inline-block;
 	}
-	
+
 	.sliderNav { display: none; }
-	
+
 	.openDeckMenu{
 		margin-top: -30px;
 		height: 134px;
@@ -1201,3 +1217,92 @@ a.ui-slider-handle.ui-state-default.ui-corner-all{
 	width: 14px;
 	height: 14px;
 }
+/********** add cards UI (start) *************/
+.emptySlider h3{
+	text-align: center;
+	padding: 2.75em 0;
+}
+/* important is necesary becuase I'm overriding the padding
+   of an ID selector */
+.editCardMode{
+	padding-bottom: 0 !important;
+	text-align: right;
+}
+
+.editFields{
+	text-align: left;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+}
+
+	.editFields h2{
+		border-bottom: 1px solid #CCCCCC;
+	    margin-bottom: 0.5em;
+	    padding-bottom: 0.15em;
+	    font-family: 'Vollkorn',Times,serif;
+	}
+
+fieldset {
+	margin-bottom: 0.5em;
+}
+
+.formEle{
+	width: 98%;
+	display: block;
+	height: 1.3125em;
+	padding: 0.5em 1%;
+	margin-bottom: 0.75em;
+	font-size: 14px;
+	line-height: 1.428571429;
+	color: #555;
+	vertical-align: middle;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+	box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+	-webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+
+}
+
+.editCardMode button{
+	margin: 0.45em 0;
+	color: #F3F3F1;
+	text-shadow: 0 1px 0 #295989;
+	border: 0;
+	border-radius: 0.3em;
+
+}
+
+	.editCardMode button:hover{
+		background: #4C4C4C;
+		background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#4C4C4C), to(#303030));
+		background-image: -webkit-linear-gradient(top, #4C4C4C, #303030);
+		background-image:    -moz-linear-gradient(top, #4C4C4C, #303030);
+		background-image:     -ms-linear-gradient(top, #4C4C4C, #303030);
+		background-image:      -o-linear-gradient(top, #4C4C4C, #303030);
+		cursor: pointer;
+
+	}
+
+.saveBtn{
+	background: #4E84C4;
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#4E84C4), to(#4075b3));
+	background-image: -webkit-linear-gradient(top, #4E84C4, #4075b3);
+	background-image:    -moz-linear-gradient(top, #4E84C4, #4075b3);
+	background-image:     -ms-linear-gradient(top, #4E84C4, #4075b3);
+	background-image:      -o-linear-gradient(top, #4E84C4, #4075b3);
+
+}
+
+.cancelBtn{
+	background: #A51C30;
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#A51C30), to(#8a1526));
+	background-image: -webkit-linear-gradient(top, #A51C30, #8a1526);
+	background-image:    -moz-linear-gradient(top, #A51C30, #8a1526);
+	background-image:     -ms-linear-gradient(top, #A51C30, #8a1526);
+	background-image:      -o-linear-gradient(top, #A51C30, #8a1526);
+}
+
+/********** add cards UI (end) *************/

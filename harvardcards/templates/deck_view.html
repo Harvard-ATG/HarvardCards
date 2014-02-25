@@ -12,52 +12,146 @@
 
 <div id="content"><!-- content (start) -->
 
-    <div class="courseWrapper"><!-- courseWrapper (start) -->
+    <div class="courseWrapper" id = "wrapper"><!-- courseWrapper (start) -->
 
         <div class="courseHeader"><!-- courseHeader (start) -->
-			<a href="#" id="contentHere" title="Content Starts">Main content below</a>
-            <h2 class="courseTitle">{{collection.title}}</h2><h3>{{deck.title}}</h3>
-            {% if collection.id in user_collection_role.ADMIN %}
+            <h2 class="courseTitle"><a href="{% url 'collectionIndex' collection.id %}">{{collection.title}}</a></h2><h3>{{deck.title}}</h3>
             <ul class="adminMenu adminMenuRight">
-                <li><a href="#">Delete</a></li>
-            </ul>
-            {% endif %}
-            <div style='float: right;'>
-                {% if is_quiz_mode %}
-                <a href="{% url 'deckIndex' deck.id %}" onclick="location.href=this.href+'?cardLoc='+(current+1);return false;">Switch to Review Mode</a>
-                {% else %}
-                <a href="{% url 'deckIndex' deck.id %}?mode=quiz" onclick="location.href=this.href+'&cardLoc='+(current+1);return false;">Switch to Quiz Mode</a>
+                {% if collection.id in user_collection_role.ADMIN %}
+                    <li><a href="{% url 'deckEdit' deck.id %}">Edit</a></li>
+                    <li><a href="{% url 'deckDelete' deck.id %}">Delete</a></li>
                 {% endif %}
-            </div>
+                <li>
+                {% if is_quiz_mode %}
+                <a href="{% url 'deckIndex' deck.id %}" id="reviewM">Review Mode</a>
+                {% else %}
+                <a href="{% url 'deckIndex' deck.id %}?mode=quiz" id="quizM">Quiz Mode</a>
+                {% endif %}
+            </ul>
+
         </div><!-- courseHeader (end) -->
 		{% if user.is_authenticated %}
-        	<a href="#" id="addCard">Add Card</a>
+        	<a href="return false;" id="addCard">Add Card</a>
         <div id="cardSlider" role="scrollbar" aria-orientation="horizontal">
         {% else %}
         <div id="cardSliderNotAdmin" role="scrollbar" tabindex="0" aria-orientation="horizontal">
         {% endif %}
-            <div class="sliderBtns deckPrev">
-            	<a id="prevCard" href="javascript:sliders[0].goToPrev()"><i class="fa fa-angle-left"></i><span>Previous</span></a>
-            	<a id="firstCard" href="javascript:sliders[0].goToFirst()"><i class="fa fa-angle-double-left"></i><span>First</span></a>
-            </div>
-            <div class="cardHolder" id="holder">
+        {% if cards|length %}
+        <div class="sliderBtns deckPrev">
+        	<a id="prevCard" href="javascript:sliders[0].goToPrev()"><i class="fa fa-angle-left"></i><span>Previous</span></a>
+        	<a id="firstCard" href="javascript:sliders[0].goToFirst()"><i class="fa fa-angle-double-left"></i><span>First</span></a>
+        </div>
+        <div class="emptySlider" id="initDeck">
+            <h3>Loading the deck...</h3>
+        </div>
+        <div class="cardHolder" id="holder" style="display:none;">
 
-                <ul id="cards">
-                    {% for card in cards %}
-                    <li role="presentation" id = {{forloop.counter0}} >
-	                    <a class="card image" href="javascript:sliders[0].goToCard({{forloop.counter0}})" role="tab" tabindex="-1">
-	                            {% for field in card.fields.reveal %}
-	                                {% include "_deck_slider_card_fields.html" with field=field %}
-	                            {% endfor %}
-	                    </a>
-                    </li>
-                    {% endfor %}
-                </ul>
+            <ul id="cards">
+                {% for card in cards %}
+                <li role="presentation" id = {{forloop.counter0}} >
+                    <a class="card image" href="javascript:sliders[0].goToCard({{forloop.counter0}})" role="tab" tabindex="-1">
+                            {% for field in card.fields.reveal %}
+                                {% include "_deck_slider_card_fields.html" with field=field %}
+                            {% endfor %}
+                    </a>
+                </li>
+                {% endfor %}
+        </ul>
+    </div>
+        <div class="sliderBtns deckNext">
+            <a id="next_card" href="#"><i class="fa fa-angle-right"></i><span>Next</span></a>
+            <a id="last_card" href="#"><i class="fa fa-angle-double-right"></i><span>Last</span></a>
+        </div>
+        {% else %}
+        <div class="emptySlider">
+            <h3>Empty Deck - Click on “Add Card” to start adding cards to your deck</h3>
+        </div>
+        {% endif %}
+        </div>
+
+        <!--div id="cardform">
+            <div class="courseWrapper addCourseWrapper" id="addCardForm">
+                <div class="courseHeader">
+					<h2>Create a New Card</h2>
+                    <ul class="adminMenu adminMenuRight">
+							<li><a href="#" id="card_cancel">Cancel</a></li>
+					</ul>
+			    </div>
+                <div style="display:none;" id="readroot">
+                    Label: <input type="text" name="Label">
+                    Value: <input type="text" name="Value">
+                    <select name="Field Type">
+                    <option value="T" selected>Text</option>
+                    <option value="I">Image</option>
+                    <option value="V">Video</option>
+                    <option value="A">Audio</option>
+                    </select>
+                    <input type="checkbox" name="showLabel" value="showLabel">Show Label
+                    <input type="checkbox" name="display" value="display">Display
+                    <ul class="adminMenu adminMenuRight">
+                            <li><a href="#" class = "moreField">Remove Field</a></li>
+					</ul>
+                    <br />
+                </div>
+                <form method="post" id="addcardform" action="/card/create/">
+                    {% csrf_token %}
+                    <span id="writeroot"></span>
+                    <input id="deck_id" name="deck_id" type="hidden" />
+                    <input id="collection_id" name="collection_id" type="hidden" value="{{collection.id}}" />
+                    <input id="max_card_id" name="max_card_id" type="hidden" value="{{cards|length}}" />
+                    <input id="num_fields" name="num_fields" type="hidden" />
+                    <input id="quiz_mode" name="quiz_mode" type="hidden" value="{{is_quiz_mode}}" />
+
+                    <ul class="adminMenu">
+                            <li><a href="#" id="moreFields">Add another field</a></li>
+                        	<li><a href="#" id="card_create">Create</a></li>
+					</ul>
+                </form>
             </div>
-            <div class="sliderBtns deckNext">
-            	<a href="javascript:sliders[0].goToNext()"><i class="fa fa-angle-right"></i><span>Next</span></a>
-            	<a href="javascript:sliders[0].goToLast()"><i class="fa fa-angle-double-right"></i><span>Last</span></a>
+        </div-->
+        <div id="cardFormContainer" style="display:none">
+        <form id="cardForm" class="editCardMode" method="POST" action="/card/create/">
+            {% csrf_token %}
+            <input id="deck_id" name="deck_id" type="hidden" />
+            <input id="collection_id" name="collection_id" type="hidden" value="{{collection.id}}" />
+            <input id="max_card_id" name="max_card_id" type="hidden" value="{{cards|length}}" />
+            <input id="num_fields" name="num_fields" type="hidden" />
+            <input id="quiz_mode" name="quiz_mode" type="hidden" value="{{is_quiz_mode}}" />
+            <div class="editFields">
+                <h2>Card front</h2>
+                <i class="fa fa-font fa-2x pull-left"></i>
+                <fieldset>
+                    <label for="term">Term</label>
+                    <input id="term" class="formEle form" type="text" placeholder="Enter term">
+                </fieldset>
+                <i class="fa fa-align-left fa-2x pull-left"></i>
+                <fieldset>
+                    <label for="definition">Definition</label>
+                    <textarea id="definition" class="formEle" placeholder="Enter definition"></textarea>
+                </fieldset>
+                <i class="fa fa-film fa-2x pull-left"></i>
+                <fieldset>
+                    <label for="videoURL">Video</label>
+                    <input id="videoURL" class="formEle" type="text" placeholder="Video URL">
+                </fieldset>
             </div>
+            <div class="hideRevealHr"></div>
+            <div class="editFields">
+                <h2>Card back</h2>
+                <i class="fa fa-picture-o fa-2x pull-left"></i>
+                <fieldset>
+                    <label for="image">Image</label>
+                    <input id="image" class="formEle form" type="text" placeholder="Click to chose an image">
+                </fieldset>
+                <i class="fa fa-microphone fa-2x pull-left"></i>
+                <fieldset>
+                    <label for="audio">Audio</label>
+                    <input id="audio" class="formEle form" type="text" placeholder="Click to chose an audio file">
+                </fieldset>
+            </div>
+            <button class="adminMenuBtn saveBtn" type="button" id="card_create">Save</button>
+            <button class="adminMenuBtn cancelBtn" type="button" id="card_cancel">Cancel</button>
+        </form>
         </div>
 		
         <div class="fullcardBtns">
@@ -66,11 +160,27 @@
       		<a class="mobileNext" href="javascript:fullCardSlider[0].goToNext()"><i class="fa fa-angle-right"></i><span>Next</span></a>
         	<a class="mobileLast" href="javascript:fullCardSlider[0].goToLast()"><i class="fa fa-angle-double-right"></i><span>Last</span></a>
         </div>
-        <div id="singleCardHolder"><!-- singleCardHolder (start)-->
-        	<div id="counterHolder" class="">
-	        	<div id="counter"></div>
-	        </div>
-            <div id="cardOverflow" class="test"><!-- cardOverflow (start) -->
+		
+
+        <div id="singleCardHolder" style="{%if cards|length == 0%} border:none; background: inherit;{%endif%}"><!-- singleCardHolder (start)-->
+            <div id="counterHolder" class="">
+                <div id="counter"></div>
+            </div>
+            {% if cards|length %}
+            <!--div id="slider"></div-->
+            <div class = "controls" id="controlbar">
+              <div style='float: right;' id="shuffle">
+                <a id="shuffle_cards" href="#">Shuffle</a>
+              </div>
+              <div style='float: right;' id="play">
+                <a id="play_cards" href="#">Play</a>
+              </div>
+              <div style='float: right;' id="full">
+                <a id="full_screen" href="#">Full Screen</a>
+              </div>
+            </div>
+            {% endif %}
+            <div id="cardOverflow"><!-- cardOverflow (start) -->
                 <ul id="allCards">
                     {% for card in cards %}
                     <li class="hide" role="tabpanel">
@@ -93,7 +203,8 @@
             </div><!-- cardOverflow (end) -->
         </div><!-- singleCardHolder (end)-->
 
-    </div><!-- courseWrapper (end) -->
+
+     </div><!-- courseWrapper (end) -->
 
 </div><!-- content (end) -->
 
@@ -101,7 +212,90 @@
 
 
 <script type="text/javascript">
-require(['jquery', 'lib', 'appendAround', 'jqueryui'], function($, lib) {
+require(['jquery', 'lib', 'Slider', 'appendAround', 'jqueryui'], function($, lib, Slider) {
+
+// http://www.quirksmode.org/dom/domform.html
+
+function moreFields() {
+	counter++;
+	var newFields = document.getElementById('readroot').cloneNode(true);
+	newFields.id = '';
+	newFields.style.display = 'block';
+	var newField = newFields.childNodes;
+	for (var i=0;i<newField.length;i++) {
+		var theName = newField[i].name
+		if (theName)
+			newField[i].name = theName + counter;
+	}
+	var insertHere = document.getElementById('writeroot');
+	insertHere.parentNode.insertBefore(newFields,insertHere);
+	$('.moreField').each(function(){
+        $(this).bind('click',function(){
+            console.log(this.parentNode);
+            this.parentNode.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode.parentNode);
+            counter=counter-1;
+            return false;
+        })
+	})
+}
+
+
+
+$(document).ready(function(){
+    //moreFields();
+    $('#cards').children().each(
+        function(){
+            $(this).bind('click',function(){
+                current = Number($(this).attr('id'));
+                sliders[0].goToCard(current);
+                return false;
+            })
+        });
+
+    $('#reviewM').click(function(){
+        location.href=this.href+'?cardLoc='+(current+1);
+        return false;
+    });
+    $('#quizM').click(function(){
+        location.href=this.href+'&cardLoc='+(current+1);
+        return false;
+    });
+   $('#moreFields').click(function(){
+        moreFields();
+        return false;
+    });
+
+
+
+
+
+});
+
+$('#addCard').click(function(){
+        $('#cardFormContainer').toggle()
+        return false;
+    });
+function extractDeckId(){
+    var pathname = $(location).attr('href');
+    var res = String(pathname.match('[^/]+$'));
+    res = res.match('([0-9]+).*');
+    res = res.slice(1);
+    return res;
+};
+
+$('#card_create').click(function(){
+        $("#deck_id").val(extractDeckId());
+        $('#cardForm').submit();
+        return false;
+});
+
+
+$('#card_cancel').click(function(){
+    $('#cardForm').css("display","none");
+    return false;
+});
+
+// stackoverflow
 function parseURLParams(url) {
     var queryStart = url.indexOf("?") + 1,
         queryEnd   = url.indexOf("#") + 1 || url.length + 1,
@@ -126,17 +320,24 @@ function parseURLParams(url) {
     }
     return parms;
 }
-
+sliders = [];
+sliderLength = $('ul#cards li').size();
 var pathname = $(location).attr('href');
 var urlPar = parseURLParams(pathname);
 current = 0;
 if(typeof(urlPar) != "undefined"){
-if(typeof(urlPar["cardLoc"]) != "undefined"){current = Number(urlPar["cardLoc"][0])-1}
+    if(typeof(urlPar["cardLoc"]) != "undefined"){
+        var k = Number(urlPar["cardLoc"][0])-1;
+        if (k>=0 && k<=sliderLength-1){
+            current=k;
+        }
+    }
 }
 sliders = [];
 fullCardSlider = [];
 sliderLength = $('ul#cards li').size();
 
+/*
 $( "#slider" ).slider({
         orientation: "horizontal",
         min: 0,
@@ -146,8 +347,9 @@ $( "#slider" ).slider({
         slide:function(event, ui){sliders[0].goToCard(ui.value)}
 });
 
+*/
 var sliderObjExist = false;
-var Slider1 = lib.Slider;
+var Slider1 = Slider;
 $('.cardHolder').each(function() {
 	if ( $(this).text() != '' ){
 		//create Slider objects
@@ -166,12 +368,13 @@ $('.test').each(function() {
 		sliderObjExist = true;
 	}
 });
-console.log(fullCardSlider);
 
-/* //RM
-	document.getElementById("holder").style.display="block";
-	document.getElementById("allCards").style.display="block";
-*/
+sliders[0].goToCard(current);
+// fixes the reorganization of slider
+$("#initDeck").css("display","none");
+
+$("#holder").css("display","block");
+
 function updateCardLoc(loc){
     numCards = sliderLength;
 	var location = Math.round((loc+1)/sliderLength*100) + '%  •  Card '+ (loc + 1) + ' of ' + sliderLength;
@@ -189,7 +392,6 @@ $(window).on("resize", function () {
 	{
 		//console.log($('.sliderNav').css('display'));
 		sliders[0].respond();
-		fullCardSlider[0].respond();
 
 	}
 /* //RM
@@ -291,36 +493,87 @@ $('.reveal').click(function() {
 <script type="text/javascript">
 require(['jquery', 'jquery.mousewheel'], function($) {
 
-/*
+$('#full_screen').click(function() {
+    var txt1 = 'Full Screen';
+    var txt2 = 'Exit Full Screen';
+    if ($("#full_screen").text() == txt1){
+        $("#wrapper").children().not("#singleCardHolder").hide();
+        $("#navigation").hide();
+        $("#appTitle").hide();
+        $("#singleCardHolder").css('margin-left','8.5%');
+        $("#full_screen").text(txt2);
+    }
+    else{
+        $("#wrapper").children().not("#cardFormContainer").show();
+        $("#navigation").show();
+        $("#appTitle").show();
+        $("#singleCardHolder").css('margin-left','0');
+        $("#full_screen").text(txt1);
+    }
+    return false;
+});
+
+// http://standardofnorms.wordpress.com/2012/04/08/shuffling-all-the-children-of-a-parent-element-in-javascript/
+$('#shuffle_cards').click(function() {
+    var cards  = $('#cards');
+    var child = cards.children();
+    while (child.length) {
+        cards.append(child.splice(Math.floor(Math.random() *  child.length), 1));
+    }
+    return false;
+});
+
+
+$('#play_cards').click(function(){
+    var txt1 = 'Play';
+    var txt2 = 'Pause';
+    if ($("#play_cards").text() == txt1){
+        myintrval = setInterval(function(){
+            if (current >= sliderLength-1)
+                $('#play_cards').click();
+            $('#next_card').click();
+        }, 5000);
+        $("#play_cards").text(txt2);
+    }
+    else{
+        clearInterval(myintrval);
+        $("#play_cards").text(txt1);
+    }
+    return false;
+});
+
 $('#previous_card').click(function() {
-    sliders[0].changeCard(-1);
+    if (current != 0){current = current - 1}
+    sliders[0].goToPrev();
     return false;
 });
 $('#next_card').click(function() {
-    sliders[0].changeCard(1);
+    if (current != sliderLength - 1){current = current + 1}
+    sliders[0].goToNext();
     return false;
 });
 
 $('#first_card').click(function() {
-    sliders[0].firstCard();
+    sliders[0].goToFirst();
+    current = 0;
     return false;
 });
 
 $('#last_card').click(function() {
-    sliders[0].lastCard();
+    sliders[0].goToLast();
+    current = sliderLength - 1;
     return false;
 });
-*/
 // scroll through the slider using horizontal mousewheel/touchpad
 
 $('#cardSlider').mousewheel(function(event) {
       if (event.deltaX>0){
         event.preventDefault();
-        sliders[0].goToNext();
+        $('#next_card').click();
       }
       else if (event.deltaX<0){
       	event.preventDefault();
-        sliders[0].goToPrev();
+        $('#previous_card').click();
       }
 });
 
@@ -328,9 +581,11 @@ function checkKey(e) {
     var event = window.event ? window.event : e;
     if (true) {
         if (event.keyCode == 37)
-            sliders[0].goToPrev()
+            $('#previous_card').click();
+            //sliders[0].goToPrev()
         if (event.keyCode == 39)
-            sliders[0].goToNext()    
+            $('#next_card').click();
+            //sliders[0].goToNext()    
     }
 };
 document.onkeydown=checkKey;

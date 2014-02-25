@@ -1,7 +1,7 @@
 {% extends "__layout_left_sidebar.html" %}
 
 {% block sidebar_content %}
-	{% include "_current_collection_nav.html" with collection=collection %}
+	{% include "_current_collection_nav.html" with collection=collection collections=collections %}
 {% endblock %}
 
 {% block main_content %}
@@ -12,33 +12,49 @@
 			<h2>{{ collection.title }}</h2>
 			{% if collection.id in user_collection_role.ADMIN %}
 			<ul class="adminMenu">
-				<li><a href="#">Edit</a></li>
-				<li><a href="#">Share</a></li>
+				<li><a href="{% url 'collectionUploadDeck' collection.id %}" id="addDeck">Add Deck</a></li>
 			</ul>
 			<ul class="adminMenu adminMenuRight">
-				<li><a href="#">Delete</a></li>
+                <li><a href="{% url 'collectionEdit' collection.id %}">Edit</a></li>
+                <li><a href="{% url 'collectionDelete' collection.id %}">Delete</a></li>
 			</ul>
 			{% endif %}
 		</div>
+        <div class="courseWrapper addCourseWrapper" id="addDeckForm"><!-- courseWrapper (start) -->
+        <form action="/deck/create/" method="POST" id="deckform">
+            {% csrf_token %}
+			<div class="courseHeader"><!-- courseHeader (start) -->
+					<h2 id="deckTitle">Enter the new deck's name</h2>
+                    <input id="deck_title" name="title" type="hidden" />
+                    <input id="collection_id" name="collection_id" type="hidden" />
+                	<ul class="adminMenu">
+							<li><a href="#" id="deck_submit">Create</a></li>
+					</ul>
+					<ul class="adminMenu adminMenuRight">
+							<li><a href="#" id="deck_cancel">Cancel</a></li>
+					</ul>
+			</div><!-- courseHeader (end) -->
+        </form>
+        </div>
 		<div class="slider" data-slider-type="decks"><!--slider (start) -->
 			<ul class="courseDecks"><!-- courseDecks(start) -->
 				{% for deck in collection.decks %}
 				<li class="deck"><!-- deck (start) -->
 					<h2>{{ deck.title }}</h2>
-					<p><h3>{{ deck.num_cards }}</h3> Cards</p>
+					<p><h3>{{ deck.num_cards }}</h3> {% if deck.num_cards == 1 %}Card {% else %}Cards{% endif %}</p>
 					<!--
 					<p>Last modified</p>
 					<p class="lastUpdated">Now</p>
 					-->
-					<a href="#" class="arrow arrowExpand"><img src="{{ STATIC_URL }}img/arrowUp.png"></a>
+					<!--a href="#" class="arrow arrowExpand"><img src="{{ STATIC_URL }}img/arrowUp.png"></a-->
 					<ul class="deckMenu">
-						<li class="arrowContainer"><a href="#" class="arrow arrowCollapse"><img src="{{ STATIC_URL }}img/arrowDown.png"></a></li>
+						<!--li class="arrowContainer"><a href="#" class="arrow arrowCollapse"><img src="{{ STATIC_URL }}img/arrowDown.png"></a></li-->
 						<li><a class="viewReview" href="{% url 'deckIndex' deck.id %}">Review</a></li>
 						<li><a class="viewReview" href="{% url 'deckIndex' deck.id %}?mode=quiz">Quiz</a></li>
 
 						{% if collection.id in user_collection_role.ADMIN %}
-						<li><a class="adminMenuBtn" href="#">Edit</a></li>
-						<li><a class="adminMenuBtn" href="#">Delete</a></li>
+                        <li><a class="adminMenuBtn" href="{% url 'deckEdit' deck.id %}">Edit</a></li>
+                        <li><a class="adminMenuBtn" href="{% url 'deckDelete' deck.id %}">Delete</a></li>
 						{% endif %}
                         </ul>
                     </li><!-- deck (end) -->
@@ -58,15 +74,27 @@
 
 {% block javascript %}
 <script type="text/javascript">
-require(['views/CollectionList'], function(CollectionList){
-	$(document).ready(function(){
-			var collectionList = new CollectionList({
-					$add_collection_button: $('#addAcourse'),
-					$collection_cancel: $('#collection_cancel'),
-					$add_collection_content: $('.addCourseWrapper'),
-					$add_collection_title: $('.courseHeader h2'),
-			});
-	});
+$(document).ready(function(){
+        $('#deck_submit').bind('click', function(){
+            setTimeout(function() {
+            $("#collection_id").val(extractCollectionId());
+
+            var gh = $("#deckTitle");
+            $("#deck_title").val(gh.text());
+            $('#deckform').submit();
+            return false;
+        }, 1000);
+        });
+
+        $('#addDeck').click(function(){
+            $('#addDeckForm').css("display","block");
+            return false;
+        });
+        $('#deck_cancel').click(function(){
+            $('#addDeckForm').css("display","none");
+            return false;
+        });
+});
 });
 
 require(['jquery', 'lib'], function($, lib) {
