@@ -592,9 +592,6 @@ div.deckNav{
 			padding: 1em 0.5em;
 		}
 
-#cardForm{
-	display:none;
-}
 #cardOverflow{
 	display: inline-block;
 	width: 100%;
