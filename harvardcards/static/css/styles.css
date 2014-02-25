@@ -90,6 +90,8 @@ h1, h2, h3, h4
 		margin-right: 0.25em;
 	}
 
+    h2.courseTitle > a { text-decoration: none }
+
 	.courseHeader h3 {
 		display:inline-block;
 		font-size: 1.5625em;
@@ -592,9 +594,6 @@ div.deckNav{
 			padding: 1em 0.5em;
 		}
 
-#cardForm{
-	display:none;
-}
 #cardOverflow{
 	display: inline-block;
 	width: 100%;
