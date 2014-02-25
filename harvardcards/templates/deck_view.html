@@ -15,7 +15,7 @@
     <div class="courseWrapper" id = "wrapper"><!-- courseWrapper (start) -->
 
         <div class="courseHeader"><!-- courseHeader (start) -->
-            <h2 class="courseTitle"><a href="{% url 'collection_id' collection.id %}">{{collection.title}}</a></h2><h3>{{deck.title}}</h3>
+            <h2 class="courseTitle"><a href="{% url 'collectionIndex' collection.id %}">{{collection.title}}</a></h2><h3>{{deck.title}}</h3>
             <ul class="adminMenu adminMenuRight">
                 {% if collection.id in user_collection_role.ADMIN %}
                     <li><a href="{% url 'deckEdit' deck.id %}">Edit</a></li>

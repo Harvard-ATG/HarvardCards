@@ -51,7 +51,7 @@ class Collection(models.Model):
 
     def get_absolute_url(self):
         from django.core.urlresolvers import reverse
-        return reverse('collection_id', args=[str(self.id)])
+        return reverse('collectionIndex', args=[str(self.id)])
 
 class Card(models.Model):
     collection = models.ForeignKey(Collection)

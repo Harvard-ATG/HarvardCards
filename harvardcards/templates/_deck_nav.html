@@ -5,9 +5,9 @@
 		    {% for c in collections %}
                 <li>
                     {% if c == collection %}
-                         <a href="{% url 'collection_id' c.id %}" class = "active">{{ c.title|truncatechars:30 }}</a>
+                         <a href="{% url 'collectionIndex' c.id %}" class = "active">{{ c.title|truncatechars:30 }}</a>
                     {% else %}
-                         <a href="{% url 'collection_id' c.id %}">{{ c.title|truncatechars:30 }}</a>
+                         <a href="{% url 'collectionIndex' c.id %}">{{ c.title|truncatechars:30 }}</a>
                     {% endif %}
                     {% if c == collection %}
                         {% if c.deck_set.count > 0 %}
