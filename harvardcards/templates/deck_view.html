@@ -15,12 +15,11 @@
     <div class="courseWrapper" id = "wrapper"><!-- courseWrapper (start) -->
 
         <div class="courseHeader"><!-- courseHeader (start) -->
-			<a href="#" id="contentHere" title="Content Starts">Main content below</a>
-            <h2 class="courseTitle">{{collection.title}}</h2><h3>{{deck.title}}</h3>
+            <h2 class="courseTitle"><a href="{% url 'collection_id' collection.id %}">{{collection.title}}</a></h2><h3>{{deck.title}}</h3>
             <ul class="adminMenu adminMenuRight">
                 {% if collection.id in user_collection_role.ADMIN %}
-                <li><a href="#">Edit</a></li>
-                <li><a href="#">Delete</a></li>
+                    <li><a href="#">Edit</a></li>
+                    <li><a href="#">Delete</a></li>
                 {% endif %}
                 <li>
                 {% if is_quiz_mode %}
@@ -32,7 +31,7 @@
 
         </div><!-- courseHeader (end) -->
 		{% if user.is_authenticated %}
-        	<a href="#" id="addCard">Add Card</a>
+        	<a href="return false;" id="addCard">Add Card</a>
         <div id="cardSlider" role="scrollbar" aria-orientation="horizontal">
         {% else %}
         <div id="cardSliderNotAdmin" role="scrollbar" tabindex="0" aria-orientation="horizontal">
