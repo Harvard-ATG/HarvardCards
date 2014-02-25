@@ -152,7 +152,15 @@
             <button class="adminMenuBtn saveBtn" type="button" id="card_create">Save</button>
             <button class="adminMenuBtn cancelBtn" type="button" id="card_cancel">Cancel</button>
         </form>
-    </div>
+        </div>
+		
+        <div class="fullcardBtns">
+        	<a class="mobileFirst" href="javascript:fullCardSlider[0].goToFirst()"><i class="fa fa-angle-double-left"></i><span>First</span></a>
+        	<a class="mobilePrevious" href="javascript:fullCardSlider[0].goToPrev()"><i class="fa fa-angle-left"></i><span>Previous</span></a>
+      		<a class="mobileNext" href="javascript:fullCardSlider[0].goToNext()"><i class="fa fa-angle-right"></i><span>Next</span></a>
+        	<a class="mobileLast" href="javascript:fullCardSlider[0].goToLast()"><i class="fa fa-angle-double-right"></i><span>Last</span></a>
+        </div>
+		
 
         <div id="singleCardHolder" style="{%if cards|length == 0%} border:none; background: inherit;{%endif%}"><!-- singleCardHolder (start)-->
             <div id="counterHolder" class="">

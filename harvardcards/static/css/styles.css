@@ -420,8 +420,9 @@ ul.adminMenu
 /********** cards inside a deck view (start) *************/
 #cardSlider
 , #cardSliderNotAdmin{
-	display: inline-block;
-	float: left;
+	/*display: inline-block;
+	float: left;*/
+	display: none;
 	background-color: #f3f3f1;
 	border: solid 1px #e1dfdf;
 	padding: 0.5em 4.976851851852%;
@@ -692,6 +693,42 @@ a#mobileMenu{
 			background-position: 4% 0.65em;
 		}
 
+.fullcardBtns{
+	position: fixed;
+	bottom: 0;
+	z-index: 1;
+	width: 98%;
+	text-align: center;
+}
+
+.fullcardBtns a{
+	background: #4e84c4;
+	padding: 0.5em 2%;
+	display: inline-block;
+	/*-webkit-border-radius: 12px;
+	-moz-border-radius: 12px;
+	border-radius: 12px;*/
+	color: #f3f3f1;
+	font-family: 'League Gothic';
+	font-size: 1em;
+	text-transform: uppercase;
+	text-decoration: none;
+}
+	.fullcardBtns .fa{
+		margin-right: 5%;
+	}
+	
+	.mobileFirst{
+		float:left;
+	}
+	.mobile{
+	}
+	.mobile{
+		
+	}
+	.mobileLast{
+		float:right;
+	}
 @media screen and (min-width: 320px){
 /*
 * iPhone portrait
@@ -955,7 +992,27 @@ a#mobileMenu{
 	,.footerNav ul ul li a.active {
 		background-position: 3% 0.65em;
 	}
-
+	
+	/* in desktop mode - hide show cars on the main
+	   content area instead of sliding */
+	#singleCardHolder ul li.hide{
+		display: none;
+	}
+	
+	#singleCardHolder ul li.show{
+		display: block;
+	}
+	
+	/*hiddent the slider navigation menu for small screen size */
+	.fullcardBtns{
+		display: none;
+	}
+	
+	#cardSlider
+	, #cardSliderNotAdmin{
+		display: inline-block;
+		
+	}
 }
 @media screen and (min-width: 1024px){
 /*
@@ -1039,7 +1096,7 @@ a#mobileMenu{
 	}
 
 	#cardSliderNotAdmin{
-		display: inline-block;
+		/*display: inline-block;*/
 		float: left;
 		background-color: #f3f3f1;
 		border: solid 1px #e1dfdf;
@@ -1059,16 +1116,6 @@ a#mobileMenu{
 	.footerNav { display:none; }
 
 	.desktopNav { display:block; }
-	
-	/* in desktop mode - hide show cars on the main
-	   content area instead of sliding */
-	#singleCardHolder ul li.hide{
-		display: none;
-	}
-	
-	#singleCardHolder ul li.show{
-		display: block;
-	}
 }
 
 @media screen and (min-width: 1024px){
