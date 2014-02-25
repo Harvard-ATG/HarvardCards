@@ -1,5 +1,5 @@
 <div id="navigation"><!-- navigaton (start) -->
-    <a href="{% url 'collectionCreate' %}" id="addAcourse">Add a course</a>
+    {% if user.is_authenticated %}<a href="{% url 'collectionCreate' %}" id="addAcourse">Add a course</a>{% endif %}
 	<nav class="desktopNav" data-set="mobileNav">
 		<ul class="appNav">
 		{% for collection in collections %}
