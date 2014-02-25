@@ -64,6 +64,12 @@ class ServicesTest(TestCase):
         collection = Collection.objects.create(title='a', description='aaa', card_template=self.card_template)
         self.assertEqual(services.delete_collection(collection.id), True)
 
+    def test_deleteDeck(self):
+        card_template = CardTemplate.objects.create(title='b', description='bbb')
+        collection = Collection.objects.create(title='a', description='aaa', card_template=card_template)
+        deck = Deck.objects.create(title='a', collection=collection)
+        self.assertEqual(services.delete_deck(deck.id), True)
+
 class QueriesTest(TestCase):
     def setUp(self):
         """ Every test needs access to the request factory. """
@@ -118,3 +124,11 @@ class QueriesTest(TestCase):
 
         self.assertEqual(deck_title, deck.title)
         self.assertEqual(len(card_list), deck.cards.count())
+
+    def test_getDeckCollectionId(self):
+        card_template = CardTemplate.objects.create(title='b', description='bbb')
+        collection = Collection.objects.create(title='a', description='aaa', card_template=card_template)
+        deck = Deck.objects.create(title='a', collection=collection)
+        collection_id = queries.getDeckCollectionId(deck.id)
+
+        self.assertEqual(collection.id, collection_id)

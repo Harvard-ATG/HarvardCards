@@ -1,0 +1,20 @@
+{% extends "__layout_left_sidebar.html" %}
+
+{% block sidebar_content %}
+	{% include "_current_collection_nav.html" with collection=collection collections=collections %}
+{% endblock %}
+
+{% block main_content %}
+<div id="content">
+    <div class="courseWrapper">
+        <div class="courseHeader">
+            <h2>Edit deck</h2>
+        </div>
+        <form action="{% url 'deckEdit' deck.id %}" method="post">{% csrf_token %}
+            {{ deck_form.as_p }}
+            <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
+            <a href="{% url 'deckIndex' deck.id %}" class="adminMenuBtn cancelBtn">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
