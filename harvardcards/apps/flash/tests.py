@@ -32,7 +32,7 @@ class CollectionTest(TestCase):
         #self.assertTemplateUsed(response, 'index.html')
 
     def test_collection_get(self):
-        url = reverse('collection_id')
+        url = reverse('collectionIndex')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 

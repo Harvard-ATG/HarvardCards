@@ -3,7 +3,7 @@
 	<nav class="desktopNav" data-set="mobileNav">
 		<ul class="appNav">
 		{% for collection in collections %}
-			<li><a href="{% url 'collection_id' collection.id %}">{{ collection.title|truncatechars:30 }}</a>
+			<li><a href="{% url 'collectionIndex' collection.id %}">{{ collection.title|truncatechars:30 }}</a>
 			{% if collection.decks|length > 0 %}
 			{% endif %}
 			</li>
