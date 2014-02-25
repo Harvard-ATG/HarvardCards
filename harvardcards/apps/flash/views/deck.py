@@ -8,15 +8,10 @@ from django.utils import simplejson as json
 from django.forms.formsets import formset_factory
 from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Users_Collections
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
-from harvardcards.apps.flash import queries, utils
-
-def test1(request):
-    return render(request, "decks/test1.html")
-
-def test2(request):
-    return render(request, "decks/test2.html")
+from harvardcards.apps.flash import services, queries, utils
 
 def index(request, deck_id=None):
+    """Displays the deck of cards for review/quiz."""
     collections = Collection.objects.all().prefetch_related('deck_set')
     deck = Deck.objects.get(id=deck_id)
     deck_cards = Decks_Cards.objects.filter(deck=deck).order_by('sort_order').prefetch_related('card__cards_fields_set__field')
@@ -53,51 +48,35 @@ def index(request, deck_id=None):
 
     return render(request, "deck_view.html", context)
 
-# 
-def create(request, deck_id=None):
+def delete(request, deck_id=None):
+    """Deletes a deck."""
+    collection_id = queries.getDeckCollectionId(deck_id)
+    services.delete_deck(deck_id)
+    return redirect('collection_id', collection_id)
 
-    
+def edit(request, deck_id=None):
+    """Edits a deck."""
+    deck = Deck.objects.get(id=deck_id)
+    collections = Collection.objects.all()
+    collection = Collection.objects.get(id=deck.collection.id)
+
     if request.method == 'POST':
-        if 'deck_id' in request.POST:
-            # then it's an edit
-            deck = Deck.objects.get(id=request.POST['deck_id'])
-            deck_id = request.POST['deck_id']
-            deckForm = DeckForm(request.POST, instance=deck)
-            collection_id = deck.collection.id
-        else:
-            # then it's a new one
-            deckForm = DeckForm(request.POST)
-            collection_id = request.POST['collection_id']
-            
-            
-        deckForm = DeckForm(request.POST)
-        if deckForm.is_valid():
-            deck = deckForm.save(commit=False)
-            deck.collection = Collection.objects.get(id=collection_id)
-            if deck_id:
-                deck.id = deck_id
-            deck.save()
-            if deck:
-                #return HttpResponse('{"success": true, "id": %s}' % deck.id, mimetype="application/json")
-                object = Deck.objects.get(id = deck.id)
-                return redirect(object)
-            else:
-                errorMsg = 'Failure to save.'
-        else:
-            errorMsg = 'Validation Error.'
+        deck_form = DeckForm(request.POST, instance=deck)
+        if deck_form.is_valid():
+            deck = deck_form.save()
+            return redirect(deck)
     else:
-        errorMsg = 'Invalid Request.'
-    return HttpResponse('{"success": false, "message": {0}}'.format(errorMsg), mimetype="application/json")
+        deck_form = DeckForm(instance=deck)
+        
+    context = {
+        "deck": deck,
+        "deck_form": deck_form, 
+        "collections": collections,
+        "collection": collection
+    }
 
-def delete(request):
-    returnValue = "false"
-    if request.POST['deck_id']:
-        deck_id = request.POST['deck_id']
-        Deck.objects.filter(id=deck_id).delete()
-        if not Deck.objects.filter(id=deck_id):
-            returnValue = "true"
+    return render(request, 'decks/edit.html', context)
     
-    return HttpResponse('{"success": %s}' % returnValue, mimetype="application/json")
   
 def download_deck(request, deck_id=None):
     '''

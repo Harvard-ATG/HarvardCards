@@ -14,6 +14,10 @@ def getDecksByCollection():
             decks_by_collection[deck.collection.id] = []
         decks_by_collection[deck.collection.id].append(deck)
     return decks_by_collection
+
+def getDeckCollectionId(deck_id):
+    """gets the collection id associated with the deck"""
+    return Deck.objects.get(id=deck_id).collection.id
         
 def getCollection(collection_id):
     """get a collection object from its id"""

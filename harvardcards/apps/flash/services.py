@@ -13,6 +13,13 @@ def delete_collection(collection_id):
     if not Collection.objects.filter(id=collection_id):
         return True
     return False
+
+def delete_deck(deck_id):
+    """Deletes a deck and returns true on success, false otherwise."""
+    Deck.objects.get(id=deck_id).delete()
+    if not Deck.objects.filter(id=deck_id):
+        return True
+    return False
     
 def handle_uploaded_deck_file(collection_id, deck_title, uploaded_file):
     """Handles an uploaded deck."""
