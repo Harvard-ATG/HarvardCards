@@ -3,7 +3,7 @@ define(['jquery'], function($) {
         this.selectEl = $(options.selectEl);
         this.previewEl = $(options.previewEl);
         this.url = this.previewEl.data('fetch-url');
-		this.defaultText = this.previewEl.html();
+        this.defaultText = this.previewEl.html();
         this.cache = {}; // cache the template previews to minimize network traffic
     };
 
@@ -11,11 +11,11 @@ define(['jquery'], function($) {
         var that = this;
         this.selectEl.on("change", function() {
             var card_template_id = $(this).find(":selected").val();
-			if(card_template_id) {
-				that.loadPreview(card_template_id);
-			} else {
-				that.resetPreview();
-			}
+            if(card_template_id) {
+                that.loadPreview(card_template_id);
+            } else {
+                that.resetPreview();
+            }
         });
     };
 
@@ -23,9 +23,9 @@ define(['jquery'], function($) {
         this.previewEl.html(html);
     };
 
-	CardTemplatePreview.prototype.resetPreview = function() {
-		this.updatePreview(this.defaultText);
-	};
+    CardTemplatePreview.prototype.resetPreview = function() {
+        this.updatePreview(this.defaultText);
+    };
 
     CardTemplatePreview.prototype.loadPreview = function(cardTemplateId) {
         var that = this;
