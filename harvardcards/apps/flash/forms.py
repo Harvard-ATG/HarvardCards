@@ -19,4 +19,4 @@ class DeckForm(forms.ModelForm):
 
 class DeckImportForm(forms.Form):
     deck_title = forms.CharField(max_length=200, required=True)
-    file = forms.FileField(required=True)
+    file = forms.FileField(required=False)
