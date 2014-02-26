@@ -21,19 +21,18 @@ urlpatterns = patterns('',
     url(r'^deck/(?P<deck_id>\d+)/edit$', 'harvardcards.apps.flash.views.deck.edit', name='deckEdit'),
     url(r'^deck/(?P<deck_id>\d+)/delete$', 'harvardcards.apps.flash.views.deck.delete', name='deckDelete'),
     url(r'^deck/(?P<deck_id>\d+)/download$', 'harvardcards.apps.flash.views.deck.download_deck', name='deckDownload'),
-
-    url(r'^card/create$', 'harvardcards.apps.flash.views.card.create', name='cardCreate'),
-    url(r'^card/delete$', 'harvardcards.apps.flash.views.card.delete', name='cardDelete'),
     
     url(r'^login/$', 'django_openid_auth.views.login_begin', name='login'),
     url(r'^login-complete/$', 'django_openid_auth.views.login_complete', name='openid-complete'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/',}, name='logout'),
     
     # API
-    url(r'^collection/fields/$', 'harvardcards.apps.flash.views.api.collection.fields', name='fieldsCollection'),
-    url(r'^collection/delete/$', 'harvardcards.apps.flash.views.api.collection.delete', name='deleteCollection'),
+    # Commenting these out because they aren't being used for anything yet
+    #url(r'^collection/fields/$', 'harvardcards.apps.flash.views.api.collection.fields', name='fieldsCollection'),
+    #url(r'^collection/delete/$', 'harvardcards.apps.flash.views.api.collection.delete', name='deleteCollection'),
+    url(r'^api/card/create$', 'harvardcards.apps.flash.views.api.card.create', name='apiCardCreate'),
+    url(r'^api/card/delete$', 'harvardcards.apps.flash.views.api.card.delete', name='apiCardDelete'),
     
-	
 	# url(r'^$', 'HarvardCards.views.home', name='home'),
     # url(r'^HarvardCards/', include('harvardcards.foo.urls')),
 

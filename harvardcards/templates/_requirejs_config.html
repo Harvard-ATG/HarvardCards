@@ -4,6 +4,7 @@ requirejs.config({
 	paths: {
 		'jquery' : 'http://code.jquery.com/jquery-1.10.1.min',
 		'jquery.cookie': '//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.3.1/jquery.cookie.min',
+		'jquery.form': 'http://malsup.github.io/jquery.form',
 		'jqueryui': 'http://code.jquery.com/ui/1.10.3/jquery-ui',
 		'lodash' : '//cdnjs.cloudflare.com/ajax/libs/lodash.js/1.3.1/lodash',
 		'bootstrap' : '//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min'
@@ -21,6 +22,10 @@ requirejs.config({
 		'jquery.cookie': {
 			deps: ['jquery'],
 			exports: 'jQuery.fn.cookie'
+		},
+		'jquery.form': {
+			deps: ['jquery'],
+			exports: 'jQuery.fn.form'
 		},
 		'lodash' : '_',
 		'bootstrap': ['jquery']

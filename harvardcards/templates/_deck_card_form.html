@@ -1,5 +1,6 @@
-<form id="cardForm" class="editCardMode" method="POST" action="{% url 'cardCreate' %}">
+<form id="cardForm" class="editCardMode" method="POST" action="{% url 'apiCardCreate' %}">
     {% csrf_token %}
+    <div class="formMessage" style="text-align:left;margin:0 0 1em 0"></div>
     <input id="deck_id" name="deck_id" type="hidden" value="{{ deck.id }}"/>
     <div class="editFields">
         <h2>Card front</h2>
@@ -14,6 +15,8 @@
             {% include "_deck_card_form_field.html" with field=field %}
         {% endfor %}
     </div>
-    <button class="adminMenuBtn saveBtn" type="button" id="card_create">Save</button>
-    <button class="adminMenuBtn cancelBtn" type="button" id="card_cancel">Cancel</button>
+    <div>
+        <button class="adminMenuBtn saveBtn" type="button" id="card_create">Save</button>
+        <button class="adminMenuBtn cancelBtn" type="button" id="card_cancel">Cancel</button>
+    </div>
 </form>

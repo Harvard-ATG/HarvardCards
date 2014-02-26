@@ -24,8 +24,9 @@ def index(request, deck_id=None):
     for dcard in deck_cards:
         card_fields = {'show':[],'reveal':[]}
         for cfield in dcard.card.cards_fields_set.all():
-            bucket = 'show'
             if cfield.field.display:
+                bucket = 'show'
+            else:
                 bucket = 'reveal'
             card_fields[bucket].append({
                 'type': cfield.field.field_type,
@@ -40,8 +41,9 @@ def index(request, deck_id=None):
 
     card_template_fields = {'show':[],'reveal':[]}
     for field in current_collection.card_template.fields.all():
-        bucket = 'show'
         if field.display:
+            bucket = 'show'
+        else:
             bucket = 'reveal'
         card_template_fields[bucket].append({
             'id': field.id,

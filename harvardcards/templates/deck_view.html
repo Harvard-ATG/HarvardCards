@@ -102,7 +102,7 @@
                 <ul id="allCards">
                     {% for card in cards %}
                     <li class="hide" role="tabpanel">
-                        {% for field in card.fields.reveal %}
+                        {% for field in card.fields.show %}
                             {% include "_deck_card_fields.html" with field=field %}
                         {% endfor %}
                         <div class="hideRevealHr">
@@ -111,7 +111,7 @@
                             {% endif %}
                         </div>
                         <div class="{% if is_quiz_mode %}hide{% endif %}">
-                        {% for field in card.fields.show %}
+                        {% for field in card.fields.reveal %}
                             {% include "_deck_card_fields.html" with field=field hide=is_quiz_mode%}
                         {% endfor %}
                         </div>
@@ -509,6 +509,32 @@ function checkKey(e) {
 };
 document.onkeydown=checkKey;
 
+});
+</script>
+
+<script type="text/javascript">
+require(['jquery', 'jquery.form'], function($) {
+    // This module sets up the card form used for adding new cards to a deck.
+    // Uses the jquery.form plugin to AJAXify the html form.
+    // TODO: move this to a separate JS file and modularize it.
+    $(document).ready(function() {
+        var $cardForm = $("#cardForm");
+        var $cardFormMessage = $cardForm.find('.formMessage');
+        var formOpts = {
+            resetForm: true,
+            beforeSubmit: function() {
+                $cardFormMessage.css("color", "black").html('Saving...');
+            },
+            success: function(responseText, statusText, xhr, formEl) {
+                //console.log("success", arguments);
+                $cardFormMessage.css("color", "green").html("<b>Card saved</b>");
+            },
+            error: function() {
+                $cardFormMessage.css("color", "red").html("<b>Error: card not saved</b>");
+            }
+        };
+        $cardForm.ajaxForm(formOpts);
+    });
 });
 </script>
 {% endblock %}
