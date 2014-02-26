@@ -38,12 +38,23 @@ def index(request, deck_id=None):
             'fields': card_fields
         })
 
+    card_template_fields = {'show':[],'reveal':[]}
+    for field in current_collection.card_template.fields.all():
+        bucket = 'show'
+        if field.display:
+            bucket = 'reveal'
+        card_template_fields[bucket].append({
+            'type': field.field_type,
+            'label': field.label,
+            'show_label': field.show_label,
+        })
+
     context = {
         "collections": collections,
         "deck": deck,
         "cards": cards,
         "collection": current_collection,
-        "card_template": current_collection.card_template,
+        "card_template_fields": card_template_fields,
         "is_quiz_mode": is_quiz_mode,
         "is_deck_admin": is_deck_admin,
     }

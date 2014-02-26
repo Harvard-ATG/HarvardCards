@@ -1,0 +1,13 @@
+{% if field.type == 'T' %}
+    <i class="fa fa-font fa-2x pull-left"></i>
+{% elif field.type == 'I' %}
+    <i class="fa fa-picture-o fa-2x pull-left"></i>
+{% elif field.type == 'V' %}
+    <i class="fa fa-film fa-2x pull-left"></i>
+{% elif field.type == 'A' %}
+    <i class="fa fa-microphone fa-2x pull-left"></i>
+{% endif %}
+<fieldset>
+    <label for="{{field.label}}">{{field.label}}</label>
+    <input id="{{field.label}}" class="formEle form" type="text" placeholder="Enter {{field.label}}" />
+</fieldset>
