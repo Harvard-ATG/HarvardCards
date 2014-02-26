@@ -30,8 +30,8 @@ urlpatterns = patterns('',
     # Commenting these out because they aren't being used for anything yet
     #url(r'^collection/fields/$', 'harvardcards.apps.flash.views.api.collection.fields', name='fieldsCollection'),
     #url(r'^collection/delete/$', 'harvardcards.apps.flash.views.api.collection.delete', name='deleteCollection'),
-    url(r'^api/card/create$', 'harvardcards.apps.flash.views.api.card.create', name='apiCardCreate'),
-    url(r'^api/card/delete$', 'harvardcards.apps.flash.views.api.card.delete', name='apiCardDelete'),
+    url(r'^api/card/create$', 'harvardcards.apps.flash.api.card.create', name='apiCardCreate'),
+    url(r'^api/card/delete$', 'harvardcards.apps.flash.api.card.delete', name='apiCardDelete'),
     
 	# url(r'^$', 'HarvardCards.views.home', name='home'),
     # url(r'^HarvardCards/', include('harvardcards.foo.urls')),
