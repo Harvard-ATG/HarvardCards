@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 from django.forms.formsets import formset_factory
 from django.test.client import RequestFactory, Client
 
-from harvardcards.apps.flash.models import Collection, Deck, Field, CardTemplate, CardTemplates_Fields
+from harvardcards.apps.flash.models import Collection, Deck, Field, CardTemplate, CardTemplates_Fields, Card
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
 from harvardcards.apps.flash.views.collection import *
 from harvardcards.apps.flash import services, queries
@@ -60,15 +60,24 @@ class ServicesTest(TestCase):
         self.client = Client()
         self.card_template = CardTemplate.objects.get(pk=1)
 
+    def makeCollection(self):
+        card_template = CardTemplate.objects.create(title='b', description='bbb')
+        collection = Collection.objects.create(title='a', description='aaa', card_template=card_template)
+        return collection
+
     def test_deleteCollection(self):
-        collection = Collection.objects.create(title='a', description='aaa', card_template=self.card_template)
+        collection = self.makeCollection()
         self.assertEqual(services.delete_collection(collection.id), True)
 
     def test_deleteDeck(self):
-        card_template = CardTemplate.objects.create(title='b', description='bbb')
-        collection = Collection.objects.create(title='a', description='aaa', card_template=card_template)
+        collection = self.makeCollection()
         deck = Deck.objects.create(title='a', collection=collection)
         self.assertEqual(services.delete_deck(deck.id), True)
+
+    def test_deleteCard(self):
+        collection = self.makeCollection()
+        card = Card.objects.create(collection=collection, sort_order=1)
+        self.assertEqual(services.delete_card(card.id), True)
 
 class QueriesTest(TestCase):
     def setUp(self):
@@ -115,9 +124,9 @@ class QueriesTest(TestCase):
             CardTemplates_Fields.objects.create(card_template=card_template, field=f)
 
         card_list = [
-            [{"field":field1,"value":"a"},{"field":field2,"value":"a"}],
-            [{"field":field1,"value":"bb"},{"field":field2,"value":"bb"}],
-            [{"field":field1,"value":"ccc"},{"field":field2,"value":"ccc"}],
+            [{"field_id":field1.id,"value":"a"},{"field_id":field2.id,"value":"a"}],
+            [{"field_id":field1.id,"value":"bb"},{"field_id":field2.id,"value":"bb"}],
+            [{"field_id":field1.id,"value":"ccc"},{"field_id":field2.id,"value":"ccc"}],
         ]
         deck_title = "my_deck_title"
         deck = services.create_deck_with_cards(collection.id, deck_title, card_list)
