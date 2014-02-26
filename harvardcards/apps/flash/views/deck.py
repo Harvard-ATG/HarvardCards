@@ -18,6 +18,7 @@ def index(request, deck_id=None):
     current_collection = Collection.objects.get(id=deck.collection.id)
     user_collection_role = Users_Collections.get_role_buckets(request.user, collections)
     is_quiz_mode = request.GET.get('mode') == 'quiz'
+    is_deck_admin = next((True for cid in user_collection_role['ADMIN'] if cid == current_collection.id), False)
 
     cards = []
     for dcard in deck_cards:
@@ -38,12 +39,13 @@ def index(request, deck_id=None):
         })
 
     context = {
-        "user_collection_role": user_collection_role,
         "collections": collections,
         "deck": deck,
         "cards": cards,
         "collection": current_collection,
-        "is_quiz_mode": is_quiz_mode
+        "card_template": current_collection.card_template,
+        "is_quiz_mode": is_quiz_mode,
+        "is_deck_admin": is_deck_admin,
     }
 
     return render(request, "deck_view.html", context)
@@ -52,7 +54,7 @@ def delete(request, deck_id=None):
     """Deletes a deck."""
     collection_id = queries.getDeckCollectionId(deck_id)
     services.delete_deck(deck_id)
-    return redirect('collection_id', collection_id)
+    return redirect('collectionIndex', collection_id)
 
 def edit(request, deck_id=None):
     """Edits a deck."""

@@ -1,0 +1,38 @@
+<form id="cardForm" class="editCardMode" method="POST" action="{% url 'cardCreate' %}">
+    {% csrf_token %}
+    <input id="deck_id" name="deck_id" type="hidden" value="{{ deck.id }}"/>
+    <div class="editFields">
+        <h2>Card front</h2>
+        <i class="fa fa-font fa-2x pull-left"></i>
+        <fieldset>
+            <label for="term">Term</label>
+            <input id="term" class="formEle form" type="text" placeholder="Enter term">
+        </fieldset>
+        <i class="fa fa-align-left fa-2x pull-left"></i>
+        <fieldset>
+            <label for="definition">Definition</label>
+            <textarea id="definition" class="formEle" placeholder="Enter definition"></textarea>
+        </fieldset>
+        <i class="fa fa-film fa-2x pull-left"></i>
+        <fieldset>
+            <label for="videoURL">Video</label>
+            <input id="videoURL" class="formEle" type="text" placeholder="Video URL">
+        </fieldset>
+    </div>
+    <div class="hideRevealHr"></div>
+    <div class="editFields">
+        <h2>Card back</h2>
+        <i class="fa fa-picture-o fa-2x pull-left"></i>
+        <fieldset>
+            <label for="image">Image</label>
+            <input id="image" class="formEle form" type="text" placeholder="Click to chose an image">
+        </fieldset>
+        <i class="fa fa-microphone fa-2x pull-left"></i>
+        <fieldset>
+            <label for="audio">Audio</label>
+            <input id="audio" class="formEle form" type="text" placeholder="Click to chose an audio file">
+        </fieldset>
+    </div>
+    <button class="adminMenuBtn saveBtn" type="button" id="card_create">Save</button>
+    <button class="adminMenuBtn cancelBtn" type="button" id="card_cancel">Cancel</button>
+</form>

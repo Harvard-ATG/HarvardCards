@@ -21,7 +21,7 @@
             <h2 class="courseTitle"><a href="{% url 'collectionIndex' collection.id %}">{{collection.title}}</a></h2>
             <h3>{{deck.title}}</h3>
             <ul class="adminMenu adminMenuRight">
-                {% if collection.id in user_collection_role.ADMIN %}
+                {% if is_deck_admin %}
                     <li><a href="{% url 'deckEdit' deck.id %}">Edit</a></li>
                     <li><a href="{% url 'deckDelete' deck.id %}">Delete</a></li>
                 {% endif %}
@@ -35,10 +35,10 @@
         </div>
 
         <!-- SECTION: Card Slider -->
-        {% if user.is_authenticated %}
+        {% if is_deck_admin %}
             <a href="javascript:void(0);" id="addCard">Add Card</a>
         {% endif %}
-        <div id="{% if user.is_authenticated %}cardSlider{% else %}cardSliderNotAdmin{% endif %}" role="scrollbar" tabindex="0" aria-orientation="horizontal">
+        <div id="{% if is_deck_admin %}cardSlider{% else %}cardSliderNotAdmin{% endif %}" role="scrollbar" tabindex="0" aria-orientation="horizontal">
         {% if cards|length %}
             <div class="sliderBtns deckPrev">
                 <a id="prevCard" href="javascript:sliders[0].goToPrev()"><i class="fa fa-angle-left"></i><span>Previous</span></a>
@@ -50,17 +50,7 @@
             </div>
 
             <div class="cardHolder" id="holder" style="display:none;">
-                <ul id="cards">
-                {% for card in cards %}
-                    <li role="presentation" id = {{forloop.counter0}} >
-                        <a class="card image" href="javascript:sliders[0].goToCard({{forloop.counter0}})" role="tab" tabindex="-1">
-                            {% for field in card.fields.reveal %}
-                                {% include "_deck_slider_card_fields.html" with field=field %}
-                            {% endfor %}
-                        </a>
-                    </li>
-                {% endfor %}
-                </ul>
+                {% include "_deck_slider_cards.html" with cards=cards %}
             </div>
 
             <div class="sliderBtns deckNext">
@@ -74,50 +64,10 @@
         {% endif %}
         </div>
 
+
         <!-- SECTION: Add Card Form -->
         <div id="cardFormContainer" style="display:none">
-            <form id="cardForm" class="editCardMode" method="POST" action="/card/create/">
-                {% csrf_token %}
-                <input id="deck_id" name="deck_id" type="hidden" />
-                <input id="collection_id" name="collection_id" type="hidden" value="{{collection.id}}" />
-                <input id="max_card_id" name="max_card_id" type="hidden" value="{{cards|length}}" />
-                <input id="num_fields" name="num_fields" type="hidden" />
-                <input id="quiz_mode" name="quiz_mode" type="hidden" value="{{is_quiz_mode}}" />
-                <div class="editFields">
-                    <h2>Card front</h2>
-                    <i class="fa fa-font fa-2x pull-left"></i>
-                    <fieldset>
-                        <label for="term">Term</label>
-                        <input id="term" class="formEle form" type="text" placeholder="Enter term">
-                    </fieldset>
-                    <i class="fa fa-align-left fa-2x pull-left"></i>
-                    <fieldset>
-                        <label for="definition">Definition</label>
-                        <textarea id="definition" class="formEle" placeholder="Enter definition"></textarea>
-                    </fieldset>
-                    <i class="fa fa-film fa-2x pull-left"></i>
-                    <fieldset>
-                        <label for="videoURL">Video</label>
-                        <input id="videoURL" class="formEle" type="text" placeholder="Video URL">
-                    </fieldset>
-                </div>
-                <div class="hideRevealHr"></div>
-                <div class="editFields">
-                    <h2>Card back</h2>
-                    <i class="fa fa-picture-o fa-2x pull-left"></i>
-                    <fieldset>
-                        <label for="image">Image</label>
-                        <input id="image" class="formEle form" type="text" placeholder="Click to chose an image">
-                    </fieldset>
-                    <i class="fa fa-microphone fa-2x pull-left"></i>
-                    <fieldset>
-                        <label for="audio">Audio</label>
-                        <input id="audio" class="formEle form" type="text" placeholder="Click to chose an audio file">
-                    </fieldset>
-                </div>
-                <button class="adminMenuBtn saveBtn" type="button" id="card_create">Save</button>
-                <button class="adminMenuBtn cancelBtn" type="button" id="card_cancel">Cancel</button>
-            </form>
+            {% include "_deck_card_form.html" with deck=deck card_template=card_template %}
         </div>
 
 
