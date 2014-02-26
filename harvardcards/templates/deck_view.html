@@ -189,9 +189,15 @@ $(document).ready(function(){
 });
 
 $('#addCard').click(function(){
-        $('#cardFormContainer').toggle()
-        return false;
-    });
+    $('#cardFormContainer').toggle()
+    return false;
+});
+
+$('#card_cancel').click(function(){
+    $('#cardFormContainer').hide();
+    return false;
+});
+
 function extractDeckId(){
     var pathname = $(location).attr('href');
     var res = String(pathname.match('[^/]+$'));
@@ -207,10 +213,6 @@ $('#card_create').click(function(){
 });
 
 
-$('#card_cancel').click(function(){
-    $('#cardForm').css("display","none");
-    return false;
-});
 
 // stackoverflow
 function parseURLParams(url) {

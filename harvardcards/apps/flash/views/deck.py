@@ -44,6 +44,7 @@ def index(request, deck_id=None):
         if field.display:
             bucket = 'reveal'
         card_template_fields[bucket].append({
+            'id': field.id,
             'type': field.field_type,
             'label': field.label,
             'show_label': field.show_label,
