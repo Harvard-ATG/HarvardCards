@@ -476,6 +476,7 @@ ul#cards{
 			a.card{
 				padding: 0.8em 0%;
 				height: 4.3375em;
+				background-color: #fff;
 			}
 
 			a.image{
@@ -486,6 +487,12 @@ ul#cards{
 			ul#cards li a img{
 				max-height: 100%;
 				padding:0;
+			}
+			/* center horizontally and vertically the text in the thumbnail image on the slider */
+			ul#cards li .cardFieldValue {
+				text-align: center;
+				vertical-align: middle;
+				line-height: 5.9375em; /* should be same as the div height */ 
 			}
 
 		ul#cards li:hover
