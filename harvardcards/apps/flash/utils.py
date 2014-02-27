@@ -26,7 +26,7 @@ def parse_deck_template_file(card_template, file_contents):
         card = []
         for col_index in range(nfields):
             card.append({
-                "field": fields[col_index],
+                "field_id": fields[col_index].id,
                 "value": sheet.cell(row_index, col_index).value,
             })
         cards.append(card)

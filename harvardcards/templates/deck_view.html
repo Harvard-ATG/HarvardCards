@@ -1,23 +1,27 @@
 {% extends "__layout_left_sidebar.html" %}
 
+
 {% block sidebar_content %}
-	{% include "_deck_nav.html" with collection=collection deck=deck is_quiz_mode=is_quiz_mode %}
+    {% include "_deck_nav.html" with collection=collection deck=deck is_quiz_mode=is_quiz_mode %}
 {% endblock %}
 
+
+{% block css %}
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+    <link href='http://fonts.googleapis.com/css?family=Vollkorn' rel='stylesheet' type='text/css'>
+{% endblock %}
+
+
 {% block main_content %}
+<div id="content">
+    <div class="courseWrapper" id = "wrapper">
 
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
-<link href='http://fonts.googleapis.com/css?family=Vollkorn' rel='stylesheet' type='text/css'>
-
-
-<div id="content"><!-- content (start) -->
-
-    <div class="courseWrapper" id = "wrapper"><!-- courseWrapper (start) -->
-
-        <div class="courseHeader"><!-- courseHeader (start) -->
-            <h2 class="courseTitle"><a href="{% url 'collectionIndex' collection.id %}">{{collection.title}}</a></h2><h3>{{deck.title}}</h3>
+        <!-- SECTION: Header -->
+        <div class="courseHeader">
+            <h2 class="courseTitle"><a href="{% url 'collectionIndex' collection.id %}">{{collection.title}}</a></h2>
+            <h3>{{deck.title}}</h3>
             <ul class="adminMenu adminMenuRight">
-                {% if collection.id in user_collection_role.ADMIN %}
+                {% if is_deck_admin %}
                     <li><a href="{% url 'deckEdit' deck.id %}">Edit</a></li>
                     <li><a href="{% url 'deckDelete' deck.id %}">Delete</a></li>
                 {% endif %}
@@ -28,146 +32,60 @@
                 <a href="{% url 'deckIndex' deck.id %}?mode=quiz" id="quizM">Quiz Mode</a>
                 {% endif %}
             </ul>
+        </div>
 
-        </div><!-- courseHeader (end) -->
-		{% if user.is_authenticated %}
-        	<a href="return false;" id="addCard">Add Card</a>
-        <div id="cardSlider" role="scrollbar" aria-orientation="horizontal">
-        {% else %}
-        <div id="cardSliderNotAdmin" role="scrollbar" tabindex="0" aria-orientation="horizontal">
+        <!-- SECTION: Card Slider -->
+        {% if is_deck_admin %}
+            <a href="javascript:void(0);" id="addCard">Add Card</a>
         {% endif %}
+        <div id="{% if is_deck_admin %}cardSlider{% else %}cardSliderNotAdmin{% endif %}" role="scrollbar" tabindex="0" aria-orientation="horizontal">
         {% if cards|length %}
-        <div class="sliderBtns deckPrev">
-        	<a id="prevCard" href="javascript:sliders[0].goToPrev()"><i class="fa fa-angle-left"></i><span>Previous</span></a>
-        	<a id="firstCard" href="javascript:sliders[0].goToFirst()"><i class="fa fa-angle-double-left"></i><span>First</span></a>
-        </div>
-        <div class="emptySlider" id="initDeck">
-            <h3>Loading the deck...</h3>
-        </div>
-        <div class="cardHolder" id="holder" style="display:none;">
+            <div class="sliderBtns deckPrev">
+                <a id="prevCard" href="javascript:sliders[0].goToPrev()"><i class="fa fa-angle-left"></i><span>Previous</span></a>
+                <a id="firstCard" href="javascript:sliders[0].goToFirst()"><i class="fa fa-angle-double-left"></i><span>First</span></a>
+            </div>
 
-            <ul id="cards">
-                {% for card in cards %}
-                <li role="presentation" id = {{forloop.counter0}} >
-                    <a class="card image" href="javascript:sliders[0].goToCard({{forloop.counter0}})" role="tab" tabindex="-1">
-                            {% for field in card.fields.reveal %}
-                                {% include "_deck_slider_card_fields.html" with field=field %}
-                            {% endfor %}
-                    </a>
-                </li>
-                {% endfor %}
-        </ul>
-    </div>
-        <div class="sliderBtns deckNext">
-            <a id="next_card" href="#"><i class="fa fa-angle-right"></i><span>Next</span></a>
-            <a id="last_card" href="#"><i class="fa fa-angle-double-right"></i><span>Last</span></a>
-        </div>
+            <div class="emptySlider" id="initDeck">
+                <h3>Loading the deck...</h3>
+            </div>
+
+            <div class="cardHolder" id="holder" style="display:none;">
+                {% include "_deck_slider_cards.html" with cards=cards %}
+            </div>
+
+            <div class="sliderBtns deckNext">
+                <a id="next_card" href="#"><i class="fa fa-angle-right"></i><span>Next</span></a>
+                <a id="last_card" href="#"><i class="fa fa-angle-double-right"></i><span>Last</span></a>
+            </div>
         {% else %}
-        <div class="emptySlider">
-            <h3>Empty Deck - Click on “Add Card” to start adding cards to your deck</h3>
-        </div>
+            <div class="emptySlider">
+                <h3>Empty Deck - Click on "Add Card" to start adding cards to your deck</h3>
+            </div>
         {% endif %}
         </div>
 
-        <!--div id="cardform">
-            <div class="courseWrapper addCourseWrapper" id="addCardForm">
-                <div class="courseHeader">
-					<h2>Create a New Card</h2>
-                    <ul class="adminMenu adminMenuRight">
-							<li><a href="#" id="card_cancel">Cancel</a></li>
-					</ul>
-			    </div>
-                <div style="display:none;" id="readroot">
-                    Label: <input type="text" name="Label">
-                    Value: <input type="text" name="Value">
-                    <select name="Field Type">
-                    <option value="T" selected>Text</option>
-                    <option value="I">Image</option>
-                    <option value="V">Video</option>
-                    <option value="A">Audio</option>
-                    </select>
-                    <input type="checkbox" name="showLabel" value="showLabel">Show Label
-                    <input type="checkbox" name="display" value="display">Display
-                    <ul class="adminMenu adminMenuRight">
-                            <li><a href="#" class = "moreField">Remove Field</a></li>
-					</ul>
-                    <br />
-                </div>
-                <form method="post" id="addcardform" action="/card/create/">
-                    {% csrf_token %}
-                    <span id="writeroot"></span>
-                    <input id="deck_id" name="deck_id" type="hidden" />
-                    <input id="collection_id" name="collection_id" type="hidden" value="{{collection.id}}" />
-                    <input id="max_card_id" name="max_card_id" type="hidden" value="{{cards|length}}" />
-                    <input id="num_fields" name="num_fields" type="hidden" />
-                    <input id="quiz_mode" name="quiz_mode" type="hidden" value="{{is_quiz_mode}}" />
 
-                    <ul class="adminMenu">
-                            <li><a href="#" id="moreFields">Add another field</a></li>
-                        	<li><a href="#" id="card_create">Create</a></li>
-					</ul>
-                </form>
-            </div>
-        </div-->
+        <!-- SECTION: Add Card Form -->
         <div id="cardFormContainer" style="display:none">
-        <form id="cardForm" class="editCardMode" method="POST" action="/card/create/">
-            {% csrf_token %}
-            <input id="deck_id" name="deck_id" type="hidden" />
-            <input id="collection_id" name="collection_id" type="hidden" value="{{collection.id}}" />
-            <input id="max_card_id" name="max_card_id" type="hidden" value="{{cards|length}}" />
-            <input id="num_fields" name="num_fields" type="hidden" />
-            <input id="quiz_mode" name="quiz_mode" type="hidden" value="{{is_quiz_mode}}" />
-            <div class="editFields">
-                <h2>Card front</h2>
-                <i class="fa fa-font fa-2x pull-left"></i>
-                <fieldset>
-                    <label for="term">Term</label>
-                    <input id="term" class="formEle form" type="text" placeholder="Enter term">
-                </fieldset>
-                <i class="fa fa-align-left fa-2x pull-left"></i>
-                <fieldset>
-                    <label for="definition">Definition</label>
-                    <textarea id="definition" class="formEle" placeholder="Enter definition"></textarea>
-                </fieldset>
-                <i class="fa fa-film fa-2x pull-left"></i>
-                <fieldset>
-                    <label for="videoURL">Video</label>
-                    <input id="videoURL" class="formEle" type="text" placeholder="Video URL">
-                </fieldset>
-            </div>
-            <div class="hideRevealHr"></div>
-            <div class="editFields">
-                <h2>Card back</h2>
-                <i class="fa fa-picture-o fa-2x pull-left"></i>
-                <fieldset>
-                    <label for="image">Image</label>
-                    <input id="image" class="formEle form" type="text" placeholder="Click to chose an image">
-                </fieldset>
-                <i class="fa fa-microphone fa-2x pull-left"></i>
-                <fieldset>
-                    <label for="audio">Audio</label>
-                    <input id="audio" class="formEle form" type="text" placeholder="Click to chose an audio file">
-                </fieldset>
-            </div>
-            <button class="adminMenuBtn saveBtn" type="button" id="card_create">Save</button>
-            <button class="adminMenuBtn cancelBtn" type="button" id="card_cancel">Cancel</button>
-        </form>
+            {% include "_deck_card_form.html" with deck=deck card_template_fields=card_template_fields %}
         </div>
-		
-        <div class="fullcardBtns">
-        	<a class="mobileFirst" href="javascript:fullCardSlider[0].goToFirst()"><i class="fa fa-angle-double-left"></i><span>First</span></a>
-        	<a class="mobilePrevious" href="javascript:fullCardSlider[0].goToPrev()"><i class="fa fa-angle-left"></i><span>Previous</span></a>
-      		<a class="mobileNext" href="javascript:fullCardSlider[0].goToNext()"><i class="fa fa-angle-right"></i><span>Next</span></a>
-        	<a class="mobileLast" href="javascript:fullCardSlider[0].goToLast()"><i class="fa fa-angle-double-right"></i><span>Last</span></a>
-        </div>
-		
 
+
+        <!-- SECTION: Mobile Slider Controls -->
+        <div class="fullcardBtns">
+            <a class="mobileFirst" href="javascript:sliders[0].goToFirst()"><i class="fa fa-angle-double-left"></i><span>First</span></a>
+            <a class="mobilePrevious" href="javascript:sliders[0].goToPrev()"><i class="fa fa-angle-left"></i><span>Previous</span></a>
+            <a class="mobileNext" href="javascript:sliders[0].goToNext()"><i class="fa fa-angle-right"></i><span>Next</span></a>
+            <a class="mobileLast" href="javascript:sliders[0].goToLast()"><i class="fa fa-angle-double-right"></i><span>Last</span></a>
+        </div>
+
+
+        <!-- SECTION: Single Card View -->
         <div id="singleCardHolder" style="{%if cards|length == 0%} border:none; background: inherit;{%endif%}"><!-- singleCardHolder (start)-->
             <div id="counterHolder" class="">
                 <div id="counter"></div>
             </div>
             {% if cards|length %}
-            <!--div id="slider"></div-->
             <div class = "controls" id="controlbar">
               <div style='float: right;' id="shuffle">
                 <a id="shuffle_cards" href="#">Shuffle</a>
@@ -180,11 +98,11 @@
               </div>
             </div>
             {% endif %}
-            <div id="cardOverflow"><!-- cardOverflow (start) -->
+            <div id="cardOverflow">
                 <ul id="allCards">
                     {% for card in cards %}
                     <li class="hide" role="tabpanel">
-                        {% for field in card.fields.reveal %}
+                        {% for field in card.fields.show %}
                             {% include "_deck_card_fields.html" with field=field %}
                         {% endfor %}
                         <div class="hideRevealHr">
@@ -193,24 +111,23 @@
                             {% endif %}
                         </div>
                         <div class="{% if is_quiz_mode %}hide{% endif %}">
-                        {% for field in card.fields.show %}
+                        {% for field in card.fields.reveal %}
                             {% include "_deck_card_fields.html" with field=field hide=is_quiz_mode%}
                         {% endfor %}
                         </div>
                     </li>
                     {% endfor %}
                 </ul>
-            </div><!-- cardOverflow (end) -->
-        </div><!-- singleCardHolder (end)-->
+            </div>
+        </div>
 
 
-     </div><!-- courseWrapper (end) -->
-
+    </div><!-- courseWrapper (end) -->
 </div><!-- content (end) -->
+{% endblock %}
 
-</div><!-- contentWrapper (end) -->
 
-
+{% block javascript %}
 <script type="text/javascript">
 require(['jquery', 'lib', 'Slider', 'appendAround', 'jqueryui'], function($, lib, Slider) {
 
@@ -272,9 +189,15 @@ $(document).ready(function(){
 });
 
 $('#addCard').click(function(){
-        $('#cardFormContainer').toggle()
-        return false;
-    });
+    $('#cardFormContainer').toggle()
+    return false;
+});
+
+$('#card_cancel').click(function(){
+    $('#cardFormContainer').hide();
+    return false;
+});
+
 function extractDeckId(){
     var pathname = $(location).attr('href');
     var res = String(pathname.match('[^/]+$'));
@@ -290,10 +213,6 @@ $('#card_create').click(function(){
 });
 
 
-$('#card_cancel').click(function(){
-    $('#cardForm').css("display","none");
-    return false;
-});
 
 // stackoverflow
 function parseURLParams(url) {
@@ -593,4 +512,29 @@ document.onkeydown=checkKey;
 });
 </script>
 
+<script type="text/javascript">
+require(['jquery', 'jquery.form'], function($) {
+    // This module sets up the card form used for adding new cards to a deck.
+    // Uses the jquery.form plugin to AJAXify the html form.
+    // TODO: move this to a separate JS file and modularize it.
+    $(document).ready(function() {
+        var $cardForm = $("#cardForm");
+        var $cardFormMessage = $cardForm.find('.formMessage');
+        var formOpts = {
+            resetForm: true,
+            beforeSubmit: function() {
+                $cardFormMessage.css("color", "black").html('Saving...');
+            },
+            success: function(responseText, statusText, xhr, formEl) {
+                //console.log("success", arguments);
+                $cardFormMessage.css("color", "green").html("<b>Card saved</b>");
+            },
+            error: function() {
+                $cardFormMessage.css("color", "red").html("<b>Error: card not saved</b>");
+            }
+        };
+        $cardForm.ajaxForm(formOpts);
+    });
+});
+</script>
 {% endblock %}

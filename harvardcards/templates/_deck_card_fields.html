@@ -5,11 +5,17 @@
 
 	{% if field.type == 'T' %}
 		<span class="cardFieldValue">{{ field.value}}</span>
-	{% else %}
-		{% if field.type == 'I' %}
+	{% elif field.type == 'I' %}
 		<img src="{{field.value}}" alt="{{field.label}}" class="cardFieldImage" />
-		{% else %}
-			<b>ERROR FIELD TYPE NOT SUPPORTED: {{field.type}}</b>
-		{% endif %}
+	{% elif field.type == 'V' %}
+		<video src="{{field.value}}" alt="{{field.label}}" controls>
+			Your browser does not support the video element.
+		</video>
+	{% elif field.type == 'A' %}
+		<audio src="{{field.value}}" alt="{{field.label}}" controls="controls">
+			Your browser does not support the audio element.
+		</audio>
+	{% else %}
+		<b>ERROR FIELD TYPE NOT SUPPORTED: {{field.type}}</b>
 	{% endif %}
 </div>
