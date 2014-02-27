@@ -16,6 +16,8 @@ urlpatterns = patterns('',
     url(r'^collection/(?P<collection_id>\d+)/download-template', 'harvardcards.apps.flash.views.collection.download_template', name='collectionDownloadTemplate'),
     url(r'^collection/(?P<collection_id>\d+)/delete', 'harvardcards.apps.flash.views.collection.delete', name='collectionDelete'),
 
+    url(r'^card_template/preview$', 'harvardcards.apps.flash.views.card_template.preview', name='cardTemplatePreview'),
+
     url(r'^deck$', 'harvardcards.apps.flash.views.deck.index', name='deckIndex'),
     url(r'^deck/(?P<deck_id>\d+)$', 'harvardcards.apps.flash.views.deck.index', name='deckIndex'),
     url(r'^deck/(?P<deck_id>\d+)/edit$', 'harvardcards.apps.flash.views.deck.edit', name='deckEdit'),

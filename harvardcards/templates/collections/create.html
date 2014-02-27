@@ -10,7 +10,8 @@
         <div class="courseHeader">
             <h2>Add course</h2>
         </div>
-        <form action="{% url 'collectionCreate' %}" method="post">{% csrf_token %}
+        <form action="{% url 'collectionCreate' %}" method="post">
+            {% csrf_token %}
             <p>
                 {{ collection_form.title.errors }}
                 <label for="id_title">Title:</label>
@@ -21,12 +22,32 @@
                 <label for="id_card_template">Template:</label>
                 {{ collection_form.card_template }}
             </p>
+            <div id="cardTemplateContainer" data-fetch-url="{% url 'cardTemplatePreview' %}" style="border: 1px solid black; margin: 1em; padding: 1em;">
+                Select a template
+            </div>
             <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
             <a href="{% url 'index' %}" class="adminMenuBtn cancelBtn">Cancel</a>
         </form>
     </div>
 </div>
 {% endblock %}
+
+
+{% block javascript %}
+<script type="text/javascript">
+require(['jquery', 'views/CardTemplatePreview'], function($, CardTemplatePreview) {
+    $(document).ready(function() {
+        var preview = new CardTemplatePreview({
+            "previewEl": "#cardTemplateContainer",
+            "selectEl": "#id_card_template",
+        });
+        preview.init();
+    });
+});
+</script>
+{% endblock %}
+
+
 
 {% block NOT_USED %}
 <!-- slider (start) -->
