@@ -53,7 +53,7 @@ def index(request, collection_id=None):
         "user_collection_role": user_collection_role,
     }
 
-    return render(request, 'collection_index.html', context)
+    return render(request, 'collections/index.html', context)
     
 def create(request):
     """Creates a collection."""
