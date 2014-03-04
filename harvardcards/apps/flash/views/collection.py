@@ -41,12 +41,15 @@ def index(request, collection_id=None):
     if collection_id:
         cur_collection = all_collections.get(id=collection_id)
         display_collections = [c for c in collection_list if c['id'] == cur_collection.id]
+        display_collection = display_collections[0]
     else:
         display_collections = collection_list
+        display_collection = None
 
     context = {
         "collections": collection_list,
         "display_collections": display_collections,
+        "display_collection": display_collection,
         "user_collection_role": user_collection_role,
     }
 
