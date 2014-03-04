@@ -5,66 +5,11 @@
 {% endblock %}
 
 {% block main_content %}
-
-<div id="content"><!-- content (start) -->
-	{% for collection in collections %}
-	<div class="courseWrapper"><!-- courseWrapper (start) -->
-
-        <div class="courseHeader"><!-- courseHeader (start) -->
-            {% if collection.decks|length == 1 %}
-			<a href="{% url 'collectionIndex' collection.id %}" title="Click to view all decks" style="float:left;"><h2  class="courseTitle">{{ collection.title }}</h2><h3>1 Deck</h3></a>
-            {% else %}
-			<a href="{% url 'collectionIndex' collection.id %}" title="Click to view all decks" style="float:left;"><h2  class="courseTitle">{{ collection.title }}</h2><h3>{{collection.decks|length}} Decks</h3></a>
-            {% endif %}
-            {% if collection.id in user_collection_role.ADMIN %}
-
-			<ul class="adminMenu adminMenuRight">
-                <li><a href="{% url 'collectionDelete' collection.id %}">Delete</a></li>
-			</ul>
-			{% endif %}
-		</div>
-                        {% if collection.decks|length %}
-
-		<div class="slider" data-slider-type="decks"><!--slider (start) -->
-			<ul class="courseDecks"><!-- courseDecks(start) -->
-				{% for deck in collection.decks %}
-                {% if forloop.counter < 5 %}
-				<li class="deck"><!-- deck (start) -->
-					<h2>{{ deck.title }}</h2>
-					<p><h3>{{ deck.num_cards }}</h3> {% if deck.num_cards == 1 %}Card {% else %}Cards{% endif %}</p>
-					<!--
-					<p>Last modified</p>
-					<p class="lastUpdated">Now</p>
-					-->
-					<!--a href="#" class="arrow arrowExpand"><img src="{{ STATIC_URL }}img/arrowUp.png"></a-->
-					<ul class="deckMenu">
-						<!--li class="arrowContainer"><a href="#" class="arrow arrowCollapse"><img src="{{ STATIC_URL }}img/arrowDown.png"></a></li-->
-						<li><a class="viewReview" href="{% url 'deckIndex' deck.id %}"><i class="fa fa-angle-right"></i>Review</a></li>
-						<li><a class="viewReview" href="{% url 'deckIndex' deck.id %}?mode=quiz"><i class="fa fa-angle-right"></i>Quiz</a></li>
-
-						{% if collection.id in user_collection_role.ADMIN %}
-                            <li><a class="adminMenuBtn" href="{% url 'deckEdit' deck.id %}">Edit</a></li>
-                            <li><a class="adminMenuBtn" href="{% url 'deckDelete' deck.id %}">Delete</a></li>
-                        {% endif %}
-                        </ul>
-                    </li><!-- deck (end) -->
-                    {% endif %}
-				    {% endfor %}
-			</ul>
-		</div><!-- slider (end) -->
-
-        <div class="sliderNav"><!-- sliderNav (start) -->
-			<ul class="sliderNavNextPrev">
-				<li class="sliderPrev"><a href="javascript:sliders.decks[{{forloop.counter0}}].goToPrev()">&laquo; Prev</a></li>
-				<li class="sliderNext"><a href="javascript:sliders.decks[{{forloop.counter0}}].goToNext()">Next &raquo;</a></li>
-				<!--li><a href="javascript:sliders[2].respond()">.respond()</a></li-->
-			</ul>
-		</div>
-        								{% endif %}
-
-	</div><!-- courseWrapper (end) -->
-	{% endfor %}
-</div><!-- content (end) -->
+<div id="content">
+	{% for collection in display_collections %}
+        {% include "_collection_view.html" with collection=collection user_collection_role=user_collection_role %}
+    {% endfor %}
+</div>
 {% endblock %}
 
 {% block javascript %}
