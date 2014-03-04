@@ -1,9 +1,9 @@
 <div class="courseWrapper">
     <div class="courseHeader">
         {% if collection.decks|length == 1 %}
-            <a href="{% url 'collectionIndex' collection.id %}" title="Click to view all decks" style="float:left;"><h2  class="courseTitle">{{ collection.title }}</h2><h3>1 Deck</h3></a>
+            <a href="{% url 'collectionIndex' collection.id %}" title="{{collection.title}}"><h2 class="courseTitle">{{ collection.title }}</h2><h3>1 Deck</h3></a>
         {% else %}
-            <a href="{% url 'collectionIndex' collection.id %}" title="Click to view all decks" style="float:left;"><h2  class="courseTitle">{{ collection.title }}</h2><h3>{{collection.decks|length}} Decks</h3></a>
+            <a href="{% url 'collectionIndex' collection.id %}" title="{{collection.title}}"><h2 class="courseTitle">{{ collection.title }}</h2><h3>{{collection.decks|length}} Decks</h3></a>
         {% endif %}
 
         {% if collection.id in user_collection_role.ADMIN %}
