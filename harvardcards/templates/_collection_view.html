@@ -1,0 +1,47 @@
+<div class="courseWrapper">
+    <div class="courseHeader">
+        <a href="{% url 'collectionIndex' collection.id %}" title="{{collection.title}}">
+            <h2 class="courseTitle">{{ collection.title }}</h2>
+            <h3>{% if collection.decks|length == 1 %}1 Deck{% else %}{{collection.decks|length}} Decks{% endif %}</h3>
+        </a>
+        {% if collection.id in user_collection_role.ADMIN %}
+            <ul class="adminMenu adminMenuRight">
+                <li><a href="{% url 'collectionEdit' collection.id %}">Edit</a></li>
+                <li><a href="{% url 'collectionDelete' collection.id %}">Delete</a></li>
+            </ul>
+        {% endif %}
+    </div>
+
+    <div class="slider" data-slider-type="decks">
+        <ul class="courseDecks">
+            {% if collection.id in user_collection_role.ADMIN %}
+                <li class="deck add">
+                    <a href="{% url 'collectionUploadDeck' collection.id %}">Add a Deck</a>
+                </li>
+            {% endif %}
+
+            {% for deck in collection.decks %}
+            <li class="deck">
+                <h2>{{ deck.title }}</h2>
+                <p><h3>{{ deck.num_cards }}</h3> {% if deck.num_cards == 1 %}Card {% else %}Cards{% endif %}</p>
+                <ul class="deckMenu">
+                    <li><a class="viewReview" href="{% url 'deckIndex' deck.id %}">Review</a></li>
+                    <li><a class="viewReview" href="{% url 'deckIndex' deck.id %}?mode=quiz">Quiz</a></li>
+
+                    {% if collection.id in user_collection_role.ADMIN %}
+                        <li><a class="adminMenuBtn" href="{% url 'deckEdit' deck.id %}">Edit</a></li>
+                        <li><a class="adminMenuBtn" href="{% url 'deckDelete' deck.id %}">Delete</a></li>
+                    {% endif %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="sliderNav">
+        <ul class="sliderNavNextPrev">
+            <li class="sliderPrev"><a href="javascript:sliders.decks[{{forloop.counter0}}].goToPrev()">&laquo; Prev</a></li>
+            <li class="sliderNext"><a href="javascript:sliders.decks[{{forloop.counter0}}].goToNext()">Next &raquo;</a></li>
+        </ul>
+    </div>
+</div>

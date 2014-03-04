@@ -11,14 +11,13 @@ from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
 from harvardcards.apps.flash import forms, services, queries, utils
 
 def index(request, collection_id=None):
-    """main landing page"""
-    collections = Collection.objects.all()
-    user_collection_role = Users_Collections.get_role_buckets(request.user, collections)
-
+    """Displays a set of collections."""
+    all_collections = Collection.objects.all()
+    user_collection_role = Users_Collections.get_role_buckets(request.user, all_collections)
     decks_by_collection = queries.getDecksByCollection()
 
     collection_list = []
-    for collection in collections:
+    for collection in all_collections:
         collection_decks = []
         if decks_by_collection.get(collection.id, 0):
             for deck in decks_by_collection[collection.id]:
@@ -39,22 +38,22 @@ def index(request, collection_id=None):
                 'decks': []
             })
 
+    if collection_id:
+        cur_collection = all_collections.get(id=collection_id)
+        display_collections = [c for c in collection_list if c['id'] == cur_collection.id]
+        display_collection = display_collections[0]
+    else:
+        display_collections = collection_list
+        display_collection = None
+
     context = {
         "collections": collection_list,
-        "user_collection_role": user_collection_role
+        "display_collections": display_collections,
+        "display_collection": display_collection,
+        "user_collection_role": user_collection_role,
     }
 
-    if collection_id:
-        current_collection = collections.get(id=collection_id)
-        curr_collection = filter(lambda x: x['id']==current_collection.id, collection_list)
-        context = {
-        "collections": collection_list,
-        "user_collection_role": user_collection_role,
-        "collection": curr_collection[0]
-        }
-        return render(request, 'current_collection_view.html', context)
-    else:
-        return render(request, 'collection_index.html', context)
+    return render(request, 'collections/index.html', context)
     
 def create(request):
     """Creates a collection."""

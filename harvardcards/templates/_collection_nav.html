@@ -1,13 +1,31 @@
-<div id="navigation"><!-- navigaton (start) -->
-    {% if user.is_authenticated %}<a href="{% url 'collectionCreate' %}" id="addAcourse">Add a course</a>{% endif %}
-	<nav class="desktopNav" data-set="mobileNav">
-		<ul class="appNav">
-		{% for collection in collections %}
-			<li><a href="{% url 'collectionIndex' collection.id %}">{{ collection.title|truncatechars:30 }}</a>
-			{% if collection.decks|length > 0 %}
-			{% endif %}
-			</li>
-		{% endfor %}
-		</ul>
-	</nav>
-</div><!-- navigaton (end) -->
+<div id="navigation">
+    {% if user.is_authenticated and not collection %}
+        <a href="{% url 'collectionCreate' %}" id="addAcourse">Add a course</a>
+    {% endif %}
+    <nav class="desktopNav" data-set="mobileNav">
+        <ul>
+            <li>
+                <a href="{% url 'index' %}">Home</a>
+            </li>
+            {% for c in collections %}
+                <li>
+                    {% if c == collection %}
+                        <a href="{% url 'collectionIndex' c.id %}" class="active">{{ c.title|truncatechars:30 }}</a>
+                    {% else %}
+                        <a href="{% url 'collectionIndex' c.id %}">{{ c.title|truncatechars:30 }}</a>
+                    {% endif %}
+
+                    {% if c == collection %}
+                        {% if c.decks|length > 0 %}
+                            <ul>
+                                {% for deck in c.decks %}
+                                    <li><a href="{% url 'deckIndex' deck.id %}">{{ deck.title|truncatechars:30}}</a></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </nav>
+</div>
