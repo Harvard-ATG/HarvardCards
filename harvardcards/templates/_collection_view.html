@@ -1,11 +1,9 @@
 <div class="courseWrapper">
     <div class="courseHeader">
-        {% if collection.decks|length == 1 %}
-            <a href="{% url 'collectionIndex' collection.id %}" title="{{collection.title}}"><h2 class="courseTitle">{{ collection.title }}</h2><h3>1 Deck</h3></a>
-        {% else %}
-            <a href="{% url 'collectionIndex' collection.id %}" title="{{collection.title}}"><h2 class="courseTitle">{{ collection.title }}</h2><h3>{{collection.decks|length}} Decks</h3></a>
-        {% endif %}
-
+        <a href="{% url 'collectionIndex' collection.id %}" title="{{collection.title}}">
+            <h2 class="courseTitle">{{ collection.title }}</h2>
+            <h3>{% if collection.decks|length == 1 %}1 Deck{% else %}{{collection.decks|length}} Decks{% endif %}</h3>
+        </a>
         {% if collection.id in user_collection_role.ADMIN %}
             <ul class="adminMenu adminMenuRight">
                 <li><a href="{% url 'collectionEdit' collection.id %}">Edit</a></li>
@@ -13,8 +11,8 @@
             </ul>
         {% endif %}
     </div>
-    <div class="slider" data-slider-type="decks">
 
+    <div class="slider" data-slider-type="decks">
         <ul class="courseDecks">
             {% if collection.id in user_collection_role.ADMIN %}
                 <li class="deck add">
@@ -39,6 +37,7 @@
             {% endfor %}
         </ul>
     </div>
+
     <div class="sliderNav">
         <ul class="sliderNavNextPrev">
             <li class="sliderPrev"><a href="javascript:sliders.decks[{{forloop.counter0}}].goToPrev()">&laquo; Prev</a></li>
