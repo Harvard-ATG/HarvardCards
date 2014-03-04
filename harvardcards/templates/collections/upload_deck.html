@@ -1,7 +1,7 @@
 {% extends "__layout_left_sidebar.html" %}
 
 {% block sidebar_content %}
-	{% include "_current_collection_nav.html" with collection=collection collections=collections %}
+	{% include "_collection_nav.html" with collections=collections collection=collection %}
 {% endblock %}
 
 {% block main_content %}
