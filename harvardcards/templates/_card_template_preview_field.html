@@ -1,3 +1,4 @@
+<div style="display:block; clear:left;">
 {% if field.type == 'T' %}
     <i class="fa fa-font fa-2x pull-left"></i>
 {% elif field.type == 'I' %}
@@ -7,7 +8,16 @@
 {% elif field.type == 'A' %}
     <i class="fa fa-microphone fa-2x pull-left"></i>
 {% endif %}
-<fieldset>
-    <label for="{{field.label}}">{{field.label}}</label>
-    <input id="{{field.label}}" name="field_{{field.id}}" class="formEle form" type="text" placeholder="Enter {{field.label}}" disabled="disabled"/>
-</fieldset>
+    {{field.label}}:
+    <span style="color: darkgray">
+    {% if field.type == 'T' %}
+    text
+    {% elif field.type == 'I' %}
+    image
+    {% elif field.type == 'V' %}
+    video
+    {% elif field.type == 'A' %}
+    audio
+    {% endif %}
+</span>
+</div>
