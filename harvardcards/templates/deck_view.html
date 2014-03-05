@@ -189,12 +189,14 @@ $(document).ready(function(){
 });
 
 $('#addCard').click(function(){
-    $('#cardFormContainer').toggle()
+    $('#cardFormContainer').toggle();
+    $('#singleCardHolder').toggle();
     return false;
 });
 
 $('#card_cancel').click(function(){
     $('#cardFormContainer').hide();
+    $('#singleCardHolder').show();
     return false;
 });
 
@@ -513,27 +515,13 @@ document.onkeydown=checkKey;
 </script>
 
 <script type="text/javascript">
-require(['jquery', 'jquery.form'], function($) {
-    // This module sets up the card form used for adding new cards to a deck.
-    // Uses the jquery.form plugin to AJAXify the html form.
-    // TODO: move this to a separate JS file and modularize it.
+require(['jquery', 'views/CardForm'], function($, CardForm) {
     $(document).ready(function() {
-        var $cardForm = $("#cardForm");
-        var $cardFormMessage = $cardForm.find('.formMessage');
-        var formOpts = {
-            resetForm: true,
-            beforeSubmit: function() {
-                $cardFormMessage.css("color", "black").html('Saving...');
-            },
-            success: function(responseText, statusText, xhr, formEl) {
-                //console.log("success", arguments);
-                $cardFormMessage.css("color", "green").html("<b>Card saved</b>");
-            },
-            error: function() {
-                $cardFormMessage.css("color", "red").html("<b>Error: card not saved</b>");
-            }
-        };
-        $cardForm.ajaxForm(formOpts);
+        var card_form = new CardForm({
+            formEl: "#cardForm",
+            formMessageEl: "#cardForm .formMessage"
+        });
+        card_form.init();
     });
 });
 </script>
