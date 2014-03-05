@@ -23,7 +23,7 @@
             <ul class="adminMenu adminMenuRight">
                 {% if is_deck_admin %}
                     <li><a href="{% url 'deckEdit' deck.id %}">Edit</a></li>
-                    <li><a href="{% url 'deckDelete' deck.id %}">Delete</a></li>
+                    <li><a href="{% url 'deckDelete' deck.id %}">Delete Deck</a></li>
                 {% endif %}
                 <li>
                 {% if is_quiz_mode %}
