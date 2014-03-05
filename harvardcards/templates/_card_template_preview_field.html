@@ -8,16 +8,16 @@
 {% elif field.type == 'A' %}
     <i class="fa fa-microphone fa-2x pull-left"></i>
 {% endif %}
-    {{field.label}}:
-    <span style="color: darkgray">
-    {% if field.type == 'T' %}
-    text
-    {% elif field.type == 'I' %}
-    image
-    {% elif field.type == 'V' %}
-    video
-    {% elif field.type == 'A' %}
-    audio
-    {% endif %}
-</span>
+    <span class="field-label {% if field.show_label %}field-label-show{% endif %}">{{field.label}}</span>
+    <span class="field-value">
+        {% if field.type == 'T' %}
+        text
+        {% elif field.type == 'I' %}
+        image
+        {% elif field.type == 'V' %}
+        video
+        {% elif field.type == 'A' %}
+        audio
+        {% endif %}
+    </span>
 </div>
