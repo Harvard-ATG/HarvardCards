@@ -41,10 +41,6 @@
 	</div>
 	<div class="footerNav" data-set="mobileNav"></div>
 	<script type="text/javascript">
-		require(['jquery', 'appendAround'], function($) {
-		});
-	</script>
-	<script type="text/javascript">
 	require(['jquery', 'jquery.cookie'], function($) {
 		var csrftoken = $.cookie('csrftoken');
 		function csrfSafeMethod(method) {
@@ -60,7 +56,7 @@
 			}
 		});
 		
-		$( ".appNav" ).appendAround();
+		$(".appNav").appendAround(); // What does this do and why is it here? -AB
 	});
 	</script>
 
