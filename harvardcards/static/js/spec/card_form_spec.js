@@ -1,4 +1,4 @@
-define(['jquery', 'views/CardForm'], function($, CardForm) {
+define(['lodash', 'jquery', 'views/CardForm'], function(_, $, CardForm) {
 	var getFixture = function() {
 		var htmlFixture = '<form method="post" action=""><div class="message"></div><input type="submit" name="submit" value="Submit" /></form>';
 		return $('<div>').html(htmlFixture);
@@ -32,32 +32,32 @@ define(['jquery', 'views/CardForm'], function($, CardForm) {
 			expect(card_form.formMessageEl).toBeTruthy();
 		});
 
-		it("shows an info message before submitting", function() {
-			var card_form = getCardFormWithFixture();
-			spyOn(card_form, 'beforeSubmit');
-			spyOn(card_form, 'message');
-			card_form.formOpts.beforeSubmit().andCallThrough();
-			expect(card_form.message).toHaveBeenCalled();
-			expect(card_form.message.mostRecentCall.args[1]).toBe(CardForm.STATUS_INFO);
-		});
+		describe("messages", function() {
+			var msg_map = [{
+				testName: "shows info message before submitting", 
+				testFunction:'beforeSubmit', 
+				expectedMsgType:CardForm.MSG_INFO
+			},{
+				testName: "shows success message on success",
+				testFunction:'success',
+				expectedMsgType:CardForm.MSG_SUCCESS
+			},{
+				testName: "shows error message on errror", 
+				testFunction:'error', 
+				expectedMsgType:CardForm.MSG_ERROR
+			}];
+			_.each(msg_map, function(item) {
+				var fn = item.testFunction;
+				var msgType = item.expectedMsgType;
 
-		it("shows a success message on succes", function() {
-			var card_form = getCardFormWithFixture();
-			spyOn(card_form, 'success');
-			spyOn(card_form, 'message');
-			card_form.formOpts.success().andCallThrough();
-			expect(card_form.message).toHaveBeenCalled();
-			expect(card_form.message.mostRecentCall.args[1]).toBe(CardForm.STATUS_SUCCESS);
+				it(item.testName, function() {
+					var card_form = getCardFormWithFixture();
+					spyOn(card_form, 'msg');
+					card_form[fn]();
+					expect(card_form.msg).toHaveBeenCalled();
+					expect(card_form.msg.mostRecentCall.args[1]).toBe(msgType);
+				});
+			});
 		});
-
-		it("shows an error message on error", function() {
-			var card_form = getCardFormWithFixture();
-			spyOn(card_form, 'error');
-			spyOn(card_form, 'message');
-			card_form.formOpts.error().andCallThrough();
-			expect(card_form.message).toHaveBeenCalled();
-			expect(card_form.message.mostRecentCall.args[1]).toBe(CardForm.STATUS_ERROR);
-		});
-
 	});
 });
