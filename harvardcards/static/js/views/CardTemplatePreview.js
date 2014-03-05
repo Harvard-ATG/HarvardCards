@@ -1,6 +1,6 @@
 define(['jquery'], function($) {
 
-	// Constructor 
+    // Constructor 
     var CardTemplatePreview = function(options) {
         this.selectEl = $(options.selectEl); // the <select> element
         this.previewEl = $(options.previewEl); // the <div> element that will hold the preview
@@ -9,7 +9,7 @@ define(['jquery'], function($) {
         this.cache = {}; // cache for the template previews to minimize network traffic
     };
 
-	// Initializes the listeners
+    // Initializes the listeners
     CardTemplatePreview.prototype.init = function() {
         var that = this;
         this.selectEl.on("change", function() {
@@ -22,17 +22,17 @@ define(['jquery'], function($) {
         });
     };
 
-	// Updates the preview 
+    // Updates the preview 
     CardTemplatePreview.prototype.update = function(html) {
         this.previewEl.html(html);
     };
 
-	// Resets the preview to the default text
+    // Resets the preview to the default text
     CardTemplatePreview.prototype.reset = function() {
         this.update(this.defaultText);
     };
 
-	// Loads the preview for the given card template ID
+    // Loads the preview for the given card template ID
     CardTemplatePreview.prototype.load = function(cardTemplateId) {
         var that = this;
         if(this.cache[cardTemplateId]) {
