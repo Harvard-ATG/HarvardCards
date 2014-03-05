@@ -1,0 +1,13 @@
+This directory should be organized as follows:
+
+js/
+    controllers/ - Application controllers (MVC)
+    lib/ - Third-party libraries such as jQuery, etc should go in here
+    modules/ - Modules that encapsulate behavior within a particular section of the DOM. 
+               These may require collaborations between many controllers, models, and views.
+    mixins/ - Mixins are special utility objects with reusable functions that may be "mixed in" 
+              with others via jQuery.extend() or _.extend().
+    models/ - Application models (MVC). These encapsulation domain knowledge and behavior. 
+    spec/ - Jasmine unit tests, known as "specs." Every object should have one or more specs. 
+    utils/ - Well-defined utility objects and functions.
+    views/ - Application views (MVC). 

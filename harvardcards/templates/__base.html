@@ -41,11 +41,7 @@
 	</div>
 	<div class="footerNav" data-set="mobileNav"></div>
 	<script type="text/javascript">
-		require(['jquery', 'appendAround'], function($) {
-		});
-	</script>
-	<script type="text/javascript">
-	require(['jquery', 'jquery.cookie'], function($) {
+	require(['jquery', 'jquery.cookie', 'jquery.appendAround'], function($) {
 		var csrftoken = $.cookie('csrftoken');
 		function csrfSafeMethod(method) {
 			// these HTTP methods do not require CSRF protection
@@ -60,7 +56,14 @@
 			}
 		});
 		
-		$( ".appNav" ).appendAround();
+        // The following is a jQuery plugin for responsive-design. 
+        //
+        // Here we are using it to ensure that the appropriate navigation structure
+        // is visible to the user given that CSS media queries will hide/show 
+        // the "nav" containers in the DOM.
+        // 
+        // See also: https://github.com/filamentgroup/AppendAround
+		$(".appNav").appendAround(); 
 	});
 	</script>
 

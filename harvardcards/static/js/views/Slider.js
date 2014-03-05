@@ -1,4 +1,4 @@
-define(['jquery', 'lib'], function($, lib) {
+define(['jquery'], function($) {
 
 	var Slider = function() { this.initialize.apply(this, arguments) }
 	Slider.prototype = {
