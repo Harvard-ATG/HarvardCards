@@ -1,0 +1,10 @@
+This directory should be organized as follows:
+
+js/
+    controllers/ - Application controllers (MVC)
+    lib/ - Third-party libraries such as jQuery, etc should go in here
+    mixins/ - Mixins that is objects with reusable functions to "mix in" to others.
+    models/ - Application models (MVC)
+    spec/ - Jasmine unit tests, known as "specs" 
+    utils/ - Well-defined utility objects and functions
+    views/ - Application views (MVC)
