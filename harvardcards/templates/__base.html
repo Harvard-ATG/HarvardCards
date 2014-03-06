@@ -16,8 +16,8 @@
 
 	<title>{% block title %}Harvard Cards{% endblock %}</title>
 </head>
-<body>
-	<div class="container">
+<body data-module="dummy">
+	<div class="container" data-module="dummy">
 		{% block header %}
 		<div id="fc_headerWrapper" class="sectionWrapper"><!-- sectionWrapper (start) -->
 			<div id="fc_header" class="section"><!-- section (start) -->
@@ -66,6 +66,12 @@
 		$(".appNav").appendAround(); 
 	});
 	</script>
+
+    <script type="text/javascript">
+    require(['modules/module-loader'], function(ModuleLoader) {
+        ModuleLoader.loadAll("body");
+    });
+    </script>
 
 	{% block javascript %}{% endblock %}
 </body>
