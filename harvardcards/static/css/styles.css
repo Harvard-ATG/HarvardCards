@@ -735,6 +735,17 @@ a#mobileMenu{
 	.mobileLast{
 		float:right;
 	}
+
+/********** add a course interface *************/
+#cardTemplateContainer {
+     border: 1px solid #999;
+     margin: 1em 0;
+     padding: 1em;
+}
+#cardTemplateContainer .field-label { margin-right: 5px; }
+#cardTemplateContainer .field-label:after { content: ":"; }
+#cardTemplateContainer .field-value { color: darkgray; }
+
 @media screen and (min-width: 320px){
 /*
 * iPhone portrait

@@ -7,7 +7,8 @@
             "show_label": false, 
             "label": "Term", 
             "display": true,
-            "sort_order": 1
+            "sort_order": 1,
+            "example_value": "Pabulum"
         }
     },
     {
@@ -18,7 +19,8 @@
             "show_label": false, 
             "label": "Definition", 
             "display": false,
-            "sort_order": 2
+            "sort_order": 2,
+            "example_value": "(n) any substance that can be used as food; (n) insipid intellectual nourishment"
         }
     },
     {
@@ -29,7 +31,8 @@
             "show_label": false, 
             "label": "Image", 
             "display": true,
-            "sort_order": 1
+            "sort_order": 1,
+            "example_value": "/static/img/leaning-tower-of-pisa-315px.jpeg"
         }
     },
     {
@@ -40,7 +43,8 @@
             "show_label": true, 
             "label": "Artist", 
             "display": false,
-            "sort_order": 2
+            "sort_order": 2,
+            "example_value": "Bonanno Pisano"
         }
     },
     {
@@ -51,7 +55,8 @@
             "show_label": true, 
             "label": "Date", 
             "display": false,
-            "sort_order": 3
+            "sort_order": 3,
+            "example_value": "Groundbreeaking: 1173; Completed: 1372"
         }
     },
     {
@@ -62,7 +67,8 @@
             "show_label": true, 
             "label": "Title", 
             "display": false,
-            "sort_order": 4
+            "sort_order": 4,
+            "example_value": "Leaning Tower of Pisa"
         }
     },
     {
@@ -73,7 +79,8 @@
             "show_label": true, 
             "label": "Materials", 
             "display": false,
-            "sort_order": 5
+            "sort_order": 5,
+            "example_value": "marble, stone"
         }
     },
     {
@@ -84,7 +91,8 @@
             "show_label": true, 
             "label": "Location", 
             "display": false,
-            "sort_order": 6
+            "sort_order": 6,
+            "example_value": "Pisa, Italy"
         }
     },
     {
@@ -95,7 +103,8 @@
             "show_label": false, 
             "label": "Word", 
             "display": true,
-            "sort_order": 1
+            "sort_order": 1,
+			"example_value": "красная площадь"
         }
     },
     {
@@ -106,7 +115,8 @@
             "show_label": true, 
             "label": "Definition", 
             "display": false,
-            "sort_order": 2
+            "sort_order": 2,
+			"example_value": "Red Square"
         }
     },
     {
@@ -117,7 +127,8 @@
             "show_label": true, 
             "label": "Pronunciation", 
             "display": false,
-            "sort_order": 3
+            "sort_order": 3,
+			"example_value": "krasnaya ploshat"
         }
     },
     {
@@ -128,7 +139,8 @@
             "show_label": true, 
             "label": "Gender", 
             "display": false,
-            "sort_order": 4
+            "sort_order": 4,
+			"example_value": "F"
         }
     },
     {
@@ -139,7 +151,8 @@
             "show_label": true, 
             "label": "Example", 
             "display": false,
-            "sort_order": 5
+            "sort_order": 5,
+			"example_value": ""
         }
     },
     {
@@ -150,7 +163,8 @@
             "show_label": true, 
             "label": "Notes", 
             "display": false,
-            "sort_order": 6
+            "sort_order": 6,
+			"example_value": ""
         }
     },
     {
@@ -161,7 +175,8 @@
             "show_label": false, 
             "label": "Character", 
             "display": true,
-            "sort_order": 1
+            "sort_order": 1,
+			"example_value": "北京"
         }
     },
     {
@@ -172,7 +187,8 @@
             "show_label": true, 
             "label": "Definition(s)", 
             "display": false,
-            "sort_order": 2
+            "sort_order": 2,
+			"example_value": "Beijing; Literal meaning: Northern Capital"
         }
     },
     {
@@ -183,7 +199,8 @@
             "show_label": true, 
             "label": "Pinyin", 
             "display": false,
-            "sort_order": 3
+            "sort_order": 3,
+			"example_value": "Běijīng"
         }
     },
     {
@@ -194,7 +211,8 @@
             "show_label": true, 
             "label": "Source(s)", 
             "display": false,
-            "sort_order": 4
+            "sort_order": 4,
+			"example_value": "None"
         }
     },
     {

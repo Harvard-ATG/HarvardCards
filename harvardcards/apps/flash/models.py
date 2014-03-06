@@ -13,6 +13,7 @@ class Field(models.Model):
     show_label = models.BooleanField()
     display = models.BooleanField()
     sort_order = models.IntegerField()
+    example_value = models.CharField(max_length=500, blank=True)
 
     class Meta:
         verbose_name = 'Field'
