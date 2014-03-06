@@ -1,6 +1,6 @@
 define(['jquery'], function($) {
 	return {
-		init: function() {
+		initModule: function() {
 			console.log("init dummy module");
 		}
 	};

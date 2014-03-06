@@ -7,8 +7,10 @@ define(['jquery', 'lodash'], function($, _) {
 	};
 
 	ModuleLoader.prototype.loadAll = function() {
-		this.log("loading all modules from root", this.rootEl);
-		$(this.rootEl).find("*[data-module]").andSelf().each(this.loadModule);
+		$(document).ready(_.bind(function() {
+			this.log("loading all modules from root", this.rootEl);
+			$(this.rootEl).find("*[data-module]").andSelf().each(this.loadModule);
+		}, this));
 	};
 
 	ModuleLoader.prototype.getModulePath = function(moduleName) {
@@ -26,9 +28,13 @@ define(['jquery', 'lodash'], function($, _) {
 	ModuleLoader.prototype.initModule = function(path, el) {
 		var that = this;
 		return function(module) {
-			that.log("loaded module", path,  el);
 			that.modules.push(module);
-			module.init(el);
+			if(module.initModule) {
+				module.initModule(el);
+				that.log("module initialized");
+			} else {
+				that.log("module NOT initialized: missing initModule()", path);
+			}
 		};
 	};
 
