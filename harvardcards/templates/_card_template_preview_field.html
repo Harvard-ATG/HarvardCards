@@ -1,3 +1,4 @@
+<div style="display:block; clear:left;">
 {% if field.type == 'T' %}
     <i class="fa fa-font fa-2x pull-left"></i>
 {% elif field.type == 'I' %}
@@ -7,7 +8,32 @@
 {% elif field.type == 'A' %}
     <i class="fa fa-microphone fa-2x pull-left"></i>
 {% endif %}
-<fieldset>
-    <label for="{{field.label}}">{{field.label}}</label>
-    <input id="{{field.label}}" name="field_{{field.id}}" class="formEle form" type="text" placeholder="Enter {{field.label}}" disabled="disabled"/>
-</fieldset>
+    <div class="field-label {% if field.show_label %}field-label-show{% endif %} pull-left">{{field.label}}</div>
+    <div class="field-value pull-left">
+        {% if field.type == 'T' %}
+            {% if field.example_value %}
+                {{field.example_value}}
+            {% else %}
+                text
+            {% endif %}
+        {% elif field.type == 'I' %}
+            {% if field.example_value %}
+                <img src="{{field.example_value}}" alt="{{field.label}}" class="cardFieldImage" />
+            {% else %}
+                image
+            {% endif %}
+        {% elif field.type == 'V' %}
+            {% if field.example_value %}
+                {{field.example_value}}
+            {% else %}
+                video
+            {% endif %}
+        {% elif field.type == 'A' %}
+            {% if field.example_value %}
+                {{field.example_value}}
+            {% else %}
+                audio
+            {% endif %}
+        {% endif %}
+    </div>
+</div>

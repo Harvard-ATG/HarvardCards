@@ -11,16 +11,24 @@ define(['jquery'], function($) {
 
     // Initializes the listeners
     CardTemplatePreview.prototype.init = function() {
-        var that = this;
-        this.selectEl.on("change", function() {
-            var card_template_id = $(this).find(":selected").val();
-            if(card_template_id) {
-                that.load(card_template_id);
-            } else {
-                that.reset();
-            }
-        });
+		this.onSelect = $.proxy(this.onSelect, this); // bind context 
+        this.selectEl.on("change", this.onSelect);
     };
+
+	// Handles the select element change event.
+	CardTemplatePreview.prototype.onSelect = function() {
+		var card_template_id = this.selectEl.find(":selected").val();
+		this.select(card_template_id);
+	};
+
+	// Selects the template to show.
+	CardTemplatePreview.prototype.select = function(cardTemplateId) {
+		if(cardTemplateId) {
+			this.load(cardTemplateId);
+		} else {
+			this.reset();
+		}
+	};
 
     // Updates the preview 
     CardTemplatePreview.prototype.update = function(html) {

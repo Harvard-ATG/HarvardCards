@@ -22,6 +22,7 @@ def preview(request):
             'type': field.field_type,
             'label': field.label,
             'show_label': field.show_label,
+            'example_value': field.example_value
         })
 
     context = {

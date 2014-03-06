@@ -59,7 +59,7 @@ table {
 .clear { clear:both; }
 
 body{
-	background: transparent url('/static/img/backgrundTile.png') left top;
+	background: transparent url('../img/backgrundTile.png') left top;
 	font-family: 'Vollkorn', Times, serif;
 	color: #4c4c4c;
 }
@@ -83,7 +83,7 @@ h1, h2, h3, h4
 
 	/* fonts for deck view/review course headers only (start) */
 	h2.courseTitle{
-		background: url('/static/img/courseTitleBreadCrumb.png') no-repeat right 50%;
+		background: url('../img/courseTitleBreadCrumb.png') no-repeat right 50%;
 		display: inline-block;
 		float: none !important;
 		padding-right: 0.5em;
@@ -193,11 +193,11 @@ h1, h2, h3, h4
 	}
 		#navigation nav > ul a:hover
 		, .footerNav ul li a:hover {
-			background: url('/static/img/mainNavHover.png') repeat-y left top;
+			background: url('../img/mainNavHover.png') repeat-y left top;
 		}
 		#navigation nav > ul a.active
 		, .footerNav ul li a.active {
-			background: url('/static/img/mainNavActive.png') repeat-y left top;
+			background: url('../img/mainNavActive.png') repeat-y left top;
 		}
 
 	#navigation nav ul ul a
@@ -213,11 +213,11 @@ h1, h2, h3, h4
 
 		#navigation nav ul ul a:hover
 		, .footerNav ul ul li a:hover{
-			background: transparent url('/static/img/subNavHover.png') no-repeat 2em 0.65em;
+			background: transparent url('../img/subNavHover.png') no-repeat 2em 0.65em;
 		}
 		#navigation nav ul ul a.active
 		, .footerNav ul ul li a.active{
-			background: transparent url('/static/img/subNavActive.png') no-repeat 2em 0.65em;
+			background: transparent url('../img/subNavActive.png') no-repeat 2em 0.65em;
 		}
 /********** main nav (end) *************/
 
@@ -264,7 +264,7 @@ a#addCard{
 	ul.courseDecks
 	, ul.templateDecks { display: inline-block; width: 100%; }
 	ul.courseDecks li{
-		background: #eeeded url('/static/img/deckBkg.jpg') no-repeat 50% 50%;
+		background: #eeeded url('../img/deckBkg.jpg') no-repeat 50% 50%;
 		text-align: center;
 		border: solid 1px #e1dfdf;
 		position: relative;
@@ -395,7 +395,7 @@ ul.adminMenu
 		font-weight:700;
 		font-size: 0.75em;
 		background-color: #f5f5f5;
-		background-image: url('/static/img/adminMenuFallBackImg.jpg');
+		background-image: url('../img/adminMenuFallBackImg.jpg');
 		background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f1f1f1), to(#f5f5f5));
 		background-image: -webkit-linear-gradient(top, #f1f1f1, #f5f5f5);
 		background-image:    -moz-linear-gradient(top, #f1f1f1, #f5f5f5);
@@ -551,7 +551,7 @@ div.deckNav{
 
 		/*li.deckPrev a
 		, div.deckPrev a{
-			background: transparent url('/static/img/deckNavPrev.png') no-repeat center 50%;
+			background: transparent url('../img/deckNavPrev.png') no-repeat center 50%;
 			text-indent: -30000px;
 			display: inline-block;
 			height: 106px;
@@ -566,7 +566,7 @@ div.deckNav{
 
 		/*li.deckNext a
 		, div.deckNext a{
-			background: transparent url('/static/img/courseTitleBreadCrumb.png') no-repeat center 50%;
+			background: transparent url('../img/courseTitleBreadCrumb.png') no-repeat center 50%;
 			text-indent: -30000px;
 			display: inline-block;
 			height: 106px;
@@ -627,7 +627,7 @@ div.deckNav{
 
 	.hideRevealHr{
 		width: 100%;
-		background: transparent url('/static/img/hideRevealLine.png') repeat left top;
+		background: transparent url('../img/hideRevealLine.png') repeat left top;
 		display: inline-block;
 		float: left;
 		text-align: center;
@@ -735,6 +735,17 @@ a#mobileMenu{
 	.mobileLast{
 		float:right;
 	}
+
+/********** add a course interface *************/
+#cardTemplateContainer {
+     border: 1px solid #999;
+     margin: 1em 0;
+     padding: 1em;
+}
+#cardTemplateContainer .field-label { margin-right: 5px; }
+#cardTemplateContainer .field-label:after { content: ":"; }
+#cardTemplateContainer .field-value { color: darkgray; }
+
 @media screen and (min-width: 320px){
 /*
 * iPhone portrait
