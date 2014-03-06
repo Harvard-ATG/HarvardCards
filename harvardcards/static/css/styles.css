@@ -742,6 +742,7 @@ a#mobileMenu{
      margin: 1em 0;
      padding: 1em;
 }
+#cardTemplateContainer .field-label { margin-right: 5px; }
 #cardTemplateContainer .field-label:after { content: ":"; }
 #cardTemplateContainer .field-value { color: darkgray; }
 
