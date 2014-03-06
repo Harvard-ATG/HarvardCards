@@ -1,5 +1,32 @@
 define(['jquery', 'lodash'], function($, _) {
 
+	/**
+	 * The ModuleLoader is responsible for finding and loading modules
+	 * declared in HTML markup.
+	 *
+	 * It works by finding all elements that have a "data-module" attribute
+	 * and then loading and initializing the module. Modules are loaded
+	 * asynchronously using requirejs. Modules are defined the same way
+	 * any requirejs module is defined with the only requirement being that
+	 * it export a method called "initModule()". The initModule() method
+	 * is called after the module is loaded. 
+	 *
+	 * Modules can be thought of as the wrapper or glue around a set of controllers,
+	 * models, and views that add behavior to some subset of the DOM. Typically,
+	 * the element on which the module is defined in the HTML markup sets the
+	 * scope of the module's responsibility. 
+	 *
+	 * The goal of this is to enforce *strict* separation between the HTML
+	 * markup and javascript. 
+	 *
+	 * Example:
+	 *
+	 *		<body data-module="main"> ... </body>
+	 *
+	 *		The ModuleLoader will then load: js/modules/main.js and call
+	 *		initModule(), passing it the <body> element.
+	 *
+	 */
 	var ModuleLoader = function(rootEl) {
 		this.rootEl = $(rootEl);
 		this.modules = [];
