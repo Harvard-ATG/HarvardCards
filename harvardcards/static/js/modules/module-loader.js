@@ -28,7 +28,7 @@ define(['jquery', 'lodash'], function($, _) {
 		return function(module) {
 			that.log("loaded module", path,  el);
 			that.modules.push(module);
-			module.init(el, config);
+			module.init(el);
 		};
 	};
 
