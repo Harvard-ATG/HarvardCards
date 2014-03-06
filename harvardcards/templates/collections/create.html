@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block main_content %}
-<div id="content">
+<div id="content" data-module="collections-create">
     <div class="courseWrapper">
         <div class="courseHeader">
             <h2>Add course</h2>
@@ -32,19 +32,4 @@
         </form>
     </div>
 </div>
-{% endblock %}
-
-
-{% block javascript %}
-<script type="text/javascript">
-require(['jquery', 'views/CardTemplatePreview'], function($, CardTemplatePreview) {
-    $(document).ready(function() {
-        var preview = new CardTemplatePreview({
-            "previewEl": "#cardTemplateContainer",
-            "selectEl": "#id_card_template",
-        });
-        preview.init();
-    });
-});
-</script>
 {% endblock %}

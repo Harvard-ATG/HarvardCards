@@ -12,11 +12,18 @@
 	{% block css %}{% endblock %}
 
 	<script src="{{ STATIC_URL }}js/lib/require.js"></script>
+
 	{% include "_requirejs_config.html" with debug=True %}
+
+	<script>
+	require(['modules/module-loader'], function(ModuleLoader) {
+		ModuleLoader.loadAll("body");
+	});
+	</script>
 
 	<title>{% block title %}Harvard Cards{% endblock %}</title>
 </head>
-<body>
+<body data-module="main">
 	<div class="container">
 		{% block header %}
 		<div id="fc_headerWrapper" class="sectionWrapper"><!-- sectionWrapper (start) -->
@@ -40,32 +47,6 @@
 		{% block footer %}{% endblock %}
 	</div>
 	<div class="footerNav" data-set="mobileNav"></div>
-	<script type="text/javascript">
-	require(['jquery', 'jquery.cookie', 'jquery.appendAround'], function($) {
-		var csrftoken = $.cookie('csrftoken');
-		function csrfSafeMethod(method) {
-			// these HTTP methods do not require CSRF protection
-			return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-		}
-		$.ajaxSetup({
-			crossDomain: false, // obviates need for sameOrigin test
-			beforeSend: function(xhr, settings) {
-				if (!csrfSafeMethod(settings.type)) {
-					xhr.setRequestHeader("X-CSRFToken", csrftoken);
-				}
-			}
-		});
-		
-        // The following is a jQuery plugin for responsive-design. 
-        //
-        // Here we are using it to ensure that the appropriate navigation structure
-        // is visible to the user given that CSS media queries will hide/show 
-        // the "nav" containers in the DOM.
-        // 
-        // See also: https://github.com/filamentgroup/AppendAround
-		$(".appNav").appendAround(); 
-	});
-	</script>
 
 	{% block javascript %}{% endblock %}
 </body>
