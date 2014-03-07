@@ -22,6 +22,8 @@ class Field(models.Model):
 
     def __unicode__(self):
         return self.label
+    def get_field_type(self):
+        return self.field_type
 
     def export(self):
         return repr(dict(label=self.label, field_type=self.field_type, display=self.display))
@@ -93,6 +95,9 @@ class Decks_Cards(models.Model):
 class Cards_Fields(models.Model):
     card = models.ForeignKey(Card)
     field = models.ForeignKey(Field)
+    # if field.get_field_type() == 'I':
+    #     value = models.FileField(upload_to='documents/%Y/%m/%d')
+    # else:
     value = models.CharField(max_length=500)
 
     class Meta:

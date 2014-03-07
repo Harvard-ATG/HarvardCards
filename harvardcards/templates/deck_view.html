@@ -82,10 +82,10 @@
 
         <!-- SECTION: Single Card View -->
         <div id="singleCardHolder" style="{%if cards|length == 0%} border:none; background: inherit;{%endif%}"><!-- singleCardHolder (start)-->
+            {% if cards|length %}
             <div id="counterHolder" class="">
                 <div id="counter"></div>
             </div>
-            {% if cards|length %}
             <div class = "controls" id="controlbar">
               <div style='float: right;' id="shuffle">
                 <a id="shuffle_cards" href="#">Shuffle</a>
