@@ -1,4 +1,4 @@
-define(['jquery', 'lodash'], function($, _) {
+define(['jquery', 'lodash', 'mixins/debug-mixin'], function($, _, DebugMixin) {
 
 	/**
 	 * The ModuleLoader is responsible for finding and loading modules
@@ -27,51 +27,63 @@ define(['jquery', 'lodash'], function($, _) {
 	 *		initModule(), passing it the <body> element.
 	 *
 	 */
-	var ModuleLoader = function(rootEl) {
+	function ModuleLoader(rootEl) {
 		this.rootEl = $(rootEl);
-		this.modules = [];
-		_.bindAll(this, ['loadModule', 'initModule']);
+		_.bindAll(this, ['loadModule', 'createModuleCallback']);
 	};
 
-	ModuleLoader.prototype.loadAll = function() {
-		$(document).ready(_.bind(function() {
-			this.log("loading all modules from root", this.rootEl);
-			$(this.rootEl).find("*[data-module]").andSelf().each(this.loadModule);
-		}, this));
-	};
+	// Mixin debugging behavior.
+	_.extend(ModuleLoader.prototype, DebugMixin);
 
+	// Returns the requireJS path to the module given the module name.
 	ModuleLoader.prototype.getModulePath = function(moduleName) {
 		return "modules/" + moduleName;
 	};
 
-	ModuleLoader.prototype.loadModule = function(index, el) {
-		this.log("load module", index, el);
-		var module_name = $(el).data("module");
-		var module_path = this.getModulePath(module_name);
-
-		require([module_path], this.initModule(module_path, el));
+	// Loads all modules.
+	ModuleLoader.prototype.loadAll = function() {
+		_(this.findModules()).each(function(module) {
+			this.loadModule(module.name, module.path, module.el);
+		}, this);
 	};
 
-	ModuleLoader.prototype.initModule = function(path, el) {
-		var that = this;
-		return function(module) {
-			that.modules.push(module);
+	// Finds all elements from the root element that have a data-module attribute
+	// and returns a list of objects with the module info.
+	ModuleLoader.prototype.findModules = function() {
+		var that = this, modules = [];
+		this.rootEl.find("*[data-module]").andSelf().each(function(index, el) {
+			var name = $(el).data("module"); 
+			if(name) {
+				modules.push({el: el, name: name, path: that.getModulePath(name)});
+			}
+		});
+		return modules;
+	};
+
+	// Delegates the loading to the global require() function.
+	ModuleLoader.prototype.loadModule = function(name, path, el) {
+		this.debug("load module", path, el);
+		require([path], this.createModuleCallback(path, el));
+	};
+
+	// Returns a function that will call the initModule() method on the module object.
+	ModuleLoader.prototype.createModuleCallback = function(path, el) {
+		return _.bind(function(module) {
 			if(module.initModule) {
 				module.initModule(el);
-				that.log("module initialized");
+				this.debug("initialized module", path);
 			} else {
-				that.log("module NOT initialized: missing initModule()", path);
+				this.debug("failed to initialize module: missing initModule()", path);
 			}
-		};
+		}, this);
 	};
 
-	ModuleLoader.prototype.log = function() {
-		console.log.apply(console, arguments);
-	};
-
+	// Class method for convenience.
 	ModuleLoader.loadAll = function(rootEl) {
-		var loader = new ModuleLoader(rootEl);
-		loader.loadAll();
+		$(document).ready(function() { 
+			var loader = new ModuleLoader(rootEl);
+			loader.loadAll();
+		});
 	};
 
 	return ModuleLoader;
