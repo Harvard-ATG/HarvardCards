@@ -9,6 +9,7 @@ from harvardcards.apps.flash import utils
 import os
 import shutil
 from harvardcards.settings.common import MEDIA_ROOT, APPS_ROOT
+from  PIL import Image
 
 def delete_collection(collection_id):
     """Deletes a collection and returns true on success, false otherwise."""
@@ -36,6 +37,29 @@ def delete_card(card_id):
     if not Deck.objects.filter(id=card_id):
         return True
     return False
+
+def resize_uploaded_img(path, file_name):
+    full_path = os.path.join(path, file_name)
+    img = Image.open(full_path)
+    img.save(os.path.join(path, 'original_'+file_name))
+    width, height = img.size
+    new_height = 600;
+    max_width = 1000;
+    if height > new_height:
+        new_width = width*new_height/float(height);
+        img_anti = img.resize((int(new_width), int(new_height)), Image.ANTIALIAS)
+        img_anti.save(full_path)
+    else:
+        if width > max_width:
+            new_height = height*max_width/float(width)
+            img_anti = img.resize((int(new_width), int(new_height)), Image.ANTIALIAS)
+            img_anti.save(full_path)
+
+    # thumbnail
+    t_height = 150
+    t_width = width*t_height/float(height)
+    img_thumb = img.resize((int(t_width), int(t_height)), Image.ANTIALIAS)
+    img_thumb.save(os.path.join(path, 'thumbnail_'+file_name))
 
 def handle_uploaded_img_file(file, deck, collection):
     curr_dir = os.getcwd()
@@ -70,6 +94,8 @@ def handle_uploaded_img_file(file, deck, collection):
     else:
         dest.write(file.read())
     dest.close()
+
+    resize_uploaded_img(path, file_name)
 
     return os.path.join('\media', dir_name, file_name)
 
