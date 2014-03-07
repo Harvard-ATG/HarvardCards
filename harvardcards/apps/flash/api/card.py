@@ -10,13 +10,18 @@ import os
 
 def handle_uploaded_file(file):
     curr_dir = os.getcwd()
-    parent_dir = os.path.abspath(os.path.join(curr_dir, 'harvardcards', 'apps', 'flash', 'uploads'))
-
+    folder_name = 'uploads'
+    parent_dir = os.path.abspath(os.path.join(curr_dir, 'harvardcards', 'apps', 'flash'))
+    parent_dir1 = os.path.abspath(os.path.join(parent_dir, folder_name))
+    if not os.path.exists(parent_dir1):
+        os.chdir(parent_dir)
+        os.mkdir(folder_name)
+        os.chdir(curr_dir)
     dirfmt = "%4d-%02d-%02d"
     dir_name = dirfmt % time.localtime()[0:3]
-    path = os.path.abspath(os.path.join(parent_dir, dir_name))
+    path = os.path.abspath(os.path.join(parent_dir1, dir_name))
     if not os.path.exists(path):
-        os.chdir(parent_dir)
+        os.chdir(parent_dir1)
         os.mkdir(dir_name)
         os.chdir(curr_dir)
     file_name = file.name
