@@ -6,7 +6,9 @@ from django.db import transaction
 
 from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Cards_Fields, Field
 from harvardcards.apps.flash import utils
-import win32con, win32api,os
+#import win32con, win32api,os
+import os
+import shutil
 from harvardcards.settings.common import MEDIA_ROOT
 
 def delete_collection(collection_id):
@@ -23,8 +25,9 @@ def delete_deck(deck_id):
     folder_path = os.path.abspath(os.path.join(MEDIA_ROOT, folder_name))
     if os.path.exists(folder_path):
         #to force deletion of a file set it to normal
-        win32api.SetFileAttributes(folder_path, win32con.FILE_ATTRIBUTE_NORMAL)
-        os.remove(folder_path)
+        #win32api.SetFileAttributes(folder_path, win32con.FILE_ATTRIBUTE_NORMAL)
+        #os.remove(folder_path)
+        shutil.rmtree(folder_path)
     deck.delete()
 
     if not Deck.objects.filter(id=deck_id):
