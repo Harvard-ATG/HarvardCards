@@ -20,7 +20,7 @@ def create(request):
         if field_name.startswith(field_prefix):
             field_id = field_name.replace(field_prefix, '')
             if field_id.isdigit():
-                path = services.handle_uploaded_img_file(request.FILES[field_name], deck.title, deck.collection)
+                path = services.handle_uploaded_img_file(request.FILES[field_name], deck.id, deck.collection.id)
                 fields.append({"field_id": int(field_id), "value": path})
 
     for field_name, field_value in request.POST.items():
