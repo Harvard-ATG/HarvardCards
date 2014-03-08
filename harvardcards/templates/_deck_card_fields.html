@@ -7,11 +7,11 @@
 		<span class="cardFieldValue">{{ field.value}}</span>
 	{% elif field.type == 'I' %}
 		<img src="\media{{field.value}}" alt="{{field.label}}" class="cardFieldImage" />
-        <ul class="adminMenu adminMenuRight">
-            <li>
+        <div class="controls">
+            <div>
             <a href="\media\originals{{field.value}}" target="_blank">View Full Size Image</a>
-            </li>
-        </ul>
+            </div>
+        </div>
 	{% elif field.type == 'V' %}
 		<video src="{{field.value}}" alt="{{field.label}}" controls>
 			Your browser does not support the video element.
