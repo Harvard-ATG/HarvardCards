@@ -7,7 +7,7 @@
 		<span class="cardFieldValue">{{ field.value}}</span>
 	{% else %}
 		{% if field.type == 'I' %}
-		<img src="{{field.value}}" alt="{{field.label}}" class="cardFieldImage" />
+		<img src="\media\thumbnails{{field.value}}" alt="{{field.label}}" class="cardFieldImage" />
 		{% else %}
 			<b>ERROR FIELD TYPE NOT SUPPORTED: {{field.type}}</b>
 		{% endif %}

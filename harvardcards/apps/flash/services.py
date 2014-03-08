@@ -25,8 +25,14 @@ def delete_deck(deck_id):
     folder_path = os.path.abspath(os.path.join(MEDIA_ROOT, folder_name))
     if os.path.exists(folder_path):
         shutil.rmtree(folder_path)
-    deck.delete()
+    folder_path_thumb = os.path.abspath(os.path.join(MEDIA_ROOT,'thumbnails', folder_name))
+    if os.path.exists(folder_path_thumb):
+        shutil.rmtree(folder_path_thumb)
+    folder_path_or = os.path.abspath(os.path.join(MEDIA_ROOT,'originals', folder_name))
+    if os.path.exists(folder_path_or):
+        shutil.rmtree(folder_path_or)
 
+    deck.delete()
     if not Deck.objects.filter(id=deck_id):
         return True
     return False
@@ -38,10 +44,20 @@ def delete_card(card_id):
         return True
     return False
 
-def resize_uploaded_img(path, file_name):
+def resize_uploaded_img(path, file_name, dir_name):
     full_path = os.path.join(path, file_name)
     img = Image.open(full_path)
-    img.save(os.path.join(path, 'original_'+file_name))
+    # original
+    path0 = os.path.join(MEDIA_ROOT, 'originals')
+    if not os.path.exists(path0):
+        os.mkdir(path0)
+
+    path1 = os.path.abspath(os.path.join(path0, dir_name))
+    if not os.path.exists(path1):
+        os.mkdir(path1)
+
+    img.save(os.path.join(path1, file_name))
+
     width, height = img.size
     new_height = 600;
     max_width = 1000;
@@ -56,36 +72,38 @@ def resize_uploaded_img(path, file_name):
             img_anti.save(full_path)
 
     # thumbnail
+    path0 = os.path.join(MEDIA_ROOT, 'thumbnails')
+    if not os.path.exists(path0):
+        os.mkdir(path0)
+
+    path1 = os.path.abspath(os.path.join(path0, dir_name))
+    if not os.path.exists(path1):
+        os.mkdir(path1)
+
     t_height = 150
     t_width = width*t_height/float(height)
     img_thumb = img.resize((int(t_width), int(t_height)), Image.ANTIALIAS)
-    img_thumb.save(os.path.join(path, 'thumbnail_'+file_name))
+    img_thumb.save(os.path.join(path1, file_name))
 
 def handle_uploaded_img_file(file, deck, collection):
-    curr_dir = os.getcwd()
-    parent_dir = os.path.abspath(os.path.join(APPS_ROOT, 'flash'))
-    parent_dir1 = MEDIA_ROOT
-
     # create the MEDIA_ROOT folder if it doesn't exist
-    if not os.path.exists(parent_dir1):
-        os.chdir(parent_dir)
-        os.mkdir(folder_name)
-        os.chdir(curr_dir)
+    if not os.path.exists(MEDIA_ROOT):
+        os.mkdir(MEDIA_ROOT)
 
     # folder where media files will be uploaded for the given deck
     dir_name = str(collection) +'_' + str(deck)
-    path = os.path.abspath(os.path.join(parent_dir1, dir_name))
+    path = os.path.abspath(os.path.join(MEDIA_ROOT, dir_name))
     if not os.path.exists(path):
-        os.chdir(parent_dir1)
-        os.mkdir(dir_name)
-        os.chdir(curr_dir)
+        os.mkdir(path)
 
     # allow files with same names to be uploaded to the same deck
     file_name = file.name
     full_path = os.path.join(path, file_name)
-    if os.path.exists(full_path):
-        file_name = '1'+file_name
+    counter = 1
+    while os.path.exists(full_path):
+        file_name = str(counter)+ '_' + file.name
         full_path = os.path.join(path, file_name)
+        counter = counter + 1
 
     dest = open(full_path, 'wb+')
     if file.multiple_chunks:
@@ -95,9 +113,9 @@ def handle_uploaded_img_file(file, deck, collection):
         dest.write(file.read())
     dest.close()
 
-    resize_uploaded_img(path, file_name)
+    resize_uploaded_img(path, file_name, dir_name)
 
-    return os.path.join('\media', dir_name, file_name)
+    return '\\' + dir_name + '\\' + file_name
 
 def handle_uploaded_deck_file(collection_id, deck_title, uploaded_file):
     """Handles an uploaded deck."""
