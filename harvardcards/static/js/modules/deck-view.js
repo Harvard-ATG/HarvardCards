@@ -363,7 +363,7 @@ function checkKey(e) {
     var event = window.event ? window.event : e;
     if (true) {
         if (event.keyCode == 37)
-            $('#prevCard').click();
+            $('#previous_card').click();
             //sliders[0].goToPrev()
         if (event.keyCode == 39)
             $('#next_card').click();
