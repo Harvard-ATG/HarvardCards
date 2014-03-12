@@ -283,14 +283,16 @@ $('#full_screen').click(function() {
         $("#navigation").hide();
         $("#appTitle").hide();
         $("#singleCardHolder").css('margin-left','8.5%');
-        $("#full_screen").text(txt2);
+        $("#full_screen .control-text").text(txt2);
+		$("#full").addClass("fa-compress").removeClass("fa-expand");
     }
     else{
         $("#wrapper").children().not("#cardFormContainer").show();
         $("#navigation").show();
         $("#appTitle").show();
         $("#singleCardHolder").css('margin-left','0');
-        $("#full_screen").text(txt1);
+        $("#full_screen .control-text").text(txt1);
+		$("#full").addClass("fa-expand").removeClass("fa-compress");
     }
     return false;
 });
@@ -309,17 +311,19 @@ $('#shuffle_cards').click(function() {
 $('#play_cards').click(function(){
     var txt1 = 'Play';
     var txt2 = 'Pause';
-    if ($("#play_cards").text() == txt1){
+    if ($("#play_cards .control-text").text() == txt1){
         myintrval = setInterval(function(){
             if (current >= sliderLength-1)
                 $('#play_cards').click();
             $('#next_card').click();
         }, 5000);
-        $("#play_cards").text(txt2);
+        $("#play_cards .control-text").text(txt2);
+		$("#play").removeClass('fa-play').addClass('fa-pause');
     }
     else{
         clearInterval(myintrval);
-        $("#play_cards").text(txt1);
+        $("#play_cards .control-text").text(txt1);
+		$("#play").removeClass('fa-pause').addClass('fa-play');
     }
     return false;
 });
