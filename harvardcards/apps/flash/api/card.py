@@ -6,9 +6,6 @@ from harvardcards.apps.flash.models import Collection, Deck, Card, Cards_Fields,
 from harvardcards.apps.flash import services, queries, utils
 from django.db import models
 
-
-
-
 @require_http_methods(["POST"])
 def create(request):
     """Creates a new card."""
