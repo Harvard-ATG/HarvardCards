@@ -9,6 +9,7 @@ from harvardcards.apps.flash import utils
 import os
 import shutil
 from harvardcards.settings.common import MEDIA_ROOT, APPS_ROOT
+from  PIL import Image
 
 def delete_collection(collection_id):
     """Deletes a collection and returns true on success, false otherwise."""
@@ -20,15 +21,27 @@ def delete_collection(collection_id):
 def delete_deck(deck_id):
     """Deletes a deck and returns true on success, false otherwise."""
     deck = Deck.objects.get(id=deck_id)
-    folder_name = str(deck.collection.id) + '_' + str(deck.id)
-    folder_path = os.path.abspath(os.path.join(MEDIA_ROOT, folder_name))
-    if os.path.exists(folder_path):
-        shutil.rmtree(folder_path)
+    delete_deck_images(deck_id)
     deck.delete()
-
     if not Deck.objects.filter(id=deck_id):
         return True
     return False
+
+def delete_deck_images(deck_id):
+    """
+    Deletes all the images associated with a deck. 
+    Raises an exception if there is a problem deleting the images.
+    """
+    deck = Deck.objects.get(id=deck_id)
+    folder_name = str(deck.collection.id) + '_' + str(deck.id)
+    folder_paths = [
+        os.path.abspath(os.path.join(MEDIA_ROOT, folder_name)),
+        os.path.abspath(os.path.join(MEDIA_ROOT,'thumbnails', folder_name)),
+        os.path.abspath(os.path.join(MEDIA_ROOT,'originals', folder_name)),
+    ]
+    for folder_path in folder_paths:
+        if os.path.exists(folder_path):
+            shutil.rmtree(folder_path)
 
 def delete_card(card_id):
     """Deletes a card and returns true on success, false otherwise."""
@@ -37,31 +50,64 @@ def delete_card(card_id):
         return True
     return False
 
-def handle_uploaded_img_file(file, deck, collection):
-    curr_dir = os.getcwd()
-    parent_dir = os.path.abspath(os.path.join(APPS_ROOT, 'flash'))
-    parent_dir1 = MEDIA_ROOT
+def resize_uploaded_img(path, file_name, dir_name):
+    """
+    Resizes an uploaded image. Saves both the original, thumbnail, and
+    resized versions.
+    """
+    full_path = os.path.join(path, file_name)
+    img = Image.open(full_path)
 
+    # original
+    path1 = os.path.abspath(os.path.join(MEDIA_ROOT, 'originals', dir_name))
+    if not os.path.exists(path1):
+        os.makedirs(path1)
+    img.save(os.path.join(path1, file_name))
+
+    # resized
+    width, height = img.size
+    new_height = 600;
+    max_width = 1000;
+    if height > new_height:
+        new_width = width*new_height/float(height);
+        img_anti = img.resize((int(new_width), int(new_height)), Image.ANTIALIAS)
+        img_anti.save(full_path)
+    else:
+        if width > max_width:
+            new_height = height*max_width/float(width)
+            img_anti = img.resize((int(new_width), int(new_height)), Image.ANTIALIAS)
+            img_anti.save(full_path)
+
+    # thumbnail
+    path1 = os.path.abspath(os.path.join(MEDIA_ROOT, 'thumbnails', dir_name))
+    if not os.path.exists(path1):
+        os.makedirs(path1)
+
+    t_height = 150
+    t_width = width*t_height/float(height)
+    img_thumb = img.resize((int(t_width), int(t_height)), Image.ANTIALIAS)
+    img_thumb.save(os.path.join(path1, file_name))
+
+def handle_uploaded_img_file(file, deck, collection):
+    """Handles an uploaded image file and returns the path to the saved image."""
     # create the MEDIA_ROOT folder if it doesn't exist
-    if not os.path.exists(parent_dir1):
-        os.chdir(parent_dir)
-        os.mkdir(folder_name)
-        os.chdir(curr_dir)
+    if not os.path.exists(MEDIA_ROOT):
+        os.mkdir(MEDIA_ROOT)
 
     # folder where media files will be uploaded for the given deck
     dir_name = str(collection) +'_' + str(deck)
-    path = os.path.abspath(os.path.join(parent_dir1, dir_name))
+    path = os.path.abspath(os.path.join(MEDIA_ROOT, dir_name))
     if not os.path.exists(path):
-        os.chdir(parent_dir1)
-        os.mkdir(dir_name)
-        os.chdir(curr_dir)
+        os.mkdir(path)
 
     # allow files with same names to be uploaded to the same deck
     file_name = file.name
     full_path = os.path.join(path, file_name)
-    if os.path.exists(full_path):
-        file_name = '1'+file_name
+    counter = 1
+    while os.path.exists(full_path):
+        file_name = str(counter)+ '_' + file.name
         full_path = os.path.join(path, file_name)
+        counter = counter + 1
 
     dest = open(full_path, 'wb+')
     if file.multiple_chunks:
@@ -71,7 +117,9 @@ def handle_uploaded_img_file(file, deck, collection):
         dest.write(file.read())
     dest.close()
 
-    return os.path.join('\media', dir_name, file_name)
+    resize_uploaded_img(path, file_name, dir_name)
+
+    return os.path.join(dir_name, file_name)
 
 def handle_uploaded_deck_file(collection_id, deck_title, uploaded_file):
     """Handles an uploaded deck."""

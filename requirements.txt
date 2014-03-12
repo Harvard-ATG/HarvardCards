@@ -13,3 +13,6 @@ xlwt==0.7.5
 
 # For debugging (dev only)
 django-debug-toolbar==0.11
+
+# For image manipulation
+Pillow==2.2.1

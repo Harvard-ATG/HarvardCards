@@ -31,6 +31,7 @@
                 {% else %}
                 <a href="{% url 'deckIndex' deck.id %}?mode=quiz" id="quizM">Quiz Mode</a>
                 {% endif %}
+                </li>
             </ul>
         </div>
 
@@ -41,8 +42,8 @@
         <div id="{% if is_deck_admin %}cardSlider{% else %}cardSliderNotAdmin{% endif %}" role="scrollbar" tabindex="0" aria-orientation="horizontal">
         {% if cards|length %}
             <div class="sliderBtns deckPrev">
-                <a id="prevCard" href="javascript:sliders[0].goToPrev()"><i class="fa fa-angle-left"></i><span>Previous</span></a>
-                <a id="firstCard" href="javascript:sliders[0].goToFirst()"><i class="fa fa-angle-double-left"></i><span>First</span></a>
+                <a id="previous_card" href="#"><i class="fa fa-angle-left"></i><span>Previous</span></a>
+                <a id="first_card" href="#"><i class="fa fa-angle-double-left"></i><span>First</span></a>
             </div>
 
             <div class="emptySlider" id="initDeck">
