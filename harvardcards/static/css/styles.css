@@ -385,7 +385,7 @@ ul.adminMenu
 	, li.sliderPrev a
 	, li.sliderNext a
 	, a.reveal
-	, .controls div a
+	, .controls a
 	, .courseHeader div a{
 		display: inline-block;
 		padding: 0.5em 1em;
@@ -403,6 +403,8 @@ ul.adminMenu
 		background-image:      -o-linear-gradient(top, #f1f1f1, #f5f5f5);
 		border: solid 1px #dcdcdc;
 	}
+    .control-text { margin-left: 4px }
+
 		li.sliderPrev {
 			float: left;
 		}
