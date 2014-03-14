@@ -43,7 +43,7 @@ define(['jquery'], function($) {
 			//show the first card on load
 			this.showCard(0);
 			//give the first card an active class
-			$(this.li).eq(0).addClass('cardActive');
+			$(this.li).eq(0).addClass('clicked');
 		
 		    this.respond();
 		},
@@ -62,13 +62,19 @@ define(['jquery'], function($) {
 		},
 	
 		goToPrev: function() {
-		    if ( this.deckView && this.currentIndex > 0 )
+			var curr_index = $(this.li).index($('.clicked'));
+			if (curr_index > 0){
+			var prev_id = $(this.li).eq(curr_index - 1).attr('id');
+		    this.goToCard(Number(prev_id));
+		    this.goTo(curr_index -1);
+		    }
+		    /**if ( this.deckView && this.currentIndex > 0 )
 			{
 				this.hideCard(this.currentIndex);
 				this.showCard(this.currentIndex - 1);
 				this.changeHighlight(this.currentIndex, this.currentIndex-1);
-			}
-		    this.goTo(this.currentIndex - 1);
+			}**/
+
 	    
 		},
 		goToNext: function() {
@@ -104,13 +110,13 @@ define(['jquery'], function($) {
 	
 		showCard: function(index){
 			//mark the current thumb as checked
-			$(this.li).eq(index).addClass('cardActive');
+			$(this.li).eq(index).addClass('clicked');
 		
 			$('ul#allCards li').eq(index).removeClass('hide').addClass('show');
 		},
 	
 		hideCard: function(index){
-			$(this.li).eq(index).removeClass('cardActive');
+			$(this.li).eq(index).removeClass('clicked');
 			document.getElementById(index).children[0].blur();
 		
 			$('ul#allCards li').eq(index).removeClass('show').addClass('hide');
@@ -228,11 +234,7 @@ define(['jquery'], function($) {
 				this.li[i].style.width = rspLiWidth;//taking 2px away because of borders
 				this.li[i].style.clear = 'none';
 				if (ipad){
-					if (i !=  lastLI){
-						this.li[i].style.marginRight = liMargin + 'px';
-					}else{
-						this.li[i].style.marginRight = 0 + 'px';
-					}
+					this.li[i].style.marginRight = liMargin + 'px';
 				}else{
 					this.li[i].style.marginRight = 0;
 				}
