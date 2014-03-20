@@ -121,90 +121,14 @@ $("#holder").css("display","block");
 
 
 $(window).on("resize", function () {
-    // to display the card location between the control buttons
-    spaceBtwControls = $('#controlbar').width()- $('#first').width()-$('#last').width()-$('#next').width()-$('#previous').width();
-    $('#cardIndex').width(spaceBtwControls + 'px');
-
 	if ( sliderObjExist )
 	{
 		//console.log($('.sliderNav').css('display'));
 		sliders[0].respond();
 
 	}
-/* //RM
-	var cardHolder = $('#singleCardHolder');
-	var holderWidth = Math.round(cardHolder.width());
-	var cardItems = $('#singleCardHolder ul li');
-	var liCount = cardItems.length;
-	//give each a card li the width of the container
-	cardItems.width(holderWidth + 'px');
-	//make the ul width big enough to fit all cards side by side
-	var ulWidth = holderWidth * liCount;
-	$('#singleCardHolder ul').width(ulWidth + 'px');
-
-	//on first load show the first card
-	cardItems.eq(current).show();
-	sliders[0].goTo(current);
-
-    updateCardLoc(current);
-	document.getElementById(current).className = "clicked"
-*/
-	//change main card based on thumbnail click
-	/*$('a.image').click(function(){
-		var i = $(this).parent().index();
-
-		if (i != current)
-		{
-			cardItems.eq(current).hide();
-			document.getElementById(current).className = "";
-            sliders[0].changeView(i);
-			cardItems.eq(i).show();
-
-			updateCardLoc(i);
-			document.getElementById(i).className = "clicked"
-			current = i;
-		}
-        else if (i===0 || i===sliderLength-1)
-            sliders[0].goTo(i)
-
-	});*/
-
 
 }).resize();
-
-
-/* accessibility (start) */
-$('body').attr('role', 'application');
-
-/* get the id of the key been pressed */
-var getElementId = function($){
-	return $.attr("id");
-}
-
-$('a').keydown(function(event){
-	
-	//console.log(event.keyCode);
-	switch(event.keyCode)
-	{
-		case 9: //tab key
-			//console.log($(this).attr('id'));
-		break;
-		case 13://enter key
-			//$('#content').attr({ "role":"widget", "tabindex": "0" });
-			//console.log(getLinkId($(this)));
-			/*if (getElementId($this) == 'prevCard')
-			{
-				sliders[0].goToPrev();
-			}
-			else if (getLinkId($this) == 'firstCard')
-			{
-				sliders[0].goToFirstCard();
-			}*/
-		break;
-	}
-	
-});
-/* accessibility (end) */
 
 
 $('.reveal').click(function() {
@@ -315,10 +239,8 @@ function checkKey(e) {
     if (true) {
         if (event.keyCode == 37)
             $('#previous_card').click();
-            //sliders[0].goToPrev()
         if (event.keyCode == 39)
             $('#next_card').click();
-            //sliders[0].goToNext()    
     }
 };
 document.onkeydown=checkKey;
