@@ -1,38 +1,15 @@
 define(['jquery', 'views/Slider', 'views/CardForm', 'jquery.appendAround', 'jqueryui', 'jquery.mousewheel'], function($, Slider, CardForm) {
+current = 0;
 
-// http://www.quirksmode.org/dom/domform.html
-
-function moreFields() {
-	counter++;
-	var newFields = document.getElementById('readroot').cloneNode(true);
-	newFields.id = '';
-	newFields.style.display = 'block';
-	var newField = newFields.childNodes;
-	for (var i=0;i<newField.length;i++) {
-		var theName = newField[i].name
-		if (theName)
-			newField[i].name = theName + counter;
-	}
-	var insertHere = document.getElementById('writeroot');
-	insertHere.parentNode.insertBefore(newFields,insertHere);
-	$('.moreField').each(function(){
-        $(this).bind('click',function(){
-            console.log(this.parentNode);
-            this.parentNode.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode.parentNode);
-            counter=counter-1;
-            return false;
-        })
-	})
-}
-
-
+sliders = [];
+fullCardSlider = [];
+sliderLength = $('ul#cards li').size();
 
 $(document).ready(function(){
-    //moreFields();
     $('#cards').children().each(
         function(){
             $(this).bind('click',function(){
-                current = Number($(this).attr('id'));
+                current = $(this).index();
                 sliders[0].goToCard(current);
                 return false;
             })
@@ -46,15 +23,6 @@ $(document).ready(function(){
         location.href=this.href+'&cardLoc='+(current+1);
         return false;
     });
-   $('#moreFields').click(function(){
-        moreFields();
-        return false;
-    });
-
-
-
-
-
 });
 
 $('#addCard').click(function(){
@@ -110,11 +78,9 @@ function parseURLParams(url) {
     }
     return parms;
 }
-sliders = [];
-sliderLength = $('ul#cards li').size();
+
 var pathname = $(location).attr('href');
 var urlPar = parseURLParams(pathname);
-current = 0;
 if(typeof(urlPar) != "undefined"){
     if(typeof(urlPar["cardLoc"]) != "undefined"){
         var k = Number(urlPar["cardLoc"][0])-1;
@@ -123,21 +89,9 @@ if(typeof(urlPar) != "undefined"){
         }
     }
 }
-sliders = [];
-fullCardSlider = [];
-sliderLength = $('ul#cards li').size();
 
-/*
-$( "#slider" ).slider({
-        orientation: "horizontal",
-        min: 0,
-        range: "min",
-        max: sliderLength-1,
-        step: 1,
-        slide:function(event, ui){sliders[0].goToCard(ui.value)}
-});
 
-*/
+
 var sliderObjExist = false;
 var Slider1 = Slider;
 $('.cardHolder').each(function() {
@@ -164,13 +118,6 @@ sliders[0].goToCard(current);
 $("#initDeck").css("display","none");
 
 $("#holder").css("display","block");
-
-function updateCardLoc(loc){
-    numCards = sliderLength;
-	var location = Math.round((loc+1)/sliderLength*100) + '%  •  Card '+ (loc + 1) + ' of ' + sliderLength;
-	$('#cardLoc').text(location);
-	$( "#slider" ).slider( "value", loc );
-}
 
 
 $(window).on("resize", function () {
