@@ -85,7 +85,7 @@ define(['jquery'], function($) {
 
 		goToNext: function() {
 
-			if ( this.deckView && this.counter < this.totalLi)
+			if ( this.deckView && this.counter < this.totalLi-1)
 			{
 				var curr = this.getScardDataAttr(this.counter);
 			    this.counter = this.counter + 1;
