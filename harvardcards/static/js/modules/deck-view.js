@@ -180,7 +180,8 @@ $('#shuffle_cards').click(function() {
 
     for (var i = 0; i<cards.children().length; i++)
         $(cards.children()[i]).attr('id', i);
-
+    sliders[0].hideAll();
+    $('#first_card').click();
     return false;
 });
 

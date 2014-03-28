@@ -47,7 +47,12 @@ define(['jquery'], function($) {
 		
 		    this.respond();
 		},
-	
+
+	    hideAll: function(){
+	        $("ul#allCards li").removeClass("show").addClass("hide");
+	        $("ul#cards li").removeClass("clicked");
+	    },
+
 		goTo: function(index) {
 			// filter invalid indices
 			if (index < 0 || index > this.li.length - 1 )
@@ -55,9 +60,7 @@ define(['jquery'], function($) {
 		
 			// move <ul> left
 			this.ul.style.left = '-' + (this.slideAmmount * index) + this.slideUnit;
-		
-			this.currentIndex = index;
-		
+
 			this.cardCounter();
 		},
 	
@@ -89,17 +92,23 @@ define(['jquery'], function($) {
 			}
 	    
 		},
+	    getSliderCardByData: function(index){
+	        return $($("ul#cards").find("[data-scard='" + index + "']")[0]);
+	    },
 
 		changeHighlight: function(current, newcard){
-	        document.getElementById(current).className = "";
-			document.getElementById(newcard).className = "clicked";
+	        this.getSliderCardByData(current).parent().removeClass("clicked");
+			this.getSliderCardByData(newcard).parent().addClass("clicked");
 
 		},
 
 		goToFirst: function(){
 			this.hideCard(this.currentIndex);
-			this.showCard(0);
-			this.changeHighlight(this.currentIndex, 0);
+			var first_card = document.getElementById(0).children[0]
+			var index = Number(first_card.getAttribute('data-scard'));
+			this.currentIndex = index;
+			this.showCard(index);
+			this.changeHighlight(this.currentIndex, index);
 			this.goTo(0);
 		},
 
@@ -137,7 +146,8 @@ define(['jquery'], function($) {
 			if ( this.deckView )
 			{
 			var counter = document.getElementById("counter");
-			counter.innerHTML = (this.currentIndex + 1) + "/" + this.totalLi;
+			var index = Number($('.clicked').attr('id'));
+			counter.innerHTML = (index + 1) + "/" + this.totalLi;
 			}
 		},
 
