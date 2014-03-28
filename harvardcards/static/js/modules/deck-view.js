@@ -8,8 +8,10 @@ sliderLength = $('ul#cards li').size();
 $(document).ready(function(){
     $('#cards').children().each(
         function(){
+            var card = $(this).children()[0];
+
             $(this).bind('click',function(){
-                current = $(this).index();
+                current = Number(card.getAttribute('data-scard'));
                 sliders[0].goToCard(current);
                 return false;
             })
@@ -172,9 +174,13 @@ $('#full_screen').click(function() {
 $('#shuffle_cards').click(function() {
     var cards  = $('#cards');
     var child = cards.children();
-    while (child.length) {
+
+    while (child.length)
         cards.append(child.splice(Math.floor(Math.random() *  child.length), 1));
-    }
+
+    for (var i = 0; i<cards.children().length; i++)
+        $(cards.children()[i]).attr('id', i);
+
     return false;
 });
 
