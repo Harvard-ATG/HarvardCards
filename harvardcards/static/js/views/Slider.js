@@ -30,7 +30,8 @@ define(['jquery'], function($) {
 			
 		
 			this.currentIndex = 0;
-		
+
+		    this.counter = 0;
 		
 			this.totalLi = this.li.length;
 			this.clickCealing;
@@ -65,31 +66,35 @@ define(['jquery'], function($) {
 		},
 	
 		goToPrev: function() {
-			var curr_index = $(this.li).index($('.clicked'));
-			if (curr_index > 0){
-                var prev_id = $(this.li).eq(curr_index - 1).attr('id');
-                this.goToCard(Number(prev_id));
-                this.goTo(curr_index -1);
-		    }
-		    /**if ( this.deckView && this.currentIndex > 0 )
+		    if ( this.deckView && this.counter > 0 )
 			{
-				this.hideCard(this.currentIndex);
-				this.showCard(this.currentIndex - 1);
-				this.changeHighlight(this.currentIndex, this.currentIndex-1);
-			}**/
-
-	    
+				var curr = this.getScardDataAttr(this.counter);
+			    this.counter = this.counter - 1;
+				var prev = this.getScardDataAttr(this.counter);
+				this.hideCard(curr);
+				this.showCard(prev);
+				this.changeHighlight(curr, prev);
+			}
+			this.goTo(this.counter);
 		},
 
+        getScardDataAttr: function(id){
+            card =  document.getElementById(id).children[0];
+            return Number(card.getAttribute('data-scard'))
+        },
+
 		goToNext: function() {
-			this.goTo(this.currentIndex + 1);
-		
-			if ( this.deckView )
+
+			if ( this.deckView && this.counter < this.totalLi)
 			{
-				this.hideCard(this.currentIndex - 1);
-				this.showCard(this.currentIndex);
-				this.changeHighlight(this.currentIndex - 1, this.currentIndex);
+				var curr = this.getScardDataAttr(this.counter);
+			    this.counter = this.counter + 1;
+				var nxt = this.getScardDataAttr(this.counter);
+				this.hideCard(curr);
+				this.showCard(nxt);
+				this.changeHighlight(curr, nxt);
 			}
+			this.goTo(this.counter);
 	    
 		},
 	    getSliderCardByData: function(index){
@@ -104,18 +109,19 @@ define(['jquery'], function($) {
 
 		goToFirst: function(){
 			this.hideCard(this.currentIndex);
-			var first_card = document.getElementById(0).children[0]
-			var index = Number(first_card.getAttribute('data-scard'));
-			this.currentIndex = index;
+			var index = this.getScardDataAttr(0);
 			this.showCard(index);
 			this.changeHighlight(this.currentIndex, index);
+			this.currentIndex = index;
 			this.goTo(0);
 		},
 
 		goToLast: function(){
 			this.hideCard(this.currentIndex);
-			this.showCard(this.totalLi-1);
-			this.changeHighlight(this.currentIndex, this.totalLi-1);
+			var index = this.getScardDataAttr(this.totalLi-1);
+			this.showCard(index);
+			this.changeHighlight(this.currentIndex, index);
+			this.currentIndex = index;
 			this.goTo(this.totalLi-1);
 		},
 
@@ -146,8 +152,8 @@ define(['jquery'], function($) {
 			if ( this.deckView )
 			{
 			var counter = document.getElementById("counter");
-			var index = Number($('.clicked').attr('id'));
-			counter.innerHTML = (index + 1) + "/" + this.totalLi;
+			this.counter = Number($('.clicked').attr('id'));
+			counter.innerHTML = (this.counter + 1) + "/" + this.totalLi;
 			}
 		},
 
