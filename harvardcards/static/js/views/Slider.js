@@ -41,9 +41,9 @@ define(['jquery'], function($) {
 			this.liMargin = 0;
 		
 			//show the first card on load
-			this.showCard(0);
+			this.showCard(this.currentIndex);
 			//give the first card an active class
-			$(this.li).eq(0).addClass('clicked');
+			$(this.li).eq(this.currentIndex).addClass('clicked');
 		
 		    this.respond();
 		},
@@ -64,9 +64,9 @@ define(['jquery'], function($) {
 		goToPrev: function() {
 			var curr_index = $(this.li).index($('.clicked'));
 			if (curr_index > 0){
-			var prev_id = $(this.li).eq(curr_index - 1).attr('id');
-		    this.goToCard(Number(prev_id));
-		    this.goTo(curr_index -1);
+                var prev_id = $(this.li).eq(curr_index - 1).attr('id');
+                this.goToCard(Number(prev_id));
+                this.goTo(curr_index -1);
 		    }
 		    /**if ( this.deckView && this.currentIndex > 0 )
 			{
@@ -77,6 +77,7 @@ define(['jquery'], function($) {
 
 	    
 		},
+
 		goToNext: function() {
 			this.goTo(this.currentIndex + 1);
 		
@@ -88,38 +89,39 @@ define(['jquery'], function($) {
 			}
 	    
 		},
+
 		changeHighlight: function(current, newcard){
 	        document.getElementById(current).className = "";
 			document.getElementById(newcard).className = "clicked";
 
 		},
+
 		goToFirst: function(){
 			this.hideCard(this.currentIndex);
 			this.showCard(0);
 			this.changeHighlight(this.currentIndex, 0);
 			this.goTo(0);
 		},
+
 		goToLast: function(){
-		
 			this.hideCard(this.currentIndex);
 			this.showCard(this.totalLi-1);
 			this.changeHighlight(this.currentIndex, this.totalLi-1);
-
 			this.goTo(this.totalLi-1);
 		},
-	
+
+	    getCardByData: function(index){
+	        return $($("#allCards").find("[data-card='" + index + "']")[0]);
+	    },
+
 		showCard: function(index){
-			//mark the current thumb as checked
-			$(this.li).eq(index).addClass('clicked');
-		
-			$('ul#allCards li').eq(index).removeClass('hide').addClass('show');
+			this.getCardByData(index).removeClass('hide').addClass('show');
+
 		},
 	
 		hideCard: function(index){
-			$(this.li).eq(index).removeClass('clicked');
 			document.getElementById(index).children[0].blur();
-		
-			$('ul#allCards li').eq(index).removeClass('show').addClass('hide');
+			this.getCardByData(index).removeClass('show').addClass('hide');
 		},
 	
 		goToCard: function(card){

@@ -1,6 +1,6 @@
 <ul id="cards">
 {% for card in cards %}
-    <li role="presentation" >
+    <li role="presentation" id="{{forloop.counter0}}" >
         <a class="card image" href="#" role="tab" tabindex="-1">
             {% for field in card.fields.show %}
                 {% include "_deck_slider_card_fields.html" with field=field %}
