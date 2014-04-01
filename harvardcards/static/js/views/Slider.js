@@ -73,13 +73,8 @@ define(['jquery'], function($) {
 		goToPrev: function() {
 		    if ( this.deckView && this.counter > 0 )
 			{
-				var curr = this.getScardDataAttr(this.counter);
-			    this.counter = this.counter - 1;
-				var prev = this.getScardDataAttr(this.counter);
-				this.currentIndex = prev;
-				this.hideCard(curr);
-				this.showCard(prev);
-				this.changeHighlight(curr, prev);
+				var prev = this.getScardDataAttr(this.counter-1);
+				this.goToCard(prev);
 			}
 			this.goTo(this.counter);
 		},
@@ -89,13 +84,8 @@ define(['jquery'], function($) {
 
 			if ( this.deckView && this.counter < this.totalLi-1)
 			{
-				var curr = this.getScardDataAttr(this.counter);
-			    this.counter = this.counter + 1;
-				var nxt = this.getScardDataAttr(this.counter);
-				this.currentIndex = nxt;
-				this.hideCard(curr);
-				this.showCard(nxt);
-				this.changeHighlight(curr, nxt);
+				var nxt = this.getScardDataAttr(this.counter+1);
+				this.goToCard(nxt);
 			}
 			this.goTo(this.counter);
 	    
