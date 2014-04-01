@@ -69,7 +69,8 @@ img { max-width: 100% }
 /* FONTS */
 h1, h2, h3, h4
 , a#addAcourse
-, a#addCard{
+, a#addCard
+, .addCards{
 	font-family: 'League Gothic', Arial, sans-serif;
 }
 	h1{ font-size: 3em; }
@@ -222,7 +223,7 @@ h1, h2, h3, h4
 /********** main nav (end) *************/
 
 a#addAcourse
-, a#addCard{
+/*, a#addCard*/{
 	text-align: center;
 	text-decoration: none;
 	display: block;
@@ -235,12 +236,38 @@ a#addAcourse
 	padding: 0.25em 10%;
 }
 
-a#addCard{
+/*a#addCard{
 	margin: 0;
 	padding: 1em 2%;
 	width: 8%;
 	float: left;
+}*/
+/********** new Add Card and Upload Cards (start) ***********/
+.addCards{
+	margin: 0;
+	width: 12%;
+	float: left;
 }
+.btn-dashed{
+	text-align: center;
+	text-decoration: none;
+	display: block;
+	font-size: 1.575em;
+	color: #4c4c4c;
+	border: 2px dashed #838383;
+	text-transform:uppercase;
+	margin: 0 auto 0.25em;
+	padding: 0.59em 5%;
+	width: 90%;
+}
+	.btn-dashed:hover{
+		background-color: #A51C30;
+		border:2px solid #A51C30;
+		color: #F3F3F1;
+	}
+	
+/********** new Add Card and Upload Cards (end) ***********/
+
 /********** hp course ROW (start) ***********/
 .courseWrapper{ 
 	display: inline-block; 
@@ -765,7 +792,8 @@ a#mobileMenu{
 	}
 
 	#navigation
-	, a#addCard { display: none; }
+	, a#addCard 
+	, .addCards{ display: none; }
 
 	#content{
 		width: 100%;
@@ -869,7 +897,8 @@ a#mobileMenu{
 		width: 98%;
 	}
 	#navigation
-	, a#addCard { display: none; }
+	, a#addCard
+	, .addCards { display: none; }
 
 	#content{
 		width: 100%;
@@ -934,7 +963,8 @@ a#mobileMenu{
 	}
 
 	#navigation
-	, a#addCard { display: none; }
+	, a#addCard
+	, .addCards { display: none; }
 
 	#content{
 		width: 100%;
@@ -960,6 +990,7 @@ a#mobileMenu{
 			border: 2px dashed #838383;
 			line-height: 167px;
 			padding: 0;
+			background: none;
 		}
 		ul.courseDecks li.deck.add a {
 			display: block;
@@ -1073,7 +1104,8 @@ a#mobileMenu{
 	}
 
 	#navigation
-	, a#addCard { display: inline-block; }
+	, a#addCard
+	, .addCards { display: inline-block; }
 
 	#content{
 		width: 80.333333333333%;
@@ -1192,7 +1224,8 @@ a#mobileMenu{
 	}
 
 	#navigation
-	, a#addCard { display: inline-block; }
+	, a#addCard
+	, .addCards { display: inline-block; }
 
 	#content{
 		width: 80.333333333333%;
