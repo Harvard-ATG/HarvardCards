@@ -95,6 +95,11 @@ def edit(request, collection_id=None):
 
     return render(request, 'collections/edit.html', context)
     
+def add_deck(request, collection_id=None):
+    """Adds a collection."""
+    collection = Collection.objects.get(id=collection_id)
+    deck = Deck.objects.create(collection=collection, title='Untitled Deck')
+    return redirect(deck)
 
 def delete(request, collection_id=None):
     """Deletes a collection."""

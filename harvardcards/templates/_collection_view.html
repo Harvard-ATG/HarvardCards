@@ -16,7 +16,7 @@
         <ul class="courseDecks">
             {% if collection.id in user_collection_role.ADMIN %}
                 <li class="deck add">
-                    <a href="{% url 'collectionUploadDeck' collection.id %}">Add a Deck</a>
+                    <a href="{% url 'collectionAddDeck' collection.id %}">Add a Deck</a>
                 </li>
             {% endif %}
 
