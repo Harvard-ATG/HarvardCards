@@ -11,8 +11,9 @@ $(document).ready(function(){
             var card = $(this).children()[0];
 
             $(this).bind('click',function(){
-                current = Number(card.getAttribute('data-scard'));
-                sliders[0].goToCard(current);
+                index = Number(card.getAttribute('data-scard'));
+                sliders[0].goToCard(index);
+                current = sliders[0].counter;
                 return false;
             })
         });
@@ -207,13 +208,17 @@ $('#play_cards').click(function(){
 });
 
 $('#previous_card').click(function() {
-    if (current != 0){current = current - 1}
-    sliders[0].goToPrev();
+    if (current != 0){
+        current = current - 1;
+        sliders[0].goToPrev();
+    }
     return false;
 });
 $('#next_card').click(function() {
-    if (current != sliderLength - 1){current = current + 1}
-    sliders[0].goToNext();
+    if (current != sliderLength - 1){
+        current = current + 1;
+        sliders[0].goToNext();
+        }
     return false;
 });
 

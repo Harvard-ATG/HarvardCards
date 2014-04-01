@@ -64,13 +64,19 @@ define(['jquery'], function($) {
 
 			this.cardCounter();
 		},
-	
+
+        getScardDataAttr: function(id){
+            card =  document.getElementById(id).children[0];
+            return Number(card.getAttribute('data-scard'))
+        },
+
 		goToPrev: function() {
 		    if ( this.deckView && this.counter > 0 )
 			{
 				var curr = this.getScardDataAttr(this.counter);
 			    this.counter = this.counter - 1;
 				var prev = this.getScardDataAttr(this.counter);
+				this.currentIndex = prev;
 				this.hideCard(curr);
 				this.showCard(prev);
 				this.changeHighlight(curr, prev);
@@ -78,10 +84,6 @@ define(['jquery'], function($) {
 			this.goTo(this.counter);
 		},
 
-        getScardDataAttr: function(id){
-            card =  document.getElementById(id).children[0];
-            return Number(card.getAttribute('data-scard'))
-        },
 
 		goToNext: function() {
 
@@ -90,6 +92,7 @@ define(['jquery'], function($) {
 				var curr = this.getScardDataAttr(this.counter);
 			    this.counter = this.counter + 1;
 				var nxt = this.getScardDataAttr(this.counter);
+				this.currentIndex = nxt;
 				this.hideCard(curr);
 				this.showCard(nxt);
 				this.changeHighlight(curr, nxt);
@@ -97,6 +100,7 @@ define(['jquery'], function($) {
 			this.goTo(this.counter);
 	    
 		},
+
 	    getSliderCardByData: function(index){
 	        return $($("ul#cards").find("[data-scard='" + index + "']")[0]);
 	    },
@@ -108,20 +112,14 @@ define(['jquery'], function($) {
 		},
 
 		goToFirst: function(){
-			this.hideCard(this.currentIndex);
 			var index = this.getScardDataAttr(0);
-			this.showCard(index);
-			this.changeHighlight(this.currentIndex, index);
-			this.currentIndex = index;
+			this.goToCard(index);
 			this.goTo(0);
 		},
 
 		goToLast: function(){
-			this.hideCard(this.currentIndex);
 			var index = this.getScardDataAttr(this.totalLi-1);
-			this.showCard(index);
-			this.changeHighlight(this.currentIndex, index);
-			this.currentIndex = index;
+			this.goToCard(index);
 			this.goTo(this.totalLi-1);
 		},
 
@@ -144,7 +142,6 @@ define(['jquery'], function($) {
 			this.showCard(card);
 			this.changeHighlight(this.currentIndex, card);
 			this.currentIndex = card;
-		
 			this.cardCounter();
 		},
 	
