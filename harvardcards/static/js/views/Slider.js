@@ -88,7 +88,6 @@ define(['jquery'], function($) {
 				this.goToCard(nxt);
 			}
 			this.goTo(this.counter);
-	    
 		},
 
 	    getSliderCardByData: function(index){
@@ -98,7 +97,6 @@ define(['jquery'], function($) {
 		changeHighlight: function(current, newcard){
 	        this.getSliderCardByData(current).parent().removeClass("clicked");
 			this.getSliderCardByData(newcard).parent().addClass("clicked");
-
 		},
 
 		goToFirst: function(){
