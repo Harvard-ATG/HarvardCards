@@ -7,7 +7,7 @@ from django.utils import simplejson as json
 
 from django.forms.formsets import formset_factory
 from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Users_Collections
-from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
+from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm, DeckImportForm
 from harvardcards.apps.flash import services, queries, utils
 
 def index(request, deck_id=None):
@@ -93,6 +93,32 @@ def edit(request, deck_id=None):
 
     return render(request, 'decks/edit.html', context)
     
+def upload_deck(request, deck_id=None):
+    '''
+    Imports a deck of cards from an excel spreadsheet.
+    '''
+    print "deck_id=", deck_id
+    deck = Deck.objects.get(id=deck_id)
+    collections = Collection.objects.all()
+    collection = Collection.objects.get(id=deck.collection.id)
+
+    if request.method == 'POST':
+        deck_form = DeckImportForm(request.POST, request.FILES)
+        if deck_form.is_valid():
+            if 'file' in request.FILES:
+                services.handle_uploaded_deck_file(deck, request.FILES['file'])
+            return redirect(deck)
+    else:
+        deck_form = DeckImportForm()
+
+    context = {
+        "deck": deck,
+        "deck_form": deck_form, 
+        "collections": collections,
+        "collection": collection
+    }
+
+    return render(request, 'decks/upload.html', context)
   
 def download_deck(request, deck_id=None):
     '''

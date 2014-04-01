@@ -12,13 +12,13 @@
         </div>
 
         <div style="margin: 0 0 1em 0">
-            <b>Instructions:</b> use the <a href="{% url 'collectionDownloadTemplate' collection.id %}">flashcard template</a>, an Excel spreadsheet, to create your deck and then upload it using the form.
+             Download the <a href="{% url 'collectionDownloadTemplate' collection.id %}">flashcard template</a> to create your deck. 
         </div>
 
-        <form action="{% url 'collectionUploadDeck' collection.id %}" method="post" {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>{% csrf_token %}
-            {{ form.as_p }}
+        <form action="{% url 'deckUpload' deck.id %}" method="post" {% if deck_form.is_multipart %}enctype="multipart/form-data"{% endif %}>{% csrf_token %}
+            {{ deck_form.as_p }}
             <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
-            <a href="{% url 'index' %}" class="adminMenuBtn cancelBtn">Cancel</a>
+            <a href="{% url 'deckIndex' deck.id %}" class="adminMenuBtn cancelBtn">Cancel</a>
         </form>
     </div>
 </div>
