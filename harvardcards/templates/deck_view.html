@@ -40,7 +40,7 @@
             <!--a href="javascript:void(0);" id="addCard">Add Card</a-->
             <div class="addCards">
             	<a href="javascript:void(0);" class="btn-dashed" id="addCard">Add Card</a>
-            	<a href="javascript:void(0);" class="btn-dashed" id="uploadCards">Upload Cards</a>
+				<a href="{% url 'deckUpload' deck.id %}" class="btn-dashed" id="uploadCards">Upload Cards</a>
             </div>
         {% endif %}
         <div id="{% if is_deck_admin %}cardSlider{% else %}cardSliderNotAdmin{% endif %}" role="scrollbar" tabindex="0" aria-orientation="horizontal">
