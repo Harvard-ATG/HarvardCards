@@ -61,8 +61,6 @@ define(['jquery'], function($) {
 		
 			// move <ul> left
 			this.ul.style.left = '-' + (this.slideAmmount * index) + this.slideUnit;
-
-			this.cardCounter();
 		},
 
         getScardDataAttr: function(id){
@@ -74,7 +72,7 @@ define(['jquery'], function($) {
 		    if (this.counter  > 0){
                 this.counter = this.counter-1;
                 this.goTo(this.counter);
-                if ( this.deckView)
+                if (this.deckView)
                 {
                     var prev = this.getScardDataAttr(this.counter);
                     this.goToCard(prev);
@@ -87,9 +85,11 @@ define(['jquery'], function($) {
 		    if (this.counter  < this.totalLi-1){
 		        this.counter = this.counter + 1;
 			    this.goTo(this.counter);
-                if ( this.deckView)
+                if (this.deckView)
                 {
                     var nxt = this.getScardDataAttr(this.counter);
+                    console.log(nxt)
+                    console.log(this.counter)
                     this.goToCard(nxt);
                 }
             }
