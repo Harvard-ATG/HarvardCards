@@ -88,8 +88,6 @@ define(['jquery'], function($) {
                 if (this.deckView)
                 {
                     var nxt = this.getScardDataAttr(this.counter);
-                    console.log(nxt)
-                    console.log(this.counter)
                     this.goToCard(nxt);
                 }
             }
@@ -122,7 +120,6 @@ define(['jquery'], function($) {
 
 		showCard: function(index){
 			this.getCardByData(index).removeClass('hide').addClass('show');
-
 		},
 	
 		hideCard: function(index){
