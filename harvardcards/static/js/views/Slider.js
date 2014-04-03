@@ -71,23 +71,28 @@ define(['jquery'], function($) {
         },
 
 		goToPrev: function() {
-		    if ( this.deckView && this.counter > 0 )
-			{
-				var prev = this.getScardDataAttr(this.counter-1);
-				this.goToCard(prev);
-			}
-			this.goTo(this.counter);
+		    if (this.counter  > 0){
+                this.counter = this.counter-1;
+                this.goTo(this.counter);
+                if ( this.deckView)
+                {
+                    var prev = this.getScardDataAttr(this.counter);
+                    this.goToCard(prev);
+                }
+            }
 		},
 
 
 		goToNext: function() {
-
-			if ( this.deckView && this.counter < this.totalLi-1)
-			{
-				var nxt = this.getScardDataAttr(this.counter+1);
-				this.goToCard(nxt);
-			}
-			this.goTo(this.counter);
+		    if (this.counter  < this.totalLi-1){
+		        this.counter = this.counter + 1;
+			    this.goTo(this.counter);
+                if ( this.deckView)
+                {
+                    var nxt = this.getScardDataAttr(this.counter);
+                    this.goToCard(nxt);
+                }
+            }
 		},
 
 	    getSliderCardByData: function(index){
