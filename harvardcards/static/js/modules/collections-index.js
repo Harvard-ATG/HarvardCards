@@ -1,4 +1,5 @@
-define(['jquery', 'views/Slider'], function($, Slider) {
+define(['jquery', 'components/slider/CollectionSlider'], function($, CollectionSlider) {
+/*
 	var sliders = {'decks':[],'templates':[]}; 
 	var sliderLength;
 
@@ -27,7 +28,12 @@ define(['jquery', 'views/Slider'], function($, Slider) {
 			}
 		}
 	}).resize();
-	
+*/
+
+	window.sliders = {'decks': [], 'templates': []};
+	$('.slider').each(function(index, el) {
+		window.sliders.decks.push(new CollectionSlider(this));
+	});
 	
 /*************************************************************************
 					TOUCH EVENTS FOR DASHBAORD (START)
@@ -158,7 +164,7 @@ define(['jquery', 'views/Slider'], function($, Slider) {
 					TOUCH EVENTS FOR DASHBAORD (END)
 *************************************************************************/
 	
-	window.sliders = sliders;
+	//window.sliders = sliders;
 
 	return {initModule: function(){}};
 });
