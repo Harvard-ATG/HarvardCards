@@ -25,7 +25,17 @@ class DeckAdmin(admin.ModelAdmin):
     list_display = ('title', 'collection')
     inlines=(CardsInLine,)
 
-admin.site.register(Collection)
+class UsersInLine(admin.StackedInline):
+    extra = 0
+    verbose_name = 'User'
+    model = Users_Collections
+
+class CollectionAdmin(admin.ModelAdmin):
+    list_display = ('title', 'description', 'card_template')
+    inlines = (UsersInLine,)
+
+
+admin.site.register(Collection, CollectionAdmin)
 admin.site.register(Field)
 admin.site.register(Card, CardAdmin)
 admin.site.register(Users_Collections)
