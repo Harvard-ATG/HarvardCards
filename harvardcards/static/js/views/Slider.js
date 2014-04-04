@@ -30,7 +30,8 @@ define(['jquery'], function($) {
 			
 		
 			this.currentIndex = 0;
-		
+
+		    this.counter = 0;
 		
 			this.totalLi = this.li.length;
 			this.clickCealing;
@@ -41,13 +42,18 @@ define(['jquery'], function($) {
 			this.liMargin = 0;
 		
 			//show the first card on load
-			this.showCard(0);
+			this.showCard(this.currentIndex);
 			//give the first card an active class
-			$(this.li).eq(0).addClass('cardActive');
+			$(this.li).eq(this.currentIndex).addClass('clicked');
 		
 		    this.respond();
 		},
-	
+
+	    hideAll: function(){
+	        $("ul#allCards li").removeClass("show").addClass("hide");
+	        $("ul#cards li").removeClass("clicked");
+	    },
+
 		goTo: function(index) {
 			// filter invalid indices
 			if (index < 0 || index > this.li.length - 1 )
@@ -55,65 +61,70 @@ define(['jquery'], function($) {
 		
 			// move <ul> left
 			this.ul.style.left = '-' + (this.slideAmmount * index) + this.slideUnit;
-		
-			this.currentIndex = index;
-		
-			this.cardCounter();
 		},
-	
-		goToPrev: function() {
-		    if ( this.deckView && this.currentIndex > 0 )
-			{
-				this.hideCard(this.currentIndex);
-				this.showCard(this.currentIndex - 1);
-				this.changeHighlight(this.currentIndex, this.currentIndex-1);
-			}
-		    this.goTo(this.currentIndex - 1);
-	    
-		},
-		goToNext: function() {
-			this.goTo(this.currentIndex + 1);
-		
-			if ( this.deckView )
-			{
-				this.hideCard(this.currentIndex - 1);
-				this.showCard(this.currentIndex);
-				this.changeHighlight(this.currentIndex - 1, this.currentIndex);
-			}
-	    
-		},
-		changeHighlight: function(current, newcard){
-	        document.getElementById(current).className = "";
-			document.getElementById(newcard).className = "clicked";
 
+        getScardDataAttr: function(id){
+            card =  document.getElementById(id).children[0];
+            return Number(card.getAttribute('data-scard'))
+        },
+
+		goToPrev: function() {
+		    if (this.counter  > 0){
+                this.counter = this.counter-1;
+                this.goTo(this.counter);
+                if (this.deckView)
+                {
+                    var prev = this.getScardDataAttr(this.counter);
+                    this.goToCard(prev);
+                }
+            }
 		},
+
+
+		goToNext: function() {
+		    if (this.counter  < this.totalLi-1){
+		        this.counter = this.counter + 1;
+			    this.goTo(this.counter);
+                if (this.deckView)
+                {
+                    var nxt = this.getScardDataAttr(this.counter);
+                    this.goToCard(nxt);
+                }
+            }
+		},
+
+	    getSliderCardByData: function(index){
+	        return $($("ul#cards").find("[data-scard='" + index + "']")[0]);
+	    },
+
+		changeHighlight: function(current, newcard){
+	        this.getSliderCardByData(current).parent().removeClass("clicked");
+			this.getSliderCardByData(newcard).parent().addClass("clicked");
+		},
+
 		goToFirst: function(){
-			this.hideCard(this.currentIndex);
-			this.showCard(0);
-			this.changeHighlight(this.currentIndex, 0);
+			var index = this.getScardDataAttr(0);
+			this.goToCard(index);
 			this.goTo(0);
 		},
-		goToLast: function(){
-		
-			this.hideCard(this.currentIndex);
-			this.showCard(this.totalLi-1);
-			this.changeHighlight(this.currentIndex, this.totalLi-1);
 
+		goToLast: function(){
+			var index = this.getScardDataAttr(this.totalLi-1);
+			this.goToCard(index);
 			this.goTo(this.totalLi-1);
 		},
-	
+
+	    getCardByData: function(index){
+	        return $($("#allCards").find("[data-card='" + index + "']")[0]);
+	    },
+
 		showCard: function(index){
-			//mark the current thumb as checked
-			$(this.li).eq(index).addClass('cardActive');
-		
-			$('ul#allCards li').eq(index).removeClass('hide').addClass('show');
+			this.getCardByData(index).removeClass('hide').addClass('show');
 		},
 	
 		hideCard: function(index){
-			$(this.li).eq(index).removeClass('cardActive');
 			document.getElementById(index).children[0].blur();
-		
-			$('ul#allCards li').eq(index).removeClass('show').addClass('hide');
+			this.getCardByData(index).removeClass('show').addClass('hide');
 		},
 	
 		goToCard: function(card){
@@ -121,7 +132,6 @@ define(['jquery'], function($) {
 			this.showCard(card);
 			this.changeHighlight(this.currentIndex, card);
 			this.currentIndex = card;
-		
 			this.cardCounter();
 		},
 	
@@ -129,7 +139,8 @@ define(['jquery'], function($) {
 			if ( this.deckView )
 			{
 			var counter = document.getElementById("counter");
-			counter.innerHTML = (this.currentIndex + 1) + "/" + this.totalLi;
+			this.counter = Number($('.clicked').attr('id'));
+			counter.innerHTML = (this.counter + 1) + "/" + this.totalLi;
 			}
 		},
 
@@ -228,11 +239,7 @@ define(['jquery'], function($) {
 				this.li[i].style.width = rspLiWidth;//taking 2px away because of borders
 				this.li[i].style.clear = 'none';
 				if (ipad){
-					if (i !=  lastLI){
-						this.li[i].style.marginRight = liMargin + 'px';
-					}else{
-						this.li[i].style.marginRight = 0 + 'px';
-					}
+					this.li[i].style.marginRight = liMargin + 'px';
 				}else{
 					this.li[i].style.marginRight = 0;
 				}

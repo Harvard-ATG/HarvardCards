@@ -498,7 +498,7 @@ ul#cards{
 			}
 
 		ul#cards li:hover
-		, ul#cards li.cardActive{
+		, ul#cards li.clicked{
 			border: solid 0.375em #4d4d4d;
 		}
 

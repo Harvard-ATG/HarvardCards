@@ -1,39 +1,19 @@
 define(['jquery', 'views/Slider', 'views/CardForm', 'jquery.appendAround', 'jqueryui', 'jquery.mousewheel'], function($, Slider, CardForm) {
+current = 0;
 
-// http://www.quirksmode.org/dom/domform.html
-
-function moreFields() {
-	counter++;
-	var newFields = document.getElementById('readroot').cloneNode(true);
-	newFields.id = '';
-	newFields.style.display = 'block';
-	var newField = newFields.childNodes;
-	for (var i=0;i<newField.length;i++) {
-		var theName = newField[i].name
-		if (theName)
-			newField[i].name = theName + counter;
-	}
-	var insertHere = document.getElementById('writeroot');
-	insertHere.parentNode.insertBefore(newFields,insertHere);
-	$('.moreField').each(function(){
-        $(this).bind('click',function(){
-            console.log(this.parentNode);
-            this.parentNode.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode.parentNode);
-            counter=counter-1;
-            return false;
-        })
-	})
-}
-
-
+sliders = [];
+fullCardSlider = [];
+sliderLength = $('ul#cards li').size();
 
 $(document).ready(function(){
-    //moreFields();
     $('#cards').children().each(
         function(){
+            var card = $(this).children()[0];
+
             $(this).bind('click',function(){
-                current = Number($(this).attr('id'));
-                sliders[0].goToCard(current);
+                index = Number(card.getAttribute('data-scard'));
+                sliders[0].goToCard(index);
+                current = sliders[0].counter;
                 return false;
             })
         });
@@ -46,15 +26,6 @@ $(document).ready(function(){
         location.href=this.href+'&cardLoc='+(current+1);
         return false;
     });
-   $('#moreFields').click(function(){
-        moreFields();
-        return false;
-    });
-
-
-
-
-
 });
 
 $('#addCard').click(function(){
@@ -110,11 +81,9 @@ function parseURLParams(url) {
     }
     return parms;
 }
-sliders = [];
-sliderLength = $('ul#cards li').size();
+
 var pathname = $(location).attr('href');
 var urlPar = parseURLParams(pathname);
-current = 0;
 if(typeof(urlPar) != "undefined"){
     if(typeof(urlPar["cardLoc"]) != "undefined"){
         var k = Number(urlPar["cardLoc"][0])-1;
@@ -123,21 +92,9 @@ if(typeof(urlPar) != "undefined"){
         }
     }
 }
-sliders = [];
-fullCardSlider = [];
-sliderLength = $('ul#cards li').size();
 
-/*
-$( "#slider" ).slider({
-        orientation: "horizontal",
-        min: 0,
-        range: "min",
-        max: sliderLength-1,
-        step: 1,
-        slide:function(event, ui){sliders[0].goToCard(ui.value)}
-});
 
-*/
+
 var sliderObjExist = false;
 var Slider1 = Slider;
 $('.cardHolder').each(function() {
@@ -165,99 +122,16 @@ $("#initDeck").css("display","none");
 
 $("#holder").css("display","block");
 
-function updateCardLoc(loc){
-    numCards = sliderLength;
-	var location = Math.round((loc+1)/sliderLength*100) + '%  •  Card '+ (loc + 1) + ' of ' + sliderLength;
-	$('#cardLoc').text(location);
-	$( "#slider" ).slider( "value", loc );
-}
-
 
 $(window).on("resize", function () {
-    // to display the card location between the control buttons
-    spaceBtwControls = $('#controlbar').width()- $('#first').width()-$('#last').width()-$('#next').width()-$('#previous').width();
-    $('#cardIndex').width(spaceBtwControls + 'px');
-
 	if ( sliderObjExist )
 	{
 		//console.log($('.sliderNav').css('display'));
 		sliders[0].respond();
 
 	}
-/* //RM
-	var cardHolder = $('#singleCardHolder');
-	var holderWidth = Math.round(cardHolder.width());
-	var cardItems = $('#singleCardHolder ul li');
-	var liCount = cardItems.length;
-	//give each a card li the width of the container
-	cardItems.width(holderWidth + 'px');
-	//make the ul width big enough to fit all cards side by side
-	var ulWidth = holderWidth * liCount;
-	$('#singleCardHolder ul').width(ulWidth + 'px');
-
-	//on first load show the first card
-	cardItems.eq(current).show();
-	sliders[0].goTo(current);
-
-    updateCardLoc(current);
-	document.getElementById(current).className = "clicked"
-*/
-	//change main card based on thumbnail click
-	/*$('a.image').click(function(){
-		var i = $(this).parent().index();
-
-		if (i != current)
-		{
-			cardItems.eq(current).hide();
-			document.getElementById(current).className = "";
-            sliders[0].changeView(i);
-			cardItems.eq(i).show();
-
-			updateCardLoc(i);
-			document.getElementById(i).className = "clicked"
-			current = i;
-		}
-        else if (i===0 || i===sliderLength-1)
-            sliders[0].goTo(i)
-
-	});*/
-
 
 }).resize();
-
-
-/* accessibility (start) */
-$('body').attr('role', 'application');
-
-/* get the id of the key been pressed */
-var getElementId = function($){
-	return $.attr("id");
-}
-
-$('a').keydown(function(event){
-	
-	//console.log(event.keyCode);
-	switch(event.keyCode)
-	{
-		case 9: //tab key
-			//console.log($(this).attr('id'));
-		break;
-		case 13://enter key
-			//$('#content').attr({ "role":"widget", "tabindex": "0" });
-			//console.log(getLinkId($(this)));
-			/*if (getElementId($this) == 'prevCard')
-			{
-				sliders[0].goToPrev();
-			}
-			else if (getLinkId($this) == 'firstCard')
-			{
-				sliders[0].goToFirstCard();
-			}*/
-		break;
-	}
-	
-});
-/* accessibility (end) */
 
 
 $('.reveal').click(function() {
@@ -301,9 +175,14 @@ $('#full_screen').click(function() {
 $('#shuffle_cards').click(function() {
     var cards  = $('#cards');
     var child = cards.children();
-    while (child.length) {
+
+    while (child.length)
         cards.append(child.splice(Math.floor(Math.random() *  child.length), 1));
-    }
+
+    for (var i = 0; i<cards.children().length; i++)
+        $(cards.children()[i]).attr('id', i);
+    sliders[0].hideAll();
+    $('#first_card').click();
     return false;
 });
 
@@ -329,13 +208,17 @@ $('#play_cards').click(function(){
 });
 
 $('#previous_card').click(function() {
-    if (current != 0){current = current - 1}
-    sliders[0].goToPrev();
+    if (current != 0){
+        current = current - 1;
+        sliders[0].goToPrev();
+    }
     return false;
 });
 $('#next_card').click(function() {
-    if (current != sliderLength - 1){current = current + 1}
-    sliders[0].goToNext();
+    if (current != sliderLength - 1){
+        current = current + 1;
+        sliders[0].goToNext();
+        }
     return false;
 });
 
@@ -368,10 +251,8 @@ function checkKey(e) {
     if (true) {
         if (event.keyCode == 37)
             $('#previous_card').click();
-            //sliders[0].goToPrev()
         if (event.keyCode == 39)
             $('#next_card').click();
-            //sliders[0].goToNext()    
     }
 };
 document.onkeydown=checkKey;
