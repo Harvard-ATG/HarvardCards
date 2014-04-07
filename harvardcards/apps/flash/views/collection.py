@@ -16,6 +16,7 @@ def index(request, collection_id=None):
     """Displays a set of collections."""
     all_collections = Collection.objects.all()
     user_collection_role = Users_Collections.get_role_buckets(request.user, all_collections)
+    print user_collection_role
     decks_by_collection = queries.getDecksByCollection()
 
     collection_list = []
