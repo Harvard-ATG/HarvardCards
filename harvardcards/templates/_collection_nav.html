@@ -1,18 +1,30 @@
 <div id="navigation">
-    {% if user.is_staff and not collection or user.is_superuser and not collection %}
+    {% if user.is_staff and not collection and is_edit_mode or user.is_superuser and not collection and is_edit_mode %}
         <a href="{% url 'collectionCreate' %}" id="addAcourse">Add a course</a>
     {% endif %}
     <nav class="desktopNav" data-set="mobileNav">
         <ul>
             <li>
+                {% if is_edit_mode %}
+                <a href="{% url 'index' %}?instructor=edit">Home</a>
+                {% else %}
                 <a href="{% url 'index' %}">Home</a>
+                {% endif %}
             </li>
             {% for c in collections %}
                 <li>
                     {% if c == collection %}
+                        {% if is_edit_mode %}
+                        <a href="{% url 'collectionIndex' c.id %}?instructor=edit" class="active">{{ c.title|truncatechars:30 }}</a>
+                        {% else %}
                         <a href="{% url 'collectionIndex' c.id %}" class="active">{{ c.title|truncatechars:30 }}</a>
+                        {% endif %}
                     {% else %}
-                        <a href="{% url 'collectionIndex' c.id %}">{{ c.title|truncatechars:30 }}</a>
+                        {% if is_edit_mode %}
+                        <a href="{% url 'collectionIndex' c.id %}?instructor=edit">{{ c.title|truncatechars:30 }}</a>
+                        {% else %}
+                         <a href="{% url 'collectionIndex' c.id %}">{{ c.title|truncatechars:30 }}</a>
+                        {% endif %}
                     {% endif %}
 
                     {% if c == collection %}

@@ -33,7 +33,7 @@
 					{% if user.is_authenticated %}
 						<li><span>{{ user.email }}</span></li>
                         {% if user.is_staff or user.is_superuser %}
-                        <li><a href="#">Edit</a></li>
+                        <li><a href="#" onclick="var pathname = $(location).attr('href'); this.href = pathname + '?instructor=edit'">Edit</a></li>
 						{% endif %}
                         <li><a href="{% url 'logout' %}">Sign out</a></li>
 					{% else %}
