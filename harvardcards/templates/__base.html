@@ -30,7 +30,7 @@
 			<div id="fc_header" class="section"><!-- section (start) -->
 				<a href="{% url 'index' %}"><img src="{{ STATIC_URL }}img/harvardLogo.png" alt="Harvard University" title="Harvard University" border="0" /></a>
 				<ul id="userInfo">
-					{% if user.is_authenticated %}
+					{% if user.is_superuser %}
 						<li><span>{{ user.email }}</span></li>
                         <li><a href="#">Edit</a></li>
 						<li><a href="{% url 'logout' %}">Sign out</a></li>

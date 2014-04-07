@@ -29,6 +29,8 @@
                 <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
                 <a href="{% url 'index' %}" class="adminMenuBtn cancelBtn">Cancel</a>
             </div>
+
+            <input id="user_id" name="user_id" type="hidden" value="{{ user.id }}"/>
         </form>
     </div>
 </div>

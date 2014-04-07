@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
 from django.core.exceptions import ViewDoesNotExist
+from django.contrib.auth.models import User
 
 from django.utils import simplejson as json
 
@@ -9,6 +10,7 @@ from django.forms.formsets import formset_factory
 from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
 from harvardcards.apps.flash import forms, services, queries, utils
+import datetime
 
 def index(request, collection_id=None):
     """Displays a set of collections."""
@@ -58,11 +60,14 @@ def index(request, collection_id=None):
 def create(request):
     """Creates a collection."""
     collections = Collection.objects.all()
-
     if request.method == 'POST':
+        user_id = int(request.POST['user_id'])
+        user = User.objects.get(id=user_id)
         collection_form = CollectionForm(request.POST)
         if collection_form.is_valid():
             collection = collection_form.save()
+            Users_Collections.objects.create(user=user, collection=collection, role='A', date_joined=datetime.date.today())
+
             return redirect(collection)
     else:
         collection_form = CollectionForm()
