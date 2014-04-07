@@ -1,30 +1,36 @@
 define(['jquery'], function($) {
+    
+    // Constructor.
 	var ResponsiveSliderPlugin = function() {
 		this.hasLayout = false;
-		this.layout = {};
+		this.layout = {}; // holds layout configuration
 		this.resize = $.proxy(this.resize, this);
 	};
 
+    // Initializes the plugin.
 	ResponsiveSliderPlugin.prototype.init = function(slider) {
 		this.slider = slider;
 		this.resize();
 		this.initListeners();
 	};
 
+    // Initializes listeners.
 	ResponsiveSliderPlugin.prototype.initListeners = function() {
 		$(window).on("resize", this.resize);
 	};
 
+    // Resizes the slider if necessary.
 	ResponsiveSliderPlugin.prototype.resize = function() {
 		this.loadLayout();
 		this.doLayout();
 	};
 
-	//For reference:
-	//  iphone portrait   = screen and (min-width: 320px)
-	//  iphone landscape  = screen and (min-width: 480px)
-	//  ipad portrait     = screen and (min-width: 768px)
-	//  desktop           = screen and (min-width: 1024px)
+    // List of rules for configuring the layout. 
+	// For reference:
+	//   iphone portrait   = screen and (min-width: 320px)
+	//   iphone landscape  = screen and (min-width: 480px)
+	//   ipad portrait     = screen and (min-width: 768px)
+	//   desktop           = screen and (min-width: 1024px)
 	ResponsiveSliderPlugin.prototype.rules = [{
 		"mediaQuery": "screen and (min-width: 280px) and (max-width: 320px)",
 		"handler": "singleLayout",
@@ -47,6 +53,9 @@ define(['jquery'], function($) {
 		"showItems": null
 	}];
 
+    // Loads a layout that will adapt to the screen. Uses media query rules
+    // to configure the layout. The first media query that matches from
+    // the rules will be loaded.
 	ResponsiveSliderPlugin.prototype.loadLayout = function() {
 		var i, rule, len;
 
@@ -64,15 +73,8 @@ define(['jquery'], function($) {
 		}
 	};
 
-	ResponsiveSliderPlugin.prototype.getItemBorderWidth = function() {
-		return parseFloat($(this.slider.items).css('border-left-width'));
-	};
-
-	ResponsiveSliderPlugin.prototype.checkMediaQuery = function(mq) {
-		var mediaQuery = window.matchMedia(mq);
-		return mediaQuery.matches ? true : false;
-	};
-
+    // Checks if there is a layout and calls the corresponding handler,
+    // otherwise just resets the layout.
 	ResponsiveSliderPlugin.prototype.doLayout = function() {
 		if(this.hasLayout) {
 			this[this.layoutHandler]();
@@ -81,6 +83,7 @@ define(['jquery'], function($) {
 		}
 	};
 
+    // Applies the current layout to the slider and its items
 	ResponsiveSliderPlugin.prototype.applyLayout = function() {
 		var layout = this.layout;
 		var numItems = this.slider.getNumItems();
@@ -106,11 +109,13 @@ define(['jquery'], function($) {
 		this.slider.goToCurrent(); // keep position when layout changes
 	};
 
+    // Resets the layout to the default 
 	ResponsiveSliderPlugin.prototype.resetLayout = function() {
 		$(this.slider.container).removeAttr('style');
 		$(this.slider.items).removeAttr('style');
 	};
 
+    // Creates a layout for a single item
 	ResponsiveSliderPlugin.prototype.singleLayout = function() {
 		var showItems = this.showItems;
 		var numItems = this.slider.getNumItems();
@@ -127,6 +132,7 @@ define(['jquery'], function($) {
 		this.applyLayout();
 	};
 
+    // Creates a layout for multiple items 
 	ResponsiveSliderPlugin.prototype.multiLayout = function() {
 		var showItems = this.showItems;
 		var numItems = this.slider.getNumItems();
@@ -146,6 +152,18 @@ define(['jquery'], function($) {
 		this.layout.slide = slide;
 
 		this.applyLayout();
+	};
+
+    // Utility function to return the border width of the slider items. Returns
+    // the number without units.
+	ResponsiveSliderPlugin.prototype.getItemBorderWidth = function() {
+		return parseFloat($(this.slider.items).css('border-left-width'));
+	};
+
+    // Utility function to execute a media query. Returns true if it matches, false otherwise.
+	ResponsiveSliderPlugin.prototype.checkMediaQuery = function(mq) {
+		var mediaQuery = window.matchMedia(mq);
+		return mediaQuery.matches ? true : false;
 	};
 	
 	return ResponsiveSliderPlugin;
