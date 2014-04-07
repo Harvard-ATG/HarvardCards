@@ -16,7 +16,6 @@ def index(request, collection_id=None):
     """Displays a set of collections."""
     all_collections = Collection.objects.all()
     user_collection_role = Users_Collections.get_role_buckets(request.user, all_collections)
-    print user_collection_role
     decks_by_collection = queries.getDecksByCollection()
 
     collection_list = []
@@ -62,12 +61,13 @@ def create(request):
     """Creates a collection."""
     collections = Collection.objects.all()
     if request.method == 'POST':
-        user_id = int(request.POST['user_id'])
-        user = User.objects.get(id=user_id)
         collection_form = CollectionForm(request.POST)
         if collection_form.is_valid():
             collection = collection_form.save()
-            Users_Collections.objects.create(user=user, collection=collection, role='A', date_joined=datetime.date.today())
+            if request.POST['user_id']:
+                user_id = int(request.POST['user_id'])
+                user = User.objects.get(id=user_id)
+                Users_Collections.objects.create(user=user, collection=collection, role='A', date_joined=datetime.date.today())
 
             return redirect(collection)
     else:
