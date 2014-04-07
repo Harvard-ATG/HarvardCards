@@ -2,7 +2,7 @@
 
 
 {% block sidebar_content %}
-    {% include "_deck_nav.html" with collection=collection deck=deck is_quiz_mode=is_quiz_mode %}
+    {% include "_deck_nav.html" with collection=collection deck=deck is_quiz_mode=is_quiz_mode is_edit_mode=is_edit_mode %}
 {% endblock %}
 
 
@@ -21,25 +21,33 @@
             <h2 class="courseTitle"><a href="{% url 'collectionIndex' collection.id %}">{{collection.title}}</a></h2>
             <h3>{{deck.title}}</h3>
             <ul class="adminMenu adminMenuRight">
-                {% if is_deck_admin %}
+                {% if is_deck_admin and is_edit_mode %}
                     <li><a href="{% url 'deckEdit' deck.id %}">Edit</a></li>
                     <li><a href="{% url 'deckDelete' deck.id %}">Delete Deck</a></li>
                 {% endif %}
                 <li>
                 {% if is_quiz_mode %}
-                <a href="{% url 'deckIndex' deck.id %}" id="reviewM">Review Mode</a>
+                    {% if is_edit_mode %}
+                    <a href="{% url 'deckIndex' deck.id %}?instructor=edit" id="reviewM">Review Mode</a>
+                    {% else %}
+                    <a href="{% url 'deckIndex' deck.id %}" id="reviewM">Review Mode</a>
+                    {% endif%}
                 {% else %}
-                <a href="{% url 'deckIndex' deck.id %}?mode=quiz" id="quizM">Quiz Mode</a>
+                    {% if is_edit_mode %}
+                    <a href="{% url 'deckIndex' deck.id %}?mode=quiz&instructor=edit" id="quizM">Quiz Mode</a>
+                    {% else %}
+                    <a href="{% url 'deckIndex' deck.id %}?mode=quiz" id="quizM">Quiz Mode</a>
+                    {% endif %}
                 {% endif %}
                 </li>
             </ul>
         </div>
 
         <!-- SECTION: Card Slider -->
-        {% if is_deck_admin %}
+        {% if is_deck_admin and is_edit_mode %}
             <a href="javascript:void(0);" id="addCard">Add Card</a>
         {% endif %}
-        <div id="{% if is_deck_admin %}cardSlider{% else %}cardSliderNotAdmin{% endif %}" role="scrollbar" tabindex="0" aria-orientation="horizontal">
+        <div id="{% if is_deck_admin and is_edit_mode %}cardSlider{% else %}cardSliderNotAdmin{% endif %}" role="scrollbar" tabindex="0" aria-orientation="horizontal">
         {% if cards|length %}
             <div class="sliderBtns deckPrev">
                 <a id="previous_card" href="#"><i class="fa fa-angle-left"></i><span>Previous</span></a>

@@ -13,7 +13,7 @@
         <form action="{% url 'deckEdit' deck.id %}" method="post">{% csrf_token %}
             {{ deck_form.as_p }}
             <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
-            <a href="{% url 'deckIndex' deck.id %}" class="adminMenuBtn cancelBtn">Cancel</a>
+            <a href="{% url 'deckIndex' deck.id %}?instructor=edit" class="adminMenuBtn cancelBtn">Cancel</a>
         </form>
     </div>
 </div>

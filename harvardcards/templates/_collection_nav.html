@@ -1,6 +1,6 @@
 <div id="navigation">
     {% if user.is_staff and not collection and is_edit_mode or user.is_superuser and not collection and is_edit_mode %}
-        <a href="{% url 'collectionCreate' %}" id="addAcourse">Add a course</a>
+        <a href="{% url 'collectionCreate' %}?instructor=edit" id="addAcourse">Add a course</a>
     {% endif %}
     <nav class="desktopNav" data-set="mobileNav">
         <ul>
@@ -31,7 +31,11 @@
                         {% if c.decks|length > 0 %}
                             <ul>
                                 {% for deck in c.decks %}
+                                    {% if is_edit_mode %}
+                                    <li><a href="{% url 'deckIndex' deck.id %}?instructor=edit">{{ deck.title|truncatechars:30}}</a></li>
+                                    {% else %}
                                     <li><a href="{% url 'deckIndex' deck.id %}">{{ deck.title|truncatechars:30}}</a></li>
+                                    {% endif %}
                                 {% endfor %}
                             </ul>
                         {% endif %}

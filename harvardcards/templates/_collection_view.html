@@ -1,6 +1,10 @@
 <div class="courseWrapper">
     <div class="courseHeader">
+        {% if is_edit_mode %}
+        <a href="{% url 'collectionIndex' collection.id %}?instructor=edit" title="{{collection.title}}">
+        {% else %}
         <a href="{% url 'collectionIndex' collection.id %}" title="{{collection.title}}">
+        {% endif %}
             <h2 class="courseTitle">{{ collection.title }}</h2>
             <h3>{% if collection.decks|length == 1 %}1 Deck{% else %}{{collection.decks|length}} Decks{% endif %}</h3>
         </a>
@@ -25,9 +29,13 @@
                 <h2>{{ deck.title }}</h2>
                 <p><h3>{{ deck.num_cards }}</h3> {% if deck.num_cards == 1 %}Card {% else %}Cards{% endif %}</p>
                 <ul class="deckMenu">
+                    {% if is_edit_mode %}
+                    <li><a class="viewReview" href="{% url 'deckIndex' deck.id %}?instructor=edit">Review</a></li>
+                    <li><a class="viewReview" href="{% url 'deckIndex' deck.id %}?mode=quiz&instructor=edit">Quiz</a></li>
+                    {% else %}
                     <li><a class="viewReview" href="{% url 'deckIndex' deck.id %}">Review</a></li>
                     <li><a class="viewReview" href="{% url 'deckIndex' deck.id %}?mode=quiz">Quiz</a></li>
-
+                    {% endif %}
                     {% if collection.id in user_collection_role.ADMIN and is_edit_mode %}
                         <li><a class="adminMenuBtn" href="{% url 'deckEdit' deck.id %}">Edit</a></li>
                         <li><a class="adminMenuBtn" href="{% url 'deckDelete' deck.id %}">Delete</a></li>

@@ -19,6 +19,7 @@ def index(request, deck_id=None):
     user_collection_role = Users_Collections.get_role_buckets(request.user, collections)
     is_quiz_mode = request.GET.get('mode') == 'quiz'
     is_deck_admin = next((True for cid in user_collection_role['ADMIN'] if cid == current_collection.id), False)
+    is_edit_mode = request.GET.get('instructor') == 'edit'
 
     cards = []
     for dcard in deck_cards:
@@ -60,6 +61,7 @@ def index(request, deck_id=None):
         "card_template_fields": card_template_fields,
         "is_quiz_mode": is_quiz_mode,
         "is_deck_admin": is_deck_admin,
+        "is_edit_mode": is_edit_mode,
     }
 
     return render(request, "deck_view.html", context)
@@ -68,7 +70,9 @@ def delete(request, deck_id=None):
     """Deletes a deck."""
     collection_id = queries.getDeckCollectionId(deck_id)
     services.delete_deck(deck_id)
-    return redirect('collectionIndex', collection_id)
+    response =  redirect('collectionIndex', collection_id)
+    response['Location'] += '?instructor=edit'
+    return response
 
 def edit(request, deck_id=None):
     """Edits a deck."""
@@ -80,7 +84,9 @@ def edit(request, deck_id=None):
         deck_form = DeckForm(request.POST, instance=deck)
         if deck_form.is_valid():
             deck = deck_form.save()
-            return redirect(deck)
+            response =  redirect(deck)
+            response['Location'] += '?instructor=edit'
+            return response
     else:
         deck_form = DeckForm(instance=deck)
         

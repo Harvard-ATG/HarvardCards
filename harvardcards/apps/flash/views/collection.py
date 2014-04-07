@@ -71,7 +71,9 @@ def create(request):
                 user = User.objects.get(id=user_id)
                 Users_Collections.objects.create(user=user, collection=collection, role='A', date_joined=datetime.date.today())
 
-            return redirect(collection)
+            response =  redirect(collection)
+            response['Location'] += '?instructor=edit'
+            return response
     else:
         collection_form = CollectionForm()
         
@@ -91,7 +93,9 @@ def edit(request, collection_id=None):
         collection_form = CollectionForm(request.POST, instance=collection)
         if collection_form.is_valid():
             collection = collection_form.save()
-            return redirect(collection)
+            response = redirect(collection)
+            response['Location'] += '?instructor=edit'
+            return response
     else:
         collection_form = CollectionForm(instance=collection)
         
@@ -107,7 +111,9 @@ def edit(request, collection_id=None):
 def delete(request, collection_id=None):
     """Deletes a collection."""
     services.delete_collection(collection_id)
-    return redirect('index')
+    response = redirect('collectionIndex')
+    response['Location'] += '?instructor=edit'
+    return response
 
 def upload_deck(request, collection_id=None):
     '''
@@ -123,7 +129,9 @@ def upload_deck(request, collection_id=None):
                 deck = services.handle_uploaded_deck_file(collection_id, form.cleaned_data['deck_title'], request.FILES['file'])
             else:
                 deck = Deck.objects.create(collection=collection, title=form.cleaned_data['deck_title'])
-            return redirect(deck)
+            response =  redirect(deck)
+            response['Location'] += '?instructor=edit'
+            return response
     else:
         form = forms.DeckImportForm()
 
