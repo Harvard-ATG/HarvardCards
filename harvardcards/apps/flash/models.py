@@ -154,7 +154,9 @@ class Users_Collections(models.Model):
         ])
 
         for collection in collections:
-            if collection.id in user_collections:
+            if user.is_superuser:
+                role = 'A'
+            elif collection.id in user_collections:
                 role = user_collections[collection.id]
             else:
                 role = 'G'

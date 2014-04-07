@@ -1,5 +1,5 @@
 <div id="navigation">
-    {% if user.is_superuser and not collection %}
+    {% if user.is_staff and not collection or user.is_superuser and not collection %}
         <a href="{% url 'collectionCreate' %}" id="addAcourse">Add a course</a>
     {% endif %}
     <nav class="desktopNav" data-set="mobileNav">

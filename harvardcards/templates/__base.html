@@ -32,7 +32,7 @@
 				<ul id="userInfo">
 					{% if user.is_authenticated %}
 						<li><span>{{ user.email }}</span></li>
-                        {% if user.is_superuser %}
+                        {% if user.is_staff or user.is_superuser %}
                         <li><a href="#">Edit</a></li>
 						{% endif %}
                         <li><a href="{% url 'logout' %}">Sign out</a></li>
