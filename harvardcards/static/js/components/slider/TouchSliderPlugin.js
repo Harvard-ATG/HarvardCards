@@ -19,7 +19,6 @@ define(['jquery'], function($) {
 	};
 
 	TouchSliderPlugin.prototype.init = function(slider) {
-		console.log("touch");
 		this.slider = slider;
 		this.attachTouchEvents();
 	};
@@ -41,7 +40,7 @@ define(['jquery'], function($) {
         var $parentEl = $(this.slider.el).parent();
 		var index = $parentEl.index();
 
-		console.log("touch event", evt.type, "index", index, "event object", evt);
+		//console.log("touch event", evt.type, "index", index, "event object", evt);
 
 		switch(e.type) {
 			case 'touchstart':

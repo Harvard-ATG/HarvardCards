@@ -16,8 +16,8 @@ define([
 
 		this.items = [];
 		this.currentIndex = 0;
+		this.maxSlideIndex = 0;
 		this.slideAmount = 0;
-		this.slideLimit = 0;
 		this.slideUnit = '%';
 
 		this.init();
@@ -51,14 +51,16 @@ define([
 	Slider.prototype.goTo = function(index) {
 		if(typeof index !== 'number') {
 			throw new Error("index must be a number");
-		} else if(index < 0 || index > this.getNumItems() - 1) {
-			throw new Error("index out of bounds");
+		} 
+		if(index < 0 || index > this.getNumItems() - 1) {
+			return false;
 		}
 
-		if(this._canSlide(index)) {
-			this._slide(this._slidePosition(index));
+		if(this._canSlideTo(index)) {
+			this._slide(this._position(index));
 		}
 		this.currentIndex = index;
+		this.trigger("changed");
 	};
 
 	Slider.prototype.goToNext = function() {
@@ -85,15 +87,15 @@ define([
 		this.goTo(this.currentIndex);
 	};
 
-	Slider.prototype._canSlide = function(to) {
-		return to <= this.slideLimit;
+	Slider.prototype._canSlideTo = function(index) {
+		return index <= this.maxSlideIndex;
 	};
 
 	Slider.prototype._slide = function(position) {
 		$(this.container)[0].style.left = position;
 	};
 
-	Slider.prototype._slidePosition = function(index) {
+	Slider.prototype._position = function(index) {
 		return '-' + (this.slideAmount * index) + this.slideUnit;
 	};
 
@@ -103,6 +105,10 @@ define([
 
 	Slider.prototype.getNumItems = function() {
 		return this.items.length;
+	};
+
+	Slider.prototype.getCurrentIndex = function() {
+		return this.currentIndex;
 	};
 
 	Slider.prototype.setWidth = function(width) {
@@ -116,9 +122,11 @@ define([
 		this.slideUnit =  unit || "%";
 	};
 
-	Slider.prototype.setSlideLimit = function(limit) {
-		this.slideLimit = limit;
+	Slider.prototype.setMaxSlideIndex = function(index) {
+		this.maxSlideIndex = index;
 	};
+
+	MicroEvent.mixin(Slider);
 
 	return Slider;
 });

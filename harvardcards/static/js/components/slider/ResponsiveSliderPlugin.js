@@ -105,7 +105,7 @@ define(['jquery'], function($) {
 		});
 
 		this.slider.setSlide(layout.slide);
-		this.slider.setSlideLimit(layout.slideLimit);
+		this.slider.setMaxSlideIndex(layout.maxSlideIndex);
 		this.slider.goToCurrent(); // keep position when layout changes
 	};
 
@@ -126,7 +126,7 @@ define(['jquery'], function($) {
 		this.layout.containerWidth = containerWidth;
 		this.layout.itemWidth = (sliderWidth - 2) + "px";
 		this.layout.itemMarginRight = 0;
-		this.layout.slideLimit = numItems - showItems;
+		this.layout.maxSlideIndex = numItems - showItems;
 		this.layout.slide = "100%";
 
 		this.applyLayout();
@@ -148,7 +148,7 @@ define(['jquery'], function($) {
 		this.layout.containerWidth = ((itemWidth + itemMargin + (itemBorderWidth * 2)) * numItems) - itemMargin + "px";
 		this.layout.itemWidth =  itemWidth + "px";
 		this.layout.itemMarginRight = itemMargin + "px";
-		this.layout.slideLimit = numItems - showItems;
+		this.layout.maxSlideIndex = numItems - showItems;
 		this.layout.slide = slide;
 
 		this.applyLayout();
