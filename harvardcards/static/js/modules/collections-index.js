@@ -27,7 +27,7 @@ define(['jquery', 'views/Slider'], function($, Slider) {
 			}
 		}
 	}).resize();
-	
+
 	
 /*************************************************************************
 					TOUCH EVENTS FOR DASHBAORD (START)

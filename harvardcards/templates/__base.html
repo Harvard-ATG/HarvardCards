@@ -33,7 +33,36 @@
 					{% if user.is_authenticated %}
 						<li><span>{{ user.email }}</span></li>
                         {% if user.is_staff or user.is_superuser %}
-                        <li><a href="#" onclick="var pathname = $(location).attr('href'); this.href = pathname + '?instructor=edit'">Edit</a></li>
+
+                        <li>
+                            {% if is_edit_mode %}
+                            <a href="#" onclick="
+                             function removeURLParameter(url, param) {
+ var urlparts= url.split('?');
+ if (urlparts.length>=2)
+ {
+  var prefix= encodeURIComponent(param)+'=';
+  var pars= urlparts[1].split(/[&;]/g);
+  for (var i=pars.length; i-- > 0;)
+   if (pars[i].indexOf(prefix, 0)==0)
+    pars.splice(i, 1);
+  if (pars.length > 0)
+   return urlparts[0]+'?'+pars.join('&');
+  else
+   return urlparts[0];
+ }
+ else
+  return url;
+};var pathname = $(location).attr('href'); this.href = removeURLParameter(pathname, 'instructor');">View Mode</a>
+                            {% else %}
+                            <a href="#" onclick="var pathname = $(location).attr('href');
+                             if(pathname.charAt(pathname.length - 1)=='#'){
+                                pathname = pathname.slice(0, -2);
+                                };
+
+                             this.href = pathname + '?instructor=edit'">Edit Mode</a>
+                            {% endif %}
+                        </li>
 						{% endif %}
                         <li><a href="{% url 'logout' %}">Sign out</a></li>
 					{% else %}
