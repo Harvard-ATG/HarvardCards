@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'^$', 'harvardcards.apps.flash.views.collection.index', name='index'),
 
     url(r'^collection$', 'harvardcards.apps.flash.views.collection.index', name='collectionIndex'),
+
     url(r'^collection/create$', 'harvardcards.apps.flash.views.collection.create', name='collectionCreate'),
     url(r'^collection/(?P<collection_id>\d+)$', 'harvardcards.apps.flash.views.collection.index', name='collectionIndex'),
     url(r'^collection/(?P<collection_id>\d+)/edit$', 'harvardcards.apps.flash.views.collection.edit', name='collectionEdit'),

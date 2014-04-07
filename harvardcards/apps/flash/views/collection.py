@@ -64,7 +64,7 @@ def create(request):
         collection_form = CollectionForm(request.POST)
         if collection_form.is_valid():
             collection = collection_form.save()
-            if request.POST['user_id']:
+            if request.POST.get('user_id', 0):
                 user_id = int(request.POST['user_id'])
                 user = User.objects.get(id=user_id)
                 Users_Collections.objects.create(user=user, collection=collection, role='A', date_joined=datetime.date.today())
