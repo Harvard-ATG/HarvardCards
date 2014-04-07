@@ -9,7 +9,10 @@
 		<img src="{{MEDIA_URL}}{{field.value}}" alt="{{field.label}}" class="cardFieldImage" />
 		<div class="controls">
 			<div>
-				<a href="{{MEDIA_URL}}originals/{{field.value}}" target="_blank">View Full Size Image</a>
+				<a href="{{MEDIA_URL}}originals/{{field.value}}" target="_blank">
+                    <i class="fa fa-external-link"></i>
+                    <span class="control-text">View Full Size Image</span>
+                </a>
 			</div>
 		</div>
 	{% elif field.type == 'V' %}

@@ -100,7 +100,7 @@
             <div id="cardOverflow">
                 <ul id="allCards">
                     {% for card in cards %}
-                    <li class="hide" role="tabpanel">
+                    <li class="hide" role="tabpanel"  data-card="{{forloop.counter0}}">
                         {% for field in card.fields.show %}
                             {% include "_deck_card_fields.html" with field=field %}
                         {% endfor %}
