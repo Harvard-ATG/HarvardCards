@@ -109,6 +109,27 @@ h1, h2, h3, h4
 	font-family: 'Vollkorn', Times, serif;
 }
 /* FONTS (end) */
+/* floats */
+.float-left{
+	float: left;
+}
+
+.float-right{
+	float: right;
+}
+/* floats (end) */
+
+/* form (start) */
+.form-input{
+	padding: 0.25em;
+}
+.form-help{
+	font-style: italic;
+	font-size: 0.75em;
+	display: block;
+	padding: 0.25em;
+}
+/* form (end) */
 
 #fc_headerWrapper{
 	background-color:#1e1e1e;
@@ -261,9 +282,9 @@ a#addAcourse
 	width: 90%;
 }
 	.btn-dashed:hover{
-		background-color: #A51C30;
-		border:2px solid #A51C30;
-		color: #F3F3F1;
+		background-color: #d2d2d2;
+		border:2px solid #999797;
+		color: #a51c30;
 	}
 	
 /********** new Add Card and Upload Cards (end) ***********/
@@ -661,6 +682,7 @@ div.deckNav{
 		float: left;
 		text-align: center;
 		padding: 0.25em 0;
+		height: 1.625em;
 	}
 	#singleCardHolder ul li.hide,
 	#cardForm ul li.hide{
@@ -681,6 +703,39 @@ div.deckNav{
 
 	}
 /*full card (end) */
+
+/* cards UI view (start) */
+.card-field{ 
+	display: inline-block;
+	width: 90%;
+	padding: 0.5em 5%;
+	margin-bottom: 0.25em;
+}
+
+/*.card-field:nth-child(even){
+	background-color: #f7f7f7;
+	border-bottom: 1px solid rgb(236, 236, 236);
+}*/
+
+.card-term{
+	text-align: right;
+	font-size: 1.25em;
+	padding-bottom: 0.1em;
+	width: 20%;
+	float: left;
+}
+
+.card-definition{
+	font-family: Arial;
+	font-size: 0.9em;
+	text-align: left;
+	width: 78%;
+	float: left;
+	margin-left: 2%;
+	line-height: 1.5;
+}
+/* cards UI view (end) */
+
 /********** cards inside a deck view (end) *************/
 
 /* mobile nav icon (start) */
@@ -1305,6 +1360,12 @@ a.ui-slider-handle.ui-state-default.ui-corner-all{
 	text-align: right;
 }
 
+.centerDiv-desktop{
+	max-width: 75%;
+	text-align: center;
+	margin:0 auto;
+}
+
 .editFields{
 	text-align: left;
 	padding-top: 0.5em;
@@ -1322,7 +1383,8 @@ fieldset {
 	margin-bottom: 0.5em;
 }
 
-.formEle{
+.formEle
+, input[type=text]{
 	width: 98%;
 	display: block;
 	height: 1.3125em;
@@ -1382,3 +1444,4 @@ fieldset {
 }
 
 /********** add cards UI (end) *************/
+
