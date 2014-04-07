@@ -1,15 +1,15 @@
 define(['jquery'], function($) {
-    var ResponsiveSliderPlugin = function() {
-	    this.hasLayout = false;
+	var ResponsiveSliderPlugin = function() {
+		this.hasLayout = false;
 		this.layout = {};
-	    this.resize = $.proxy(this.resize, this);
-    };
+		this.resize = $.proxy(this.resize, this);
+	};
 
-    ResponsiveSliderPlugin.prototype.init = function(slider) {
-        this.slider = slider;
-	    this.resize();
-	    this.initListeners();
-    };
+	ResponsiveSliderPlugin.prototype.init = function(slider) {
+		this.slider = slider;
+		this.resize();
+		this.initListeners();
+	};
 
 	ResponsiveSliderPlugin.prototype.initListeners = function() {
 		$(window).on("resize", this.resize);
@@ -17,35 +17,35 @@ define(['jquery'], function($) {
 
 	ResponsiveSliderPlugin.prototype.resize = function() {
 		this.loadLayout();
-	    this.doLayout();
+		this.doLayout();
 	};
 
 	//For reference:
-    //  iphone portrait   = screen and (min-width: 320px)
-    //  iphone landscape  = screen and (min-width: 480px)
-    //  ipad portrait     = screen and (min-width: 768px)
-    //  desktop           = screen and (min-width: 1024px)
-    ResponsiveSliderPlugin.prototype.rules = [{
-        "mediaQuery": "screen and (min-width: 280px) and (max-width: 320px)",
-	    "handler": "singleLayout",
-	    "showItems": 1
-    },{
-        "mediaQuery": "screen and (min-width: 321px) and (max-width: 480px)",
-	    "handler": "multiLayout",
-        "showItems": 2
-    },{
-        "mediaQuery": "screen and (min-width: 481px) and (max-width: 680px)",
-	    "handler": "multiLayout",
-	    "showItems": 3
-    },{
-        "mediaQuery": "screen and (min-width: 680px) and (max-width: 1023px)",
-	    "handler": "multiLayout",
-        "showItems": 4
-    },{
-	    "mediaQuery": "screen and (min-width: 1024px)",
-	    "handler": "resetLayout",
-	    "showItems": null
-    }];
+	//  iphone portrait   = screen and (min-width: 320px)
+	//  iphone landscape  = screen and (min-width: 480px)
+	//  ipad portrait     = screen and (min-width: 768px)
+	//  desktop           = screen and (min-width: 1024px)
+	ResponsiveSliderPlugin.prototype.rules = [{
+		"mediaQuery": "screen and (min-width: 280px) and (max-width: 320px)",
+		"handler": "singleLayout",
+		"showItems": 1
+	},{
+		"mediaQuery": "screen and (min-width: 321px) and (max-width: 480px)",
+		"handler": "multiLayout",
+		"showItems": 2
+	},{
+		"mediaQuery": "screen and (min-width: 481px) and (max-width: 680px)",
+		"handler": "multiLayout",
+		"showItems": 3
+	},{
+		"mediaQuery": "screen and (min-width: 680px) and (max-width: 1023px)",
+		"handler": "multiLayout",
+		"showItems": 4
+	},{
+		"mediaQuery": "screen and (min-width: 1024px)",
+		"handler": "resetLayout",
+		"showItems": null
+	}];
 
 	ResponsiveSliderPlugin.prototype.loadLayout = function() {
 		var i, rule, len;
@@ -64,14 +64,14 @@ define(['jquery'], function($) {
 		}
 	};
 
-    ResponsiveSliderPlugin.prototype.getItemBorderWidth = function() {
-        return parseFloat($(this.slider.items).css('border-left-width'));
-    };
+	ResponsiveSliderPlugin.prototype.getItemBorderWidth = function() {
+		return parseFloat($(this.slider.items).css('border-left-width'));
+	};
 
-    ResponsiveSliderPlugin.prototype.checkMediaQuery = function(mq) {
-        var mediaQuery = window.matchMedia(mq);
-        return mediaQuery.matches ? true : false;
-    };
+	ResponsiveSliderPlugin.prototype.checkMediaQuery = function(mq) {
+		var mediaQuery = window.matchMedia(mq);
+		return mediaQuery.matches ? true : false;
+	};
 
 	ResponsiveSliderPlugin.prototype.doLayout = function() {
 		if(this.hasLayout) {

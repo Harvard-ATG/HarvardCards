@@ -1,16 +1,16 @@
 define(['jquery', 'components/slider/Slider'], function($, Slider) {
 
-    var CollectionSlider = function(el) {
-        this.el = $(el);
-        this.init();
-    };
+	var CollectionSlider = function(el) {
+		this.el = $(el);
+		this.init();
+	};
 
-    CollectionSlider.prototype.init = function() {
-        this.slider = new Slider({
-            el: this.el,
-            plugins: ['responsive', 'touch']
-        });
-    };
+	CollectionSlider.prototype.init = function() {
+		this.slider = new Slider({
+			el: this.el,
+			plugins: ['responsive', 'touch']
+		});
+	};
 
 	// Delegate methods to Slider instance
 	$.each(['goToNext', 'goToPrev'], function(index, method) {
