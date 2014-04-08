@@ -27,9 +27,9 @@
                 {% endif %}
                 <li>
                 {% if is_quiz_mode %}
-                <a href="{% url 'deckIndex' deck.id %}" id="reviewM">Review Mode</a>
+                <a href="{% url 'deckIndex' deck.id %}" id="review_mode">Review Mode</a>
                 {% else %}
-                <a href="{% url 'deckIndex' deck.id %}?mode=quiz" id="quizM">Quiz Mode</a>
+                <a href="{% url 'deckIndex' deck.id %}?mode=quiz" id="quiz_mode">Quiz Mode</a>
                 {% endif %}
                 </li>
             </ul>
@@ -74,10 +74,10 @@
 
         <!-- SECTION: Mobile Slider Controls -->
         <div class="fullcardBtns">
-            <a class="mobileFirst" href="javascript:sliders[0].goToFirst()"><i class="fa fa-angle-double-left"></i><span>First</span></a>
-            <a class="mobilePrevious" href="javascript:sliders[0].goToPrev()"><i class="fa fa-angle-left"></i><span>Previous</span></a>
-            <a class="mobileNext" href="javascript:sliders[0].goToNext()"><i class="fa fa-angle-right"></i><span>Next</span></a>
-            <a class="mobileLast" href="javascript:sliders[0].goToLast()"><i class="fa fa-angle-double-right"></i><span>Last</span></a>
+            <a class="mobileFirst" href="#"><i class="fa fa-angle-double-left"></i><span>First</span></a>
+            <a class="mobilePrevious" href="#"><i class="fa fa-angle-left"></i><span>Previous</span></a>
+            <a class="mobileNext" href="#"><i class="fa fa-angle-right"></i><span>Next</span></a>
+            <a class="mobileLast" href="#"><i class="fa fa-angle-double-right"></i><span>Last</span></a>
         </div>
 
 
@@ -96,7 +96,7 @@
             <div id="cardOverflow">
                 <ul id="allCards">
                     {% for card in cards %}
-                    <li class="hide" role="tabpanel"  data-card="{{forloop.counter0}}">
+                    <li class="hide" role="tabpanel"  data-card-id="{{ card.card_id }}">
                         {% for field in card.fields.show %}
                             {% include "_deck_card_fields.html" with field=field %}
                         {% endfor %}

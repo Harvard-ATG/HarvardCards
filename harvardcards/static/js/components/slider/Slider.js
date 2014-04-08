@@ -2,20 +2,22 @@ define([
 	'jquery',
 	'microevent',
 	'components/slider/ResponsiveSliderPlugin',
-	'components/slider/TouchSliderPlugin'
+	'components/slider/TouchSliderPlugin',
+	'components/slider/KeyboardSliderPlugin',
  ], function(
 	$,
 	MicroEvent,
 	ResponsiveSliderPlugin,
-	TouchSliderPlugin
+	TouchSliderPlugin,
+	KeyboardSliderPlugin
 ) {
 
 	var Slider = function(config) {
 		this.el = config.el;
-		this.plugins = config.plugins || [];
+		this.plugins = config.plugins || {};
 
 		this.items = [];
-		this.currentIndex = 0;
+		this.currentIndex = config.startIndex || 0;
 		this.maxSlideIndex = 0;
 		this.slideAmount = 0;
 		this.slideUnit = '%';
@@ -25,6 +27,7 @@ define([
 
 	Slider.prototype.pluginMap = {
 		'responsive': ResponsiveSliderPlugin,
+		'keyboard': KeyboardSliderPlugin,
 		'touch': TouchSliderPlugin
 	};
 
@@ -41,9 +44,9 @@ define([
 	};
 
 	Slider.prototype.initPlugins = function() {
-		_.each(this.plugins, function(pluginName) {
+		_.each(this.plugins, function(pluginConfig, pluginName) {
 			var pluginClass = this.pluginMap[pluginName];
-			var plugin = new pluginClass();
+			var plugin = new pluginClass(pluginConfig);
 			plugin.init(this);
 		}, this);
 	};
@@ -56,42 +59,47 @@ define([
 			return false;
 		}
 
-		if(this._canSlideTo(index)) {
-			this._slide(this._position(index));
-		}
+		this.trigger("beforeslide");
+		this._slide(index);
 		this.currentIndex = index;
-		this.trigger("changed");
+		this.trigger("slide");
+
+		return true;
 	};
 
 	Slider.prototype.goToNext = function() {
 		if(this.currentIndex < this.getNumItems() - 1) {
-			this.goTo(this.currentIndex + 1);
+			return this.goTo(this.currentIndex + 1);
 		}
+		return false;
 	};
 
 	Slider.prototype.goToPrev = function() {
 		if(this.currentIndex > 0) {
-			this.goTo(this.currentIndex - 1);
+			return this.goTo(this.currentIndex - 1);
 		}
+		return false;
 	};
 
 	Slider.prototype.goToFirst = function() {
-		this.goTo(0);
+		return this.goTo(0);
 	};
 
 	Slider.prototype.goToLast = function() {
-		this.goTo(this.numItems - 1);
+		return this.goTo(this.getNumItems() - 1);
 	};
 
 	Slider.prototype.goToCurrent = function() {
-		this.goTo(this.currentIndex);
+		return this.goTo(this.currentIndex);
 	};
 
-	Slider.prototype._canSlideTo = function(index) {
-		return index <= this.maxSlideIndex;
-	};
+	Slider.prototype._slide = function(index) {
+		var position;
+		if(index > this.maxSlideIndex) {
+			index = this.maxSlideIndex;
+		}
+		position = this._position(index);
 
-	Slider.prototype._slide = function(position) {
 		$(this.container)[0].style.left = position;
 	};
 

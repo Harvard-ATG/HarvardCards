@@ -1,8 +1,10 @@
 define(['jquery'], function($) {
     
     // Constructor.
-	var ResponsiveSliderPlugin = function() {
+	var ResponsiveSliderPlugin = function(config) {
+		config = config || {};
 		this.hasLayout = false;
+		this.maxShowItems = config.maxShowItems || null;
 		this.layout = {}; // holds layout configuration
 		this.resize = $.proxy(this.resize, this);
 	};
@@ -57,14 +59,18 @@ define(['jquery'], function($) {
     // to configure the layout. The first media query that matches from
     // the rules will be loaded.
 	ResponsiveSliderPlugin.prototype.loadLayout = function() {
-		var i, rule, len;
+		var i, rule, len, matched = false;
 
 		this.hasLayout = false;
 		this.layout = {};
 
 		for(i = 0, len = this.rules.length; i < len; i++) {
 			rule = this.rules[i];
-			if(this.checkMediaQuery(rule.mediaQuery)) {
+			matched = this.checkMediaQuery(rule.mediaQuery);
+			if(rule.showItems === this.maxShowItems) {
+				matched = true;
+			}
+			if(matched) {
 				this.hasLayout = true;
 				this.layoutHandler = rule.handler;
 				this.showItems = rule.showItems;

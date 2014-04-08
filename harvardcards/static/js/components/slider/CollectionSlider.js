@@ -8,7 +8,7 @@ define(['jquery', 'components/slider/Slider'], function($, Slider) {
 	CollectionSlider.prototype.init = function() {
 		this.slider = new Slider({
 			el: this.el,
-			plugins: ['responsive', 'touch']
+			plugins: {'responsive':null, 'touch':null}
 		});
 	};
 
