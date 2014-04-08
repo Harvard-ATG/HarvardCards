@@ -20,13 +20,18 @@ define(['jquery'], function($) {
 
 	TouchSliderPlugin.prototype.init = function(slider) {
 		this.slider = slider;
-		this.attachTouchEvents();
+		if(this.hasTouchSupport()) {
+			this.hideNav();
+			this.attachTouchEvents();
+		}
+	};
+
+	TouchSliderPlugin.prototype.hasTouchSupport = function() {
+		return 'ontouchstart' in document.documentElement;
 	};
 
 	TouchSliderPlugin.prototype.hideNav = function() {
-		if (typeof(window.ontouchstart) != 'undefined' || typeof(window.onmspointerdown) != 'undefined') {
-			this.slider.hideNav(); //$('.sliderNav').hide();
-		}
+		$(".sliderNav", this.slider.el).hide();
 	};
 
 	TouchSliderPlugin.prototype.attachTouchEvents = function() {

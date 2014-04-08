@@ -12,7 +12,7 @@
         {% endif %}
     </div>
 
-    <div class="slider" data-slider-type="decks">
+    <div class="slider">
         <ul class="courseDecks">
             {% if collection.id in user_collection_role.ADMIN %}
                 <li class="deck add">
@@ -36,12 +36,11 @@
                 </li>
             {% endfor %}
         </ul>
-    </div>
-
-    <div class="sliderNav">
-        <ul class="sliderNavNextPrev">
-            <li class="sliderPrev"><a href="javascript:sliders.decks[{{forloop.counter0}}].goToPrev()">&laquo; Prev</a></li>
-            <li class="sliderNext"><a href="javascript:sliders.decks[{{forloop.counter0}}].goToNext()">Next &raquo;</a></li>
-        </ul>
+        <div class="sliderNav">
+            <ul class="sliderNavNextPrev">
+                <li class="sliderPrev"><a href="javascript:void(0)">&laquo; Prev</a></li>
+                <li class="sliderNext"><a href="javascript:void(0)">Next &raquo;</a></li>
+            </ul>
+        </div>
     </div>
 </div>

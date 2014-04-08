@@ -39,7 +39,7 @@
         {% if is_deck_admin %}
             <a href="javascript:void(0);" id="addCard">Add Card</a>
         {% endif %}
-        <div id="{% if is_deck_admin %}cardSlider{% else %}cardSliderNotAdmin{% endif %}" role="scrollbar" tabindex="0" aria-orientation="horizontal">
+        <div id="{% if is_deck_admin %}cardSlider{% else %}cardSliderNotAdmin{% endif %}" class="slider" role="scrollbar" tabindex="0" aria-orientation="horizontal">
         {% if cards|length %}
             <div class="sliderBtns deckPrev">
                 <a id="previous_card" href="#"><i class="fa fa-angle-left"></i><span>Previous</span></a>

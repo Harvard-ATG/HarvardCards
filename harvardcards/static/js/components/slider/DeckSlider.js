@@ -25,11 +25,8 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 			}
 		});
 
+		this.initNav();
 		this.initListeners();
-
-		if(this.card_ids[0]) {
-			this.goToCard(this.card_ids[0]);
-		}
 	};
 
 	// Delegate methods to Slider instance
@@ -39,7 +36,28 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 			this.selectCard(this.card_ids[this.slider.getCurrentIndex()]);
 			return result;
 		};
-	})
+	});
+
+	DeckSlider.prototype.initNav = function() {
+		var self = this;
+		var navButtons = {
+			"#first_card": "goToFirst",
+			"#previous_card": "goToPrev",
+			"#next_card": "goToNext",
+			"#last_card": "goToLast",
+			".mobileFirst": "goToFirst",
+			".mobilePrevious": "goToPrev",
+			".mobileNext": "goToNext",
+			".mobileLast": "goToLast"
+		};
+
+		$.each(navButtons, function(key, value) {
+			$(key).on("click", function(evt) {
+				evt.preventDefault();
+				self[value]();
+			});
+		});
+	};
 
 	DeckSlider.prototype.initListeners = function() {
 		var self = this;
