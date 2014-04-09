@@ -54,19 +54,22 @@ define([
 
 		this.items = [];
 		this.currentIndex = config.startIndex || 0;
-		this.maxSlideIndex = 0;
+		this.slideWindow = 0;
 		this.slideAmount = 0;
 		this.slideUnit = '%';
 
 		this.init();
 	};
 
+	// Maps string names to plugin constructors.
+	// Defines the list of available plugins.
 	Slider.prototype.pluginMap = {
 		'responsive': ResponsiveSliderPlugin,
 		'keyboard': KeyboardSliderPlugin,
 		'touch': TouchSliderPlugin
 	};
 
+	// Initializes the slider.
 	Slider.prototype.init = function() {
 		var items = [];
 
@@ -79,6 +82,7 @@ define([
 		this.initPlugins();
 	};
 
+	// Initializes all plugins, if any.
 	Slider.prototype.initPlugins = function() {
 		_.each(this.plugins, function(pluginConfig, pluginName) {
 			var pluginClass = this.pluginMap[pluginName];
@@ -87,6 +91,11 @@ define([
 		}, this);
 	};
 
+	// Go to (i.e. slide) to an item.
+	// Throws an exception if the given index is not a number.
+	// Triggers "beforeslide" and "slide".
+	// Returns false if the index is out of range.
+	// Returns true if the slide was successful.
 	Slider.prototype.goTo = function(index) {
 		if(typeof index !== 'number') {
 			throw new Error("index must be a number");
@@ -103,6 +112,7 @@ define([
 		return true;
 	};
 
+	// Returns true if the slider advanced to the next item, false otherwise.
 	Slider.prototype.goToNext = function() {
 		if(this.currentIndex < this.getNumItems() - 1) {
 			return this.goTo(this.currentIndex + 1);
@@ -110,6 +120,7 @@ define([
 		return false;
 	};
 
+	// Returns true if the slider advanced to the previous item, false otherwise.
 	Slider.prototype.goToPrev = function() {
 		if(this.currentIndex > 0) {
 			return this.goTo(this.currentIndex - 1);
@@ -117,56 +128,72 @@ define([
 		return false;
 	};
 
+	// Returns true if the slider advanced to the first item, false otherwise.
 	Slider.prototype.goToFirst = function() {
 		return this.goTo(0);
 	};
 
+	// Returns true if the slider advanced to the last item, false otherwise.
 	Slider.prototype.goToLast = function() {
 		return this.goTo(this.getNumItems() - 1);
 	};
 
+	// Returns true if the slider advanced to the current item, false otherwise.
 	Slider.prototype.goToCurrent = function() {
 		return this.goTo(this.currentIndex);
 	};
 
+	// Returns true if the slider is on the last item, false otherwise.
 	Slider.prototype.isLastItem = function() {
 		return this.currentIndex === this.getLastIndex();
 	};
 
+	// Helper function to slide to the given index.
 	Slider.prototype._slide = function(index) {
-		var position;
-		if(index > this.maxSlideIndex) {
-			index = this.maxSlideIndex;
+		var position, limit;
+		if(this.slideWindow) { 
+			limit = this.getNumItems() - this.slideWindow;
+			if(index > limit) {
+				index = limit;
+			}
 		}
 		position = this._position(index);
 
 		$(this.container)[0].style.left = position;
 	};
 
+	// Helper function to return the CSS offset amount for the slide.
 	Slider.prototype._position = function(index) {
 		return '-' + (this.slideAmount * index) + this.slideUnit;
 	};
 
+	// Returns the width of the slider element.
 	Slider.prototype.getWidth = function() {
 		return $(this.el).width();
 	};
 
+	// Returns the number of list items in the slider.
 	Slider.prototype.getNumItems = function() {
 		return this.items.length;
 	};
 
+	// Returns the last index of the slider's items.
 	Slider.prototype.getLastIndex = function() {
 		return this.items.length > 0 ? this.items.length - 1 : 0; 
 	};
 
+	// Returns the current index.
 	Slider.prototype.getCurrentIndex = function() {
 		return this.currentIndex;
 	};
 
+	// Sets the width of the slider element.
 	Slider.prototype.setWidth = function(width) {
 		this.el.style.width = width;
 	};
 
+	// Sets the slide value, which may be expressed as a percentage or in pixels.
+	// Example: "100%" or "10px"
 	Slider.prototype.setSlide = function(slide) {
 		var amount = parseFloat(slide);
 		var unit = slide.replace(amount, '');
@@ -174,8 +201,10 @@ define([
 		this.slideUnit =  unit || "%";
 	};
 
-	Slider.prototype.setMaxSlideIndex = function(index) {
-		this.maxSlideIndex = index;
+	// Sets the slide window size. This is used to stop the slider 
+	// from moving the window once it reaches the end.
+	Slider.prototype.setWindow = function(windowSize) {
+		this.slideWindow = windowSize;
 	};
 
 	MicroEvent.mixin(Slider);
