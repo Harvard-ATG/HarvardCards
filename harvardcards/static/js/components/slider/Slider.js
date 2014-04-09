@@ -12,6 +12,42 @@ define([
 	KeyboardSliderPlugin
 ) {
 
+	/**
+	 * The Slider class has the responsibility of knowing how to slide
+	 * elements in a list left or right. It has no knowledge about the behavior
+	 * of the individual items, nor should it. 
+	 *
+	 * This is intended to be used and configured by more specific slider classes. Plugins
+	 * are one of the means by which the core slider functionality can be extended. A plugin
+	 * is just an object that implements an "init(slider)" method. The plugin may then 
+	 * use the public API of the slider to change its behavior and look and feel.
+	 *
+	 * The markup expected by the slider is just an unordered HTML list. The slider only
+	 * checks for the presence of the list "ul" and its children, the "li" list items. 
+	 * The contents of each list item is of no concern to the slider. It does not and 
+	 * should not depend on anything inside the list item.
+	 *
+	 * Usage:
+	 *		<div class="slider">
+	 *			<ul> 
+	 *				<li><a href="#">Foo</a></li>
+	 *				<li><a href="#">Bar</a></li>
+	 *			</ul>
+	 *		</div>
+	 *
+	 *		<script>
+	 *		var slider = new Slider({ 
+	 *			el: $(".slider"), 
+	 *			plugins: {
+	 *				responsive: { 
+	 *					maxShowItems: 4
+	 *				},
+	 *				touch: null,
+	 *				keyboard: null
+	 *			}
+	 *		});
+	 *		</script>
+	 */
 	var Slider = function(config) {
 		this.el = config.el;
 		this.plugins = config.plugins || {};
