@@ -12,9 +12,11 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 	 * set of buttons placed at the bottom of the screen will be displayed
 	 * to control the slider.
 	 *
-	 * The slider knows how to "shuffle" the cards.
+	 * The slider knows how to "play" and "shuffle" the cards.
 	 *
-	 *
+	 * Events (see MicroEvent):
+	 *		- beforeslide : triggered before the slide
+	 *		- slide       : triggered after the slide
 	 *
 	 * Usage:
 	 *		var slider = new CollectionSlider($("#slider"));
