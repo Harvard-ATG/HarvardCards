@@ -75,17 +75,15 @@ var initModule = function() {
 	    var txt1 = 'Full Screen';
 	    var txt2 = 'Exit Full Screen';
 	    if ($("#full_screen").text() == txt1){
-	        $("#wrapper").children().not("#singleCardHolder").hide();
-	        $("#navigation").hide();
-	        $("#appTitle").hide();
+	        $("#wrapper").children().not("#singleCardHolder, .fullcardBtns").hide();
+	        $("#appTitle, #navigation").hide();
 	        $("#singleCardHolder").css('margin-left','8.5%');
 	        $("#full_screen .control-text").text(txt2);
 			$("#full").addClass("fa-compress").removeClass("fa-expand");
 	    }
 	    else{
-	        $("#wrapper").children().not("#cardFormContainer").show();
-	        $("#navigation").show();
-	        $("#appTitle").show();
+	        $("#wrapper").children().not("#cardFormContainer, .fullcardBtns").show();
+			$("#appTitle, #navigation").show();
 	        $("#singleCardHolder").css('margin-left','0');
 	        $("#full_screen .control-text").text(txt1);
 			$("#full").addClass("fa-expand").removeClass("fa-compress");
