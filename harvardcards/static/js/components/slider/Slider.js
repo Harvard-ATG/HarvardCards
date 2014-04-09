@@ -93,6 +93,10 @@ define([
 		return this.goTo(this.currentIndex);
 	};
 
+	Slider.prototype.isLastItem = function() {
+		return this.currentIndex === this.getLastIndex();
+	};
+
 	Slider.prototype._slide = function(index) {
 		var position;
 		if(index > this.maxSlideIndex) {
@@ -113,6 +117,10 @@ define([
 
 	Slider.prototype.getNumItems = function() {
 		return this.items.length;
+	};
+
+	Slider.prototype.getLastIndex = function() {
+		return this.items.length > 0 ? this.items.length - 1 : 0; 
 	};
 
 	Slider.prototype.getCurrentIndex = function() {

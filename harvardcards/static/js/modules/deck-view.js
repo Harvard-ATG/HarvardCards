@@ -100,21 +100,18 @@ var initModule = function() {
 
 
 	$('#play_cards').click(function(){
-	    var txt1 = 'Play';
-	    var txt2 = 'Pause';
-		var sliderLength = deck_slider.getNumItems();
-	    if ($("#play_cards .control-text").text() == txt1){
-	        myintrval = setInterval(function(){
-	            if (!deck_slider.goToNext()) {
-	                $('#play_cards').click();
-	            }
-	        }, 5000);
-	        $("#play_cards .control-text").text(txt2);
+	    var playText = 'Play';
+	    var pauseText = 'Pause';
+	    if ($("#play_cards .control-text").text() == playText){
+			deck_slider.play(function() {
+				$("#play_cards").click();
+			});
+	        $("#play_cards .control-text").text(pauseText);
 			$("#play").removeClass('fa-play').addClass('fa-pause');
 	    }
 	    else{
-	        clearInterval(myintrval);
-	        $("#play_cards .control-text").text(txt1);
+			deck_slider.pause();
+	        $("#play_cards .control-text").text(playText);
 			$("#play").removeClass('fa-pause').addClass('fa-play');
 	    }
 	    return false;

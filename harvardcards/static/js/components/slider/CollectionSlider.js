@@ -1,5 +1,18 @@
 define(['jquery', 'components/slider/Slider'], function($, Slider) {
 
+	/**
+	 * The CollectionSlider is responsible for displaying a list of 
+	 * decks as a slider on smaller screen sizes.
+	 *
+	 * The slider is responsive to the size of the screen and supports
+	 * touch events. Swipe left/right to go to the next/previous deck.
+	 * Swipe up/down to go to the next collection.
+	 *
+	 * Usage:
+	 *		var slider = new CollectionSlider($("#slider"));
+	 *		slider.goToNext();
+	 *		slider.goToPrev();
+	 */
 	var CollectionSlider = function(el) {
 		this.el = $(el);
 		this.goToNext = $.proxy(this.goToNext, this);
@@ -7,6 +20,7 @@ define(['jquery', 'components/slider/Slider'], function($, Slider) {
 		this.init();
 	};
 
+	// Initializes the slider object. 
 	CollectionSlider.prototype.init = function() {
 		this.slider = new Slider({
 			el: this.el,
@@ -16,6 +30,7 @@ define(['jquery', 'components/slider/Slider'], function($, Slider) {
 		this.initNav();
 	};
 
+	// Initializes the nav buttons.
 	CollectionSlider.prototype.initNav = function() {
 		var self = this;
 		var navButtons = {
@@ -26,10 +41,18 @@ define(['jquery', 'components/slider/Slider'], function($, Slider) {
 		$.each(navButtons, function(key, value) {
 			$(".sliderNav", self.el).find(key).on("click", function(evt) {
 				evt.preventDefault();
-				self.slider[value]();
+				self[value]();
 			});
 		});
 	};
 
-    return CollectionSlider;
+	// Adds methods to the CollectionSlider that just delegate to slider.
+	// These methods are considered public.
+	$.each(['goToPrev', 'goToNext'], function(index, method) {
+		CollectionSlider.prototype[method] = function() {
+			return this.slider[method]();
+		};
+	});
+
+	return CollectionSlider;
 });
