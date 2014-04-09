@@ -59,10 +59,10 @@ define([
 			return false;
 		}
 
-		this.trigger("beforeslide");
+		this.trigger("beforeslide", this, this.currentIndex);
 		this._slide(index);
 		this.currentIndex = index;
-		this.trigger("slide");
+		this.trigger("slide", this, index);
 
 		return true;
 	};

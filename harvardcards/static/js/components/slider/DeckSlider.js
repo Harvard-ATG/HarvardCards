@@ -25,13 +25,18 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 	 */
 	var DeckSlider = function(el, startIndex) {
 		this.el = $(el);
+		this.startIndex = startIndex || 0;
+
 		this.card_ids = []; 
 		this.currentCardId = null; 
 		this.currentCardEl = null;
-		this.startIndex = startIndex || 0;
 		this.playbackDelay = 4000;
 		this._playIntervalId = null;
+
+		// bind methods to the "this" context
 		this.onClickCard = $.proxy(this.onClickCard, this);
+		this.onBeforeSlide = $.proxy(this.onBeforeSlide, this);
+		this.onSlide = $.proxy(this.onSlide, this);
 
 		this.init();
 	};
@@ -95,21 +100,22 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 
 	// Initializes listeners on card elements and the slider object.
 	DeckSlider.prototype.initListeners = function() {
-		var self = this;
-
+		this.slider.bind("beforeslide", this.onBeforeSlide);
+		this.slider.bind("slide", this.onSlide);
 		this.el.on("click", ".card", this.onClickCard);
+	};
 
-		this.slider.bind("beforeslide", function() {
-			var card_id = self.card_ids[self.slider.getCurrentIndex()];
-			self.selectCard(card_id);
-			self.trigger("beforeslide", self, card_id);
-		});
+	// Handles slider event triggered before the slide.
+	DeckSlider.prototype.onBeforeSlide = function(slider, index) {
+		var card_id = this.card_ids[index];
+		this.trigger("beforeslide", this, card_id);
+	};
 
-		this.slider.bind("slide", function() {
-			var card_id = self.card_ids[self.slider.getCurrentIndex()];
-			self.selectCard(card_id);
-			self.trigger("slide", self, card_id);
-		});
+	// Handles slider event triggered after the slide.
+	DeckSlider.prototype.onSlide = function(slider, index) {
+		var card_id = this.card_ids[index];
+		this.selectCard(card_id);
+		this.trigger("slide", this, card_id);
 	};
 
 	// Handles a click on a card element.
