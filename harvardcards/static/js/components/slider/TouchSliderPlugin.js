@@ -70,9 +70,9 @@ define(['jquery'], function($) {
 						scrollTop = $('html').position().top;
 					} else {
 						//page up
-                        if($parentEl.prev().position()) {
-                            scrollTop = $parentEl.prev().position().top;
-                        }
+						if($parentEl.prev().position()) {
+							scrollTop = $parentEl.prev().position().top;
+						}
 					}
 					this.scrollTop(scrollTop);
 				} else if (this.lastPosY - this.startPosY < -50) {
@@ -82,9 +82,9 @@ define(['jquery'], function($) {
 						scrollTop = $('html').position().bottom;
 					} else {
 						//page down
-                        if($parentEl.next().position()) {
-                            scrollTop = $parentEl.next().position().top;
-                        }
+						if($parentEl.next().position()) {
+							scrollTop = $parentEl.next().position().top;
+						}
 					}
 					this.scrollTop(scrollTop);
 				} else {
