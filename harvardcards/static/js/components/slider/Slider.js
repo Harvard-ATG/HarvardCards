@@ -49,35 +49,41 @@ define([
 	 *		</script>
 	 */
 	var Slider = function(config) {
-		this.el = config.el;
-		this.plugins = config.plugins || {};
+		this.el = config.el; // element to bind the slider to
+		this.plugins = config.plugins || {}; // list of plugin names
 
-		this.items = [];
-		this.currentIndex = config.startIndex || 0;
-		this.slideWindow = 0;
-		this.slideAmount = 0;
-		this.slideUnit = '%';
+		this.containerEl = null; // should be <ul>
+		this.items = []; // should be <li>'s
+		this.pluginMap = {}; // map of plugin instances
+		this.currentIndex = config.startIndex || 0; // starting position
+		this.slideWindow = 0; // number of items to show
+		this.slideAmount = 0; // amount to slide
+		this.slideUnit = '%'; // slide unit
 
 		this.init();
 	};
 
-	// Maps string names to plugin constructors.
 	// Defines the list of available plugins.
-	Slider.prototype.pluginMap = {
-		'responsive': ResponsiveSliderPlugin,
+	// Maps plugin keys to constructors.
+	Slider.pluginRegistry = {
+		'touch': TouchSliderPlugin,
 		'keyboard': KeyboardSliderPlugin,
-		'touch': TouchSliderPlugin
+		'responsive': ResponsiveSliderPlugin
 	};
 
 	// Initializes the slider.
 	Slider.prototype.init = function() {
 		var items = [];
 
-		this.container = $("ul", this.el).first();
-		this.container.children("li").each(function(index, el) {
+		this.containerEl = $(this.el).find("ul").first();
+		this.containerEl.children("li").each(function(index, el) {
 			items.push(el);
 		});
 		this.items = items;
+
+		if(!this.isValidIndex(this.currentIndex)) {
+			throw new Error("invalid starting index");
+		}
 
 		this.initPlugins();
 	};
@@ -85,22 +91,21 @@ define([
 	// Initializes all plugins, if any.
 	Slider.prototype.initPlugins = function() {
 		_.each(this.plugins, function(pluginConfig, pluginName) {
-			var pluginClass = this.pluginMap[pluginName];
-			var plugin = new pluginClass(pluginConfig);
+			var plugin, pluginClass = Slider.pluginRegistry[pluginName];
+			if(!pluginClass) {
+				throw new Error("invalid plugin: " + pluginName);
+			}
+			plugin = new pluginClass(pluginConfig);
 			plugin.init(this);
+			this.pluginMap[pluginName] = plugin;
 		}, this);
 	};
 
 	// Go to (i.e. slide) to an item.
-	// Throws an exception if the given index is not a number.
-	// Triggers "beforeslide" and "slide".
-	// Returns false if the index is out of range.
-	// Returns true if the slide was successful.
+	// Triggers "beforeslide" and "slide" on success.
+	// Returns true on success, false otherwise.
 	Slider.prototype.goTo = function(index) {
-		if(typeof index !== 'number') {
-			throw new Error("index must be a number");
-		} 
-		if(index < 0 || index > this.getNumItems() - 1) {
+		if(!this.isValidIndex(index)) {
 			return false;
 		}
 
@@ -148,23 +153,14 @@ define([
 		return this.currentIndex === this.getLastIndex();
 	};
 
-	// Helper function to slide to the given index.
-	Slider.prototype._slide = function(index) {
-		var position, limit;
-		if(this.slideWindow) { 
-			limit = this.getNumItems() - this.slideWindow;
-			if(index > limit) {
-				index = limit;
-			}
-		}
-		position = this._position(index);
-
-		$(this.container)[0].style.left = position;
+	// Returns true if the slider is on the first item, false otherwise.
+	Slider.prototype.isFirstItem = function() {
+		return this.currentIndex === 0;
 	};
 
-	// Helper function to return the CSS offset amount for the slide.
-	Slider.prototype._position = function(index) {
-		return '-' + (this.slideAmount * index) + this.slideUnit;
+	// Returns true if the index is valid, false otherwise.
+	Slider.prototype.isValidIndex = function(index) {
+		return this.currentIndex >= 0 && this.currentIndex <= this.getNumItems() - 1;
 	};
 
 	// Returns the width of the slider element.
@@ -204,10 +200,34 @@ define([
 	// Sets the slide window size. This is used to stop the slider 
 	// from moving the window once it reaches the end.
 	Slider.prototype.setWindow = function(windowSize) {
+		if(windowSize < 0 || windowSize > this.getNumItems()) {
+			throw new Error("window size is out of bounds");
+		}
 		this.slideWindow = windowSize;
 	};
 
+	// Helper function to slide to the given index.
+	Slider.prototype._slide = function(index) {
+		var position, limit;
+		if(this.slideWindow) {
+			limit = this.getNumItems() - this.slideWindow;
+			if(index > limit) {
+				index = limit;
+			}
+		}
+		position = this._position(index);
+
+		$(this.containerEl)[0].style.left = position;
+	};
+
+	// Helper function to return the CSS offset amount for the slide.
+	Slider.prototype._position = function(index) {
+		return '-' + (this.slideAmount * index) + this.slideUnit;
+	};
+
+	// Makes slider instances event emitters
 	MicroEvent.mixin(Slider);
+
 
 	return Slider;
 });

@@ -94,7 +94,7 @@ define(['jquery'], function($) {
 		var layout = this.layout;
 		var numItems = this.slider.getNumItems();
 
-		$(this.slider.container).width(layout.containerWidth);
+		$(this.slider.containerEl).width(layout.containerWidth);
 
 		$(this.slider.items).each(function(index, el) {
 			el.style.width = layout.itemWidth;
@@ -117,7 +117,7 @@ define(['jquery'], function($) {
 
     // Resets the layout to the default 
 	ResponsiveSliderPlugin.prototype.resetLayout = function() {
-		$(this.slider.container).removeAttr('style');
+		$(this.slider.containerEl).removeAttr('style');
 		$(this.slider.items).removeAttr('style');
 	};
 
