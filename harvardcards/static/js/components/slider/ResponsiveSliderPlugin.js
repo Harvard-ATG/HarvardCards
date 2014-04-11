@@ -1,6 +1,16 @@
 define(['jquery'], function($) {
     
-    // Constructor.
+	/**
+	 * ResponsiveSliderPlugin responsible for modifying the layout of the
+	 * slider to best fit the screen. That is, it makes the slider responsive.
+	 *
+	 * This class isn't meant to be instantiated by itself. Collaborates
+	 * With Slider.
+	 *
+	 * Usage:
+	 *      var plugin = new ResponsiveSliderPlugin();
+	 *      plugin.init(slider);
+	 */
 	var ResponsiveSliderPlugin = function(config) {
 		config = config || {};
 		this.hasLayout = false;

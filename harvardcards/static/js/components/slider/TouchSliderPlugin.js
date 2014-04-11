@@ -13,11 +13,23 @@ define(['jquery'], function($) {
 		TRANSFORM_CSS = '-webkit-transform';
 		TRANSITION_CSS = '-webkit-transition';
 	}
-
-	var TouchSliderPlugin = function() {
+	/**
+	 * TouchSliderPlugin responsible for adding ability to advance
+	 * the slider using swipe left/right or up/down.
+	 *
+	 * This class isn't meant to be instantiated by itself. Collaborates
+	 * With Slider.
+	 *
+	 * Usage:
+	 *      var plugin = new TouchSliderPlugin();
+	 *      plugin.init(slider);
+	 */
+	var TouchSliderPlugin = function(config) {
+		config = config || {};
 		this.handleTouchEvents = $.proxy(this.handleTouchEvents, this);
 	};
 
+	// Initializes the plugin.
 	TouchSliderPlugin.prototype.init = function(slider) {
 		this.slider = slider;
 		if(this.hasTouchSupport()) {
@@ -26,18 +38,22 @@ define(['jquery'], function($) {
 		}
 	};
 
+	// Returns true if the device has touch support, false otherwise.
 	TouchSliderPlugin.prototype.hasTouchSupport = function() {
 		return 'ontouchstart' in document.documentElement;
 	};
 
+	// Hides the navigation element.
 	TouchSliderPlugin.prototype.hideNav = function() {
 		$(".sliderNav", this.slider.el).hide();
 	};
 
+	// Attaches touch event handles to the slider.
 	TouchSliderPlugin.prototype.attachTouchEvents = function() {
 		$(this.slider.el).on("touchmove touchstart touchend", this.handleTouchEvents);
 	};
 
+	// Handler for touch events.
 	TouchSliderPlugin.prototype.handleTouchEvents = function(evt) {
 		var e = evt.originalEvent;
 		var direction = 0;
@@ -102,6 +118,7 @@ define(['jquery'], function($) {
 		return false;
 	};
 
+	// Helper function to scroll the screen.
 	TouchSliderPlugin.prototype.scrollTop = function(scrollTop) {
 		var duration = 500;
 		if(typeof scrollTop === 'number') {
@@ -109,10 +126,12 @@ define(['jquery'], function($) {
 		}
 	};
 
+	// Not used.
 	TouchSliderPlugin.prototype.cleanTransitions = function(node) {
 		node.style[TRANSITION] = 'none';
 	};
 
+	// Not used.
 	TouchSliderPlugin.prototype.setPosition = function(node, left) {
 		node.style[TRANSFORM] =  "translate3d("+left+"px, 0, 0)";
 	};
