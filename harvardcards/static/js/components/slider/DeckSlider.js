@@ -94,6 +94,7 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 			$(key).on("click", function(evt) {
 				evt.preventDefault();
 				self[value]();
+
 			});
 		});
 	};
@@ -124,6 +125,7 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 		if(this.isCard(currentTarget)) {
 			card_id = this.getCardId(currentTarget);
 			this.goToCard(card_id);
+			return false;
 		}
 	};
 
