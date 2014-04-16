@@ -317,6 +317,28 @@ a#addAcourse
 		border: solid 1px #e1dfdf;
 		position: relative;
 	}
+    ul.courseDecks li.deck.add {
+        border: 2px dashed #838383;
+        line-height: 167px;
+        padding: 0;
+    }
+    ul.courseDecks li.deck.add a {
+        display: block;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        text-transform:uppercase;
+        text-decoration: none;
+        text-align: center;
+        vertical-align:middle;
+        font-size: 1.875em;
+        font-family: 'League Gothic', Arial, sans-serif;
+        color: #4c4c4c;
+    }
+    ul.courseDecks li.deck.add a:hover {
+        color: #a51c30;
+    }
 	/* template deck (start) */
 	ul.templateDecks li{
 		background: none;
@@ -928,7 +950,7 @@ a#mobileMenu{
 
 	#cardSlider
 	, #cardSliderNotAdmin{
-		margin-left: 0;
+		margin: 0;
 		width: 90.046296296296%;
 	}
 
@@ -997,7 +1019,7 @@ a#mobileMenu{
 
 #cardSlider
 , #cardSliderNotAdmin{
-	margin-left: 0;
+	margin: 0;
 	width: 90.046296296296%;
 }
 
@@ -1065,7 +1087,6 @@ a#mobileMenu{
 			color: #a51c30;
 		}
 
-
 	.arrow{
 		padding: 5% 0%;
 		width: 25%;
@@ -1102,7 +1123,7 @@ a#mobileMenu{
 
 	#cardSlider
 	, #cardSliderNotAdmin{
-		margin-left: 0;
+		margin: 0;
 		width: 90.046296296296%;
 	}
 
@@ -1232,7 +1253,7 @@ a#mobileMenu{
 		border: solid 1px #e1dfdf;
 		padding: 0.5em 4.75%;
 		position: relative;
-		margin:0;
+        margin: 0;
 		width: 90.046296296296%;
 	}
 
