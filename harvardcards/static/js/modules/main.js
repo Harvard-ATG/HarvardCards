@@ -1,9 +1,25 @@
-define(['jquery', 'jquery.cookie', 'jquery.appendAround'], function($) {
+define(['jquery', 'jquery.cookie', 'jquery.appendAround', 'views/urlManipulate'], function(jquery, jqueryCookie, jqueryAppend, urlManipulate) {
 	return {
 		initModule: function(el) {
 			this.setupCSRF();
 			this.setupAppNav();
+			this.setupEditBtn();
+			this.setupViewBtn();
 		},
+		setupViewBtn: function(){
+		    $('#viewMode').click(function(){
+                location.href = urlManipulate.removeURLParameter(this.href, 'instructor');
+                return false;
+            })
+		},
+
+		setupEditBtn: function(){
+		    $('#editMode').click(function(){
+                location.href=urlManipulate.addParameter(this.href,'instructor','edit', false);
+                return false;
+            })
+		},
+
 		setupCSRF: function() {
 			var csrftoken = $.cookie('csrftoken');
 			function csrfSafeMethod(method) {
