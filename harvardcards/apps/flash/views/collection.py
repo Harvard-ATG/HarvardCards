@@ -95,37 +95,16 @@ def edit(request, collection_id=None):
 
     return render(request, 'collections/edit.html', context)
     
+def add_deck(request, collection_id=None):
+    """Adds a collection."""
+    collection = Collection.objects.get(id=collection_id)
+    deck = Deck.objects.create(collection=collection, title='Untitled Deck')
+    return redirect(deck)
 
 def delete(request, collection_id=None):
     """Deletes a collection."""
     services.delete_collection(collection_id)
     return redirect('index')
-
-def upload_deck(request, collection_id=None):
-    '''
-    Uploads a deck of cards from an excel spreadsheet.
-    '''
-    collections = Collection.objects.all().prefetch_related('deck_set')
-    collection = Collection.objects.get(id=collection_id)
-
-    if request.method == 'POST':
-        form = forms.DeckImportForm(request.POST, request.FILES)
-        if form.is_valid():
-            if 'file' in request.FILES:
-                deck = services.handle_uploaded_deck_file(collection_id, form.cleaned_data['deck_title'], request.FILES['file'])
-            else:
-                deck = Deck.objects.create(collection=collection, title=form.cleaned_data['deck_title'])
-            return redirect(deck)
-    else:
-        form = forms.DeckImportForm()
-
-    context = {
-        "form": form, 
-        "collection": collection,
-        "collections": collections
-    }
-
-    return render(request, 'collections/upload_deck.html', context)
 
 def download_template(request, collection_id=None):
     '''

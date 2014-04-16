@@ -1,17 +1,22 @@
+<h2>{{card_template_title}}</h2>
+<p>{{card_template_description}}</p>
 <div id="cardTemplatePreview">
-    <h2>{{card_template_title}}</h2>
-    <p>{{card_template_description}}</p>
+    
     <div class="editFields">
         <h2>Card front</h2>
-        {% for field in card_template_fields.show %}
-            {% include "_card_template_preview_field.html" with field=field %}
-        {% endfor %}
+        <div class="centerDiv-desktop">
+	        {% for field in card_template_fields.show %}
+	            {% include "_card_template_preview_field.html" with field=field %}
+	        {% endfor %}
+        </div>
     </div>
     <div class="hideRevealHr"></div>
     <div class="editFields">
         <h2>Card back</h2>
-        {% for field in card_template_fields.reveal %}
-            {% include "_card_template_preview_field.html" with field=field %}
-        {% endfor %}
+		<div class="centerDiv-desktop">
+	        {% for field in card_template_fields.reveal %}
+	            {% include "_card_template_preview_field.html" with field=field %}
+	        {% endfor %}
+		</div>
     </div>
 </div>

@@ -121,14 +121,11 @@ def handle_uploaded_img_file(file, deck, collection):
 
     return os.path.join(dir_name, file_name)
 
-def handle_uploaded_deck_file(collection_id, deck_title, uploaded_file):
-    """Handles an uploaded deck."""
-    collection = Collection.objects.get(id=collection_id)
+def handle_uploaded_deck_file(deck, uploaded_file):
+    """Handles an uploaded deck file."""
     file_contents = uploaded_file.read()
-    parsed_cards = utils.parse_deck_template_file(collection.card_template, file_contents)
-    deck = create_deck_with_cards(collection_id, deck_title, parsed_cards)
-
-    return deck
+    parsed_cards = utils.parse_deck_template_file(deck.collection.card_template, file_contents)
+    add_cards_to_deck(deck, parsed_cards)
 
 @transaction.commit_on_success
 def add_cards_to_deck(deck, card_list):
