@@ -23,12 +23,12 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 	 *		slider.goToNext();
 	 *		slider.goToPrev();
 	 */
-	var DeckSlider = function(el, startIndex) {
+	var DeckSlider = function(el) {
 		this.el = $(el);
-		this.startIndex = startIndex || 0;
 
-		this.card_ids = []; 
-		this.currentCardId = null; 
+		this.card_ids = [];
+		this.currentCardId = this.el.data('start-card-id');
+		this.currentCardIndex = 0;
 		this.currentCardEl = null;
 		this.playbackDelay = 4000;
 		this._playIntervalId = null;
@@ -45,9 +45,15 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 	DeckSlider.prototype.init = function() {
 		this.card_ids = this.findCardIds();
 
+		if(this.currentCardId) {
+			this.setCurrentCard(this.currentCardId);
+		} else if(this.card_ids.length > 0) {
+			this.setCurrentCard(this.card_ids[0])
+		}
+
 		this.slider = new Slider({
 			el: this.el,
-			startIndex: this.startIndex,
+			startIndex: this.currentCardIndex || 0,
 			plugins: {
 				responsive: {
 					maxShowItems: 4
@@ -63,9 +69,7 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 	// Delegate and augment slider goTo methods 
 	$.each(['goToNext', 'goToPrev', 'goToFirst', 'goToLast', 'goToCurrent'], function(index, method) {
 		DeckSlider.prototype[method] = function() {
-			var result = this.slider[method].apply(this.slider, arguments);
-			this.selectCard(this.card_ids[this.slider.getCurrentIndex()]);
-			return result;
+			return this.slider[method].apply(this.slider, arguments);
 		};
 	});
 
@@ -168,6 +172,15 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 		return this.slider.getNumItems();
 	};
 
+	// Returns the index of a card or 0 if not found.
+	DeckSlider.prototype.getIndexOfCard = function(cardId) {
+		var index = this.card_ids.indexOf(cardId);
+		if(index >= 0) {
+			return index;
+		}
+		return 0;
+	};
+
 	// Selects and highlights the given card. 
 	DeckSlider.prototype.selectCard = function(card_id) {
 		this.unhighlight();
@@ -185,8 +198,9 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 
 	// Sets the current card by ID.
 	DeckSlider.prototype.setCurrentCard = function(card_id) {
-		this.currentCardEl = this.findByCardId(card_id);
 		this.currentCardId = card_id;
+		this.currentCardEl = this.findByCardId(card_id);
+		this.currentCardIndex = this.getIndexOfCard(card_id);
 	};
 
 	// Unhighlights the current card.

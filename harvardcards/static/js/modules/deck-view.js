@@ -11,24 +11,26 @@ var initModule = function() {
 			this.el.html(current + " / " + total);
 		}
 	};
+	var $allCards = $("#allCards");
+
 	card_counter.update = $.proxy(card_counter.update, card_counter);
 
 	deck_slider.bind("beforeslide", function(slider, card_id) {
-		$("#allCards").find("[data-card-id]").removeClass("show").addClass("hide");
+		$allCards.find("[data-card-id]").removeClass("show").addClass("hide");
 	});
 	deck_slider.bind("slide", function(slider, card_id) {
-		$("#allCards").find("[data-card-id="+card_id+"]").removeClass("hide").addClass("show");
+		$allCards.find("[data-card-id="+card_id+"]").removeClass("hide").addClass("show");
 	});
 	deck_slider.bind("slide", card_counter.update);
-	deck_slider.goToFirst();
+	deck_slider.goToCurrent();
 	card_counter.update();
 
 	$('#review_mode').click(function(){
-	    location.href=this.href+'?cardLoc='+deck_slider.getCurrentCardId();
+	    location.href=this.href+'?card_id='+deck_slider.getCurrentCardId();
 	    return false;
 	});
 	$('#quiz_mode').click(function(){
-	    location.href=this.href+'&cardLoc='+deck_slider.getCurrentCardId();
+	    location.href=this.href+'&card_id='+deck_slider.getCurrentCardId();
 	    return false;
 	});
 
