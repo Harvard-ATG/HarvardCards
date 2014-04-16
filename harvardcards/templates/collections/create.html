@@ -7,21 +7,31 @@
 {% block main_content %}
 <div id="content" data-module="collections-create">
     <div class="courseWrapper">
-        <div class="courseHeader">
+        <!--div class="courseHeader">
             <h2>Add course</h2>
-        </div>
+        </div-->
         <form action="{% url 'collectionCreate' %}" method="post">
             {% csrf_token %}
-            <p>
+            <!--p-->
+            <div class="courseHeader">
                 {{ collection_form.title.errors }}
-                <label for="id_title">Title:</label>
-                {{ collection_form.title }}
-            </p>
-            <p>
+                <label for="id_title" style="visibility:hidden;text-indent:-300px;position:absolute;">Title:</label>
+                <input id="{{ collection_form.title.id_for_label }}" name="{{ collection_form.title.html_name }}" type="text" autofocus placeholder="Enter course name here">
+                <!--
+                	this outputs the text form filed with the django templates
+                	{{ collection_form.title }} -->
+            </div>
+            <!--/p-->
+            <!--p-->
                 {{ collection_form.card_template.errors }}
-                <label for="id_card_template">Template:</label>
-                {{ collection_form.card_template }}
-            </p>
+                <h2 class="float-left"><label for="id_card_template">Template:</label></h2>
+                <div class="form-input float-left">
+                	{{ collection_form.card_template }}
+                	<span class="form-help">Choose the template message blah blah blah helper text...</span>
+                </div>
+            <!--/p-->
+            <div class="clear"><!-- empty --></div>
+            
             <div id="cardTemplateContainer" data-fetch-url="{% url 'cardTemplatePreview' %}">
                 Select a template
             </div>

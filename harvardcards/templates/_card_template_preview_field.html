@@ -1,5 +1,5 @@
-<div style="display:block; clear:left;">
-{% if field.type == 'T' %}
+<!--div class="centerDiv-desktop"-->
+<!--{% if field.type == 'T' %}
     <i class="fa fa-font fa-2x pull-left"></i>
 {% elif field.type == 'I' %}
     <i class="fa fa-picture-o fa-2x pull-left"></i>
@@ -7,33 +7,38 @@
     <i class="fa fa-film fa-2x pull-left"></i>
 {% elif field.type == 'A' %}
     <i class="fa fa-microphone fa-2x pull-left"></i>
-{% endif %}
-    <div class="field-label {% if field.show_label %}field-label-show{% endif %} pull-left">{{field.label}}</div>
-    <div class="field-value pull-left">
-        {% if field.type == 'T' %}
-            {% if field.example_value %}
-                {{field.example_value}}
-            {% else %}
-                text
-            {% endif %}
-        {% elif field.type == 'I' %}
-            {% if field.example_value %}
-                <img src="{{field.example_value}}" alt="{{field.label}}" class="cardFieldImage" />
-            {% else %}
-                image
-            {% endif %}
-        {% elif field.type == 'V' %}
-            {% if field.example_value %}
-                {{field.example_value}}
-            {% else %}
-                video
-            {% endif %}
-        {% elif field.type == 'A' %}
-            {% if field.example_value %}
-                {{field.example_value}}
-            {% else %}
-                audio
-            {% endif %}
-        {% endif %}
-    </div>
-</div>
+{% endif %}-->
+	<div class="card-field">		
+	    {% if field.type != 'I' %}
+	    	<!-- not need to show a title for 'image', only show for other fields -->
+	    	<div class="card-term {% if field.show_label %}field-label-show{% endif %} ">{{field.label}}:</div>
+	    {% endif %}
+	    <div class="card-definition">
+	        {% if field.type == 'T' %}
+	            {% if field.example_value %}
+	                {{field.example_value}}
+	            {% else %}
+	                text
+	            {% endif %}
+	        {% elif field.type == 'I' %}
+	            {% if field.example_value %}
+	                <img src="{{field.example_value}}" alt="{{field.label}}" class="cardFieldImage" />
+	            {% else %}
+	                image
+	            {% endif %}
+	        {% elif field.type == 'V' %}
+	            {% if field.example_value %}
+	                {{field.example_value}}
+	            {% else %}
+	                video
+	            {% endif %}
+	        {% elif field.type == 'A' %}
+	            {% if field.example_value %}
+	                {{field.example_value}}
+	            {% else %}
+	                audio
+	            {% endif %}
+	        {% endif %}
+	    </div>
+	</div>
+<!--/div-->

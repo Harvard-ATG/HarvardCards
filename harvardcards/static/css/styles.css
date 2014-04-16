@@ -69,7 +69,8 @@ img { max-width: 100% }
 /* FONTS */
 h1, h2, h3, h4
 , a#addAcourse
-, a#addCard{
+, a#addCard
+, .addCards{
 	font-family: 'League Gothic', Arial, sans-serif;
 }
 	h1{ font-size: 3em; }
@@ -108,6 +109,27 @@ h1, h2, h3, h4
 	font-family: 'Vollkorn', Times, serif;
 }
 /* FONTS (end) */
+/* floats */
+.float-left{
+	float: left;
+}
+
+.float-right{
+	float: right;
+}
+/* floats (end) */
+
+/* form (start) */
+.form-input{
+	padding: 0.25em;
+}
+.form-help{
+	font-style: italic;
+	font-size: 0.75em;
+	display: block;
+	padding: 0.25em;
+}
+/* form (end) */
 
 #fc_headerWrapper{
 	background-color:#1e1e1e;
@@ -222,7 +244,7 @@ h1, h2, h3, h4
 /********** main nav (end) *************/
 
 a#addAcourse
-, a#addCard{
+/*, a#addCard*/{
 	text-align: center;
 	text-decoration: none;
 	display: block;
@@ -235,12 +257,38 @@ a#addAcourse
 	padding: 0.25em 10%;
 }
 
-a#addCard{
+/*a#addCard{
 	margin: 0;
 	padding: 1em 2%;
 	width: 8%;
 	float: left;
+}*/
+/********** new Add Card and Upload Cards (start) ***********/
+.addCards{
+	margin: 0;
+	width: 12%;
+	float: left;
 }
+.btn-dashed{
+	text-align: center;
+	text-decoration: none;
+	display: block;
+	font-size: 1.575em;
+	color: #4c4c4c;
+	border: 2px dashed #838383;
+	text-transform:uppercase;
+	margin: 0 auto 0.25em;
+	padding: 0.59em 5%;
+	width: 90%;
+}
+	.btn-dashed:hover{
+		background-color: #d2d2d2;
+		border:2px solid #999797;
+		color: #a51c30;
+	}
+	
+/********** new Add Card and Upload Cards (end) ***********/
+
 /********** hp course ROW (start) ***********/
 .courseWrapper{ 
 	display: inline-block; 
@@ -269,6 +317,28 @@ a#addCard{
 		border: solid 1px #e1dfdf;
 		position: relative;
 	}
+    ul.courseDecks li.deck.add {
+        border: 2px dashed #838383;
+        line-height: 167px;
+        padding: 0;
+    }
+    ul.courseDecks li.deck.add a {
+        display: block;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        text-transform:uppercase;
+        text-decoration: none;
+        text-align: center;
+        vertical-align:middle;
+        font-size: 1.875em;
+        font-family: 'League Gothic', Arial, sans-serif;
+        color: #4c4c4c;
+    }
+    ul.courseDecks li.deck.add a:hover {
+        color: #a51c30;
+    }
 	/* template deck (start) */
 	ul.templateDecks li{
 		background: none;
@@ -634,6 +704,7 @@ div.deckNav{
 		float: left;
 		text-align: center;
 		padding: 0.25em 0;
+		height: 1.625em;
 	}
 	#singleCardHolder ul li.hide,
 	#cardForm ul li.hide{
@@ -654,6 +725,39 @@ div.deckNav{
 
 	}
 /*full card (end) */
+
+/* cards UI view (start) */
+.card-field{ 
+	display: inline-block;
+	width: 90%;
+	padding: 0.5em 5%;
+	margin-bottom: 0.25em;
+}
+
+/*.card-field:nth-child(even){
+	background-color: #f7f7f7;
+	border-bottom: 1px solid rgb(236, 236, 236);
+}*/
+
+.card-term{
+	text-align: right;
+	font-size: 1.25em;
+	padding-bottom: 0.1em;
+	width: 20%;
+	float: left;
+}
+
+.card-definition{
+	font-family: Arial;
+	font-size: 0.9em;
+	text-align: left;
+	width: 78%;
+	float: left;
+	margin-left: 2%;
+	line-height: 1.5;
+}
+/* cards UI view (end) */
+
 /********** cards inside a deck view (end) *************/
 
 /* mobile nav icon (start) */
@@ -765,7 +869,8 @@ a#mobileMenu{
 	}
 
 	#navigation
-	, a#addCard { display: none; }
+	, a#addCard 
+	, .addCards{ display: none; }
 
 	#content{
 		width: 100%;
@@ -845,7 +950,7 @@ a#mobileMenu{
 
 	#cardSlider
 	, #cardSliderNotAdmin{
-		margin-left: 0;
+		margin: 0;
 		width: 90.046296296296%;
 	}
 
@@ -869,7 +974,8 @@ a#mobileMenu{
 		width: 98%;
 	}
 	#navigation
-	, a#addCard { display: none; }
+	, a#addCard
+	, .addCards { display: none; }
 
 	#content{
 		width: 100%;
@@ -913,7 +1019,7 @@ a#mobileMenu{
 
 #cardSlider
 , #cardSliderNotAdmin{
-	margin-left: 0;
+	margin: 0;
 	width: 90.046296296296%;
 }
 
@@ -934,7 +1040,8 @@ a#mobileMenu{
 	}
 
 	#navigation
-	, a#addCard { display: none; }
+	, a#addCard
+	, .addCards { display: none; }
 
 	#content{
 		width: 100%;
@@ -960,6 +1067,7 @@ a#mobileMenu{
 			border: 2px dashed #838383;
 			line-height: 167px;
 			padding: 0;
+			background: none;
 		}
 		ul.courseDecks li.deck.add a {
 			display: block;
@@ -978,7 +1086,6 @@ a#mobileMenu{
 		ul.courseDecks li.deck.add a:hover {
 			color: #a51c30;
 		}
-
 
 	.arrow{
 		padding: 5% 0%;
@@ -1016,7 +1123,7 @@ a#mobileMenu{
 
 	#cardSlider
 	, #cardSliderNotAdmin{
-		margin-left: 0;
+		margin: 0;
 		width: 90.046296296296%;
 	}
 
@@ -1073,7 +1180,8 @@ a#mobileMenu{
 	}
 
 	#navigation
-	, a#addCard { display: inline-block; }
+	, a#addCard
+	, .addCards { display: inline-block; }
 
 	#content{
 		width: 80.333333333333%;
@@ -1145,7 +1253,7 @@ a#mobileMenu{
 		border: solid 1px #e1dfdf;
 		padding: 0.5em 4.75%;
 		position: relative;
-		margin:0;
+        margin: 0;
 		width: 90.046296296296%;
 	}
 
@@ -1192,7 +1300,8 @@ a#mobileMenu{
 	}
 
 	#navigation
-	, a#addCard { display: inline-block; }
+	, a#addCard
+	, .addCards { display: inline-block; }
 
 	#content{
 		width: 80.333333333333%;
@@ -1272,6 +1381,12 @@ a.ui-slider-handle.ui-state-default.ui-corner-all{
 	text-align: right;
 }
 
+.centerDiv-desktop{
+	max-width: 75%;
+	text-align: center;
+	margin:0 auto;
+}
+
 .editFields{
 	text-align: left;
 	padding-top: 0.5em;
@@ -1289,7 +1404,8 @@ fieldset {
 	margin-bottom: 0.5em;
 }
 
-.formEle{
+.formEle
+, input[type=text]{
 	width: 98%;
 	display: block;
 	height: 1.3125em;
@@ -1349,3 +1465,4 @@ fieldset {
 }
 
 /********** add cards UI (end) *************/
+
