@@ -60,7 +60,6 @@ define([
 		this.slideAmount = 0; // amount to slide
 		this.slideUnit = '%'; // slide unit
 
-		console.log(this, config);
 		this.init();
 	};
 
