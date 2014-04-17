@@ -7,7 +7,7 @@
         {% if collection.id in user_collection_role.ADMIN %}
             <ul class="adminMenu adminMenuRight">
                 <li><a href="{% url 'collectionEdit' collection.id %}">Edit</a></li>
-                <li><a href="{% url 'collectionDelete' collection.id %}">Delete</a></li>
+                <li><a href="javascript:void(0);" class="js-delete-collection" data-action-url="{% url 'apiCollectionDelete' collection.id %}">Delete</a></li>
             </ul>
         {% endif %}
     </div>
