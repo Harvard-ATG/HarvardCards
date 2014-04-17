@@ -60,6 +60,7 @@ define([
 		this.slideAmount = 0; // amount to slide
 		this.slideUnit = '%'; // slide unit
 
+		console.log(this, config);
 		this.init();
 	};
 
@@ -81,7 +82,7 @@ define([
 		});
 		this.items = items;
 
-		if(!this.isValidIndex(this.currentIndex)) {
+		if(this.items.length > 0 && !this.isValidIndex(this.currentIndex)) {
 			throw new Error("invalid starting index");
 		}
 
@@ -160,7 +161,7 @@ define([
 
 	// Returns true if the index is valid, false otherwise.
 	Slider.prototype.isValidIndex = function(index) {
-		return this.currentIndex >= 0 && this.currentIndex <= this.getNumItems() - 1;
+		return index >= 0 && index < this.getNumItems();
 	};
 
 	// Returns the width of the slider element.
@@ -200,10 +201,9 @@ define([
 	// Sets the slide window size. This is used to stop the slider 
 	// from moving the window once it reaches the end.
 	Slider.prototype.setWindow = function(windowSize) {
-		if(windowSize < 0 || windowSize > this.getNumItems()) {
-			throw new Error("window size is out of bounds");
+		if(windowSize >= 0 && windowSize < this.getNumItems()) {
+			this.slideWindow = windowSize;
 		}
-		this.slideWindow = windowSize;
 	};
 
 	// Helper function to slide to the given index.
