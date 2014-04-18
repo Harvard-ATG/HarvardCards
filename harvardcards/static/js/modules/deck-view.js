@@ -1,4 +1,4 @@
-define(['jquery','components/slider/DeckSlider','views/CardForm'], function($,DeckSlider,CardForm) {
+define(['jquery','components/slider/DeckSlider', 'views/CardForm', 'utils/utils'], function($,DeckSlider,CardForm,utils) {
 
 var initModule = function() {
 	var deck_slider = new DeckSlider($(".slider").first());
@@ -125,6 +125,8 @@ var initModule = function() {
 		formMessageEl: "#cardForm .formMessage"
 	});
 	card_form.init();
+
+	utils.setupConfirm();
 };
 
 	return {initModule:initModule};
