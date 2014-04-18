@@ -7,7 +7,7 @@
         {% if collection.id in user_collection_role.ADMIN %}
             <ul class="adminMenu adminMenuRight">
                 <li><a href="{% url 'collectionEdit' collection.id %}">Edit</a></li>
-                <li><a href="{% url 'collectionDelete' collection.id %}">Delete</a></li>
+                <li><a href="{% url 'collectionDelete' collection.id %}" data-confirm="Are you sure you want to delete: {{collection.title|escape}}?">Delete</a></li>
             </ul>
         {% endif %}
     </div>
@@ -30,7 +30,7 @@
 
                     {% if collection.id in user_collection_role.ADMIN %}
                         <li><a class="adminMenuBtn" href="{% url 'deckEdit' deck.id %}">Edit</a></li>
-                        <li><a class="adminMenuBtn" href="{% url 'deckDelete' deck.id %}">Delete</a></li>
+                        <li><a class="adminMenuBtn" href="{% url 'deckDelete' deck.id %}" data-confirm="Are you sure you want to delete: {{deck.title|escape}}?">Delete</a></li>
                     {% endif %}
                     </ul>
                 </li>
