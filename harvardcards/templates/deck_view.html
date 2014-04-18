@@ -19,7 +19,7 @@
         <!-- SECTION: Header -->
         <div class="courseHeader">
             <h2 class="courseTitle"><a href="{% url 'collectionIndex' collection.id %}">{{collection.title}}</a></h2>
-            <h3>{{deck.title}}</h3>
+            <h3 data-editable="yes" data-editable-field="title" data-editable-url="{% url 'apiDeckRename' deck.id %}">{{deck.title}}</h3>
             <ul class="adminMenu adminMenuRight">
                 {% if is_deck_admin %}
                     <li><a href="{% url 'deckEdit' deck.id %}">Edit</a></li>

@@ -1,4 +1,4 @@
-define(['jquery','components/slider/DeckSlider','views/CardForm'], function($,DeckSlider,CardForm) {
+define(['jquery','components/slider/DeckSlider','components/InlineEditor', 'views/CardForm'], function($,DeckSlider,InlineEditor,CardForm) {
 
 var initModule = function() {
 	var deck_slider = new DeckSlider($(".slider").first());
@@ -119,6 +119,24 @@ var initModule = function() {
 	    return false;
 	});
 
+	$("[data-editable]").each(function(index, el) {
+		var $el = $(el);
+		var enabled = $el.data('editable');
+		var url = $el.data('editable-url');
+		var field = $el.data('editable-field');
+		if(enabled === 'yes') {
+			var editor = new InlineEditor($el, {
+				url: url,
+				name: 'title',
+				success: function(data, textStatus, xhr) {
+					console.log("success", arguments, this);
+				},
+				error: function(xhr, textStatus, errorThrown) {
+					window.alert("Error saving: "+ errorThrown);
+				}
+			});
+		}
+	});
 
 	var card_form = new CardForm({
 		formEl: "#cardForm",

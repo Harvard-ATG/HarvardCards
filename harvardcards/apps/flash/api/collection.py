@@ -1,3 +1,4 @@
+from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
@@ -10,24 +11,21 @@ from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, 
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
 from harvardcards.apps.flash import services, queries
 
-def delete(request):
-    """delete a collection"""
-    returnValue = "false"
-    if request.GET['id']:
-        collection_id = request.GET['id']
-        returnValue = services.deleteCollection()
-    
-    return HttpResponse('{"success": %s}' % returnValue, mimetype="application/json")
-    
-def fields(request):
+@require_http_methods(["POST"])
+def delete(request, collection_id=None):
+    """Delete a collection"""
+    result = {"success": False}
+    if collection_id is not None:
+        result['success'] = services.delete_collection(collection_id)
+        redirect_response = redirect('index')
+        result['location'] = redirect_response['Location']
+    return HttpResponse(json.dumps(result), mimetype="application/json")
+
+@require_http_methods(["GET"])
+def fields(request, collection_id=None):
     """list the fields of a collection"""
-    if 'collection_id' in request.POST:
-        field_list = queries.getFieldList(request.POST['collection_id'])           
-        fields_json = json.dumps(field_list)
-        return HttpResponse('{"success": true, "fields": %s}' % fields_json, mimetype="application/json")
-        
-    else:
-        errorMsg = "No collection_id specified."
-        for key, value in request.POST.iteritems():
-            errorMsg += "<br>" + key + " => " + value
-    return HttpResponse('{"success": true, "error": "%s"}' % errorMsg, mimetype="application/json")
+    result = {"success": False, "fields": []}
+    if collection_id is not None:
+        result['fields'] = queries.getFieldList(collection_id)
+        result['success'] = True;
+    return HttpResponse(json.dumps(result), mimetype="application/json")
