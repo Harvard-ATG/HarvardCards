@@ -22,7 +22,7 @@
             <h3>{{deck.title}}</h3>
             <ul class="adminMenu adminMenuRight">
                 {% if is_deck_admin %}
-                <li><a href="{% url 'deckDelete' deck.id %}" data-confirm="Are you sure you want to delete {{deck.title}}">Delete Deck</a></li>
+                <li><a href="{% url 'deckDelete' deck.id %}" data-confirm="Are you sure you want to delete: {{deck.title|escape}}">Delete Deck</a></li>
                 {% endif %}
                 <li>
                 {% if is_quiz_mode %}
