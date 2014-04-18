@@ -33,7 +33,6 @@ urlpatterns = patterns('',
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 
     # API
-    # Commenting these out because they aren't being used for anything yet
     url(r'^api/card/create$', 'harvardcards.apps.flash.api.card.create', name='apiCardCreate'),
     url(r'^api/card/delete$', 'harvardcards.apps.flash.api.card.delete', name='apiCardDelete'),
     url(r'^api/deck/(?P<deck_id>\d+)/delete$', 'harvardcards.apps.flash.api.deck.delete', name='apiDeckDelete'),

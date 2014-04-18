@@ -1,4 +1,4 @@
-define(['jquery','components/slider/DeckSlider', 'components/ActionButton', 'views/CardForm'], function($,DeckSlider,ActionButton,CardForm) {
+define(['jquery','components/slider/DeckSlider', 'views/CardForm', 'utils/utils'], function($,DeckSlider,CardForm,utils) {
 
 var initModule = function() {
 	var deck_slider = new DeckSlider($(".slider").first());
@@ -126,19 +126,7 @@ var initModule = function() {
 	});
 	card_form.init();
 
-	var delete_deck_button = new ActionButton($("#delete_deck"), {
-		before: function() {
-			return window.confirm("Delete deck permanently?");
-		},
-		after: function(success, data) {
-			if(success) {
-				window.location = data.location;
-			} else {
-				window.alert("Error deleting deck: " + data);
-			}
-
-		}
-	});
+	utils.setupConfirm();
 };
 
 	return {initModule:initModule};
