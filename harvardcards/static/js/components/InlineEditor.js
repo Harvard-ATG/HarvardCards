@@ -41,7 +41,7 @@ define(['jquery', 'jquery.jeditable', 'jqueryui'], function($) {
 		var data = {};
 		data[editor.name] = value;
 
-		var deferred = this.ajax({
+		var deferred = editor.ajax({
 			url: editor.url,
 			method: 'POST',
 			dataType: 'json',
