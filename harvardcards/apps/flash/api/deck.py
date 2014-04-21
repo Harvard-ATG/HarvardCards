@@ -29,5 +29,5 @@ def rename(request, deck_id=None):
         if deck_form.is_valid():
             deck = deck_form.save()
         else:
-            result['errors'] = deck_form['title'].errors
+            result['errors'] = {'title': deck_form['title'].errors}
     return HttpResponse(json.dumps(result), mimetype="application/json")

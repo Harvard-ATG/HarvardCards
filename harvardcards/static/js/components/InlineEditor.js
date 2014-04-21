@@ -15,7 +15,9 @@ define(['jquery', 'jquery.jeditable', 'jqueryui'], function($) {
 	InlineEditor.prototype.init = function() {
 		var that = this;
 		var editorConfig = {
-			select: true
+			select: true,
+			submit: "Save",
+			cancel: "Cancel"
 		};
 
 		this.url = this.options.url || '';
@@ -39,7 +41,7 @@ define(['jquery', 'jquery.jeditable', 'jqueryui'], function($) {
 		var data = {};
 		data[editor.name] = value;
 
-		var deferred = $.ajax({
+		var deferred = this.ajax({
 			url: editor.url,
 			method: 'POST',
 			dataType: 'json',
@@ -52,13 +54,18 @@ define(['jquery', 'jquery.jeditable', 'jqueryui'], function($) {
 		return value;
 	};
 
+	InlineEditor.prototype.ajax = function() {
+		return $.ajax.apply($, arguments);
+	};
+
 	InlineEditor.prototype.onSuccess = function(data, textStatus, xhr) {
-		this.highlight({color: "yellow"});
-		this.success.apply(this, arguments); 
+		var result = this.success.apply(this, arguments);
+		if(result === true || result === false) {
+			this.highlight({color: result ? "yellow" : "red"});
+		}
 	};
 
 	InlineEditor.prototype.onError = function(xhr, textStatus, errorThrown) {
-		this.highlight({color: "red"});
 		this.error.apply(this, arguments);
 	};
 
