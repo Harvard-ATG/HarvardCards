@@ -23,8 +23,8 @@ urlpatterns = patterns('',
 
     url(r'^deck$', 'harvardcards.apps.flash.views.deck.index', name='deckIndex'),
     url(r'^deck/(?P<deck_id>\d+)$', 'harvardcards.apps.flash.views.deck.index', name='deckIndex'),
-    url(r'^deck/(?P<deck_id>\d+)/edit$', 'harvardcards.apps.flash.views.deck.edit', name='deckEdit'),
-    url(r'^deck/(?P<deck_id>\d+)/delete$', 'harvardcards.apps.flash.views.deck.delete', name='deckDelete'),
+    url(r'^deck/(?P<deck_id>\d+)/edit', 'harvardcards.apps.flash.views.deck.edit', name='deckEdit'),
+    url(r'^deck/(?P<deck_id>\d+)/delete', 'harvardcards.apps.flash.views.deck.delete', name='deckDelete'),
     url(r'^deck/(?P<deck_id>\d+)/download$', 'harvardcards.apps.flash.views.deck.download_deck', name='deckDownload'),
     url(r'^deck/(?P<deck_id>\d+)/upload$', 'harvardcards.apps.flash.views.deck.upload_deck', name='deckUpload'),
     
@@ -34,12 +34,11 @@ urlpatterns = patterns('',
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 
     # API
-    # Commenting these out because they aren't being used for anything yet
-    #url(r'^collection/fields/$', 'harvardcards.apps.flash.views.api.collection.fields', name='fieldsCollection'),
-    #url(r'^collection/delete/$', 'harvardcards.apps.flash.views.api.collection.delete', name='deleteCollection'),
     url(r'^api/card/create$', 'harvardcards.apps.flash.api.card.create', name='apiCardCreate'),
     url(r'^api/card/delete$', 'harvardcards.apps.flash.api.card.delete', name='apiCardDelete'),
-    
+    url(r'^api/deck/(?P<deck_id>\d+)/delete$', 'harvardcards.apps.flash.api.deck.delete', name='apiDeckDelete'),
+    url(r'^api/collection/(?P<collection_id>\d+)/delete$', 'harvardcards.apps.flash.api.collection.delete', name='apiCollectionDelete'),
+
 	# url(r'^$', 'HarvardCards.views.home', name='home'),
     # url(r'^HarvardCards/', include('harvardcards.foo.urls')),
 

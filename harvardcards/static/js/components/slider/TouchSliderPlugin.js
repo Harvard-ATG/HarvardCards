@@ -115,7 +115,6 @@ define(['jquery'], function($) {
 				//console.log("touch event not handled", e.type);
 				break;
 		}
-		return false;
 	};
 
 	// Helper function to scroll the screen.

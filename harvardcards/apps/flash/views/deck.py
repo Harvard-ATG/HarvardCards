@@ -91,21 +91,20 @@ def edit(request, deck_id=None):
             return response
     else:
         deck_form = DeckForm(instance=deck)
-        
+
     context = {
         "deck": deck,
-        "deck_form": deck_form, 
+        "deck_form": deck_form,
         "collections": collections,
         "collection": collection
     }
 
     return render(request, 'decks/edit.html', context)
-    
+
 def upload_deck(request, deck_id=None):
     '''
     Imports a deck of cards from an excel spreadsheet.
     '''
-    print "deck_id=", deck_id
     deck = Deck.objects.get(id=deck_id)
     collections = Collection.objects.all()
     collection = Collection.objects.get(id=deck.collection.id)
@@ -127,7 +126,7 @@ def upload_deck(request, deck_id=None):
     }
 
     return render(request, 'decks/upload.html', context)
-  
+
 def download_deck(request, deck_id=None):
     '''
     Downloads an excel spreadsheet of a deck of cards.
