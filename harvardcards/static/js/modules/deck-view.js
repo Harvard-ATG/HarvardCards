@@ -1,4 +1,4 @@
-define(['jquery','components/slider/DeckSlider', 'views/CardForm', 'utils/utils'], function($,DeckSlider,CardForm,utils) {
+define(['jquery','components/slider/DeckSlider','views/CardForm', 'utils/utils'], function($,DeckSlider,CardForm,utils) {
 
 var initModule = function() {
 	var deck_slider = new DeckSlider($(".slider").first());
@@ -119,7 +119,6 @@ var initModule = function() {
 	    return false;
 	});
 
-
 	var card_form = new CardForm({
 		formEl: "#cardForm",
 		formMessageEl: "#cardForm .formMessage"
@@ -127,6 +126,7 @@ var initModule = function() {
 	card_form.init();
 
 	utils.setupConfirm();
+	utils.setupEditableTitle();
 };
 
 	return {initModule:initModule};

@@ -17,3 +17,17 @@ def delete(request, deck_id=None):
         redirect_response = redirect('collectionIndex', collection_id)
         result['location'] = redirect_response['Location']
     return HttpResponse(json.dumps(result), mimetype="application/json")
+
+@require_http_methods(["POST"])
+def rename(request, deck_id=None):
+    """Rename a deck"""
+    result = {"success": False}
+    if deck_id is not None:
+        deck = Deck.objects.get(id=deck_id)
+        deck_form = forms.DeckForm(request.POST, instance=deck)
+        result['success'] = deck_form.is_valid()
+        if deck_form.is_valid():
+            deck = deck_form.save()
+        else:
+            result['errors'] = {'title': deck_form['title'].errors}
+    return HttpResponse(json.dumps(result), mimetype="application/json")

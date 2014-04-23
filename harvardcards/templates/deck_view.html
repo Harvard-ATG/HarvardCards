@@ -19,7 +19,12 @@
         <!-- SECTION: Header -->
         <div class="courseHeader">
             <h2 class="courseTitle"><a href="{% url 'collectionIndex' collection.id %}">{{collection.title}}</a></h2>
-            <h3>{{deck.title}}</h3>
+            {% if is_deck_admin %}
+                <h3 data-editable="yes" data-editable-field="title" data-editable-url="{% url 'apiDeckRename' deck.id %}">{{deck.title}}</h3>
+                <i class="fa fa-pencil"></i>
+            {% else %}
+                <h3>{{deck.title}}</h3>
+            {% endif %}
             <ul class="adminMenu adminMenuRight">
                 {% if is_deck_admin %}
                 <li><a href="{% url 'deckDelete' deck.id %}" data-confirm="Are you sure you want to delete: {{deck.title|escape}}">Delete Deck</a></li>

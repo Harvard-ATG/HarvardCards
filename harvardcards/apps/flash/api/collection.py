@@ -1,8 +1,8 @@
+from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
 from django.core.exceptions import ViewDoesNotExist
-from django.views.decorators.http import require_http_methods
 
 from django.utils import simplejson as json
 
@@ -22,15 +22,10 @@ def delete(request, collection_id=None):
     return HttpResponse(json.dumps(result), mimetype="application/json")
 
 @require_http_methods(["GET"])
-def fields(request):
+def fields(request, collection_id=None):
     """list the fields of a collection"""
-    if 'collection_id' in request.POST:
-        field_list = queries.getFieldList(request.POST['collection_id'])           
-        fields_json = json.dumps(field_list)
-        return HttpResponse('{"success": true, "fields": %s}' % fields_json, mimetype="application/json")
-        
-    else:
-        errorMsg = "No collection_id specified."
-        for key, value in request.POST.iteritems():
-            errorMsg += "<br>" + key + " => " + value
-    return HttpResponse('{"success": true, "error": "%s"}' % errorMsg, mimetype="application/json")
+    result = {"success": False, "fields": []}
+    if collection_id is not None:
+        result['fields'] = queries.getFieldList(collection_id)
+        result['success'] = True;
+    return HttpResponse(json.dumps(result), mimetype="application/json")
