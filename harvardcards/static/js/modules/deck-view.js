@@ -1,4 +1,4 @@
-define(['jquery','components/slider/DeckSlider','views/CardForm', 'utils/utils'], function($,DeckSlider,CardForm,utils) {
+define(['jquery','components/slider/DeckSlider', 'components/InlineEditor', 'models/Deck', 'views/CardForm', 'utils/utils'], function($, DeckSlider, InlineEditor, Deck, CardForm, utils) {
 
 var initModule = function() {
 	var deck_slider = new DeckSlider($(".slider").first());
@@ -126,8 +126,40 @@ var initModule = function() {
 	card_form.init();
 
 	utils.setupConfirm();
-	utils.setupEditableTitle();
+
+	setupEditableDeckTitle();
 };
+
+// Add ability to edit inline every element with data-editable=yes.
+// Note: also requires data-editable-url (API endpoint)
+// and data-editable-field (name of the field to POST to the API)
+function setupEditableDeckTitle() {
+	$("[data-editable]").each(function(index, el) {
+		var $el = $(el);
+		var editable = $el.data('editable') || 'no';
+		var id = $el.data('editable-id') || '';
+		if(editable !== 'yes') {
+			return;
+		}
+
+		var editor = new InlineEditor($el, {
+			edit: function(editor, value, settings) {
+				var deck = new Deck({ id: id });
+				return deck.rename(value);
+			},
+			success: function(data, textStatus, xhr) {
+				var success = data.success;
+				if(!success) {
+					window.alert("Error saving: "+ data.errors[field]);
+				}
+				return success;
+			},
+			error: function(xhr, textStatus, errorThrown) {
+				window.alert("Error saving: "+ errorThrown);
+			}
+		});
+	});
+}
 
 	return {initModule:initModule};
 });
