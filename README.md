@@ -6,7 +6,7 @@ HarvardCards is a web-based flashcard application for students who want to memor
 
 # Quickstart
 
-- This is a [Django](https://www.djangoproject.com/) application. To get a development environment up and running, you should have  [Vagrant](http://www.vagrantup.com/) and [VirtualBox](https://www.virtualbox.org/) installed. 
+- This is a [Django](https://www.djangoproject.com/) application. You should have  [Vagrant](http://www.vagrantup.com/) and [VirtualBox](https://www.virtualbox.org/) installed before proceeding. Execute these commands to setup and run the development server:
 
 ```sh
 $ git clone git@github.com:Harvard-ATG/HarvardCards.git HarvardCards
