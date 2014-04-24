@@ -129,7 +129,7 @@ def handle_uploaded_deck_file(deck, uploaded_file):
 
 @transaction.commit_on_success
 def add_cards_to_deck(deck, card_list):
-    """Adds a list of cards with fields to a deck."""
+    """Adds a batch of cards with fields to a deck."""
     fields = Field.objects.all()
     card_sort_order = deck.collection.card_set.count()
     deck_sort_order = deck.cards.count()
@@ -143,6 +143,20 @@ def add_cards_to_deck(deck, card_list):
             field_value = field_item['value']
             Cards_Fields.objects.create(card=card, field=field_object, value=field_value)
     return deck
+
+@transaction.commit_on_success
+def add_card_to_deck(deck, card_item):
+    """Adds a single card with fields to a deck."""
+    fields = Field.objects.all()
+    card_sort_order = deck.collection.card_set.count() + 1
+    deck_sort_order = deck.cards.count() + 1
+    card = Card.objects.create(collection=deck.collection, sort_order=card_sort_order)
+    Decks_Cards.objects.create(deck=deck, card=card, sort_order=deck_sort_order)
+    for field_item in card_item:
+        field_object = fields.get(pk=field_item['field_id']) 
+        field_value = field_item['value']
+        Cards_Fields.objects.create(card=card, field=field_object, value=field_value)
+    return card
 
 @transaction.commit_on_success
 def create_deck_with_cards(collection_id, deck_title, card_list):

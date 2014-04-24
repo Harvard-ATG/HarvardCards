@@ -9,30 +9,35 @@ from django.db import models
 @require_http_methods(["POST"])
 def create(request):
     """Creates a new card."""
+    result = {"success": False}
     deck = Deck.objects.get(id=request.POST['deck_id'])
-    errorMsg = ''
     field_prefix = 'field_'
-    fields = []
+    card_item = []
+
     for field_name, field_value in request.FILES.items():
         if field_name.startswith(field_prefix):
             field_id = field_name.replace(field_prefix, '')
             if field_id.isdigit():
                 path = services.handle_uploaded_img_file(request.FILES[field_name], deck.id, deck.collection.id)
-                fields.append({"field_id": int(field_id), "value": path})
+                card_item.append({"field_id": int(field_id), "value": path})
 
     for field_name, field_value in request.POST.items():
         if field_name.startswith(field_prefix):
             field_id = field_name.replace(field_prefix, '')
             if field_id.isdigit():
-                fields.append({"field_id": int(field_id), "value": field_value})
+                card_item.append({"field_id": int(field_id), "value": field_value})
 
-    cards = [fields]
-    services.add_cards_to_deck(deck, cards)
+    card = services.add_card_to_deck(deck, card_item)
 
-    return HttpResponse('{"success": true, "error": "%s"}' % errorMsg, mimetype="application/json")
+    result['data'] = {"card_id": card.id}
+    result['location'] = "{0}?card_id={1}".format(deck.get_absolute_url(), card.id)
+
+    return HttpResponse(json.dumps(result), mimetype="application/json")
 
 @require_http_methods(["POST"])
-def delete(request, card_id=None):
+def delete(request):
     """Deletes a card."""
-    success = services.delete_card(card_id)
-    return HttpResponse('{"success": %s}' % success, mimetype="application/json")
+    card_id = request.POST['card_id']
+    result = {}
+    result['success'] = services.delete_card(card_id)
+    return HttpResponse(json.dumps(result), mimetype="application/json")

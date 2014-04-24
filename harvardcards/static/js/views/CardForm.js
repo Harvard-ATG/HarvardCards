@@ -1,14 +1,15 @@
-define(['lodash', 'jquery', 'jquery.form'], function(_, $) {
+define(['lodash', 'jquery', 'jquery.form', 'models/Card'], function(_, $, $form, Card) {
 
     // This module sets up the card form used for adding new cards to a deck.
     // Uses the jquery.form plugin to AJAXify the html form.
-    // TODO: move this to a separate JS file and modularize it.
     var CardForm = function(config) {
         if(!config || !config['formEl'] || !config['formMessageEl']) {
             throw new Error("invalid or missing CardForm config");
         }
         this.formEl = $(config.formEl);
         this.formMessageEl = $(config.formMessageEl);
+		this.error = $.proxy(this.error, this);
+		this.success = $.proxy(this.success, this);
     };
 
     CardForm.prototype.init = function() {
@@ -23,7 +24,7 @@ define(['lodash', 'jquery', 'jquery.form'], function(_, $) {
             error: this.error,
             success: this.success
         });
-};
+	};
 
     // Status types for showing messages (constants)
     var MSG_INFO = CardForm.MSG_INFO = "info";
@@ -34,13 +35,13 @@ define(['lodash', 'jquery', 'jquery.form'], function(_, $) {
         this.msg("Saving card...", MSG_INFO);
     };
 
-    CardForm.prototype.success = function(responseText, statusText, xhr, formEl) {
+    CardForm.prototype.success = function(data, statusText, xhr, formEl) {
         //console.log("success", arguments);
-        this.msg("Card saved", MSG_SUCCESS);
+        this.msg("Card saved. <a href=\""+data['location']+"\">Refresh</a>.", MSG_SUCCESS);
     };
 
     CardForm.prototype.error = function(xhr, textStatus, errorThrown) {
-        this.msg("Error saving card: " + textStatus, MSG_ERROR);
+        this.msg("Card error: " + textStatus, MSG_ERROR);
     };
 
     // Displays a message about the status of the form.
