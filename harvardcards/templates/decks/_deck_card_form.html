@@ -1,0 +1,13 @@
+<div class="editFields">
+    <h2>Card front</h2>
+    {% for field in card_fields.show %}
+        {% include "decks/_deck_card_form_field.html" with field=field %}
+    {% endfor %}
+</div>
+<div class="hideRevealHr"></div>
+<div class="editFields">
+    <h2>Card back</h2>
+    {% for field in card_fields.reveal reversed %}
+        {% include "decks/_deck_card_form_field.html" with field=field %}
+    {% endfor %}
+</div>

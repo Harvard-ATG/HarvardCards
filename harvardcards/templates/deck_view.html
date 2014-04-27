@@ -43,8 +43,8 @@
         {% if is_deck_admin %}
             <!--a href="javascript:void(0);" id="addCard">Add Card</a-->
             <div class="addCards">
-            	<a href="javascript:void(0);" class="btn-dashed" id="addCard">Add Card</a>
-				<a href="{% url 'deckUpload' deck.id %}" class="btn-dashed" id="uploadCards">Upload Cards</a>
+            	<a href="{% url 'deckEditCard' deck.id %}" class="btn-dashed">Add Card</a>
+				<a href="{% url 'deckUpload' deck.id %}" class="btn-dashed">Upload Cards</a>
             </div>
         {% endif %}
         <div id="{% if is_deck_admin %}cardSlider{% else %}cardSliderNotAdmin{% endif %}" class="slider" role="scrollbar" tabindex="0" aria-orientation="horizontal" data-start-card-id="{{card_id}}">
@@ -68,17 +68,10 @@
             </div>
         {% else %}
             <div class="emptySlider">
-                <h3>Empty Deck - Click on "Add Card" to start adding cards to your deck</h3>
+                <h3>Empty deck {% if is_deck_admin %}- Click "Add Card" to start adding cards to your deck{% endif %}</h3>
             </div>
         {% endif %}
         </div>
-
-
-        <!-- SECTION: Add Card Form -->
-        <div id="cardFormContainer" style="display:none">
-            {% include "_deck_card_form.html" with deck=deck card_template_fields=card_template_fields %}
-        </div>
-
 
         <!-- SECTION: Mobile Slider Controls -->
         <div class="fullcardBtns">
@@ -105,6 +98,15 @@
                 <ul id="allCards">
                     {% for card in cards %}
                     <li class="hide" role="tabpanel"  data-card-id="{{ card.card_id }}">
+                        {% if is_deck_admin %}
+                        <div class="controls">
+                            <form method="POST" action="{% url "deckDeleteCard" deck.id %}">{%csrf_token%}
+                                <input type="hidden" name="card_id" value="{{card.card_id}}"/>
+                                <button class="pull-right" data-confirm="Are you sure you want to delete this card?">Delete</button>
+                            </form>
+                            <a class="pull-right" href="{% url "deckEditCard" deck.id %}?card_id={{card.card_id}}">Edit</a>
+                        </div>
+                        {% endif %}
                         {% for field in card.fields.show %}
                             {% include "_deck_card_fields.html" with field=field %}
                         {% endfor %}

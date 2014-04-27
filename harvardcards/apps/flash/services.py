@@ -126,6 +126,16 @@ def handle_uploaded_deck_file(deck, uploaded_file):
     file_contents = uploaded_file.read()
     parsed_cards = utils.parse_deck_template_file(deck.collection.card_template, file_contents)
     add_cards_to_deck(deck, parsed_cards)
+ 
+@transaction.commit_on_success
+def update_card_fields(card, field_items):
+    field_ids = [f['field_id'] for f in field_items]
+    field_map = dict((f['field_id'],f) for f in field_items)
+    cfields = card.cards_fields_set.filter(field__id__in=field_ids)
+    for cfield in cfields:
+        field_id = cfield.field.id
+        cfield.value = field_map[field_id]['value']
+        cfield.save()
 
 @transaction.commit_on_success
 def add_cards_to_deck(deck, card_list):
@@ -143,6 +153,20 @@ def add_cards_to_deck(deck, card_list):
             field_value = field_item['value']
             Cards_Fields.objects.create(card=card, field=field_object, value=field_value)
     return deck
+
+@transaction.commit_on_success
+def add_card_to_deck(deck, card_item):
+    """Adds a single card with fields to a deck."""
+    fields = Field.objects.all()
+    card_sort_order = deck.collection.card_set.count() + 1
+    deck_sort_order = deck.cards.count() + 1
+    card = Card.objects.create(collection=deck.collection, sort_order=card_sort_order)
+    Decks_Cards.objects.create(deck=deck, card=card, sort_order=deck_sort_order)
+    for field_item in card_item:
+        field_object = fields.get(pk=field_item['field_id']) 
+        field_value = field_item['value']
+        Cards_Fields.objects.create(card=card, field=field_object, value=field_value)
+    return card
 
 @transaction.commit_on_success
 def create_deck_with_cards(collection_id, deck_title, card_list):
