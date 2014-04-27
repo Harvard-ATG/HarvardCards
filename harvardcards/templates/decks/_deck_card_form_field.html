@@ -1,0 +1,28 @@
+{% if field.type == 'T' %}
+    <i class="fa fa-font fa-2x pull-left"></i>
+{% elif field.type == 'I' %}
+    <i class="fa fa-picture-o fa-2x pull-left"></i>
+{% elif field.type == 'V' %}
+    <i class="fa fa-film fa-2x pull-left"></i>
+{% elif field.type == 'A' %}
+    <i class="fa fa-microphone fa-2x pull-left"></i>
+{% endif %}
+<fieldset>
+    <label for="{{field.label}}">{{field.label}}</label>
+    {% if field.type == 'I' %} 
+        {% if field.value != '' %}
+        <img src="{{MEDIA_URL}}{{field.value}}" alt="{{field.label}}" class="cardFieldImage"/>
+        <div>
+            <a href="{{MEDIA_URL}}originals/{{field.value}}" target="_blank">
+                <i class="fa fa-external-link"></i>
+                <span class="control-text">View Full Size Image</span>
+            </a>
+        </div>
+        {% endif %}
+        <input id="{{field.label}}" name="field_{{field.id}}" class="formEle form" type="file" placeholder="Enter {{field.label}}" value="{{field.value}}" />
+    {% elif field.type == 'T' or field.type == 'V' or field.type == 'A' %}
+        <input id="{{field.label}}" name="field_{{field.id}}" class="formEle form" type="text" placeholder="Enter {{field.label}}" value="{{field.value}}" />
+	{% else %}
+		<b>ERROR - FIELD TYPE NOT SUPPORTED: {{field.type}}</b>
+    {% endif %}
+</fieldset>

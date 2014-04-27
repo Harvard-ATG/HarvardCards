@@ -119,12 +119,6 @@ var initModule = function() {
 	    return false;
 	});
 
-	var card_form = new CardForm({
-		formEl: "#cardForm",
-		formMessageEl: "#cardForm .formMessage"
-	});
-	card_form.init();
-
 	utils.setupConfirm();
 	utils.setupEditableTitle();
 };
