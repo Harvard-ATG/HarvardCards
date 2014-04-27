@@ -105,7 +105,7 @@
                 <ul id="allCards">
                     {% for card in cards %}
                     <li class="hide" role="tabpanel"  data-card-id="{{ card.card_id }}">
-                        {% if is_deck_admin %}
+                        {% if is_edit_mode and is_deck_admin %}
                         <div class="controls">
                             <form method="POST" action="{% url "deckDeleteCard" deck.id %}">{%csrf_token%}
                                 <input type="hidden" name="card_id" value="{{card.card_id}}"/>
