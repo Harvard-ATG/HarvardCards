@@ -27,7 +27,6 @@
             {% endif %}
             <ul class="adminMenu adminMenuRight">
                 {% if is_deck_admin and is_edit_mode %}
-                    <li><a href="{% url 'deckEdit' deck.id %}">Edit</a></li>
 					<li><a href="{% url 'deckDelete' deck.id %}" data-confirm="Are you sure you want to delete: {{deck.title|escape}}">Delete Deck</a></li>
                 {% endif %}
                 <li>
@@ -58,8 +57,8 @@
         <div id="{% if is_deck_admin and is_edit_mode %}cardSlider{% else %}cardSliderNotAdmin{% endif %}" role="scrollbar" tabindex="0" aria-orientation="horizontal" class="slider" data-start-card-id="{{card_id}}">
         {% if cards|length %}
             <div class="sliderBtns deckPrev">
-                <a id="previous_card" href="#"><i class="fa fa-angle-left"></i><span>Previous</span></a>
-                <a id="first_card" href="#"><i class="fa fa-angle-double-left"></i><span>First</span></a>
+                <a id="previous_card" href="javascript:void(0)"><i class="fa fa-angle-left"></i><span>Previous</span></a>
+                <a id="first_card" href="javascript:void(0)"><i class="fa fa-angle-double-left"></i><span>First</span></a>
             </div>
 
             <div class="emptySlider" id="initDeck">
@@ -71,8 +70,8 @@
             </div>
 
             <div class="sliderBtns deckNext">
-                <a id="next_card" href="#"><i class="fa fa-angle-right"></i><span>Next</span></a>
-                <a id="last_card" href="#"><i class="fa fa-angle-double-right"></i><span>Last</span></a>
+                <a id="next_card" href="javascript:void(0)"><i class="fa fa-angle-right"></i><span>Next</span></a>
+                <a id="last_card" href="javascript:void(0)"><i class="fa fa-angle-double-right"></i><span>Last</span></a>
             </div>
         {% else %}
             <div class="emptySlider">
@@ -83,10 +82,10 @@
 
         <!-- SECTION: Mobile Slider Controls -->
         <div class="fullcardBtns">
-            <a class="mobileFirst" href="#"><i class="fa fa-angle-double-left"></i><span>First</span></a>
-            <a class="mobilePrevious" href="#"><i class="fa fa-angle-left"></i><span>Previous</span></a>
-            <a class="mobileNext" href="#"><i class="fa fa-angle-right"></i><span>Next</span></a>
-            <a class="mobileLast" href="#"><i class="fa fa-angle-double-right"></i><span>Last</span></a>
+            <a class="mobileFirst" href="javascript:void(0)"><i class="fa fa-angle-double-left"></i><span>First</span></a>
+            <a class="mobilePrevious" href="javascript:void(0)"><i class="fa fa-angle-left"></i><span>Previous</span></a>
+            <a class="mobileNext" href="javascript:void(0)"><i class="fa fa-angle-right"></i><span>Next</span></a>
+            <a class="mobileLast" href="javascript:void(0)"><i class="fa fa-angle-double-right"></i><span>Last</span></a>
         </div>
 
 
@@ -97,9 +96,9 @@
                 <div id="counter"></div>
             </div>
             <div class="controls" id="controlbar">
-              <a class="pull-right" id="shuffle_cards" href="#"><i id="shuffle" class="fa fa-random"></i><span class="control-text">Shuffle</span></a>
-              <a class="pull-right" id="play_cards" href="#"><i id="play" class="fa fa-play"></i><span class="control-text">Play</span></a>
-              <a class="pull-right" id="full_screen" href="#"><i id="full" class="fa fa-expand"></i><span class="control-text">Full Screen</span></a>
+              <a class="pull-right" id="shuffle_cards" href="javascript:void(0)"><i id="shuffle" class="fa fa-random"></i><span class="control-text">Shuffle</span></a>
+              <a class="pull-right" id="play_cards" href="javascript:void(0)"><i id="play" class="fa fa-play"></i><span class="control-text">Play</span></a>
+              <a class="pull-right" id="full_screen" href="javascript:void(0)"><i id="full" class="fa fa-expand"></i><span class="control-text">Full Screen</span></a>
             </div>
             {% endif %}
             <div id="cardOverflow">
@@ -120,7 +119,7 @@
                         {% endfor %}
                         <div class="hideRevealHr">
                             {% if is_quiz_mode %}
-                            <a href="#" class="reveal">Reveal</a>
+                            <a href="javascript:void(0)" class="reveal">Reveal</a>
                             {% endif %}
                         </div>
                         <div class="{% if is_quiz_mode %}hide{% endif %}">

@@ -29,16 +29,11 @@
                 <h2>{{ deck.title }}</h2>
                 <p><h3>{{ deck.num_cards }}</h3> {% if deck.num_cards == 1 %}Card {% else %}Cards{% endif %}</p>
                 <ul class="deckMenu">
-                    {% if is_edit_mode %}
-                    <li><a class="viewReview" href="{% url 'deckIndex' deck.id %}?instructor=edit">Review</a></li>
-                    <li><a class="viewReview" href="{% url 'deckIndex' deck.id %}?mode=quiz&instructor=edit">Quiz</a></li>
+                    {% if is_edit_mode and collection.id in user_collection_role.ADMIN %}
+                    <li><a class="viewReview" href="{% url 'deckIndex' deck.id %}?instructor=edit">Edit</a></li>
                     {% else %}
                     <li><a class="viewReview" href="{% url 'deckIndex' deck.id %}">Review</a></li>
                     <li><a class="viewReview" href="{% url 'deckIndex' deck.id %}?mode=quiz">Quiz</a></li>
-                    {% endif %}
-                    {% if collection.id in user_collection_role.ADMIN and is_edit_mode %}
-                        <li><a class="adminMenuBtn" href="{% url 'deckEdit' deck.id %}">Edit</a></li>
-                        <li><a class="adminMenuBtn" href="{% url 'deckDelete' deck.id %}" data-confirm="Are you sure you want to delete: {{deck.title|escape}}?">Delete</a></li>
                     {% endif %}
                     </ul>
                 </li>

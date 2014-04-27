@@ -1,25 +1,25 @@
 define(['jquery', 'jquery.cookie', 'jquery.appendAround', 'views/urlManipulate'], function(jquery, jqueryCookie, jqueryAppend, urlManipulate) {
+    function instructorEditMode(href, enabled) {
+        var href = location.href;
+        if(enabled) {
+            return urlManipulate.addParameter(href, 'instructor', 'edit', false);
+        } 
+        return urlManipulate.removeURLParameter(href, 'instructor');
+    }
+
 	return {
 		initModule: function(el) {
 			this.setupCSRF();
 			this.setupAppNav();
-			this.setupEditBtn();
-			this.setupViewBtn();
+            this.setupInstructorModeButton("#viewMode", false);
+            this.setupInstructorModeButton("#editMode", true);
 		},
-		setupViewBtn: function(){
-		    $('#viewMode').click(function(){
-                location.href = urlManipulate.removeURLParameter(this.href, 'instructor');
+		setupInstructorModeButton: function(el, enabled){
+            $(el).on("click", function() {
+                location.href = instructorEditMode(location.href, enabled);
                 return false;
-            })
+            });
 		},
-
-		setupEditBtn: function(){
-		    $('#editMode').click(function(){
-                location.href=urlManipulate.addParameter(this.href,'instructor','edit', false);
-                return false;
-            })
-		},
-
 		setupCSRF: function() {
 			var csrftoken = $.cookie('csrftoken');
 			function csrfSafeMethod(method) {
