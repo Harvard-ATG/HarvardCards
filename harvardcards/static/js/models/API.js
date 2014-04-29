@@ -67,7 +67,7 @@ define(['module', 'jquery'], function(module, $) {
 			dataType: this.config.dataType,
 			data: this.config.data
 		};
-		console.log(url, settings);
+		//console.log(url, settings);
 		return $.ajax(url, settings);
 	};
 
