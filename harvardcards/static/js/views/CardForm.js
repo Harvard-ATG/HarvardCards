@@ -1,4 +1,4 @@
-define(['lodash', 'jquery', 'jquery.form', 'models/Card'], function(_, $, $form, Card) {
+define(['lodash', 'jquery', 'jquery.form'], function(_, $, $form) {
 
     // This module sets up the card form used for adding new cards to a deck.
     // Uses the jquery.form plugin to AJAXify the html form.
