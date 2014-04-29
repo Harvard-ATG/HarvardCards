@@ -1,18 +1,18 @@
 {% extends "__layout_left_sidebar.html" %}
 
 {% block sidebar_content %}
-	{% include "_collection_nav.html" with collections=collections collection=collection %}
+	{% include "_deck_nav.html" with collections=collections collection=collection deck=deck%}
 {% endblock %}
 
 {% block main_content %}
 <div id="content"><!-- content (start) -->
     <div class="courseWrapper">
         <div class="courseHeader">
-            <h2>Upload Deck</h2>
+            <h2>Upload cards to deck</h2>
         </div>
 
         <div style="margin: 0 0 1em 0">
-             Download the <a href="{% url 'collectionDownloadTemplate' collection.id %}">flashcard template</a> to create your deck. 
+              Add cards to the <a href="{% url 'collectionDownloadTemplate' collection.id %}">flashcard template <i class="fa fa-download"></i></a> and then upload it using the form below.
         </div>
 
         <form action="{% url 'deckUpload' deck.id %}" method="post" {% if deck_form.is_multipart %}enctype="multipart/form-data"{% endif %}>{% csrf_token %}

@@ -6,17 +6,11 @@ HarvardCards is a web-based flashcard application for students who want to memor
 
 # Quickstart
 
-- Requires [Python 2.7.x](http://python.org/download/releases/) and [Pip](http://www.pip-installer.org/) to install. 
-- To install Pip, see [their instructions](http://www.pip-installer.org/en/latest/installing.html).
+- This is a [Django](https://www.djangoproject.com/) application. You should have  [Vagrant](http://www.vagrantup.com/) and [VirtualBox](https://www.virtualbox.org/) installed before proceeding. Execute these commands to setup and run the development server:
 
 ```sh
-pip install -r requirements.txt
+$ git clone git@github.com:Harvard-ATG/HarvardCards.git && cd HarvardCards
+$ vagrant up
 ```
 
-```sh
-$ git clone git@github.com:Harvard-ATG/HarvardCards.git HarvardCards
-$ cd HarvardCards
-$ ./manage.py syncdb
-$ ./manage.py runserver
-```
-You should now be able to run the application on your localhost at ```http://127.0.0.1:8000```. 
+You should now be able to access the application at: ```http://localhost:8080```

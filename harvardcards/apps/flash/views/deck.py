@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.views.decorators.http import require_http_methods
 from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
 from django.core.exceptions import ViewDoesNotExist
@@ -9,6 +10,8 @@ from django.forms.formsets import formset_factory
 from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Users_Collections
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm, DeckImportForm
 from harvardcards.apps.flash import services, queries, utils
+
+import urllib
 
 def index(request, deck_id=None):
     """Displays the deck of cards for review/quiz."""
@@ -40,25 +43,11 @@ def index(request, deck_id=None):
             'fields': card_fields
         })
 
-    card_template_fields = {'show':[],'reveal':[]}
-    for field in current_collection.card_template.fields.all():
-        if field.display:
-            bucket = 'show'
-        else:
-            bucket = 'reveal'
-        card_template_fields[bucket].append({
-            'id': field.id,
-            'type': field.field_type,
-            'label': field.label,
-            'show_label': field.show_label,
-        })
-
     context = {
+        "collection": current_collection,
         "collections": collections,
         "deck": deck,
         "cards": cards,
-        "collection": current_collection,
-        "card_template_fields": card_template_fields,
         "is_quiz_mode": is_quiz_mode,
         "is_deck_admin": is_deck_admin,
         "card_id": card_id
@@ -71,29 +60,6 @@ def delete(request, deck_id=None):
     collection_id = queries.getDeckCollectionId(deck_id)
     services.delete_deck(deck_id)
     return redirect('collectionIndex', collection_id)
-
-def edit(request, deck_id=None):
-    """Edits a deck."""
-    deck = Deck.objects.get(id=deck_id)
-    collections = Collection.objects.all()
-    collection = Collection.objects.get(id=deck.collection.id)
-
-    if request.method == 'POST':
-        deck_form = DeckForm(request.POST, instance=deck)
-        if deck_form.is_valid():
-            deck = deck_form.save()
-            return redirect(deck)
-    else:
-        deck_form = DeckForm(instance=deck)
-
-    context = {
-        "deck": deck,
-        "deck_form": deck_form,
-        "collections": collections,
-        "collection": collection
-    }
-
-    return render(request, 'decks/edit.html', context)
 
 def upload_deck(request, deck_id=None):
     '''
@@ -133,3 +99,83 @@ def download_deck(request, deck_id=None):
     response.write(file_output)
 
     return response
+
+def edit_card(request, deck_id=None):
+    """Add a new card to the deck."""
+    deck = Deck.objects.get(id=deck_id)
+    current_collection = Collection.objects.get(id=deck.collection.id)
+    collections = Collection.objects.all().prefetch_related('deck_set')
+
+    if request.method == 'POST':
+        errorMsg = ''
+        field_prefix = 'field_'
+        fields = []
+        for field_name, field_value in request.FILES.items():
+            if field_name.startswith(field_prefix):
+                field_id = field_name.replace(field_prefix, '')
+                if field_id.isdigit():
+                    if request.FILES[field_name].size > 0:
+                        path = services.handle_uploaded_img_file(request.FILES[field_name], deck.id, deck.collection.id)
+                        fields.append({"field_id": int(field_id), "value": path})
+
+        for field_name, field_value in request.POST.items():
+            if field_name.startswith(field_prefix):
+                field_id = field_name.replace(field_prefix, '')
+                if field_id.isdigit():
+                    fields.append({"field_id": int(field_id), "value": field_value})
+
+        if request.POST.get('card_id', '') == '':
+            card = services.add_card_to_deck(deck, fields)
+        else:
+            card = Card.objects.get(id=request.POST.get('card_id'))
+            services.update_card_fields(card, fields)
+
+        params = {"card_id":card.id}
+        return redirect(deck.get_absolute_url() + '?' + urllib.urlencode(params))
+
+    card_fields = {'show':[],'reveal':[]}
+    if request.GET.get('card_id', '') == '':
+        for field in current_collection.card_template.fields.all():
+            if field.display:
+                bucket = 'show'
+            else:
+                bucket = 'reveal'
+            card_fields[bucket].append({
+                'id': field.id,
+                'type': field.field_type,
+                'label': field.label,
+                'show_label': field.show_label,
+                'value': ''
+            })
+    else:
+        card = Card.objects.get(id=request.GET.get('card_id'))
+        for cfield in card.cards_fields_set.all():
+            if cfield.field.display:
+                bucket = 'show'
+            else:
+                bucket = 'reveal'
+            card_fields[bucket].append({
+                'id': cfield.field.id,
+                'type': cfield.field.field_type,
+                'label': cfield.field.label,
+                'show_label': cfield.field.show_label,
+                'value': cfield.value,
+            })
+
+    context = {
+        "deck": deck,
+        "card_id": request.GET.get('card_id', ''),
+        "collection": current_collection,
+        "collections": collections,
+        "card_fields": card_fields,
+    }
+
+    return render(request, 'decks/edit_card.html', context)
+
+@require_http_methods(["POST"])
+def delete_card(request, deck_id=None):
+    """Deletes a card."""
+    deck = Deck.objects.get(id=deck_id)
+    card_id = request.POST.get('card_id', None)
+    success = services.delete_card(card_id)
+    return redirect(deck)

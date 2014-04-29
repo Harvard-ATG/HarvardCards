@@ -126,6 +126,16 @@ def handle_uploaded_deck_file(deck, uploaded_file):
     file_contents = uploaded_file.read()
     parsed_cards = utils.parse_deck_template_file(deck.collection.card_template, file_contents)
     add_cards_to_deck(deck, parsed_cards)
+ 
+@transaction.commit_on_success
+def update_card_fields(card, field_items):
+    field_ids = [f['field_id'] for f in field_items]
+    field_map = dict((f['field_id'],f) for f in field_items)
+    cfields = card.cards_fields_set.filter(field__id__in=field_ids)
+    for cfield in cfields:
+        field_id = cfield.field.id
+        cfield.value = field_map[field_id]['value']
+        cfield.save()
 
 @transaction.commit_on_success
 def add_cards_to_deck(deck, card_list):
