@@ -1,4 +1,4 @@
-define(['jquery', 'jquery.cookie', 'jquery.appendAround', 'views/urlManipulate'], function(jquery, jqueryCookie, jqueryAppend, urlManipulate) {
+define(['jquery', 'jquery.cookie', 'jquery.appendAround', 'jquery.scrollTo'], function(jquery, jqueryCookie, jqueryAppend, jqueryScrollTo) {
 	return {
 		initModule: function(el) {
 			this.setupCSRF();
@@ -28,6 +28,14 @@ define(['jquery', 'jquery.cookie', 'jquery.appendAround', 'views/urlManipulate']
 			// 
 			// See also: https://github.com/filamentgroup/AppendAround
 			$(".appNav").appendAround(); 
+		
+			// Scroll to the visible mobile nav menu
+			$("#mobileMenu").on("click", function(e) {
+				var target = $('[data-set=mobileNav]:visible');
+				if(target.length == 1) {
+					$("html,body").scrollTo(target, 300);
+				}
+			});
 		}
 	};
 });
