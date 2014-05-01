@@ -1,4 +1,4 @@
-The *js* directory is organized as follows:
+This directory is organized as follows:
 
 ├── components/ Packages of collaborating objects/classes.
 ├── lib/        Third-party packages and libraries (i.e. jQuery, etc)
