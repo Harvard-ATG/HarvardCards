@@ -20,8 +20,7 @@ define(['jquery', 'jquery.jeditable', 'jqueryui'], function($) {
 			cancel: "Cancel"
 		};
 
-		this.url = this.options.url || '';
-		this.name = this.options.name || 'field_name';
+		this.edit = this.options.edit || function() {}; // edit callback
 		this.success = this.options.success || function() {}; // success callback
 		this.error = this.options.error || function() {}; // error callback
 
@@ -38,24 +37,10 @@ define(['jquery', 'jquery.jeditable', 'jqueryui'], function($) {
 	};
 
 	InlineEditor.prototype.handleEdit = function(editor, value, settings) {
-		var data = {};
-		data[editor.name] = value;
-
-		var deferred = editor.ajax({
-			url: editor.url,
-			method: 'POST',
-			dataType: 'json',
-			data: data
-		});
-		
+		var deferred = editor.edit(editor, value, settings);
 		deferred.done(editor.onSuccess);
 		deferred.fail(editor.onError);
-
 		return value;
-	};
-
-	InlineEditor.prototype.ajax = function() {
-		return $.ajax.apply($, arguments);
 	};
 
 	InlineEditor.prototype.onSuccess = function(data, textStatus, xhr) {

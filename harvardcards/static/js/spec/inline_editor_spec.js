@@ -15,42 +15,34 @@ define(['lodash','jquery','components/InlineEditor'], function(_, $, InlineEdito
 	describe("InlineEditor", function() {
 		it("creates an instance", function() {
 			var fixture = getFixture('xyz');
-			var options = {
-				url: '/api/foo',
-				name: 'foo'
-			};
-			var editor = new InlineEditor(fixture, options);
+			var editor = new InlineEditor(fixture, {});
 			expect(editor.el.get(0)).toBe(fixture.get(0));
-			expect(editor.url).toBe(options.url);
-			expect(editor.name).toBe(options.name);
 		});
 
 		it("executes callback on edit", function() {
-			var old_value = "oldvalue", new_value = "newvalue";
-			var fixture = getFixture(old_value);
+			var editor = null; 
+			var result = null;
+			var new_value = 'bar';
+			var fixture = getFixture('foo');
 			var options = {
-				url: '/api/foo',
-				name: 'foo',
+				edit: function() {
+					var deferred = new $.Deferred();
+					deferred.resolve(); // resolve immediately
+					return deferred;
+				},
 				success: function() {},
 				error: function() {}
 			};
-			var editor, result;
 
 			spyOn(options, 'success');
 			spyOn(options, 'error');
+			spyOn(options, 'edit').andCallThrough();
 
 			editor = new InlineEditor(fixture, options);
-
-			spyOn(editor, 'ajax').andCallFake(function() {
-				var deferred = new $.Deferred();
-				deferred.resolve(); // resolve immediately
-				return deferred;
-			});
-
 			result = editor.handleEdit(editor, new_value, {});
 
 			expect(result).toBe(new_value);
-			expect(editor.ajax).toHaveBeenCalled();
+			expect(options.edit).toHaveBeenCalled();
 			expect(options.success).toHaveBeenCalled();
 			expect(options.error).not.toHaveBeenCalled();
 		});

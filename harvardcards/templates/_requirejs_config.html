@@ -32,6 +32,12 @@ requirejs.config({
         },
         'lodash' : '_'
     },
+    config: {
+        'models/API': {
+            apiKey: null, {# TODO: not implemented yet #}
+            apiRoot: "{% url 'apiRoot' %}"
+        }
+    },
     {% if debug %}
     'urlArgs': ('t='+(new Date().getTime()))
     {% endif %}
