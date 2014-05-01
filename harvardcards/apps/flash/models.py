@@ -133,9 +133,12 @@ class Users_Collections(models.Model):
     )
     role = models.CharField(max_length=1, choices=ROLES, default='G')
     date_joined = models.DateField()
+    class Meta:
+        verbose_name = 'Users Collections'
+        verbose_name_plural = 'Users Collections'
 
     def __unicode__(self):
-        return "User: " + str(self.user.id) + " Collection: " + str(self.collection.title) + " Role: " + str(self.role)
+        return "User: " + str(self.user.email) + " Collection: " + str(self.collection.title) + " Role: " + str(self.role)
 
     @classmethod
     def get_role_buckets(self, user, collections):

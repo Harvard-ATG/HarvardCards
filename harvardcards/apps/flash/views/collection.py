@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
 from django.core.exceptions import ViewDoesNotExist
+from django.contrib.auth.models import User
 
 from django.utils import simplejson as json
 
@@ -9,6 +10,7 @@ from django.forms.formsets import formset_factory
 from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
 from harvardcards.apps.flash import forms, services, queries, utils
+import datetime
 
 def index(request, collection_id=None):
     """Displays a set of collections."""
@@ -58,12 +60,18 @@ def index(request, collection_id=None):
 def create(request):
     """Creates a collection."""
     collections = Collection.objects.all()
-
     if request.method == 'POST':
         collection_form = CollectionForm(request.POST)
         if collection_form.is_valid():
             collection = collection_form.save()
-            return redirect(collection)
+            if request.POST.get('user_id', 0):
+                user_id = int(request.POST['user_id'])
+                user = User.objects.get(id=user_id)
+                Users_Collections.objects.create(user=user, collection=collection, role='A', date_joined=datetime.date.today())
+
+            response =  redirect(collection)
+            response['Location'] += '?instructor=edit'
+            return response
     else:
         collection_form = CollectionForm()
         
@@ -83,7 +91,9 @@ def edit(request, collection_id=None):
         collection_form = CollectionForm(request.POST, instance=collection)
         if collection_form.is_valid():
             collection = collection_form.save()
-            return redirect(collection)
+            response = redirect(collection)
+            response['Location'] += '?instructor=edit'
+            return response
     else:
         collection_form = CollectionForm(instance=collection)
         
@@ -104,7 +114,37 @@ def add_deck(request, collection_id=None):
 def delete(request, collection_id=None):
     """Deletes a collection."""
     services.delete_collection(collection_id)
-    return redirect('index')
+    response = redirect('collectionIndex')
+    response['Location'] += '?instructor=edit'
+    return response
+
+def upload_deck(request, collection_id=None):
+    '''
+    Uploads a deck of cards from an excel spreadsheet.
+    '''
+    collections = Collection.objects.all().prefetch_related('deck_set')
+    collection = Collection.objects.get(id=collection_id)
+
+    if request.method == 'POST':
+        form = forms.DeckImportForm(request.POST, request.FILES)
+        if form.is_valid():
+            if 'file' in request.FILES:
+                deck = services.handle_uploaded_deck_file(collection_id, form.cleaned_data['deck_title'], request.FILES['file'])
+            else:
+                deck = Deck.objects.create(collection=collection, title=form.cleaned_data['deck_title'])
+            response =  redirect(deck)
+            response['Location'] += '?instructor=edit'
+            return response
+    else:
+        form = forms.DeckImportForm()
+
+    context = {
+        "form": form, 
+        "collection": collection,
+        "collections": collections
+    }
+
+    return render(request, 'collections/upload_deck.html', context)
 
 def download_template(request, collection_id=None):
     '''

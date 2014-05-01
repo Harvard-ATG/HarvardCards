@@ -1,18 +1,20 @@
 <div id="navigation">
-    {% if user.is_authenticated and not collection %}
-        <a href="{% url 'collectionCreate' %}" id="addAcourse">Add a course</a>
-    {% endif %}
+	{% if not collection %}
+		{% if user.is_staff or user.is_superuser %}
+			<a href="{% url 'collectionCreate' %}" id="addAcourse">Add a course</a>
+		{% endif %}
+	{% endif %}
     <nav class="desktopNav" data-set="mobileNav">
         <ul>
             <li>
-                <a href="{% url 'index' %}">Home</a>
+                <a href="{% url 'index' %}?instructor=edit">Home</a>
             </li>
             {% for c in collections %}
                 <li>
                     {% if c == collection %}
                         <a href="{% url 'collectionIndex' c.id %}" class="active">{{ c.title|truncatechars:30 }}</a>
                     {% else %}
-                        <a href="{% url 'collectionIndex' c.id %}">{{ c.title|truncatechars:30 }}</a>
+                         <a href="{% url 'collectionIndex' c.id %}">{{ c.title|truncatechars:30 }}</a>
                     {% endif %}
 
                     {% if c == collection %}

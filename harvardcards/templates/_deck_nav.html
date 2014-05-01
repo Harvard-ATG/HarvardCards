@@ -1,14 +1,17 @@
 <div id="navigation"><!-- navigaton (start) -->
 	<nav class="desktopNav" data-set="mobileNav">
 		<ul class="appNav">
-			<li><a href="{% url 'index' %}">Home</a></li>
+			<li>
+                <a href="{% url 'index' %}">Home</a>
+			</li>
 		    {% for c in collections %}
                 <li>
                     {% if c == collection %}
-                         <a href="{% url 'collectionIndex' c.id %}" class = "active">{{ c.title|truncatechars:30 }}</a>
+                        <a href="{% url 'collectionIndex' c.id %}" class="active">{{ c.title|truncatechars:30 }}</a>
                     {% else %}
                          <a href="{% url 'collectionIndex' c.id %}">{{ c.title|truncatechars:30 }}</a>
                     {% endif %}
+
                     {% if c == collection %}
                         {% if c.deck_set.count > 0 %}
                         <ul>
@@ -16,15 +19,15 @@
                             <li>
                                 {% if is_quiz_mode %}
                                     {% if d == deck %}
-                                    <a href="{% url 'deckIndex' d.id %}?mode=quiz" class = "active">{{ d.title|truncatechars:30}}</a>
+                                        <li><a href="{% url 'deckIndex' d.id %}?mode=quiz" class="active">{{ d.title|truncatechars:30}}</a></li>
                                     {% else %}
-                                    <a href="{% url 'deckIndex' d.id %}?mode=quiz">{{ d.title|truncatechars:30}}</a>
+                                        <li><a href="{% url 'deckIndex' d.id %}?mode=quiz">{{ d.title|truncatechars:30}}</a></li>
                                     {% endif %}
                                 {% else %}
                                     {% if d == deck %}
-                                    <a href="{% url 'deckIndex' d.id %}" class = "active">{{ d.title|truncatechars:30}}</a>
+                                        <li><a href="{% url 'deckIndex' d.id %}" class="active">{{ d.title|truncatechars:30}}</a></li>
                                     {% else %}
-                                    <a href="{% url 'deckIndex' d.id %}">{{ d.title|truncatechars:30}}</a>
+                                        <li><a href="{% url 'deckIndex' d.id %}">{{ d.title|truncatechars:30}}</a></li>
                                     {% endif %}
                                 {% endif %}
 

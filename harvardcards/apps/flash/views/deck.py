@@ -50,7 +50,7 @@ def index(request, deck_id=None):
         "cards": cards,
         "is_quiz_mode": is_quiz_mode,
         "is_deck_admin": is_deck_admin,
-        "card_id": card_id
+        "card_id": card_id,
     }
 
     return render(request, "deck_view.html", context)
@@ -59,7 +59,9 @@ def delete(request, deck_id=None):
     """Deletes a deck."""
     collection_id = queries.getDeckCollectionId(deck_id)
     services.delete_deck(deck_id)
-    return redirect('collectionIndex', collection_id)
+    response =  redirect('collectionIndex', collection_id)
+    response['Location'] += '?instructor=edit'
+    return response
 
 def upload_deck(request, deck_id=None):
     '''

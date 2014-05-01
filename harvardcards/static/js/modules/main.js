@@ -1,4 +1,4 @@
-define(['jquery', 'jquery.cookie', 'jquery.appendAround'], function($) {
+define(['jquery', 'jquery.cookie', 'jquery.appendAround', 'views/urlManipulate'], function(jquery, jqueryCookie, jqueryAppend, urlManipulate) {
 	return {
 		initModule: function(el) {
 			this.setupCSRF();

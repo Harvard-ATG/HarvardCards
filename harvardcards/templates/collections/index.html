@@ -1,13 +1,13 @@
 {% extends "__layout_left_sidebar.html" %}
 
 {% block sidebar_content %}
-    {% include "_collection_nav.html" with collections=collections collection=display_collection %}
+    {% include "_collection_nav.html" with collections=collections collection=display_collection is_edit_mode=is_edit_mode %}
 {% endblock %}
 
 {% block main_content %}
 <div id="content" data-module="collections-index">
 	{% for collection in display_collections %}
-        {% include "_collection_view.html" with collection=collection user_collection_role=user_collection_role %}
+        {% include "_collection_view.html" with collection=collection user_collection_role=user_collection_role is_edit_mode=is_edit_mode %}
     {% endfor %}
 </div>
 {% endblock %}

@@ -22,7 +22,7 @@
                 {{ collection_form.card_template }}
             </p>
             <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
-            <a href="{% url 'index' %}" class="adminMenuBtn cancelBtn">Cancel</a>
+            <a href="{% url 'collectionIndex' collection.id %}?instructor=edit" class="adminMenuBtn cancelBtn">Cancel</a>
         </form>
     </div>
 </div>
