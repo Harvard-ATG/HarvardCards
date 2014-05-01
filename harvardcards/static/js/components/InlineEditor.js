@@ -43,10 +43,6 @@ define(['jquery', 'jquery.jeditable', 'jqueryui'], function($) {
 		return value;
 	};
 
-	InlineEditor.prototype.ajax = function() {
-		return $.ajax.apply($, arguments);
-	};
-
 	InlineEditor.prototype.onSuccess = function(data, textStatus, xhr) {
 		var result = this.success.apply(this, arguments);
 		if(result === true || result === false) {

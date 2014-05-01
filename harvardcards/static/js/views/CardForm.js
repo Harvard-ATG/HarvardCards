@@ -4,6 +4,7 @@ define(['lodash', 'jquery', 'jquery.form'], function(_, $, $form) {
     // Uses the jquery.form plugin to AJAXify the html form.
     var CardForm = function(config) {
         if(!config || !config['formEl'] || !config['formMessageEl']) {
+			console.log("card form", config);
             throw new Error("invalid or missing CardForm config");
         }
         this.formEl = $(config.formEl);
@@ -36,8 +37,7 @@ define(['lodash', 'jquery', 'jquery.form'], function(_, $, $form) {
     };
 
     CardForm.prototype.success = function(data, statusText, xhr, formEl) {
-        //console.log("success", arguments);
-        this.msg("Card saved. <a href=\""+data['location']+"\">Refresh</a>.", MSG_SUCCESS);
+        this.msg("Card save.", MSG_SUCCESS);
     };
 
     CardForm.prototype.error = function(xhr, textStatus, errorThrown) {
