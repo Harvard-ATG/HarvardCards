@@ -1,12 +1,12 @@
 The *js* directory is organized as follows:
 
-├── components/		Objects that package up functionality and services for views.
-├── lib/			Third-party libraries (i.e. jQuery, etc)
-├── mixins/			Objects with related functions that can be "mixed" into other objects via $.extend().
-├── models/			Objects that model aspects of business logic without respect to the display.
-├── modules/		Objects that fulfill the role of "controller" for a sub-tree of the DOM. See module-loader.js.
-├── spec/			Unit tests or "specs" for objects. See Jasmine unit testing docs.
-├── utils/			Utility objects and functions. 
-└── views/			Object that controls the display and behavior element(s) in the DOM.
+├── components/ Packages of collaborating objects/classes.
+├── lib/        Third-party packages and libraries (i.e. jQuery, etc)
+├── mixins/     Mixins or groups of methods that can be "mixed" into any class/object.
+├── models/     Domain or business objects. 
+├── modules/    Controller objects that manage a section of the DOM.
+├── spec/       Unit tests (Jasmine framework).
+├── utils/      General purpose utilities.
+└── views/      Display-oriented objects that are responsible for view logic.
 
-All libraries are intended to be used with AMD (requirejs) and follow basic MVC structure.
+All libraries are intended to be used with AMD (requirejs). 
