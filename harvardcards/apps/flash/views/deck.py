@@ -22,7 +22,6 @@ def index(request, deck_id=None):
     user_collection_role = Users_Collections.get_role_buckets(request.user, collections)
     is_quiz_mode = request.GET.get('mode') == 'quiz'
     is_deck_admin = next((True for cid in user_collection_role['ADMIN'] if cid == current_collection.id), False)
-    is_edit_mode = request.GET.get('instructor') == 'edit'
     card_id = request.GET.get('card_id', '')
 
     cards = []
@@ -51,7 +50,6 @@ def index(request, deck_id=None):
         "cards": cards,
         "is_quiz_mode": is_quiz_mode,
         "is_deck_admin": is_deck_admin,
-        "is_edit_mode": is_edit_mode,
         "card_id": card_id,
     }
 

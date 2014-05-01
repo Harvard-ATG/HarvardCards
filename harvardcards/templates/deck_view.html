@@ -2,7 +2,7 @@
 
 
 {% block sidebar_content %}
-    {% include "_deck_nav.html" with collection=collection deck=deck is_quiz_mode=is_quiz_mode is_edit_mode=is_edit_mode %}
+    {% include "_deck_nav.html" with collection=collection deck=deck is_quiz_mode=is_quiz_mode %}
 {% endblock %}
 
 
@@ -19,25 +19,25 @@
         <!-- SECTION: Header -->
         <div class="courseHeader">
             <h2 class="courseTitle"><a href="{% url 'collectionIndex' collection.id %}">{{collection.title}}</a></h2>
-            {% if is_deck_admin and is_edit_mode %}
+            {% if is_deck_admin %}
                 <h3 data-editable="yes" data-editable-id="{{deck.id}}">{{deck.title}}</h3>
                 <i class="fa fa-pencil"></i>
             {% else %}
                 <h3>{{deck.title}}</h3>
             {% endif %}
             <ul class="adminMenu adminMenuRight">
-                {% if is_deck_admin and is_edit_mode %}
+                {% if is_deck_admin %}
 					<li><a href="{% url 'deckDelete' deck.id %}" data-confirm="Are you sure you want to delete: {{deck.title|escape}}">Delete Deck</a></li>
                 {% endif %}
                 <li>
                 {% if is_quiz_mode %}
-                    {% if is_deck_admin and is_edit_mode %}
-					<a href="{% url 'deckIndex' deck.id %}{% if is_edit_mode %}?instructor=edit{% endif %}" id="review_mode">Review Mode</a>
+                    {% if is_deck_admin %}
+					<a href="{% url 'deckIndex' deck.id %}" id="review_mode">Review Mode</a>
                     {% else %}
                     <a href="{% url 'deckIndex' deck.id %}" id="review_mode">Review Mode</a>
                     {% endif%}
                 {% else %}
-                    {% if is_deck_admin and is_edit_mode %}
+                    {% if is_deck_admin %}
                     <a href="{% url 'deckIndex' deck.id %}?mode=quiz&instructor=edit" id="quiz_mode">Quiz Mode</a>
                     {% else %}
                     <a href="{% url 'deckIndex' deck.id %}?mode=quiz" id="quiz_mode">Quiz Mode</a>
@@ -48,13 +48,13 @@
         </div>
 
         <!-- SECTION: Card Slider -->
-        {% if is_deck_admin and is_edit_mode %}
+        {% if is_deck_admin %}
             <div class="addCards">
             	<a href="{% url 'deckEditCard' deck.id %}" class="btn-dashed">Add Card</a>
 				<a href="{% url 'deckUpload' deck.id %}" class="btn-dashed">Upload Cards</a>
             </div>
         {% endif %}
-        <div id="{% if is_deck_admin and is_edit_mode %}cardSlider{% else %}cardSliderNotAdmin{% endif %}" role="scrollbar" tabindex="0" aria-orientation="horizontal" class="slider" data-start-card-id="{{card_id}}">
+        <div id="{% if is_deck_admin %}cardSlider{% else %}cardSliderNotAdmin{% endif %}" role="scrollbar" tabindex="0" aria-orientation="horizontal" class="slider" data-start-card-id="{{card_id}}">
         {% if cards|length %}
             <div class="sliderBtns deckPrev">
                 <a id="previous_card" href="javascript:void(0)"><i class="fa fa-angle-left"></i><span>Previous</span></a>
@@ -105,7 +105,7 @@
                 <ul id="allCards">
                     {% for card in cards %}
                     <li class="hide" role="tabpanel"  data-card-id="{{ card.card_id }}">
-                        {% if is_deck_admin and is_edit_mode %}
+                        {% if is_deck_admin %}
                         <div class="controls">
                             <form method="POST" action="{% url "deckDeleteCard" deck.id %}">{%csrf_token%}
                                 <input type="hidden" name="card_id" value="{{card.card_id}}"/>

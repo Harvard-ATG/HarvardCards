@@ -17,7 +17,6 @@ def index(request, collection_id=None):
     all_collections = Collection.objects.all()
     user_collection_role = Users_Collections.get_role_buckets(request.user, all_collections)
     decks_by_collection = queries.getDecksByCollection()
-    is_edit_mode = request.GET.get('instructor') == 'edit'
 
     collection_list = []
     for collection in all_collections:
@@ -54,7 +53,6 @@ def index(request, collection_id=None):
         "display_collections": display_collections,
         "display_collection": display_collection,
         "user_collection_role": user_collection_role,
-        "is_edit_mode": is_edit_mode,
     }
 
     return render(request, 'collections/index.html', context)
