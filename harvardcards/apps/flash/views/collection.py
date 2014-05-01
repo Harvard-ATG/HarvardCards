@@ -69,8 +69,7 @@ def create(request):
                 user = User.objects.get(id=user_id)
                 Users_Collections.objects.create(user=user, collection=collection, role='A', date_joined=datetime.date.today())
 
-            response =  redirect(collection)
-            response['Location'] += '?instructor=edit'
+            response = redirect(collection)
             return response
     else:
         collection_form = CollectionForm()

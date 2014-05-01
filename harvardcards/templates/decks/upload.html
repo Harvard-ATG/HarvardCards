@@ -18,7 +18,7 @@
         <form action="{% url 'deckUpload' deck.id %}" method="post" {% if deck_form.is_multipart %}enctype="multipart/form-data"{% endif %}>{% csrf_token %}
             {{ deck_form.as_p }}
             <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
-            <a href="{% url 'deckIndex' deck.id %}?instructor=edit" class="adminMenuBtn cancelBtn">Cancel</a>
+            <a href="{% url 'deckIndex' deck.id %}" class="adminMenuBtn cancelBtn">Cancel</a>
         </form>
     </div>
 </div>

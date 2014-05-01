@@ -31,17 +31,9 @@
                 {% endif %}
                 <li>
                 {% if is_quiz_mode %}
-                    {% if is_deck_admin %}
-					<a href="{% url 'deckIndex' deck.id %}" id="review_mode">Review Mode</a>
-                    {% else %}
                     <a href="{% url 'deckIndex' deck.id %}" id="review_mode">Review Mode</a>
-                    {% endif%}
                 {% else %}
-                    {% if is_deck_admin %}
-                    <a href="{% url 'deckIndex' deck.id %}?mode=quiz&instructor=edit" id="quiz_mode">Quiz Mode</a>
-                    {% else %}
                     <a href="{% url 'deckIndex' deck.id %}?mode=quiz" id="quiz_mode">Quiz Mode</a>
-                    {% endif %}
                 {% endif %}
                 </li>
             </ul>

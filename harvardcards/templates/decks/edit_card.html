@@ -15,7 +15,7 @@
             <input type="hidden" name="card_id" value="{{card_id}}" />
             {% include "decks/_deck_card_form.html" with card_fields=card_fields %}
             <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
-            <a href="{% url 'deckIndex' deck.id %}?instructor=edit" class="adminMenuBtn cancelBtn">Cancel</a>
+            <a href="{% url 'deckIndex' deck.id %}" class="adminMenuBtn cancelBtn">Cancel</a>
         </form>
     </div>
 </div>
