@@ -8,10 +8,15 @@ from harvardcards.apps.flash import forms, services, queries, utils
 from django.db import models
 
 @require_http_methods(["POST"])
-def delete(request, deck_id=None):
+def delete(request):
     """Delete a deck"""
+    deck_id = request.POST['deck_id']
     result = {"success": False}
-    if deck_id is not None:
+    if deck_id is None:
+        result['error'] = "Missing deck_id parameter"
+    elif not Deck.objects.filter(id=deck_id).exists():
+        result['error'] = "Deck not found"
+    else:
         collection_id = queries.getDeckCollectionId(deck_id)
         result['success'] = services.delete_deck(deck_id)
         redirect_response = redirect('collectionIndex', collection_id)
@@ -19,10 +24,15 @@ def delete(request, deck_id=None):
     return HttpResponse(json.dumps(result), mimetype="application/json")
 
 @require_http_methods(["POST"])
-def rename(request, deck_id=None):
+def rename(request):
     """Rename a deck"""
+    deck_id = request.POST['deck_id']
     result = {"success": False}
-    if deck_id is not None:
+    if deck_id is None:
+        result['error'] = "Missing deck_id parameter"
+    elif not Deck.objects.filter(id=deck_id).exists():
+        result['error'] = "Deck not found"
+    else:
         deck = Deck.objects.get(id=deck_id)
         deck_form = forms.DeckForm(request.POST, instance=deck)
         result['success'] = deck_form.is_valid()

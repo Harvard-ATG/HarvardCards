@@ -139,7 +139,7 @@ def update_card_fields(card, field_items):
 
 @transaction.commit_on_success
 def add_cards_to_deck(deck, card_list):
-    """Adds a list of cards with fields to a deck."""
+    """Adds a batch of cards with fields to a deck."""
     fields = Field.objects.all()
     card_sort_order = deck.collection.card_set.count()
     deck_sort_order = deck.cards.count()

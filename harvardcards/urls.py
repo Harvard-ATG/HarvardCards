@@ -36,12 +36,13 @@ urlpatterns = patterns('',
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 
     # API
+    url(r'^api$', 'harvardcards.apps.flash.api.api.root', name='apiRoot'),
     url(r'^api/card/create$', 'harvardcards.apps.flash.api.card.create', name='apiCardCreate'),
     url(r'^api/card/delete$', 'harvardcards.apps.flash.api.card.delete', name='apiCardDelete'),
-    url(r'^api/deck/(?P<deck_id>\d+)/rename$', 'harvardcards.apps.flash.api.deck.rename', name='apiDeckRename'),
-    url(r'^api/deck/(?P<deck_id>\d+)/delete$', 'harvardcards.apps.flash.api.deck.delete', name='apiDeckDelete'),
-    url(r'^api/collection/(?P<collection_id>\d+)/fields$', 'harvardcards.apps.flash.api.collection.fields', name='apiCollectionFields'),
-    url(r'^api/collection/(?P<collection_id>\d+)/delete$', 'harvardcards.apps.flash.api.collection.delete', name='apiCollectionDelete'),
+    url(r'^api/deck/rename$', 'harvardcards.apps.flash.api.deck.rename', name='apiDeckRename'),
+    url(r'^api/deck/delete$', 'harvardcards.apps.flash.api.deck.delete', name='apiDeckDelete'),
+    url(r'^api/collection/fields$', 'harvardcards.apps.flash.api.collection.fields', name='apiCollectionFields'),
+    url(r'^api/collection/delete$', 'harvardcards.apps.flash.api.collection.delete', name='apiCollectionDelete'),
     
 	# url(r'^$', 'HarvardCards.views.home', name='home'),
     # url(r'^HarvardCards/', include('harvardcards.foo.urls')),

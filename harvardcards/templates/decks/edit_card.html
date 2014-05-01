@@ -10,7 +10,8 @@
         <div class="courseHeader">
             <h2>Edit card</h2>
         </div>
-        <form action="{% url 'deckEditCard' deck.id %}" method="post">{% csrf_token %}
+        <form action="{% url 'deckEditCard' deck.id %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
             <input type="hidden" name="card_id" value="{{card_id}}" />
             {% include "decks/_deck_card_form.html" with card_fields=card_fields %}
             <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
