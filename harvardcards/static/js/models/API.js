@@ -39,7 +39,7 @@ define(['module', 'jquery'], function(module, $) {
 
 	// Returns a fully-qualifiedn API url given a path.
 	API.url = function(path) {
-		return API.apiRoot + '/' + path;
+		return [API.apiRoot, path].join('/');
 	};
 
 	// Executes an API request immediately via AJAX.
@@ -62,13 +62,16 @@ define(['module', 'jquery'], function(module, $) {
 	// See: http://api.jquery.com/jQuery.Deferred/
 	API.prototype.execute = function() {
 		var url = API.url(this.config.url);
-		var settings = {
+		return this._ajax(url, {
 			method: this.config.method,
 			dataType: this.config.dataType,
 			data: this.config.data
-		};
-		//console.log(url, settings);
-		return $.ajax(url, settings);
+		});
+	};
+
+	// Utility method that delegates to $.ajax().
+	API.prototype._ajax = function() {
+		return $.ajax.apply($, arguments);
 	};
 
 	return API;

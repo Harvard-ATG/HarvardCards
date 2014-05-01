@@ -1,10 +1,11 @@
-define(['lodash', 'jquery', 'models/Deck', function(_, $, Deck) {
+define(['lodash', 'jquery', 'models/Deck'], function(_, $, Deck) {
 	describe("Deck", function() {
 		it("creates an empty instance", function() {
 			var deck = new Deck();
 			expect(deck.id).toBeNull();
 			expect(deck.title).toBe('');
 		});
+
 		it("creates a non-empty instance", function() {
 			var id = 123;
 			var title = 'foo';
@@ -12,6 +13,7 @@ define(['lodash', 'jquery', 'models/Deck', function(_, $, Deck) {
 			expect(deck.id).toBe(id);
 			expect(deck.title).toBe(title);
 		});
+
 		it("renames itself", function() {
 			var new_title = "bar";
 			var deck = new Deck({ id: 1, title: "foo" });
