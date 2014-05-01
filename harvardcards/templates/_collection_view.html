@@ -1,8 +1,10 @@
 <div class="courseWrapper">
     <div class="courseHeader">
         <a href="{% url 'collectionIndex' collection.id %}" title="{{collection.title}}">
+        {% spaceless %}
             <h2 class="courseTitle">{{ collection.title }}</h2>
             <h3>{% if collection.decks|length == 1 %}1 Deck{% else %}{{collection.decks|length}} Decks{% endif %}</h3>
+        {% endspaceless %}
         </a>
         {% if collection.id in user_collection_role.ADMIN %}
             <ul class="adminMenu adminMenuRight">
