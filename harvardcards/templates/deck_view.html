@@ -19,7 +19,7 @@
         <!-- SECTION: Header -->
         <div class="courseHeader">
             <h2 class="courseTitle"><a href="{% url 'collectionIndex' collection.id %}">{{collection.title}}</a></h2>
-            {% if is_deck_admin %}
+            {% if is_deck_admin and is_edit_mode %}
                 <h3 data-editable="yes" data-editable-id="{{deck.id}}">{{deck.title}}</h3>
                 <i class="fa fa-pencil"></i>
             {% else %}
@@ -31,13 +31,13 @@
                 {% endif %}
                 <li>
                 {% if is_quiz_mode %}
-                    {% if is_edit_mode %}
-                    <a href="{% url 'deckIndex' deck.id %}?instructor=edit" id="review_mode">Review Mode</a>
+                    {% if is_deck_admin and is_edit_mode %}
+					<a href="{% url 'deckIndex' deck.id %}{% if is_edit_mode %}?instructor=edit{% endif %}" id="review_mode">Review Mode</a>
                     {% else %}
                     <a href="{% url 'deckIndex' deck.id %}" id="review_mode">Review Mode</a>
                     {% endif%}
                 {% else %}
-                    {% if is_edit_mode %}
+                    {% if is_deck_admin and is_edit_mode %}
                     <a href="{% url 'deckIndex' deck.id %}?mode=quiz&instructor=edit" id="quiz_mode">Quiz Mode</a>
                     {% else %}
                     <a href="{% url 'deckIndex' deck.id %}?mode=quiz" id="quiz_mode">Quiz Mode</a>
@@ -105,7 +105,7 @@
                 <ul id="allCards">
                     {% for card in cards %}
                     <li class="hide" role="tabpanel"  data-card-id="{{ card.card_id }}">
-                        {% if is_edit_mode and is_deck_admin %}
+                        {% if is_deck_admin and is_edit_mode %}
                         <div class="controls">
                             <form method="POST" action="{% url "deckDeleteCard" deck.id %}">{%csrf_token%}
                                 <input type="hidden" name="card_id" value="{{card.card_id}}"/>
