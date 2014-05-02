@@ -7,7 +7,7 @@
 <div class="hideRevealHr"></div>
 <div class="editFields">
     <h2>Card back</h2>
-    {% for field in card_fields.reveal reversed %}
+    {% for field in card_fields.reveal %}
         {% include "decks/_deck_card_form_field.html" with field=field %}
     {% endfor %}
 </div>

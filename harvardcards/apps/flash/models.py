@@ -103,6 +103,7 @@ class Cards_Fields(models.Model):
     class Meta:
         verbose_name = 'Card Fields'
         verbose_name_plural = 'Card Fields'
+        ordering = ['field__sort_order']
 
     def __unicode__(self):
         return self.value
@@ -114,6 +115,7 @@ class CardTemplates_Fields(models.Model):
     class Meta:
         verbose_name = 'Card Template Fields'
         verbose_name_plural = 'Card Template Fields'
+        ordering = ['field__sort_order']
 
     def __unicode__(self):
         return "CardTemplate: " + str(self.card_template.id) + "; Field: " + str(self.field.id)

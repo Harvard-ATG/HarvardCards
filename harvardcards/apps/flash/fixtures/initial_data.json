@@ -216,6 +216,42 @@
         }
     },
     {
+        "pk": 19,
+        "model": "flash.field", 
+        "fields": {
+            "field_type": "T", 
+            "show_label": false, 
+            "label": "Word", 
+            "display": true,
+            "sort_order": 1,
+			"example_value": ""
+        }
+    },
+    {
+        "pk": 20,
+        "model": "flash.field", 
+        "fields": {
+            "field_type": "T", 
+            "show_label": true, 
+            "label": "Definition", 
+            "display": false,
+            "sort_order": 2,
+			"example_value": ""
+        }
+    },
+    {
+        "pk": 21,
+        "model": "flash.field", 
+        "fields": {
+            "field_type": "A", 
+            "show_label": true, 
+            "label": "Pronunciation", 
+            "display": false,
+            "sort_order": 3,
+			"example_value": ""
+        }
+    },
+    {
         "pk": 1,
         "model": "flash.CardTemplate",
         "fields": {
@@ -245,6 +281,14 @@
         "fields": {
             "title": "Chinese",
             "description": "Chinese vocabulary flashcard template."
+        }
+    },
+    {
+        "pk": 5,
+        "model": "flash.CardTemplate",
+        "fields": {
+            "title": "Language with Audio",
+            "description": "Language flashcards with audio component."
         }
     },
     {
@@ -389,6 +433,30 @@
         "fields": {
             "card_template": 4,
             "field": 18 
+        }
+    },
+    {
+        "pk": 19,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 5,
+            "field": 19 
+        }
+    },
+    {
+        "pk": 20,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 5,
+            "field": 20
+        }
+    },
+    {
+        "pk": 21,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 5,
+            "field": 21
         }
     }
 ]

@@ -27,6 +27,7 @@ def index(request, deck_id=None):
     cards = []
     for dcard in deck_cards:
         card_fields = {'show':[],'reveal':[]}
+        print dcard.card.cards_fields_set.all()
         for cfield in dcard.card.cards_fields_set.all():
             if cfield.field.display:
                 bucket = 'show'

@@ -28,13 +28,17 @@
 	            {% endif %}
 	        {% elif field.type == 'V' %}
 	            {% if field.example_value %}
-	                {{field.example_value}}
+					<video src="{{field.example_value}}" alt="{{field.label}}" controls>
+						Your browser does not support the <code>video</code> element.
+					</video>
 	            {% else %}
 	                video
 	            {% endif %}
 	        {% elif field.type == 'A' %}
 	            {% if field.example_value %}
-	                {{field.example_value}}
+					<audio src="{{field.example_value}}" alt="{{field.label}}" controls="controls">
+						Your browser does not support the <code>audio</code> element.
+					</audio>
 	            {% else %}
 	                audio
 	            {% endif %}
