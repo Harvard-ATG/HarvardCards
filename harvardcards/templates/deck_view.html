@@ -99,10 +99,7 @@
                     <li class="hide" role="tabpanel"  data-card-id="{{ card.card_id }}">
                         {% if is_deck_admin %}
                         <div class="controls">
-                            <form method="POST" action="{% url "deckDeleteCard" deck.id %}">{%csrf_token%}
-                                <input type="hidden" name="card_id" value="{{card.card_id}}"/>
-                                <button class="pull-right" data-confirm="Are you sure you want to delete this card?">Delete</button>
-                            </form>
+                            <a class="pull-right" href="{% url "deckDeleteCard" deck.id %}?card_id={{card.card_id}}" data-confirm="Are you sure you want to delete this card?">Delete</a>
                             <a class="pull-right" href="{% url "deckEditCard" deck.id %}?card_id={{card.card_id}}">Edit</a>
                         </div>
                         {% endif %}

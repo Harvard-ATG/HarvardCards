@@ -46,7 +46,7 @@ def delete_deck_images(deck_id):
 def delete_card(card_id):
     """Deletes a card and returns true on success, false otherwise."""
     Card.objects.get(id=card_id).delete()
-    if not Deck.objects.filter(id=card_id):
+    if not Card.objects.filter(id=card_id):
         return True
     return False
 

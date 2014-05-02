@@ -62,3 +62,8 @@ def getDeckCardsList(deck_id):
         })
 
     return card_list
+
+def isCardInDeck(card_id, deck_id):
+    if Decks_Cards.objects.filter(card=card_id, deck=deck_id):
+        return True
+    return False

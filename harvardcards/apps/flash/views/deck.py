@@ -174,10 +174,10 @@ def edit_card(request, deck_id=None):
 
     return render(request, 'decks/edit_card.html', context)
 
-@require_http_methods(["POST"])
 def delete_card(request, deck_id=None):
     """Deletes a card."""
     deck = Deck.objects.get(id=deck_id)
-    card_id = request.POST.get('card_id', None)
-    success = services.delete_card(card_id)
+    card_id = request.GET.get('card_id', None)
+    if queries.isCardInDeck(card_id, deck_id):
+        success = services.delete_card(card_id)
     return redirect(deck)
