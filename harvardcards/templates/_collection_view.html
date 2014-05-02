@@ -8,8 +8,8 @@
         </a>
         {% if collection.id in user_collection_role.ADMIN %}
             <ul class="adminMenu adminMenuRight">
-                <li><a href="{% url 'collectionEdit' collection.id %}">Edit</a></li>
-                <li><a href="{% url 'collectionDelete' collection.id %}" data-confirm="Are you sure you want to delete: {{collection.title|escape}}?">Delete</a></li>
+				<li><a href="{% url 'collectionEdit' collection.id %}"><i class="fa fa-pencil"></i> Edit</a></li>
+				<li><a href="{% url 'collectionDelete' collection.id %}" data-confirm="Are you sure you want to delete: {{collection.title|escape}}?"><i class="fa fa-times-circle"></i> Delete</a></li>
             </ul>
         {% endif %}
     </div>
