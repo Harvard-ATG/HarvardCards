@@ -531,50 +531,36 @@ ul#cards{
 		border:solid 6px #d2d2d2;
 	}
 
-	/*ul#cards li div{
-		height: 2em;
-		background-color: #f3f3f1;
-
-	}*/
-		/*a.card {*/
-		ul#cards li a{
+		ul#cards li.card{
 			display: block;
 			width: 100%;
-			text-align: center;
-			color: #a51c30;
-			text-decoration: none;
 			overflow: hidden;
-		}
-			a.card{
-				padding: 0.8em 0%;
-				height: 4.3375em;
-				background-color: #fff;
-			}
-
-			a.image{
-				padding: 0;
-				height: 5.9375em;
-			}
-
-			ul#cards li a img{
-				max-height: 100%;
-				padding:0;
-			}
-			/* center horizontally and vertically the text in the thumbnail image on the slider */
-			ul#cards li .cardFieldValue {
-				text-align: center;
-				vertical-align: middle;
-				line-height: 5.9375em; /* should be same as the div height */ 
-			}
-
-		ul#cards li:hover
-		, ul#cards li.clicked{
+            padding: 0.8em 0%;
+            height: 4.3375em;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 5.9375em; /* should be same as the div height */
+			color: #a51c30;
+            background-color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        ul#cards li.card-clicked {
+            border: solid 0.375em #4d4d4d;
+        }
+        ul#cards li.card-image {
+            padding: 0;
+            height: 5.9375em;
+        }
+        ul#cards li.card img{
+            max-height: 100%;
+            padding:0;
+        }
+		ul#cards li:hover,ul#cards li.clicked{
 			border: solid 0.375em #4d4d4d;
 		}
 
-	ul#cards li.clicked {
-			border: solid 0.375em #4d4d4d;
-	}
+
 div.deckNav{
 	display: block;
 	position: absolute;

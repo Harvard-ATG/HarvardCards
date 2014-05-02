@@ -1,23 +1,17 @@
-<div>
-	{% if field.show_label %}
-		<span class="cardFieldLabel" style="font-weight:bold">{{ field.label }}:</span>
-	{% endif %}
-
-	{% if field.value %}
-		{% if field.type == 'T' %}
-			<span class="cardFieldValue">{{ field.value}}</span>
-		{% elif field.type == 'I' %}
-			<img src="{{MEDIA_URL}}thumbnails/{{field.value}}" alt="{{field.label}}" class="cardFieldImage" />
-		{% elif field.type == 'V' %}
-			<video src="{{field.value}}" alt="{{field.label}}" controls>
-				Your browser does not support the <code>video</code> element.
-			</video>
-		{% elif field.type == 'A' %}
-			<audio src="{{field.value}}" alt="{{field.label}}" controls="controls">
-				Your browser does not support the <code>audio</code> element.
-			</audio>
-		{% else %}
-			<b>ERROR FIELD TYPE NOT SUPPORTED: {{field.type}}</b>
-		{% endif %}
-	{% endif %}
-</div>
+{% if field.value %}
+    {% if field.type == 'T' %}
+        {{ field.value}}
+    {% elif field.type == 'I' %}
+        <img src="{{MEDIA_URL}}thumbnails/{{field.value}}" alt="{{field.label}}" class="cardFieldImage" />
+    {% elif field.type == 'V' %}
+        <video src="{{field.value}}" alt="{{field.label}}" controls>
+            Your browser does not support the <code>video</code> element.
+        </video>
+    {% elif field.type == 'A' %}
+        <audio src="{{field.value}}" alt="{{field.label}}" controls="controls">
+            Your browser does not support the <code>audio</code> element.
+        </audio>
+    {% else %}
+        <b>ERROR FIELD TYPE NOT SUPPORTED: {{field.type}}</b>
+    {% endif %}
+{% endif %}

@@ -96,7 +96,7 @@
             <div id="cardOverflow">
                 <ul id="allCards">
                     {% for card in cards %}
-                    <li class="hide" role="tabpanel"  data-card-id="{{ card.card_id }}">
+                    <li class="hide {% if card.color %}card-{{card.color}}{% endif %}" role="tabpanel"  data-card-id="{{ card.card_id }}">
                         {% if is_deck_admin %}
                         <div class="controls">
 							<a class="pull-right" href="{% url "deckDeleteCard" deck.id %}?card_id={{card.card_id}}" data-confirm="Are you sure you want to delete this card?"><i class="fa fa-times-circle"></i> Delete Card</a>

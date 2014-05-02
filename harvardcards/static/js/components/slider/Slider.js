@@ -105,6 +105,7 @@ define([
 	// Triggers "beforeslide" and "slide" on success.
 	// Returns true on success, false otherwise.
 	Slider.prototype.goTo = function(index) {
+        console.log("goTo", index, this.isValidIndex(index));
 		if(!this.isValidIndex(index)) {
 			return false;
 		}

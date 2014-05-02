@@ -41,6 +41,7 @@ def index(request, deck_id=None):
             })
         cards.append({
             'card_id': dcard.card.id,
+            'color': dcard.card.color,
             'fields': card_fields
         })
 
