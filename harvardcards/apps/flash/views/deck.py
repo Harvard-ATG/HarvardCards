@@ -7,6 +7,7 @@ from django.core.exceptions import ViewDoesNotExist
 from django.utils import simplejson as json
 
 from django.forms.formsets import formset_factory
+from django.forms import widgets
 from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Users_Collections
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm, DeckImportForm
 from harvardcards.apps.flash import services, queries, utils
@@ -27,7 +28,6 @@ def index(request, deck_id=None):
     cards = []
     for dcard in deck_cards:
         card_fields = {'show':[],'reveal':[]}
-        print dcard.card.cards_fields_set.all()
         for cfield in dcard.card.cards_fields_set.all():
             if cfield.field.display:
                 bucket = 'show'
@@ -109,6 +109,7 @@ def edit_card(request, deck_id=None):
     deck = Deck.objects.get(id=deck_id)
     current_collection = Collection.objects.get(id=deck.collection.id)
     collections = Collection.objects.all().prefetch_related('deck_set')
+    card_color = None
 
     if request.method == 'POST':
         errorMsg = ''
@@ -133,6 +134,10 @@ def edit_card(request, deck_id=None):
         else:
             card = Card.objects.get(id=request.POST.get('card_id'))
             services.update_card_fields(card, fields)
+
+        if request.POST.get('card_color') != '':
+            card.color = request.POST.get('card_color')
+            card.save()
 
         params = {"card_id":card.id}
         return redirect(deck.get_absolute_url() + '?' + urllib.urlencode(params))
@@ -165,6 +170,13 @@ def edit_card(request, deck_id=None):
                 'show_label': cfield.field.show_label,
                 'value': cfield.value,
             })
+        if card.color != '':
+            card_color = card.color
+
+    if card_color is None:
+        card_color = Card.DEFAULT_COLOR
+
+    card_color_select = widgets.Select(attrs=None, choices=Card.COLOR_CHOICES)
 
     context = {
         "deck": deck,
@@ -172,6 +184,7 @@ def edit_card(request, deck_id=None):
         "collection": current_collection,
         "collections": collections,
         "card_fields": card_fields,
+        "card_color_select":  card_color_select.render("card_color", card_color)
     }
 
     return render(request, 'decks/edit_card.html', context)

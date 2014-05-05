@@ -87,39 +87,38 @@
             <div id="counterHolder" class="">
                 <div id="counter"></div>
             </div>
-            <div class="controls" id="controlbar">
+            <div class="controls">
               <a class="pull-right" id="shuffle_cards" href="javascript:void(0)"><i id="shuffle" class="fa fa-random"></i><span class="control-text">Shuffle</span></a>
               <a class="pull-right" id="play_cards" href="javascript:void(0)"><i id="play" class="fa fa-play"></i><span class="control-text">Play</span></a>
               <a class="pull-right" id="full_screen" href="javascript:void(0)"><i id="full" class="fa fa-expand"></i><span class="control-text">Full Screen</span></a>
             </div>
+            {% for card in cards %}
+                {% if is_deck_admin %}
+                <div class="controls hide" data-card-id="{{card.card_id}}">
+                    <a class="pull-right" href="{% url "deckDeleteCard" deck.id %}?card_id={{card.card_id}}" data-confirm="Are you sure you want to delete this card?"><i class="fa fa-times-circle"></i> Delete Card</a>
+                    <a class="pull-right" href="{% url "deckEditCard" deck.id %}?card_id={{card.card_id}}"><i class="fa fa-pencil"></i> Edit Card</a>
+                </div>
+                {% endif %}
+            {% endfor %}
+
             {% endif %}
-            <div id="cardOverflow">
-                <ul id="allCards">
-                    {% for card in cards %}
-                    <li class="hide {% if card.color %}card-{{card.color}}{% endif %}" role="tabpanel"  data-card-id="{{ card.card_id }}">
-                        {% if is_deck_admin %}
-                        <div class="controls">
-							<a class="pull-right" href="{% url "deckDeleteCard" deck.id %}?card_id={{card.card_id}}" data-confirm="Are you sure you want to delete this card?"><i class="fa fa-times-circle"></i> Delete Card</a>
-							<a class="pull-right" href="{% url "deckEditCard" deck.id %}?card_id={{card.card_id}}"><i class="fa fa-pencil"></i> Edit Card</a>
-                        </div>
-                        {% endif %}
-                        {% for field in card.fields.show %}
-                            {% include "_deck_card_fields.html" with field=field %}
-                        {% endfor %}
-                        <div class="hideRevealHr">
-                            {% if is_quiz_mode %}
-                            <a href="javascript:void(0)" class="reveal">Reveal</a>
-                            {% endif %}
-                        </div>
-                        <div class="{% if is_quiz_mode %}hide{% endif %}">
-                        {% for field in card.fields.reveal %}
-                            {% include "_deck_card_fields.html" with field=field hide=is_quiz_mode%}
-                        {% endfor %}
-                        </div>
-                    </li>
+            <ul id="allCards">
+                {% for card in cards %}
+                <li class="{% if card.color %}card-color-{{card.color}}{% endif %} hide" role="tabpanel"  data-card-id="{{ card.card_id }}">
+                    {% for field in card.fields.show %}
+                        {% include "_deck_card_fields.html" with field=field hide=False %}
                     {% endfor %}
-                </ul>
-            </div>
+                    <div class="hideRevealHr">
+                        {% if is_quiz_mode %}
+                        <a href="javascript:void(0)" class="reveal">Reveal</a>
+                        {% endif %}
+                    </div>
+                    {% for field in card.fields.reveal %}
+                        {% include "_deck_card_fields.html" with field=field hide=is_quiz_mode%}
+                    {% endfor %}
+                </li>
+                {% endfor %}
+            </ul>
         </div>
 
     </div><!-- courseWrapper (end) -->

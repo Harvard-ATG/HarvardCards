@@ -57,15 +57,14 @@ class Collection(models.Model):
         return reverse('collectionIndex', args=[str(self.id)])
 
 class Card(models.Model):
-    DEFAULT_COLOR = "white"
+    DEFAULT_COLOR = "default"
     COLOR_CHOICES = (
-        (DEFAULT_COLOR, "White"),
+        (DEFAULT_COLOR, "Default"),
         ("red", "Red"),
-        ("orange", "Orange"),
-        ("yellow", "Yellow"),
         ("green", "Green"),
         ("blue", "Blue"),
-        ("pink", "Pink"),
+        ("orange", "Orange"),
+        ("white", "White"),
     )
     collection = models.ForeignKey(Collection)
     sort_order = models.IntegerField()

@@ -525,7 +525,6 @@ ul#cards{
 	ul#cards li{
 		display: inline-block;
 		width: 19%;
-		background-color: #f3f3f1;
 		margin-right: 1%;
 		float: left;
 		border:solid 6px #d2d2d2;
@@ -540,8 +539,6 @@ ul#cards{
             text-align: center;
             vertical-align: middle;
             line-height: 5.9375em; /* should be same as the div height */
-			color: #a51c30;
-            background-color: #fff;
             text-decoration: none;
             cursor: pointer;
         }
@@ -559,7 +556,11 @@ ul#cards{
 		ul#cards li:hover,ul#cards li.clicked{
 			border: solid 0.375em #4d4d4d;
 		}
-
+        .card-color-default, .card-color-white { background-color: #fff; color: #a51c30; }
+        .card-color-red { background-color: #A51C30; color: #fff; }
+        .card-color-green { background-color: #00703C; color: #fff; }
+        .card-color-blue { background-color: #0F4D92; color: #fff; }
+        .card-color-orange { background-color: #F46F1B; color: #fff; }
 
 div.deckNav{
 	display: block;
@@ -660,12 +661,6 @@ div.deckNav{
 			padding: 1em 0.5em;
 		}
 
-#cardOverflow{
-	display: inline-block;
-	width: 100%;
-	overflow: hidden;
-}
-
 #singleCardHolder ul
 , #singleCardHolder ul li
 , #cardForm ul
@@ -677,8 +672,6 @@ div.deckNav{
 
 	.showRevealWrapper, .editFields{
 		width: 98%;
-		display: inline-block;
-		background-color: #fff;
 		text-align: center;
 		padding: 1.25em 1%;
 	}
@@ -686,8 +679,6 @@ div.deckNav{
 	.hideRevealHr{
 		width: 100%;
 		background: transparent url('../img/hideRevealLine.png') repeat left top;
-		display: inline-block;
-		float: left;
 		text-align: center;
 		padding: 0.25em 0;
 		height: 1.625em;
@@ -1332,7 +1323,6 @@ a#mobileMenu{
 }
 .controls {
   width: 100%;
-  display:inline-block;
   overflow: auto;
   white-space: nowrap;
   margin:0px auto;

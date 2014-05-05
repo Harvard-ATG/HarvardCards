@@ -1,6 +1,6 @@
 <ul id="cards">
 {% for card in cards %}
-    <li role="presentation" class="card card-image {% if card.color %}card-{{card.color}}{% endif %}" role="tab" tabindex="-1" data-card-id="{{card.card_id}}">
+    <li role="presentation" class="card card-image {% if card.color %}card-color-{{card.color}}{% endif %}" role="tab" tabindex="-1" data-card-id="{{card.card_id}}">
     {% spaceless %}
     {% for field in card.fields.show %}
         {% include "_deck_slider_card_fields.html" with field=field %}
