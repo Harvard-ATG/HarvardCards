@@ -135,7 +135,7 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 
 	// Finds a card element by the card ID.
 	DeckSlider.prototype.findByCardId = function(card_id) {
-		return $(".card[data-card-id="+card_id+"]");
+		return $(".card[data-card-id="+card_id+"]", this.el);
 	};
 
 	// Finds all the card IDs from the card elements.
@@ -164,7 +164,7 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 
 	// Returns true if the element is a card, false otherwise.
 	DeckSlider.prototype.isCard = function(el) {
-		return $(el).is("a.card");
+		return $(el).is(".card");
 	};
 
 	// Returns the total number of items in the slider.
@@ -206,14 +206,14 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 	// Unhighlights the current card.
 	DeckSlider.prototype.unhighlight = function() {
 		if(this.currentCardEl) {
-			this.currentCardEl.parent().removeClass("clicked");
+			this.currentCardEl.removeClass("card-clicked");
 		}
 	};
 
 	// Highlights the current card.
 	DeckSlider.prototype.highlight = function() {
 		if(this.currentCardEl) {
-			this.currentCardEl.parent().addClass("clicked");
+			this.currentCardEl.addClass("card-clicked");
 		}
 	};
 

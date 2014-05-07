@@ -57,9 +57,19 @@ class Collection(models.Model):
         return reverse('collectionIndex', args=[str(self.id)])
 
 class Card(models.Model):
+    DEFAULT_COLOR = "default"
+    COLOR_CHOICES = (
+        (DEFAULT_COLOR, "Default"),
+        ("red", "Red"),
+        ("green", "Green"),
+        ("blue", "Blue"),
+        ("orange", "Orange"),
+        ("white", "White"),
+    )
     collection = models.ForeignKey(Collection)
     sort_order = models.IntegerField()
     fields = models.ManyToManyField(Field, through='Cards_Fields')
+    color = models.CharField(max_length=12, choices=COLOR_CHOICES, default=DEFAULT_COLOR)
 
     def __unicode__(self):
         return "Card: " + str(self.id) + "; Collection: " + str(self.collection.title)
