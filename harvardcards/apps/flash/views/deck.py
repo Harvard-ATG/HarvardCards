@@ -11,7 +11,7 @@ from django.forms import widgets
 from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Users_Collections
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm, DeckImportForm
 from harvardcards.apps.flash import services, queries, utils
-
+from PIL import Image
 import urllib
 
 def index(request, deck_id=None):
@@ -115,19 +115,33 @@ def edit_card(request, deck_id=None):
         errorMsg = ''
         field_prefix = 'field_'
         fields = []
+
+        num_fields = 0
         for field_name, field_value in request.FILES.items():
             if field_name.startswith(field_prefix):
                 field_id = field_name.replace(field_prefix, '')
                 if field_id.isdigit():
                     if request.FILES[field_name].size > 0:
-                        path = services.handle_uploaded_img_file(request.FILES[field_name], deck.id, deck.collection.id)
-                        fields.append({"field_id": int(field_id), "value": path})
+                        try:
+                            img = Image.open(request.FILES[field_name])
+                        except:
+                            return HttpResponse(json.dumps({"message":"The uploaded image file type is not supported."}))
+                        if request.FILES[field_name]:
+                            num_fields = num_fields + 1
+                            path = services.handle_uploaded_img_file(request.FILES[field_name], deck.id, deck.collection.id)
+                            fields.append({"field_id": int(field_id), "value": path})
 
         for field_name, field_value in request.POST.items():
             if field_name.startswith(field_prefix):
                 field_id = field_name.replace(field_prefix, '')
                 if field_id.isdigit():
-                    fields.append({"field_id": int(field_id), "value": field_value})
+                    if field_value:
+                        num_fields = num_fields + 1
+                        fields.append({"field_id": int(field_id), "value": field_value})
+
+        if num_fields==0:
+            return HttpResponse(json.dumps({"message":"All Card Fields are Empty."}))
+
 
         if request.POST.get('card_id', '') == '':
             card = services.add_card_to_deck(deck, fields)

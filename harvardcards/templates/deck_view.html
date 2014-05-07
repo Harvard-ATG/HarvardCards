@@ -20,7 +20,7 @@
         <div class="courseHeader">
             <h2 class="courseTitle"><a href="{% url 'collectionIndex' collection.id %}">{{collection.title}}</a></h2>
             {% if is_deck_admin %}
-                <h3 data-editable="yes" data-editable-id="{{deck.id}}">{{deck.title}}</h3>
+                <h3 data-editable="yes" data-editable-id="{{deck.id}}" title="Click to edit title...">{{deck.title}}</h3>
                 <i class="fa fa-pencil"></i>
             {% else %}
                 <h3>{{deck.title}}</h3>

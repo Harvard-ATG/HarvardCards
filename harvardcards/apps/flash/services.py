@@ -10,6 +10,8 @@ import os
 import shutil
 from harvardcards.settings.common import MEDIA_ROOT, APPS_ROOT
 from  PIL import Image
+from django.http import HttpResponse
+from django.utils import simplejson as json
 
 def delete_collection(collection_id):
     """Deletes a collection and returns true on success, false otherwise."""
@@ -56,6 +58,7 @@ def resize_uploaded_img(path, file_name, dir_name):
     resized versions.
     """
     full_path = os.path.join(path, file_name)
+
     img = Image.open(full_path)
 
     # original
@@ -116,7 +119,6 @@ def handle_uploaded_img_file(file, deck, collection):
     else:
         dest.write(file.read())
     dest.close()
-
     resize_uploaded_img(path, file_name, dir_name)
 
     return os.path.join(dir_name, file_name)
