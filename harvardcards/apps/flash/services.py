@@ -10,8 +10,6 @@ import os
 import shutil
 from harvardcards.settings.common import MEDIA_ROOT, APPS_ROOT
 from  PIL import Image
-from django.http import HttpResponse
-from django.utils import simplejson as json
 import urllib2
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
