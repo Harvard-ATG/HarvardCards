@@ -99,8 +99,7 @@ def valid_uploaded_file(uploaded_file, file_type):
             return False
         return True
 
-def handle_uploaded_img_file(file, deck, collection):
-    """Handles an uploaded image file and returns the path to the saved image."""
+def handle_media_folders(collection, deck, file_name):
     # create the MEDIA_ROOT folder if it doesn't exist
     if not os.path.exists(MEDIA_ROOT):
         os.mkdir(MEDIA_ROOT)
@@ -110,16 +109,21 @@ def handle_uploaded_img_file(file, deck, collection):
     path = os.path.abspath(os.path.join(MEDIA_ROOT, dir_name))
     if not os.path.exists(path):
         os.mkdir(path)
-
     # allow files with same names to be uploaded to the same deck
-    file_name = file.name
+    original_filename = file_name
     full_path = os.path.join(path, file_name)
     counter = 1
     while os.path.exists(full_path):
-        file_name = str(counter)+ '_' + file.name
+        file_name = str(counter)+ '_' + original_filename
         full_path = os.path.join(path, file_name)
         counter = counter + 1
+    return [full_path, path, dir_name]
 
+def handle_uploaded_img_file(file, deck, collection):
+    """Handles an uploaded image file and returns the path to the saved image."""
+
+    file_name = file.name
+    [full_path, path, dir_name] = handle_media_folders(collection, deck, file_name)
     dest = open(full_path, 'wb+')
     if file.multiple_chunks:
         for c in file.chunks():
@@ -130,6 +134,15 @@ def handle_uploaded_img_file(file, deck, collection):
     resize_uploaded_img(path, file_name, dir_name)
 
     return os.path.join(dir_name, file_name)
+
+def upload_img_from_path(path_original, deck, collection):
+    img = Image.open(path_original)
+    head, file_name = os.path.split(path_original)
+    [full_path, path, dir_name] = handle_media_folders(collection.id, deck.id, file_name)
+    img.save(full_path)
+    resize_uploaded_img(path, file_name, dir_name)
+    return os.path.join(dir_name, file_name)
+
 
 def handle_uploaded_deck_file(deck, uploaded_file):
     """Handles an uploaded deck file."""
@@ -159,8 +172,11 @@ def add_cards_to_deck(deck, card_list):
         card = Card.objects.create(collection=deck.collection, sort_order=card_sort_order)
         Decks_Cards.objects.create(deck=deck, card=card, sort_order=deck_sort_order)
         for field_item in card_item:
-            field_object = fields.get(pk=field_item['field_id']) 
-            field_value = field_item['value']
+            field_object = fields.get(pk=field_item['field_id'])
+            if field_object.field_type == 'I':
+                field_value = upload_img_from_path(field_item['value'], deck, deck.collection)
+            else:
+                field_value = field_item['value']
             Cards_Fields.objects.create(card=card, field=field_object, value=field_value)
     return deck
 
