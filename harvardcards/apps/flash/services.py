@@ -117,13 +117,13 @@ def handle_media_folders(collection, deck, file_name):
         file_name = str(counter)+ '_' + original_filename
         full_path = os.path.join(path, file_name)
         counter = counter + 1
-    return [full_path, path, dir_name]
+    return [full_path, path, dir_name, file_name]
 
 def handle_uploaded_img_file(file, deck, collection):
     """Handles an uploaded image file and returns the path to the saved image."""
 
     file_name = file.name
-    [full_path, path, dir_name] = handle_media_folders(collection, deck, file_name)
+    [full_path, path, dir_name, file_name] = handle_media_folders(collection, deck, file_name)
     dest = open(full_path, 'wb+')
     if file.multiple_chunks:
         for c in file.chunks():
@@ -138,7 +138,7 @@ def handle_uploaded_img_file(file, deck, collection):
 def upload_img_from_path(path_original, deck, collection):
     img = Image.open(path_original)
     head, file_name = os.path.split(path_original)
-    [full_path, path, dir_name] = handle_media_folders(collection.id, deck.id, file_name)
+    [full_path, path, dir_name, file_name] = handle_media_folders(collection.id, deck.id, file_name)
     img.save(full_path)
     resize_uploaded_img(path, file_name, dir_name)
     return os.path.join(dir_name, file_name)
