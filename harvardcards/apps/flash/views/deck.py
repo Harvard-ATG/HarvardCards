@@ -122,11 +122,9 @@ def edit_card(request, deck_id=None):
                 field_id = field_name.replace(field_prefix, '')
                 if field_id.isdigit():
                     if request.FILES[field_name].size > 0:
-                        try:
-                            img = Image.open(request.FILES[field_name])
-                        except:
-                            return HttpResponse(json.dumps({"message":"The uploaded image file type is not supported."}))
                         if request.FILES[field_name]:
+                            if not services.valid_uploaded_file(request.FILES[field_name], 'I'):
+                                return HttpResponse(json.dumps({"message":"The uploaded image file type is not supported."}))
                             num_fields = num_fields + 1
                             path = services.handle_uploaded_img_file(request.FILES[field_name], deck.id, deck.collection.id)
                             fields.append({"field_id": int(field_id), "value": path})

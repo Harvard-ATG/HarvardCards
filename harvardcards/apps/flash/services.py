@@ -91,6 +91,14 @@ def resize_uploaded_img(path, file_name, dir_name):
     img_thumb = img.resize((int(t_width), int(t_height)), Image.ANTIALIAS)
     img_thumb.save(os.path.join(path1, file_name))
 
+def valid_uploaded_file(uploaded_file, file_type):
+    if file_type == 'I':
+        try:
+            img = Image.open(uploaded_file)
+        except:
+            return False
+        return True
+
 def handle_uploaded_img_file(file, deck, collection):
     """Handles an uploaded image file and returns the path to the saved image."""
     # create the MEDIA_ROOT folder if it doesn't exist
