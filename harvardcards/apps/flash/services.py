@@ -12,6 +12,10 @@ from harvardcards.settings.common import MEDIA_ROOT, APPS_ROOT
 from  PIL import Image
 from django.http import HttpResponse
 from django.utils import simplejson as json
+import urllib2
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
+
 
 def delete_collection(collection_id):
     """Deletes a collection and returns true on success, false otherwise."""
@@ -135,11 +139,18 @@ def handle_uploaded_img_file(file, deck, collection):
 
     return os.path.join(dir_name, file_name)
 
+
 def upload_img_from_path(path_original, deck, collection):
-    img = Image.open(path_original)
     head, file_name = os.path.split(path_original)
     [full_path, path, dir_name, file_name] = handle_media_folders(collection.id, deck.id, file_name)
-    img.save(full_path)
+    try:
+        webpage = urllib2.urlopen(path_original)
+        img = open(full_path,"wb")
+        img.write(webpage.read())
+        img.close()
+    except:
+        img = Image.open(path_original)
+        img.save(full_path)
     resize_uploaded_img(path, file_name, dir_name)
     return os.path.join(dir_name, file_name)
 
