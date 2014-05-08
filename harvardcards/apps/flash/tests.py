@@ -124,9 +124,9 @@ class QueriesTest(TestCase):
             CardTemplates_Fields.objects.create(card_template=card_template, field=f)
 
         card_list = [
-            [{"field_id":field1.id,"value":"a"},{"field_id":field2.id,"value":"a"}],
-            [{"field_id":field1.id,"value":"bb"},{"field_id":field2.id,"value":"bb"}],
-            [{"field_id":field1.id,"value":"ccc"},{"field_id":field2.id,"value":"ccc"}],
+            [{"field_id":field1.id,"value":"a"},{"field_id":field2.id,"value":"http://www.columbia.edu/cu/arthistory/images/slideshow/Amiens.jpg"}],
+            [{"field_id":field1.id,"value":"bb"},{"field_id":field2.id,"value":"http://www.columbia.edu/cu/arthistory/images/slideshow/10310749545.jpg"}],
+            [{"field_id":field1.id,"value":"ccc"},{"field_id":field2.id,"value":"http://art.uga.edu/images/cache/ce_image/local/images/uploads/areas-of-study/overview/mfa_arthistory_overview_620_300auto_c1.jpg"}],
         ]
         deck_title = "my_deck_title"
         deck = services.create_deck_with_cards(collection.id, deck_title, card_list)
