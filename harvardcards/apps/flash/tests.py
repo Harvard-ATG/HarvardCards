@@ -13,7 +13,8 @@ from harvardcards.apps.flash.models import Collection, Deck, Field, CardTemplate
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
 from harvardcards.apps.flash.views.collection import *
 from harvardcards.apps.flash import services, queries
-
+from harvardcards.settings.common import MEDIA_ROOT
+import os
 import unittest
 
 class CollectionTest(TestCase):
@@ -124,9 +125,9 @@ class QueriesTest(TestCase):
             CardTemplates_Fields.objects.create(card_template=card_template, field=f)
 
         card_list = [
-            [{"field_id":field1.id,"value":"a"},{"field_id":field2.id,"value":"http://localhost:8000/static/tests/a.jpg"}],
-            [{"field_id":field1.id,"value":"bb"},{"field_id":field2.id,"value":"http://localhost:8000/static/tests/bb.jpg"}],
-            [{"field_id":field1.id,"value":"ccc"},{"field_id":field2.id,"value":"http://localhost:8000/static/tests/ccc.png"}],
+            [{"field_id":field1.id,"value":"a"},{"field_id":field2.id,"value":os.path.join(MEDIA_ROOT, 'tests', 'a.jpg")}],
+            [{"field_id":field1.id,"value":"bb"},{"field_id":field2.id,"value":os.path.join(MEDIA_ROOT, 'tests', 'bb.jpg")}],
+            [{"field_id":field1.id,"value":"ccc"},{"field_id":field2.id,"value":os.path.join(MEDIA_ROOT, 'tests', 'ccc.png")}],
         ]
         deck_title = "my_deck_title"
         deck = services.create_deck_with_cards(collection.id, deck_title, card_list)
