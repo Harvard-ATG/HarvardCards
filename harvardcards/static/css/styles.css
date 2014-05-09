@@ -557,10 +557,10 @@ ul#cards{
 			border: solid 0.375em #4d4d4d;
 		}
         .card-color-default, .card-color-white { background-color: #fff; color: #a51c30; }
-        .card-color-red { background-color: #A51C30; color: #fff; }
-        .card-color-green { background-color: #00703C; color: #fff; }
-        .card-color-blue { background-color: #0F4D92; color: #fff; }
-        .card-color-orange { background-color: #F46F1B; color: #fff; }
+        .card-color-blue { background-color: #AFE6F1; color: #000; }
+        .card-color-pink { background-color: #FCB0BA; color: #000; }
+        .card-color-green { background-color: #CED665; color: #000; }
+        .card-color-orange { background-color: #EFA545; color: #000; }
 
 div.deckNav{
 	display: block;

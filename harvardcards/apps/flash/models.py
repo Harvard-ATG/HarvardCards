@@ -60,9 +60,9 @@ class Card(models.Model):
     DEFAULT_COLOR = "default"
     COLOR_CHOICES = (
         (DEFAULT_COLOR, "Default"),
-        ("red", "Red"),
-        ("green", "Green"),
         ("blue", "Blue"),
+        ("pink", "Pink"),
+        ("green", "Green"),
         ("orange", "Orange"),
         ("white", "White"),
     )
