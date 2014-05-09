@@ -42,7 +42,7 @@
         <!-- SECTION: Card Slider -->
         {% if is_deck_admin %}
             <div class="addCards">
-            	<a href="{% url 'deckEditCard' deck.id %}" class="btn-dashed">Add Card</a>
+            	<a href="{% url 'renderEditCard' deck.id %}" class="btn-dashed">Add Card</a>
 				<a href="{% url 'deckUpload' deck.id %}" class="btn-dashed">Upload Cards</a>
             </div>
         {% endif %}

@@ -14,6 +14,7 @@ from harvardcards.apps.flash import services, queries, utils
 from PIL import Image
 import urllib
 
+
 def index(request, deck_id=None):
     """Displays the deck of cards for review/quiz."""
     collections = Collection.objects.all().prefetch_related('deck_set')
@@ -111,49 +112,6 @@ def edit_card(request, deck_id=None):
     collections = Collection.objects.all().prefetch_related('deck_set')
     card_color = None
 
-    if request.method == 'POST':
-        errorMsg = ''
-        field_prefix = 'field_'
-        fields = []
-
-        num_fields = 0
-        for field_name, field_value in request.FILES.items():
-            if field_name.startswith(field_prefix):
-                field_id = field_name.replace(field_prefix, '')
-                if field_id.isdigit():
-                    if request.FILES[field_name].size > 0:
-                        if request.FILES[field_name]:
-                            if not services.valid_uploaded_file(request.FILES[field_name], 'I'):
-                                return HttpResponse(json.dumps({"message":"The uploaded image file type is not supported."}))
-                            num_fields = num_fields + 1
-                            path = services.handle_uploaded_img_file(request.FILES[field_name], deck.id, deck.collection.id)
-                            fields.append({"field_id": int(field_id), "value": path})
-
-        for field_name, field_value in request.POST.items():
-            if field_name.startswith(field_prefix):
-                field_id = field_name.replace(field_prefix, '')
-                if field_id.isdigit():
-                    if field_value:
-                        num_fields = num_fields + 1
-                        fields.append({"field_id": int(field_id), "value": field_value})
-
-        if num_fields==0:
-            return HttpResponse(json.dumps({"message":"All Card Fields are Empty."}))
-
-
-        if request.POST.get('card_id', '') == '':
-            card = services.add_card_to_deck(deck, fields)
-        else:
-            card = Card.objects.get(id=request.POST.get('card_id'))
-            services.update_card_fields(card, fields)
-
-        if request.POST.get('card_color') != '':
-            card.color = request.POST.get('card_color')
-            card.save()
-
-        params = {"card_id":card.id}
-        return redirect(deck.get_absolute_url() + '?' + urllib.urlencode(params))
-
     card_fields = {'show':[],'reveal':[]}
     if request.GET.get('card_id', '') == '':
         for field in current_collection.card_template.fields.all():
@@ -198,7 +156,8 @@ def edit_card(request, deck_id=None):
         "card_fields": card_fields,
         "card_color_select":  card_color_select.render("card_color", card_color)
     }
-
+    print request
+    print '\n'
     return render(request, 'decks/edit_card.html', context)
 
 def delete_card(request, deck_id=None):

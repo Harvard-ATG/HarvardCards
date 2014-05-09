@@ -7,32 +7,59 @@ from harvardcards.apps.flash import services, queries, utils
 from django.db import models
 
 @require_http_methods(["POST"])
-def create(request):
-    """Creates a new card."""
+def create(request, deck_id = None):
+    """Add a new card to the deck."""
     result = {"success": False}
-    deck = Deck.objects.get(id=request.POST['deck_id'])
-    field_prefix = 'field_'
-    card_item = []
+    deck = Deck.objects.get(id=deck_id)
 
+
+    field_prefix = 'field_'
+    fields = []
+
+    num_fields = 0
     for field_name, field_value in request.FILES.items():
         if field_name.startswith(field_prefix):
             field_id = field_name.replace(field_prefix, '')
             if field_id.isdigit():
-                path = services.handle_uploaded_img_file(request.FILES[field_name], deck.id, deck.collection.id)
-                card_item.append({"field_id": int(field_id), "value": path})
+                if request.FILES[field_name].size > 0:
+                    if request.FILES[field_name]:
+                        if not services.valid_uploaded_file(request.FILES[field_name], 'I'):
+                            result['error'] = "The uploaded image file type is not supported."
+                            return HttpResponse(json.dumps(result))
+                        num_fields = num_fields + 1
+                        path = services.handle_uploaded_img_file(request.FILES[field_name], deck.id, deck.collection.id)
+                        fields.append({"field_id": int(field_id), "value": path})
 
     for field_name, field_value in request.POST.items():
         if field_name.startswith(field_prefix):
             field_id = field_name.replace(field_prefix, '')
             if field_id.isdigit():
-                card_item.append({"field_id": int(field_id), "value": field_value})
+                if field_value:
+                    num_fields = num_fields + 1
+                    fields.append({"field_id": int(field_id), "value": field_value})
 
-    card = services.add_card_to_deck(deck, card_item)
+
+    if num_fields==0:
+        result['error'] = "All Card Fields are Empty."
+        return HttpResponse(json.dumps(result))
+
+
+    if request.POST.get('card_id', '') == '':
+        card = services.add_card_to_deck(deck, fields)
+    else:
+        card = Card.objects.get(id=request.POST.get('card_id'))
+        services.update_card_fields(card, fields)
+
+    if request.POST.get('card_color') != '':
+        card.color = request.POST.get('card_color')
+        card.save()
 
     result['data'] = {"card_id": card.id}
     result['location'] = "{0}?card_id={1}".format(deck.get_absolute_url(), card.id)
 
     return HttpResponse(json.dumps(result), mimetype="application/json")
+
+
 
 @require_http_methods(["POST"])
 def delete(request):
