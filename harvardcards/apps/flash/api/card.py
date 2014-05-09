@@ -25,7 +25,7 @@ def create(request, deck_id = None):
                     if request.FILES[field_name]:
                         if not services.valid_uploaded_file(request.FILES[field_name], 'I'):
                             result['error'] = "The uploaded image file type is not supported."
-                            return HttpResponse(json.dumps(result))
+                            return HttpResponse(json.dumps(result), mimetype="application/json")
                         num_fields = num_fields + 1
                         path = services.handle_uploaded_img_file(request.FILES[field_name], deck.id, deck.collection.id)
                         fields.append({"field_id": int(field_id), "value": path})
@@ -41,7 +41,7 @@ def create(request, deck_id = None):
 
     if num_fields==0:
         result['error'] = "All Card Fields are Empty."
-        return HttpResponse(json.dumps(result))
+        return HttpResponse(json.dumps(result), mimetype="application/json")
 
 
     if request.POST.get('card_id', '') == '':
@@ -53,6 +53,7 @@ def create(request, deck_id = None):
     if request.POST.get('card_color') != '':
         card.color = request.POST.get('card_color')
         card.save()
+    result['success'] = True
 
     result['data'] = {"card_id": card.id}
     result['location'] = "{0}?card_id={1}".format(deck.get_absolute_url(), card.id)

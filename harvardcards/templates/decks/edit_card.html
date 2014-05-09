@@ -5,12 +5,13 @@
 {% endblock %}
 
 {% block main_content %}
-<div id="content">
+<div id="content" data-module="edit_card">
     <div class="courseWrapper">
         <div class="courseHeader">
             <h2>Edit card</h2>
         </div>
-        <form action="{% url 'deckEditCard' deck.id %}" method="post" enctype="multipart/form-data">
+        <form id="cardForm" action="{% url 'deckEditCard' deck.id %}" method="post" enctype="multipart/form-data">
+            <div class="formMessage" style="text-align:left;margin:0 0 1em 0; display:none;"></div>
             {% csrf_token %}
             <input type="hidden" name="card_id" value="{{card_id}}" />
 

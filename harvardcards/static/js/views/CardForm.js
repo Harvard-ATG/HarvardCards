@@ -20,7 +20,7 @@ define(['lodash', 'jquery', 'jquery.form'], function(_, $, $form) {
 
         // use the jQuery.form plugin to AJAXify the form
         this.formEl.ajaxForm({
-            resetForm: true,
+            resetForm: false,
             beforeSubmit: this.beforeSubmit,
             error: this.error,
             success: this.success
@@ -37,7 +37,12 @@ define(['lodash', 'jquery', 'jquery.form'], function(_, $, $form) {
     };
 
     CardForm.prototype.success = function(data, statusText, xhr, formEl) {
-        this.msg("Card save.", MSG_SUCCESS);
+        if (data.success){
+            this.msg("Card save.", MSG_SUCCESS);
+            window.location = data.location;
+            }
+        else
+            this.msg(data.error, MSG_ERROR);
     };
 
     CardForm.prototype.error = function(xhr, textStatus, errorThrown) {
@@ -46,6 +51,7 @@ define(['lodash', 'jquery', 'jquery.form'], function(_, $, $form) {
 
     // Displays a message about the status of the form.
     CardForm.prototype.msg = function(html, statusType) {
+        this.formMessageEl.css('display', 'block');
         var css, css_for = {};
         css_for[MSG_SUCCESS] = {color:"green"};
         css_for[MSG_ERROR] = {color:"red"};
@@ -55,7 +61,6 @@ define(['lodash', 'jquery', 'jquery.form'], function(_, $, $form) {
         if(!css) {
             css = css_for[MSG_INFO];
         }
-
         this.formMessageEl.css(css).html(html);
     };
 
