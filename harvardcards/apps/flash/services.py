@@ -5,7 +5,7 @@ This module contains services and commands that may change the state of the syst
 from django.db import transaction
 
 from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Cards_Fields, Field
-from harvardcards.apps.flash import utils
+from harvardcards.apps.flash import utils, queries
 import os
 import shutil
 from harvardcards.settings.common import MEDIA_ROOT, APPS_ROOT

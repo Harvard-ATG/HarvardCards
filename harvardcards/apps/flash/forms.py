@@ -20,3 +20,5 @@ class DeckForm(forms.ModelForm):
 class DeckImportForm(forms.Form):
     file = forms.FileField(required=False)
 
+class CardEditForm(forms.Form):
+    pass

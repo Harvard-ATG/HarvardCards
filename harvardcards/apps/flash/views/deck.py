@@ -156,8 +156,6 @@ def edit_card(request, deck_id=None):
         "card_fields": card_fields,
         "card_color_select":  card_color_select.render("card_color", card_color)
     }
-    print request
-    print '\n'
     return render(request, 'decks/edit_card.html', context)
 
 def delete_card(request, deck_id=None):

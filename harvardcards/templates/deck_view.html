@@ -42,7 +42,7 @@
         <!-- SECTION: Card Slider -->
         {% if is_deck_admin %}
             <div class="addCards">
-            	<a href="{% url 'renderEditCard' deck.id %}" class="btn-dashed">Add Card</a>
+            	<a href="{% url 'deckEditCard' deck.id %}" class="btn-dashed">Add Card</a>
 				<a href="{% url 'deckUpload' deck.id %}" class="btn-dashed">Upload Cards</a>
             </div>
         {% endif %}
@@ -96,7 +96,7 @@
                 {% if is_deck_admin %}
                 <div class="controls hide" data-card-id="{{card.card_id}}">
                     <a class="pull-right" href="{% url "deckDeleteCard" deck.id %}?card_id={{card.card_id}}" data-confirm="Are you sure you want to delete this card?"><i class="fa fa-times-circle"></i> Delete Card</a>
-                    <a class="pull-right" href="{% url "renderEditCard" deck.id %}?card_id={{card.card_id}}"><i class="fa fa-pencil"></i> Edit Card</a>
+                    <a class="pull-right" href="{% url "deckEditCard" deck.id %}?card_id={{card.card_id}}"><i class="fa fa-pencil"></i> Edit Card</a>
                 </div>
                 {% endif %}
             {% endfor %}

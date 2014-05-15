@@ -37,12 +37,24 @@ define(['lodash', 'jquery', 'jquery.form'], function(_, $, $form) {
     };
 
     CardForm.prototype.success = function(data, statusText, xhr, formEl) {
+        console.log("success", arguments);
         if (data.success){
-            this.msg("Card save.", MSG_SUCCESS);
-            window.location = data.location;
-            }
-        else
-            this.msg(data.error, MSG_ERROR);
+            this.msg("Card saved", MSG_SUCCESS);
+            window.setTimeout(this.makeRedirect(data.location), 500)
+        } else {
+            var errors = '';
+            $.each(data.error, function(index, errstr) {
+                errors += '<li>' + errstr + '</li>';
+            });
+            errors = '<ul>' + errors + '</ul>';
+            this.msg(errors, MSG_ERROR);
+        }
+    };
+
+    CardForm.prototype.makeRedirect = function(location) {
+        return function() {
+            window.location = location;
+        };
     };
 
     CardForm.prototype.error = function(xhr, textStatus, errorThrown) {
