@@ -34,21 +34,36 @@ define(['lodash', 'jquery', 'jquery.form'], function(_, $, $form) {
 
     CardForm.prototype.beforeSubmit = function() {
         this.msg("Saving card...", MSG_INFO);
+        this.hideErrors();
     };
 
     CardForm.prototype.success = function(data, statusText, xhr, formEl) {
         console.log("success", arguments);
+        var that = this;
         if (data.success){
             this.msg("Card saved", MSG_SUCCESS);
-            window.setTimeout(this.makeRedirect(data.location), 500)
+            if(data.data.card_url) {
+                window.setTimeout(this.makeRedirect(data.data.card_url), 500)
+            }
         } else {
-            var errors = '';
-            $.each(data.error, function(index, errstr) {
-                errors += '<li>' + errstr + '</li>';
+            this.msg("Error saving card", MSG_ERROR);
+            $.each(data.errors, function(key, val) {
+                that.setFieldError(key, val);
             });
-            errors = '<ul>' + errors + '</ul>';
-            this.msg(errors, MSG_ERROR);
+            this.showErrors();
         }
+    };
+
+    CardForm.prototype.setFieldError = function(key, val) {
+        this.formEl.find('.field-error-'+key).html(val);
+    };
+
+    CardForm.prototype.showErrors = function() {
+        this.formEl.find('.field-error').show();
+    };
+
+    CardForm.prototype.hideErrors = function() {
+        this.formEl.find('.field-error').hide();
     };
 
     CardForm.prototype.makeRedirect = function(location) {

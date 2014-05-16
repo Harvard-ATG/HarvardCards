@@ -129,6 +129,9 @@ h1, h2, h3, h4
 	display: block;
 	padding: 0.25em;
 }
+#cardForm .field-error {
+    color: red;
+}
 /* form (end) */
 
 #fc_headerWrapper{

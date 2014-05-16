@@ -105,52 +105,71 @@ def download_deck(request, deck_id=None):
 
     return response
 
-def edit_card(request, deck_id=None):
-    """Add a new card to the deck."""
+def create_card(request, deck_id=None):
+    """Create a new card from the collection card template."""
     deck = Deck.objects.get(id=deck_id)
     current_collection = Collection.objects.get(id=deck.collection.id)
     collections = Collection.objects.all().prefetch_related('deck_set')
-    card_color = None
-
-    card_fields = {'show':[],'reveal':[]}
-    if request.GET.get('card_id', '') == '':
-        for field in current_collection.card_template.fields.all():
-            if field.display:
-                bucket = 'show'
-            else:
-                bucket = 'reveal'
-            card_fields[bucket].append({
-                'id': field.id,
-                'type': field.field_type,
-                'label': field.label,
-                'show_label': field.show_label,
-                'value': ''
-            })
-    else:
-        card = Card.objects.get(id=request.GET.get('card_id'))
-        for cfield in card.cards_fields_set.all():
-            if cfield.field.display:
-                bucket = 'show'
-            else:
-                bucket = 'reveal'
-            card_fields[bucket].append({
-                'id': cfield.field.id,
-                'type': cfield.field.field_type,
-                'label': cfield.field.label,
-                'show_label': cfield.field.show_label,
-                'value': cfield.value,
-            })
-        if card.color != '':
-            card_color = card.color
-
-    if card_color is None:
-        card_color = Card.DEFAULT_COLOR
-
+    card_color = Card.DEFAULT_COLOR
     card_color_select = widgets.Select(attrs=None, choices=Card.COLOR_CHOICES)
+
+    card_fields = {'show':[], 'reveal':[]}
+    for field in current_collection.card_template.fields.all():
+        if field.display:
+            bucket = 'show'
+        else:
+            bucket = 'reveal'
+        card_fields[bucket].append({
+            'id': field.id,
+            'type': field.field_type,
+            'label': field.label,
+            'show_label': field.show_label,
+            'value': ''
+        })
 
     context = {
         "deck": deck,
-        "card_id": request.GET.get('card_id', ''),
+        "card_id": '',
+        "collection": current_collection,
+        "collections": collections,
+        "card_fields": card_fields,
+        "card_color_select":  card_color_select.render("card_color", card_color)
+    }
+    return render(request, 'decks/edit_card.html', context)
+
+
+
+def edit_card(request, deck_id=None):
+    """Edit an existing card's fields."""
+    deck = Deck.objects.get(id=deck_id)
+    current_collection = Collection.objects.get(id=deck.collection.id)
+    collections = Collection.objects.all().prefetch_related('deck_set')
+
+    card_id = request.GET.get('card_id', '')
+    card = Card.objects.get(id=card_id)
+    card_color = card.color
+    if not card_color:
+        card_color = Card.DEFAULT_COLOR
+    card_color_select = widgets.Select(attrs=None, choices=Card.COLOR_CHOICES)
+    card_fields = {'show':[],'reveal':[]}
+
+    for cfield in card.cards_fields_set.all():
+        if cfield.field.display:
+            bucket = 'show'
+        else:
+            bucket = 'reveal'
+        card_fields[bucket].append({
+            'id': cfield.field.id,
+            'type': cfield.field.field_type,
+            'label': cfield.field.label,
+            'show_label': cfield.field.show_label,
+            'value': cfield.value,
+        })
+
+
+    context = {
+        "deck": deck,
+        "card_id": card_id,
         "collection": current_collection,
         "collections": collections,
         "card_fields": card_fields,

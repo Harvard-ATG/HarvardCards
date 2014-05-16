@@ -164,10 +164,22 @@ def update_card_fields(card, field_items):
     field_ids = [f['field_id'] for f in field_items]
     field_map = dict((f['field_id'],f) for f in field_items)
     cfields = card.cards_fields_set.filter(field__id__in=field_ids)
+
+    # update fields
     for cfield in cfields:
         field_id = cfield.field.id
         cfield.value = field_map[field_id]['value']
         cfield.save()
+        field_map.pop(field_id)
+
+    # create fields that did not exist
+    if len(field_map) > 0:
+        fields = Field.objects.all()
+        for field_id, field_item in field_map.items():
+            field_object = fields.get(pk=field_id)
+            field_value = field_item['value']
+            Cards_Fields.objects.create(card=card, field=field_object, value=field_value)
+    return card
 
 @transaction.commit_on_success
 def add_cards_to_deck(deck, card_list):
@@ -190,23 +202,18 @@ def add_cards_to_deck(deck, card_list):
     return deck
 
 @transaction.commit_on_success
-def add_card_to_deck(deck, card_item):
-    """Adds a single card with fields to a deck."""
-    fields = Field.objects.all()
-    card_sort_order = deck.collection.card_set.count() + 1
-    deck_sort_order = deck.cards.count() + 1
-    card = Card.objects.create(collection=deck.collection, sort_order=card_sort_order)
-    Decks_Cards.objects.create(deck=deck, card=card, sort_order=deck_sort_order)
-    for field_item in card_item:
-        field_object = fields.get(pk=field_item['field_id']) 
-        field_value = field_item['value']
-        Cards_Fields.objects.create(card=card, field=field_object, value=field_value)
-    return card
-
-@transaction.commit_on_success
 def create_deck_with_cards(collection_id, deck_title, card_list):
     """Creates and populates a new deck with cards."""
     collection = Collection.objects.get(id=collection_id)
     deck = Deck.objects.create(title=deck_title, collection=collection)
     add_cards_to_deck(deck, card_list)
     return deck
+
+@transaction.commit_on_success
+def create_card_in_deck(deck):
+    fields = Field.objects.all()
+    card_sort_order = deck.collection.card_set.count() + 1
+    deck_sort_order = deck.cards.count() + 1
+    card = Card.objects.create(collection=deck.collection, sort_order=card_sort_order)
+    Decks_Cards.objects.create(deck=deck, card=card, sort_order=deck_sort_order)
+    return card
