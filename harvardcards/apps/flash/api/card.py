@@ -14,6 +14,7 @@ def edit(request):
     card_id = request.POST.get('card_id', '')
     deck_id = request.POST.get('deck_id', '')
 
+    # fetch the fields being edited; new cards must be created from the card template
     if card_id == '':
         deck = Deck.objects.get(id=deck_id)
         card_fields = deck.collection.card_template.fields.all()
@@ -21,6 +22,7 @@ def edit(request):
         card = Card.objects.get(id=card_id)
         card_fields = [cfield.field for cfield in card.cards_fields_set.all()]
 
+    # attempted to validate and save the form data
     card_edit_form = CardEditForm(request.POST, request.FILES, card_fields=card_fields)
     if card_edit_form.is_valid():
         card_edit_form.save()
