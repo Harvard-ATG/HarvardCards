@@ -60,6 +60,10 @@ def index(request, deck_id=None):
 
 def delete(request, deck_id=None):
     """Deletes a deck."""
+
+    # ROLE CHECK -- make sure user has permission
+    services.check_role_deck(user=request.user, role="A", deck_id=deck_id, raise_exception=True)
+
     collection_id = queries.getDeckCollectionId(deck_id)
     services.delete_deck(deck_id)
     response =  redirect('collectionIndex', collection_id)
@@ -70,6 +74,10 @@ def upload_deck(request, deck_id=None):
     '''
     Imports a deck of cards from an excel spreadsheet.
     '''
+
+    # ROLE CHECK -- make sure user has permission
+    services.check_role_deck(user=request.user, role="A", deck_id=deck_id, raise_exception=True)
+
     deck = Deck.objects.get(id=deck_id)
     collections = Collection.objects.all()
     collection = Collection.objects.get(id=deck.collection.id)
@@ -107,6 +115,10 @@ def download_deck(request, deck_id=None):
 
 def create_card(request, deck_id=None):
     """Create a new card from the collection card template."""
+
+    # ROLE CHECK -- make sure user has permission
+    services.check_role_deck(user=request.user, role="A", deck_id=deck_id, raise_exception=True)
+
     deck = Deck.objects.get(id=deck_id)
     current_collection = Collection.objects.get(id=deck.collection.id)
     collections = Collection.objects.all().prefetch_related('deck_set')
@@ -141,6 +153,10 @@ def create_card(request, deck_id=None):
 
 def edit_card(request, deck_id=None):
     """Edit an existing card's fields."""
+
+    # ROLE CHECK -- make sure user has permission
+    services.check_role_deck(user=request.user, role="A", deck_id=deck_id, raise_exception=True)
+
     deck = Deck.objects.get(id=deck_id)
     current_collection = Collection.objects.get(id=deck.collection.id)
     collections = Collection.objects.all().prefetch_related('deck_set')
@@ -179,6 +195,10 @@ def edit_card(request, deck_id=None):
 
 def delete_card(request, deck_id=None):
     """Deletes a card."""
+
+    # ROLE CHECK -- make sure user has permission
+    services.check_role_deck(user=request.user, role="A", deck_id=deck_id, raise_exception=True)
+
     deck = Deck.objects.get(id=deck_id)
     card_id = request.GET.get('card_id', None)
     if queries.isCardInDeck(card_id, deck_id):

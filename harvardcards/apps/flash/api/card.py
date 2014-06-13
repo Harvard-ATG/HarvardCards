@@ -14,6 +14,9 @@ def edit(request):
     card_id = request.POST.get('card_id', '')
     deck_id = request.POST.get('deck_id', '')
 
+    # ROLE CHECK -- make sure user has permission
+    services.check_role_deck(user=request.user, role="A", deck_id=deck_id, raise_exception=True)
+
     # fetch the fields being edited; new cards must be created from the card template
     if card_id == '':
         deck = Deck.objects.get(id=deck_id)
@@ -43,6 +46,11 @@ def edit(request):
 def delete(request):
     """Deletes a card."""
     card_id = request.POST['card_id']
+    deck_id = request.POST['deck_id']
+
+    # ROLE CHECK -- make sure user has permission
+    services.check_role_deck(user=request.user, role="A", deck_id=deck_id, raise_exception=True)
+
     result = {}
     result['success'] = services.delete_card(card_id)
     return HttpResponse(json.dumps(result), mimetype="application/json")

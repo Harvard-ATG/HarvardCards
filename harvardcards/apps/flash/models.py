@@ -175,3 +175,9 @@ class Users_Collections(models.Model):
             role_buckets[role_map[role]].append(collection.id)
 
         return role_buckets
+
+    @classmethod
+    def check_role(self, user, role, collection):
+        if user.is_superuser:
+            return True
+        return bool(self.objects.filter(user=user.id, role=role, collection=collection.id))
