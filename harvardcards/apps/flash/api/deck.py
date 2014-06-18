@@ -11,6 +11,10 @@ from django.db import models
 def delete(request):
     """Delete a deck"""
     deck_id = request.POST['deck_id']
+
+    # ROLE CHECK -- make sure user has permission
+    services.check_role_deck(user=request.user, role="A", deck_id=deck_id, raise_exception=True)
+
     result = {"success": False}
     if deck_id is None:
         result['error'] = "Missing deck_id parameter"
@@ -27,6 +31,10 @@ def delete(request):
 def rename(request):
     """Rename a deck"""
     deck_id = request.POST['deck_id']
+
+    # ROLE CHECK -- make sure user has permission
+    services.check_role_deck(user=request.user, role="A", deck_id=deck_id, raise_exception=True)
+
     result = {"success": False}
     if deck_id is None:
         result['error'] = "Missing deck_id parameter"

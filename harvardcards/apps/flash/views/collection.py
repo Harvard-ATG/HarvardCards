@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
-from django.core.exceptions import ViewDoesNotExist
+from django.core.exceptions import ViewDoesNotExist, PermissionDenied
 from django.contrib.auth.models import User
 
 from django.utils import simplejson as json
@@ -59,6 +59,10 @@ def index(request, collection_id=None):
     
 def create(request):
     """Creates a collection."""
+
+    if not (request.user.is_superuser or request.user.is_staff):
+        raise PermissionDenied
+
     collections = Collection.objects.all()
     if request.method == 'POST':
         collection_form = CollectionForm(request.POST)
@@ -67,6 +71,7 @@ def create(request):
             if request.POST.get('user_id', 0):
                 user_id = int(request.POST['user_id'])
                 user = User.objects.get(id=user_id)
+                Users_Collections.objects.create(user=user, collection=collection, role='O', date_joined=datetime.date.today())
                 Users_Collections.objects.create(user=user, collection=collection, role='A', date_joined=datetime.date.today())
 
             response = redirect(collection)
@@ -83,6 +88,10 @@ def create(request):
 
 def edit(request, collection_id=None):
     """Edits a collection."""
+
+    # ROLE CHECK -- make sure user has permission
+    services.check_role_collection(user=request.user, role="A", collection_id=collection_id, raise_exception=True)
+
     collections = Collection.objects.all()
     collection = Collection.objects.get(id=collection_id)
 
@@ -106,12 +115,20 @@ def edit(request, collection_id=None):
     
 def add_deck(request, collection_id=None):
     """Adds a collection."""
+
+    # ROLE CHECK -- make sure user has permission
+    services.check_role_collection(user=request.user, role="A", collection_id=collection_id, raise_exception=True)
+
     collection = Collection.objects.get(id=collection_id)
     deck = Deck.objects.create(collection=collection, title='Untitled Deck')
     return redirect(deck)
 
 def delete(request, collection_id=None):
     """Deletes a collection."""
+
+    # ROLE CHECK -- make sure user has permission
+    services.check_role_collection(user=request.user, role="A", collection_id=collection_id, raise_exception=True)
+
     services.delete_collection(collection_id)
     response = redirect('collectionIndex')
     response['Location'] += '?instructor=edit'
@@ -121,6 +138,11 @@ def upload_deck(request, collection_id=None):
     '''
     Uploads a deck of cards from an excel spreadsheet.
     '''
+
+    # ROLE CHECK -- make sure user has permission
+    services.check_role_collection(user=request.user, role="A", collection_id=collection_id, raise_exception=True)
+
+
     collections = Collection.objects.all().prefetch_related('deck_set')
     collection = Collection.objects.get(id=collection_id)
 

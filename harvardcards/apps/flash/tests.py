@@ -8,6 +8,7 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.forms.formsets import formset_factory
 from django.test.client import RequestFactory, Client
+from django.contrib.auth.models import User
 
 from harvardcards.apps.flash.models import Collection, Deck, Field, CardTemplate, CardTemplates_Fields, Card
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
@@ -18,10 +19,26 @@ import os
 import unittest
 
 class CollectionTest(TestCase):
+    admin_user = None
+    admin_username = 'admintest'
+    admin_password = 'password'
+    admin_email = 'admintest@foo.us'
+
     def setUp(self):
-        # Every test needs access to the request factory.
+        super(CollectionTest, self).setUp()
         self.factory = RequestFactory()
         self.client = Client()
+        self._setupSuperUser()
+
+    def tearDown(self):
+        super(CollectionTest, self).tearDown()
+        self.admin_user.delete()
+
+    def _setupSuperUser(self):
+        self.admin_user = User.objects.create_superuser(
+                self.admin_username, 
+                self.admin_email, 
+                self.admin_password)
 
     def test_index(self):
         url = reverse('index')
@@ -38,6 +55,9 @@ class CollectionTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_collection_create(self):
+        logged_in = self.client.login(username=self.admin_user.username, password=self.admin_password)
+        self.assertTrue(logged_in, 'super user logged in')
+
         url = reverse('collectionCreate')
         post_data = {'title':'foobar', 'card_template':'1'}
 
