@@ -7,6 +7,12 @@ from harvardcards.apps.flash.forms import CardEditForm
 from harvardcards.apps.flash import services, queries, utils
 from django.db import models
 
+import urllib2
+from django.utils.datastructures import MultiValueDict
+from django.core.files import File
+from cStringIO import StringIO
+from PIL import Image, ImageFile    
+
 @require_http_methods(["POST"])
 def edit(request):
     """Add/edit card."""
@@ -24,9 +30,36 @@ def edit(request):
     else:
         card = Card.objects.get(id=card_id)
         card_fields = [cfield.field for cfield in card.cards_fields_set.all()]
-
+    
+    print request.POST
+    print '-----'
     # attempted to validate and save the form data
-    card_edit_form = CardEditForm(request.POST, request.FILES, card_fields=card_fields)
+    file_url = dict(request.POST).get('field_3', '')[0]
+
+    if file_url:
+        inStream = urllib2.urlopen(file_url)
+
+        parser = ImageFile.Parser()
+        while True:
+            s = inStream.read(1024)
+            if not s:
+                break
+            parser.feed(s)
+
+        inImage = parser.close()
+        # convert to RGB to avoid error with png and tiffs
+        #if inImage.mode != "RGB":
+        #    inImage = inImage.convert("RGB")
+
+        img_temp = StringIO()
+        inImage.save(img_temp, 'PNG')
+        img_temp.seek(0)
+        file_object = File(img_temp, 'img_temp.png')
+        uploaded_file = MultiValueDict({'field_3': [file_object]})
+    else:
+        uploaded_file = request.FILES
+    
+    card_edit_form = CardEditForm(request.POST, uploaded_file, card_fields=card_fields)
     if card_edit_form.is_valid():
         card_edit_form.save()
         card = card_edit_form.get_card()
