@@ -116,6 +116,9 @@ def download_deck(request, deck_id=None):
 def create_card(request, deck_id=None):
     """Create a new card from the collection card template."""
 
+    IMAGE_UPLOAD_TYPE = (('F', 'File'),
+                        ('U', 'URL'))
+
     # ROLE CHECK -- make sure user has permission
     services.check_role_deck(user=request.user, role="A", deck_id=deck_id, raise_exception=True)
 
@@ -124,6 +127,7 @@ def create_card(request, deck_id=None):
     collections = Collection.objects.all().prefetch_related('deck_set')
     card_color = Card.DEFAULT_COLOR
     card_color_select = widgets.Select(attrs=None, choices=Card.COLOR_CHOICES)
+    image_upload_select = widgets.Select(attrs= {'onchange' :'refresh(this)'}, choices=IMAGE_UPLOAD_TYPE)
 
     card_fields = {'show':[], 'reveal':[]}
     for field in current_collection.card_template.fields.all():
@@ -145,7 +149,8 @@ def create_card(request, deck_id=None):
         "collection": current_collection,
         "collections": collections,
         "card_fields": card_fields,
-        "card_color_select":  card_color_select.render("card_color", card_color)
+        "card_color_select":  card_color_select.render("card_color", card_color),
+        "upload_type_select": image_upload_select.render("image_upload", 'F')
     }
     return render(request, 'decks/edit_card.html', context)
 

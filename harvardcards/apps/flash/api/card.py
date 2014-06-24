@@ -31,10 +31,8 @@ def edit(request):
         card = Card.objects.get(id=card_id)
         card_fields = [cfield.field for cfield in card.cards_fields_set.all()]
     
-    print request.POST
-    print '-----'
     # attempted to validate and save the form data
-    file_url = dict(request.POST).get('field_3', '')[0]
+    file_url = dict(request.POST).get('image_url', '')[0]
 
     if file_url:
         inStream = urllib2.urlopen(file_url)
