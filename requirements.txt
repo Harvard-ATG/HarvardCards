@@ -16,3 +16,4 @@ django-debug-toolbar==0.11
 
 # For image manipulation
 Pillow==2.2.1
+
