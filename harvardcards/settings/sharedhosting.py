@@ -2,9 +2,9 @@
 from harvardcards.settings.common import *
 import os
 
-STATIC_URL = '/~harvardcards/static/'
+#STATIC_URL = '/~harvardcards/static/'
 
-FORCE_SCRIPT_NAME = '/~harvardcards/index.py'
+#FORCE_SCRIPT_NAME = '/~harvardcards/index.py'
 
 DATABASES = {
     'default': {
