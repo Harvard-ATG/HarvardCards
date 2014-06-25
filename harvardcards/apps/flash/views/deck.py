@@ -39,24 +39,24 @@ def index(request, deck_id=None):
                 'label': cfield.field.label,
                 'show_label': cfield.field.show_label,
                 'value': cfield.value,
-            })
-        cards.append({
-            'card_id': dcard.card.id,
-            'color': dcard.card.color,
-            'fields': card_fields
-        })
+                })
+            cards.append({
+                'card_id': dcard.card.id,
+                'color': dcard.card.color,
+                'fields': card_fields
+                })
 
-    context = {
-        "collection": current_collection,
-        "collections": collections,
-        "deck": deck,
-        "cards": cards,
-        "is_quiz_mode": is_quiz_mode,
-        "is_deck_admin": is_deck_admin,
-        "card_id": card_id,
-    }
+            context = {
+                    "collection": current_collection,
+                    "collections": collections,
+                    "deck": deck,
+                    "cards": cards,
+                    "is_quiz_mode": is_quiz_mode,
+                    "is_deck_admin": is_deck_admin,
+                    "card_id": card_id,
+                    }
 
-    return render(request, "deck_view.html", context)
+            return render(request, "deck_view.html", context)
 
 def delete(request, deck_id=None):
     """Deletes a deck."""
@@ -92,11 +92,11 @@ def upload_deck(request, deck_id=None):
         deck_form = DeckImportForm()
 
     context = {
-        "deck": deck,
-        "deck_form": deck_form, 
-        "collections": collections,
-        "collection": collection
-    }
+            "deck": deck,
+            "deck_form": deck_form, 
+            "collections": collections,
+            "collection": collection
+            }
 
     return render(request, 'decks/upload.html', context)
 
@@ -113,11 +113,11 @@ def download_deck(request, deck_id=None):
 
     return response
 
-def create_card(request, deck_id=None):
-    """Create a new card from the collection card template."""
+def create_edit_card(request, deck_id=None):
+    """Create a new card or edit an existing one from the collection card template."""
 
     IMAGE_UPLOAD_TYPE = (('F', 'File'),
-                        ('U', 'URL'))
+            ('U', 'URL'))
 
     # ROLE CHECK -- make sure user has permission
     services.check_role_deck(user=request.user, role="A", deck_id=deck_id, raise_exception=True)
@@ -125,12 +125,20 @@ def create_card(request, deck_id=None):
     deck = Deck.objects.get(id=deck_id)
     current_collection = Collection.objects.get(id=deck.collection.id)
     collections = Collection.objects.all().prefetch_related('deck_set')
-    card_color = Card.DEFAULT_COLOR
     card_color_select = widgets.Select(attrs=None, choices=Card.COLOR_CHOICES)
     image_upload_select = widgets.Select(attrs= {'onchange' :'switch_upload_image_type(this)'}, choices=IMAGE_UPLOAD_TYPE)
 
     card_fields = {'show':[], 'reveal':[]}
-    for field in current_collection.card_template.fields.all():
+
+    # Only has card_id if we are editing a card
+    card_id = request.GET.get('card_id', '')
+    if card_id:
+        card = Card.objects.get(id=card_id)
+        card_color = card.color
+    else:
+        card_color = Card.DEFAULT_COLOR
+
+    for field in [cfield.field for cfield in card.cards_fields_set.all()] if card_id else current_collection.card_template.fields.all():
         if field.display:
             bucket = 'show'
         else:
@@ -141,61 +149,18 @@ def create_card(request, deck_id=None):
             'label': field.label,
             'show_label': field.show_label,
             'value': ''
-        })
+            })
 
-    context = {
-        "deck": deck,
-        "card_id": '',
-        "collection": current_collection,
-        "collections": collections,
-        "card_fields": card_fields,
-        "card_color_select":  card_color_select.render("card_color", card_color),
-        "upload_type_select": image_upload_select.render("image_upload", 'F')
-    }
-    return render(request, 'decks/edit_card.html', context)
-
-
-
-def edit_card(request, deck_id=None):
-    """Edit an existing card's fields."""
-
-    # ROLE CHECK -- make sure user has permission
-    services.check_role_deck(user=request.user, role="A", deck_id=deck_id, raise_exception=True)
-
-    deck = Deck.objects.get(id=deck_id)
-    current_collection = Collection.objects.get(id=deck.collection.id)
-    collections = Collection.objects.all().prefetch_related('deck_set')
-
-    card_id = request.GET.get('card_id', '')
-    card = Card.objects.get(id=card_id)
-    card_color = card.color
-    if not card_color:
-        card_color = Card.DEFAULT_COLOR
-    card_color_select = widgets.Select(attrs=None, choices=Card.COLOR_CHOICES)
-    card_fields = {'show':[],'reveal':[]}
-
-    for cfield in card.cards_fields_set.all():
-        if cfield.field.display:
-            bucket = 'show'
-        else:
-            bucket = 'reveal'
-        card_fields[bucket].append({
-            'id': cfield.field.id,
-            'type': cfield.field.field_type,
-            'label': cfield.field.label,
-            'show_label': cfield.field.show_label,
-            'value': cfield.value,
-        })
-
-
-    context = {
-        "deck": deck,
-        "card_id": card_id,
-        "collection": current_collection,
-        "collections": collections,
-        "card_fields": card_fields,
-        "card_color_select":  card_color_select.render("card_color", card_color)
-    }
+        context = {
+                "deck": deck,
+                "card_id": card_id if card_id else '',
+                "collection": current_collection,
+                "collections": collections,
+                "card_fields": card_fields,
+                "card_color_select":  card_color_select.render("card_color", card_color),
+                "upload_type_select": image_upload_select.render("image_upload", 'F')
+                }
+    
     return render(request, 'decks/edit_card.html', context)
 
 def delete_card(request, deck_id=None):
