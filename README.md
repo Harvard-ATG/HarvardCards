@@ -10,6 +10,7 @@ HarvardCards is a web-based flashcard application for students who want to memor
 
 ```sh
 $ git clone git@github.com:Harvard-ATG/HarvardCards.git && cd HarvardCards
+$ vagrant box add precise32 http://files.vagrantup.com/precise32.box
 $ vagrant up
 ```
 

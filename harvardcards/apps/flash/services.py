@@ -4,7 +4,7 @@ This module contains services and commands that may change the state of the syst
 """
 from django.db import transaction
 
-from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Cards_Fields, Field
+from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Cards_Fields, Field, Users_Collections
 from harvardcards.apps.flash import utils, queries
 import os
 import shutil
@@ -12,7 +12,7 @@ from harvardcards.settings.common import MEDIA_ROOT, APPS_ROOT
 from  PIL import Image
 import urllib2
 from django.core.validators import URLValidator
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, PermissionDenied
 
 
 def delete_collection(collection_id):
@@ -217,3 +217,26 @@ def create_card_in_deck(deck):
     card = Card.objects.create(collection=deck.collection, sort_order=card_sort_order)
     Decks_Cards.objects.create(deck=deck, card=card, sort_order=deck_sort_order)
     return card
+
+def check_role_collection(user=None, role=None, collection_id=None, raise_exception=True):
+    """ Checks if a user has a role in a collection. Convenience function for check_role()."""
+    return check_role(user, role, collection_id)
+
+def check_role_deck(user=None, role=None, deck_id=None, raise_exception=True):
+    """ Checks if a user has a role in a collection given a deck. Convenience function for check_role()."""
+    collection_id = queries.getDeckCollectionId(deck_id)
+    return check_role(user, role, collection_id)
+
+def check_role(user=None, role=None, collection_id=None, raise_exception=True):
+    """
+    Checks to see if a user has a role in a collection. Returns True if the user has the role.
+    When raise_exception=True, raises a PermissionDenied exception if the user doesn't have the role,
+    otherwise returns False.
+    """
+    collection = Collection.objects.get(id=collection_id)
+    user_has_role = Users_Collections.check_role(user, role, collection)
+    if user_has_role:
+        return True
+    if raise_exception:
+        raise PermissionDenied
+    return False
