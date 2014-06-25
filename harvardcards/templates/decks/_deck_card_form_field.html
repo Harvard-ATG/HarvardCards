@@ -1,25 +1,3 @@
-{% block head %}
-<script>
-    function refresh(sel)
-    {
-        var file_input = document.getElementById("file_upload_type");
-        var url_input = document.getElementById("url_upload_type");
-        if (sel.value == "U")
-        {
-            file_input.style.display = "none";
-            url_input.style.display = "block";
-        }
-        else
-        {
-            file_input.style.display = "block";
-            url_input.style.display = "none";
-        }
-    }
-
-</script>
-
-{% endblock %}
-
 {% if field.type == 'T' %}
     <i class="fa fa-font fa-2x pull-left"></i>
 {% elif field.type == 'I' %}

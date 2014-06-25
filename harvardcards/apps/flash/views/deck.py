@@ -127,7 +127,7 @@ def create_card(request, deck_id=None):
     collections = Collection.objects.all().prefetch_related('deck_set')
     card_color = Card.DEFAULT_COLOR
     card_color_select = widgets.Select(attrs=None, choices=Card.COLOR_CHOICES)
-    image_upload_select = widgets.Select(attrs= {'onchange' :'refresh(this)'}, choices=IMAGE_UPLOAD_TYPE)
+    image_upload_select = widgets.Select(attrs= {'onchange' :'switch_upload_image_type(this)'}, choices=IMAGE_UPLOAD_TYPE)
 
     card_fields = {'show':[], 'reveal':[]}
     for field in current_collection.card_template.fields.all():
