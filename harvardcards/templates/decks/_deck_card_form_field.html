@@ -20,7 +20,12 @@
                 </a>
             </div>
         {% endif %}
-        <input name="field_{{field.id}}" class="formEle form" type="file" placeholder="Enter {{field.label}}" />
+        <fieldset>
+            <label>File Type</label>
+            {{upload_type_select}}
+        </fieldset>
+        <input id="url_upload_type" name="image_url"  type="text" placeholder="Enter {{field.label}} URL" style="display:none" />
+        <input id="file_upload_type" name="field_{{field.id}}"  type="file" placeholder="Enter {{field.label}}" style="display:block"/>
     {% elif field.type == 'T' or field.type == 'V' or field.type == 'A' %}
         <label for="{{field.label}}">{{field.label}}</label>
         <input name="field_{{field.id}}" class="formEle form" type="text" placeholder="Enter {{field.label}}" value="{{field.value}}" />
