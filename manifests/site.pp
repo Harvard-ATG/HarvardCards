@@ -69,6 +69,7 @@ class djangoapp {
 
 	# setup super user
 	exec { "django-setup-superuser":
+		environment => ["DJANGO_SETTINGS_MODULE=harvardcards.settings.dev-mysql"],
 		command => 'echo "from django.contrib.auth.models import User; User.objects.create_superuser(\'admin\', \'admin@example.com\', \'admin\')" | ./manage.py shell',
 		cwd => "$PROJ_DIR",
 		require => Exec['django-syncdb']
