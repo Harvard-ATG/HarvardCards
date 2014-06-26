@@ -5,7 +5,14 @@ South==0.8.4
 
 # For openid authentication
 python-openid==2.2.5
-django-openid-auth==0.5
+
+######
+# NOTE: issue with mysql in django-openid-auth v0.5, but
+# it was fixed in a PR on github, so using that instead.
+# https://github.com/jplana/django-openid-auth/issues/1
+######
+#django-openid-auth==0.5
+git+https://github.com/jplana/django-openid-auth@mysql-support
 
 # For reading/writing excel files
 xlrd==0.9.2
@@ -16,3 +23,4 @@ django-debug-toolbar==0.11
 
 # For image manipulation
 Pillow==2.2.1
+
