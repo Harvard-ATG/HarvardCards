@@ -40,23 +40,22 @@ def index(request, deck_id=None):
                 'show_label': cfield.field.show_label,
                 'value': cfield.value,
                 })
-            cards.append({
-                'card_id': dcard.card.id,
-                'color': dcard.card.color,
-                'fields': card_fields
-                })
+        cards.append({
+            'card_id': dcard.card.id,
+            'color': dcard.card.color,
+            'fields': card_fields
+            })
+    context = {  
+            "collection": current_collection,
+            "collections": collections,
+            "deck": deck,
+            "cards": cards,
+            "is_quiz_mode": is_quiz_mode,
+            "is_deck_admin": is_deck_admin,
+            "card_id": card_id,
+            }
 
-            context = {
-                    "collection": current_collection,
-                    "collections": collections,
-                    "deck": deck,
-                    "cards": cards,
-                    "is_quiz_mode": is_quiz_mode,
-                    "is_deck_admin": is_deck_admin,
-                    "card_id": card_id,
-                    }
-
-            return render(request, "deck_view.html", context)
+    return render(request, "deck_view.html", context)
 
 def delete(request, deck_id=None):
     """Deletes a deck."""
