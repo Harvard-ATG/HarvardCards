@@ -53,13 +53,14 @@ class djangoapp {
 
 	# setup mysql database
 	exec { "mysql-setup-db":
-		command => "mysql -u root -e \"CREATE DATABASE IF NOT EXISTS $DB_NAME CHARACTER SET utf8; GRANT ALL ON $DB_NAME.* TO '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';\"",
+		command => "mysql -u root -e \"CREATE DATABASE IF NOT EXISTS $DB_NAME CHARACTER SET utf8 COLLATE utf8_general_ci; GRANT ALL ON $DB_NAME.* TO '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS'; FLUSH PRIVILEGES;\"",
 		cwd => "$PROJ_DIR",
 		logoutput => true,
 	}
 
 	# django sync database
 	exec { "django-syncdb":
+		environment => ["DJANGO_SETTINGS_MODULE=harvardcards.settings.dev-mysql"],
 		command => "python manage.py syncdb --noinput",
 		cwd => "$PROJ_DIR",
 		require => [Exec['mysql-setup-db'],Exec['pip-install-requirements']],
@@ -75,7 +76,8 @@ class djangoapp {
 
 	# start server?
 	exec { "django-runserver":
-		command => "python manage.py runserver --settings=harvardcards.settings.dev-mysql 0.0.0.0:8000 >django-server.log 2>&1 &",
+		environment => ["DJANGO_SETTINGS_MODULE=harvardcards.settings.dev-mysql"],
+		command => "python manage.py runserver 0.0.0.0:8000 >django-server.log 2>&1 &",
 		cwd => "$PROJ_DIR",
 		require => Exec['django-syncdb'],
 		logoutput => true,	
