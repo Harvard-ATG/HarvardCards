@@ -1,4 +1,3 @@
-# Google App Engine Settinsg
 from harvardcards.settings.common import *
 
 DATABASES = {
