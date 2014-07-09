@@ -30,6 +30,7 @@
 				<li><a href="{% url 'deckDelete' deck.id %}" data-confirm="Are you sure you want to delete: {{deck.title|escape}}"><i class="fa fa-times-circle"></i> Delete Deck</a></li>
                 {% endif %}
                 <li>
+                    <a href="#" id="flip_mode">Flip Mode</a>
                 {% if is_quiz_mode %}
                     <a href="{% url 'deckIndex' deck.id %}" id="review_mode">Review Mode</a>
                 {% else %}
