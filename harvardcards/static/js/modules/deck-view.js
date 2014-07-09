@@ -118,6 +118,18 @@ var initModule = function() {
 	    }
 	    return false;
 	});
+	
+	// initialize flip-mode
+	if(localStorage['flip_mode'] === true){
+		$('#flip_mode').addClass('down');
+	}
+	$('#flip_mode').click(function(){
+		if(localStorage['flip_mode']){
+			flipMode(false);
+		} else {
+			flipMode(true);
+		}
+	});
 
 	utils.setupConfirm();
 
@@ -153,6 +165,16 @@ function setupEditableDeckTitle() {
 			}
 		});
 	});
+}
+
+var flipMode = function(flip){
+	if(flip){
+		$('#flip_mode').addClass('down');
+		localStorage['flip_mode'] = true;
+	} else {
+		$('#flip_mode').removeClass('down');
+		localStorage.removeItem('flip_mode');
+	}
 }
 
 	return {initModule:initModule};
