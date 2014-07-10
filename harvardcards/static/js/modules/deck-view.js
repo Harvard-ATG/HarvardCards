@@ -120,11 +120,11 @@ var initModule = function() {
 	});
 	
 	// initialize flip-mode
-	if(localStorage['flip_mode'] === true){
+	if(localStorage.flip_mode){
 		$('#flip_mode').addClass('down');
 	}
 	$('#flip_mode').click(function(){
-		if(localStorage['flip_mode']){
+		if(localStorage.flip_mode){
 			flipMode(false);
 		} else {
 			flipMode(true);
