@@ -1,14 +1,19 @@
 from harvardcards.settings.common import *
 
+import os
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'flashdb',    # Or path to database file if using sqlite3.
+		'OPTIONS': {
+			'read_default_file': os.path.join(ROOT_DIR, 'config', 'my.cnf'),
+		},
+        #'NAME': 'flashdb',    # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
-        'USER': 'flashuser',
-        'PASSWORD': 'flashpass',
-        'HOST': 'localhost',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '3306',                      # Set to empty string for default.
+        #'USER': 'flashuser',
+        #'PASSWORD': 'flashpass',
+        #'HOST': 'localhost',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        #'PORT': '3306',                      # Set to empty string for default.
     }
 }
 
