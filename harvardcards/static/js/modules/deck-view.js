@@ -121,7 +121,7 @@ var initModule = function() {
 	
 	// initialize flip-mode
 	if(localStorage.flip_mode){
-		$('#flip_mode').addClass('down');
+		flipMode(true);
 	}
 	$('#flip_mode').click(function(){
 		if(localStorage.flip_mode){
@@ -171,10 +171,18 @@ var flipMode = function(flip){
 	if(flip){
 		$('#flip_mode').addClass('down');
 		localStorage['flip_mode'] = true;
+		flipContent();
 	} else {
 		$('#flip_mode').removeClass('down');
 		localStorage.removeItem('flip_mode');
+		flipContent();
 	}
+}
+
+var flipContent = function(){
+	var tmp = $('#show_content').html();
+	$('#show_content').html($('#reveal_content').html());
+	$('#reveal_content').html(tmp);
 }
 
 	return {initModule:initModule};

@@ -104,19 +104,23 @@
 							<a class="pull-right" href="{% url "deckEditCard" deck.id %}?card_id={{card.card_id}}"><i class="fa fa-pencil"></i> Edit Card</a>
                         </div>
                         {% endif %}
-                        {% for field in card.fields.show %}
-                            {% include "_deck_card_fields.html" with field=field %}
-                        {% endfor %}
+												<article id="show_content">
+                            {% for field in card.fields.show %}
+                                {% include "_deck_card_fields.html" with field=field %}
+                            {% endfor %}
+												</article>
                         <div class="hideRevealHr">
                             {% if is_quiz_mode %}
                             <a href="javascript:void(0)" class="reveal">Reveal</a>
                             {% endif %}
                         </div>
                         <div class="{% if is_quiz_mode %}hide{% endif %}">
-                        {% for field in card.fields.reveal %}
-                            {% include "_deck_card_fields.html" with field=field hide=is_quiz_mode%}
-                        {% endfor %}
-                        </div>
+													<article id="reveal_content">
+                              {% for field in card.fields.reveal %}
+                                  {% include "_deck_card_fields.html" with field=field hide=is_quiz_mode%}
+                              {% endfor %}
+													</article>
+												</div>
                     </li>
                     {% endfor %}
                 </ul>
