@@ -170,10 +170,12 @@ function setupEditableDeckTitle() {
 var flipMode = function(flip){
 	if(flip){
 		$('#flip_mode').addClass('down');
+		$('#flip_mode').attr('aria-pressed', 'true');
 		localStorage['flip_mode'] = true;
 		flipContent();
 	} else {
 		$('#flip_mode').removeClass('down');
+		$('#flip_mode').attr('aria-pressed', 'false');
 		localStorage.removeItem('flip_mode');
 		flipContent();
 	}
