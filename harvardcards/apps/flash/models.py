@@ -138,10 +138,12 @@ class Users_Collections(models.Model):
     user = models.ForeignKey(User)
     collection = models.ForeignKey(Collection)
     ROLES = (
-        ('G', 'Guest'),
-        ('S', 'Student'),
-        ('A', 'Admin'),
-        ('O', 'Owner')
+        ('O', 'Observer'),                  # Guest
+        ('L', 'Learner'),                   # Student
+        ('T', 'Teaching Assistant'),
+        ('C', 'Content Developer'),
+        ('I', 'Instructor'),                # Owner
+        ('A', 'Administrator')
     )
     role = models.CharField(max_length=1, choices=ROLES, default='G')
     date_joined = models.DateField()
@@ -171,7 +173,7 @@ class Users_Collections(models.Model):
             elif collection.id in user_collections:
                 role = user_collections[collection.id]
             else:
-                role = 'G'
+                role = 'O'
             role_buckets[role_map[role]].append(collection.id)
 
         return role_buckets

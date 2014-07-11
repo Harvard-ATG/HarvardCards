@@ -2,6 +2,7 @@
 This module contains services and commands that may change the state of the system
 (i.e. called for their side effects).
 """
+from functools import wraps
 from django.db import transaction
 
 from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Cards_Fields, Field, Users_Collections
@@ -218,25 +219,53 @@ def create_card_in_deck(deck):
     Decks_Cards.objects.create(deck=deck, card=card, sort_order=deck_sort_order)
     return card
 
-def check_role_collection(user=None, role=None, collection_id=None, raise_exception=True):
-    """ Checks if a user has a role in a collection. Convenience function for check_role()."""
-    return check_role(user, role, collection_id)
-
-def check_role_deck(user=None, role=None, deck_id=None, raise_exception=True):
-    """ Checks if a user has a role in a collection given a deck. Convenience function for check_role()."""
-    collection_id = queries.getDeckCollectionId(deck_id)
-    return check_role(user, role, collection_id)
-
-def check_role(user=None, role=None, collection_id=None, raise_exception=True):
+def check_role(roles, entity_type):
     """
-    Checks to see if a user has a role in a collection. Returns True if the user has the role.
-    When raise_exception=True, raises a PermissionDenied exception if the user doesn't have the role,
-    otherwise returns False.
+    A decortor that checks to see if a user has the required role in a collection. Allows the user to enter the function
+    if the user has the role. Raises a PermissionDenied exception if the user doesn't have the role.
+
+    Input: a list of roles allowed for this function
+    Output: the function if user has role, else a PermissionDenied
     """
-    collection = Collection.objects.get(id=collection_id)
-    user_has_role = Users_Collections.check_role(user, role, collection)
-    if user_has_role:
-        return True
-    if raise_exception:
-        raise PermissionDenied
-    return False
+    def decorator(func):
+        def inner_decorator(request, *args, **kwargs):
+            role_bucket = get_or_update_role_bucket(request)
+
+            entity_id = None
+            if request.GET:
+                entity_id = request.GET.get('deck_id','') if entity_type == 'deck' else request.GET.get('collection_id','')
+            elif not entity_id and request.POST:
+                entity_id = request.POST.get('deck_id','') if entity_type == 'deck' else request.POST.get('collection_id','')
+            else:
+                raise PermissionDenied
+            
+            entity_id = int(entity_id)
+            if entity_type == 'deck':
+                deck = Deck.objects.get(id=entity_id)
+                entity_id = deck.collection.id
+
+            for role in roles:
+                if entity_id in role_bucket[role]:
+                    return func(request, *args, **kwargs)
+            raise PermissionDenied
+        return wraps(func)(inner_decorator)
+    return decorator
+
+def is_superuser_or_staff(user):
+    """ Checks if the user is superuser or staff. Returns True or False """
+    return user.is_staff or user.is_superuser
+
+def get_or_update_role_bucket(request, collection_id = None, role = None):
+    """ Get, create, and/or update the user's role_bucket.
+        Returns the uptodate role_bucket dictionary.
+    """
+    role_bucket = request.session.get('role_bucket',{})
+
+    if role_bucket and collection_id:
+        role_bucket[role].append(collection_id)
+    else:
+        all_collections = Collection.objects.all() 
+        role_bucket = Users_Collections.get_role_buckets(request.user, all_collections)
+        request.session['role_bucket'] = role_bucket
+   
+    return role_bucket
