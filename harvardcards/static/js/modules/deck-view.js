@@ -196,9 +196,13 @@ var flipMode = function(flip){
 }
 
 var flipContent = function(){
-	var tmp = $('#show_content').html();
-	$('#show_content').html($('#reveal_content').html());
-	$('#reveal_content').html(tmp);
+	$('#allCards > li').each(function(item){
+		var showed = $(this).find('.show_content').html();
+		var revealed = $(this).find('.reveal_content').html();
+		$(this).find('.show_content').html(revealed);
+		$(this).find('.reveal_content').html(showed);
+		
+	});
 }
 
 	return {initModule:initModule};

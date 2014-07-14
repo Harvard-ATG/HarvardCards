@@ -104,7 +104,7 @@
 							<a class="pull-right" href="{% url "deckEditCard" deck.id %}?card_id={{card.card_id}}"><i class="fa fa-pencil"></i> Edit Card</a>
                         </div>
                         {% endif %}
-												<article id="show_content">
+												<article class="show_content">
                             {% for field in card.fields.show %}
                                 {% include "_deck_card_fields.html" with field=field %}
                             {% endfor %}
@@ -115,7 +115,7 @@
                             {% endif %}
                         </div>
                         <div class="{% if is_quiz_mode %}hide{% endif %}">
-													<article id="reveal_content">
+													<article class="reveal_content">
                               {% for field in card.fields.reveal %}
                                   {% include "_deck_card_fields.html" with field=field hide=is_quiz_mode%}
                               {% endfor %}
