@@ -2,6 +2,7 @@ define([
 	'jquery',
 	'components/slider/DeckSlider', 
 	'components/InlineEditor', 
+	'components/FlipMode',
 	'models/Deck', 
 	'views/CardForm', 
 	'utils/utils'
@@ -9,6 +10,7 @@ define([
 	$, 
 	DeckSlider, 
 	InlineEditor, 
+	FlipMode,
 	Deck, 
 	CardForm, 
 	utils
@@ -134,16 +136,7 @@ var initModule = function() {
 	});
 	
 	// initialize flip-mode
-	if(localStorage.flip_mode){
-		flipMode(true);
-	}
-	$('#flip_mode').click(function(){
-		if(localStorage.flip_mode){
-			flipMode(false);
-		} else {
-			flipMode(true);
-		}
-	});
+	var flipMode = new FlipMode;
 
 	utils.setupConfirm();
 
@@ -178,30 +171,6 @@ function setupEditableDeckTitle() {
 				window.alert("Error saving: "+ errorThrown);
 			}
 		});
-	});
-}
-
-var flipMode = function(flip){
-	if(flip){
-		$('#flip_mode').addClass('down');
-		$('#flip_mode').attr('aria-pressed', 'true');
-		localStorage['flip_mode'] = true;
-		flipContent();
-	} else {
-		$('#flip_mode').removeClass('down');
-		$('#flip_mode').attr('aria-pressed', 'false');
-		localStorage.removeItem('flip_mode');
-		flipContent();
-	}
-}
-
-var flipContent = function(){
-	$('#allCards > li').each(function(item){
-		var showed = $(this).find('.show_content').html();
-		var revealed = $(this).find('.reveal_content').html();
-		$(this).find('.show_content').html(revealed);
-		$(this).find('.reveal_content').html(showed);
-		
 	});
 }
 
