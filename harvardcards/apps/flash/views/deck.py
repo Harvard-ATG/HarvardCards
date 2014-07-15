@@ -118,16 +118,13 @@ def download_deck(request, deck_id=None):
 def create_edit_card(request, deck_id=None):
     """Create a new card or edit an existing one from the collection card template."""
 
-    IMAGE_UPLOAD_TYPE = (('F', 'File'),
-            ('U', 'URL'))
+    IMAGE_UPLOAD_TYPE = (('F', 'File'),('U', 'URL'))
 
     deck = Deck.objects.get(id=deck_id)
     current_collection = Collection.objects.get(id=deck.collection.id)
     collections = Collection.objects.all().prefetch_related('deck_set')
     card_color_select = widgets.Select(attrs=None, choices=Card.COLOR_CHOICES)
     image_upload_select = widgets.Select(attrs= {'onchange' :'switch_upload_image_type(this)'}, choices=IMAGE_UPLOAD_TYPE)
-
-    card_fields = {'show':[], 'reveal':[]}
 
     # Only has card_id if we are editing a card
     card_id = request.GET.get('card_id', '')
@@ -137,28 +134,38 @@ def create_edit_card(request, deck_id=None):
     else:
         card_color = Card.DEFAULT_COLOR
 
-    for field in [cfield.field for cfield in card.cards_fields_set.all()] if card_id else current_collection.card_template.fields.all():
-        if field.display:
-            bucket = 'show'
-        else:
-            bucket = 'reveal'
-        card_fields[bucket].append({
-            'id': field.id,
-            'type': field.field_type,
-            'label': field.label,
-            'show_label': field.show_label,
-            'value': ''
-            })
+    if card_id:
+        field_list = [{
+            "id":cfield.field.id, 
+            "type": cfield.field.field_type,
+            "label": cfield.field.label,
+            "bucket": "show" if cfield.field.display else "reveal",
+            "show_label": cfield.field.show_label,
+            "value": cfield.value
+        } for cfield in card.cards_fields_set.all()]
+    else:
+        field_list = [{
+            "id": field.id, 
+            "type": field.field_type,
+            "bucket": "show" if field.display else "reveal",
+            "label": field.label,
+            "show_label": field.show_label,
+            "value": ""
+        } for field in current_collection.card_template.fields.all()]
 
-        context = {
-                "deck": deck,
-                "card_id": card_id if card_id else '',
-                "collection": current_collection,
-                "collections": collections,
-                "card_fields": card_fields,
-                "card_color_select":  card_color_select.render("card_color", card_color),
-                "upload_type_select": image_upload_select.render("image_upload", 'F')
-                }
+    card_fields = {'show':[], 'reveal':[]}
+    for field in field_list:
+        card_fields[field['bucket']].append(field)
+
+    context = {
+        "deck": deck,
+        "card_id": card_id if card_id else '',
+        "collection": current_collection,
+        "collections": collections,
+        "card_fields": card_fields,
+        "card_color_select":  card_color_select.render("card_color", card_color),
+        "upload_type_select": image_upload_select.render("image_upload", 'F')
+    }
     
     return render(request, 'decks/edit_card.html', context)
 
