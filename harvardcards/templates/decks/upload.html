@@ -15,7 +15,7 @@
               Add cards to the <a href="{% url 'collectionDownloadTemplate' collection.id %}">flashcard template <i class="fa fa-download"></i></a> and then upload it using the form below.
         </div>
 
-        <form action="{% url 'deckUpload' deck.id %}" method="post" {% if deck_form.is_multipart %}enctype="multipart/form-data"{% endif %}>{% csrf_token %}
+        <form action="{% url 'deckUpload' deck.id %}?deck_id={{ deck.id }}" method="post" {% if deck_form.is_multipart %}enctype="multipart/form-data"{% endif %}>{% csrf_token %}
             {{ deck_form.as_p }}
             <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
             <a href="{% url 'deckIndex' deck.id %}" class="adminMenuBtn cancelBtn">Cancel</a>
