@@ -245,7 +245,7 @@ def check_role(roles, entity_type):
                 entity_id = deck.collection.id
 
             for role in roles:
-                if entity_id in role_bucket[role]:
+                if entity_id in role_bucket[Users_Collections.role_map[role]]:
                     return func(request, *args, **kwargs)
             raise PermissionDenied
         return wraps(func)(inner_decorator)
@@ -262,6 +262,8 @@ def get_or_update_role_bucket(request, collection_id = None, role = None):
     role_bucket = request.session.get('role_bucket',{})
 
     if role_bucket and collection_id:
+        if not role or not role_bucket.has_key(role):
+            raise Exception("Invalid role provided. %s does not exist" % role)
         role_bucket[role].append(collection_id)
     else:
         all_collections = Collection.objects.all() 

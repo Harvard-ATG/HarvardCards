@@ -137,14 +137,23 @@ class CardTemplates_Fields(models.Model):
 class Users_Collections(models.Model):
     user = models.ForeignKey(User)
     collection = models.ForeignKey(Collection)
+    OBSERVER = 'O'
+    LEARNER = 'L'
+    TEACHING_ASSISTANT = 'T'
+    CONTENT_DEVELOPER = 'C'
+    INSTRUCTOR = 'I'
+    ADMINISTRATOR = 'A'
     ROLES = (
-        ('O', 'Observer'),                  # Guest
-        ('L', 'Learner'),                   # Student
-        ('T', 'Teaching Assistant'),
-        ('C', 'Content Developer'),
-        ('I', 'Instructor'),                # Owner
-        ('A', 'Administrator')
+        (OBSERVER,              'Observer'),                  # Guest
+        (LEARNER,               'Learner'),                   # Student
+        (TEACHING_ASSISTANT,    'Teaching Assistant'),
+        (CONTENT_DEVELOPER,     'Content Developer'),
+        (INSTRUCTOR,            'Instructor'),                # Owner
+        (ADMINISTRATOR,         'Administrator')
     )
+    
+    role_map = dict([(role[0], role[1].upper()) for role in ROLES])
+    
     role = models.CharField(max_length=1, choices=ROLES, default='G')
     date_joined = models.DateField()
     class Meta:
@@ -159,9 +168,8 @@ class Users_Collections(models.Model):
         ''' Given a user and a set of collections, this function returns a
         dictionary that maps roles to collections. '''
 
-        role_map = dict([(role[0], role[1].upper()) for role in self.ROLES])
-        role_buckets = dict([(bucket, []) for bucket in role_map.values()])
-
+        role_buckets = dict([(bucket, []) for bucket in self.role_map.values()])
+    
         user_collections = dict([
             (item.collection_id, item.role)
             for item in self.objects.filter(user=user.id)
@@ -174,7 +182,7 @@ class Users_Collections(models.Model):
                 role = user_collections[collection.id]
             else:
                 role = 'O'
-            role_buckets[role_map[role]].append(collection.id)
+        role_buckets[self.role_map[role]].append(collection.id)
 
         return role_buckets
 

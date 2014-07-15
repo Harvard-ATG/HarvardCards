@@ -63,7 +63,7 @@ def index(request, deck_id=None):
 
     return render(request, "deck_view.html", context)
 
-@check_role(['ADMINISTRATOR', 'INSTRUCTOR', 'TEACHING ASSISTANT', 'CONTENT DEVELOPER'], 'deck')
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')
 def delete(request, deck_id=None):
     """Deletes a deck."""
 
@@ -73,7 +73,7 @@ def delete(request, deck_id=None):
     response['Location'] += '?instructor=edit'
     return response
 
-@check_role(['ADMINISTRATOR', 'INSTRUCTOR', 'TEACHING ASSISTANT', 'CONTENT DEVELOPER'], 'deck')  
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')  
 def upload_deck(request, deck_id=None):
     '''
     Imports a deck of cards from an excel spreadsheet.
@@ -114,7 +114,7 @@ def download_deck(request, deck_id=None):
 
     return response
 
-@check_role(['ADMINISTRATOR', 'INSTRUCTOR', 'TEACHING ASSISTANT', 'CONTENT DEVELOPER'], 'deck')  
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')  
 def create_edit_card(request, deck_id=None):
     """Create a new card or edit an existing one from the collection card template."""
 
@@ -162,7 +162,7 @@ def create_edit_card(request, deck_id=None):
     
     return render(request, 'decks/edit_card.html', context)
 
-@check_role(['ADMINISTRATOR', 'INSTRUCTOR', 'TEACHING ASSISTANT', 'CONTENT DEVELOPER'], 'deck')  
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')  
 def delete_card(request, deck_id=None):
     """Deletes a card."""
 

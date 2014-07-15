@@ -2,7 +2,7 @@ from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse
 from django.utils import simplejson as json
 
-from harvardcards.apps.flash.models import Collection, Deck, Card, Cards_Fields, Field
+from harvardcards.apps.flash.models import Collection, Deck, Card, Cards_Fields, Field, Users_Collections
 from harvardcards.apps.flash.forms import CardEditForm
 from harvardcards.apps.flash import services, queries, utils
 from harvardcards.apps.flash.services import check_role
@@ -15,7 +15,7 @@ from cStringIO import StringIO
 from PIL import Image, ImageFile    
 
 @require_http_methods(["POST"])
-@check_role(['ADMINISTRATOR', 'INSTRUCTOR', 'TEACHING ASSISTANT', 'CONTENT DEVELOPER'], 'deck')
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')
 def edit(request):
     """Add/edit card."""
     result = {"success":False}
@@ -74,7 +74,7 @@ def edit(request):
 
 
 @require_http_methods(["POST"])
-@check_role(['ADMINISTRATOR', 'INSTRUCTOR', 'TEACHING ASSISTANT', 'CONTENT DEVELOPER'], 'deck')
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')
 def delete(request):
     """Deletes a card."""
     card_id = request.POST['card_id']

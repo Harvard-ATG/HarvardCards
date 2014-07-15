@@ -93,7 +93,7 @@ def create(request):
 
     return render(request, 'collections/create.html', context)
 
-@check_role(['ADMINISTRATOR', 'INSTRUCTOR'], 'collection')
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR], 'collection')
 def edit(request, collection_id=None):
     """Edits a collection."""
 
@@ -118,7 +118,7 @@ def edit(request, collection_id=None):
 
     return render(request, 'collections/edit.html', context)
 
-@check_role(['ADMINISTRATOR', 'INSTRUCTOR', 'TEACHING ASSISTANT', 'CONTENT DEVELOPER'], 'collection')
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'collection')
 def add_deck(request, collection_id=None):
     """Adds a deck."""
 
@@ -126,7 +126,7 @@ def add_deck(request, collection_id=None):
     deck = Deck.objects.create(collection=collection, title='Untitled Deck')
     return redirect(deck)
 
-@check_role(['ADMINISTRATOR', 'INSTRUCTOR'], 'collection') 
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR], 'collection') 
 def delete(request, collection_id=None):
     """Deletes a collection."""
 
