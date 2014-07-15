@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
 from django.core.exceptions import ViewDoesNotExist, PermissionDenied
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import user_passes_test, login_required
+from django.contrib.auth.decorators import login_required
 
 from django.utils import simplejson as json
 
@@ -63,7 +63,6 @@ def index(request, collection_id=None):
 
     return render(request, 'collections/index.html', context)
     
-#@user_passes_test(is_superuser_or_staff)
 #should only check on collections? allow any registered user to create their own?
 @login_required
 def create(request):
