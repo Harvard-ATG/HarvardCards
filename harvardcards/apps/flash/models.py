@@ -182,7 +182,7 @@ class Users_Collections(models.Model):
                 role = user_collections[collection.id]
             else:
                 role = 'O'
-        role_buckets[self.role_map[role]].append(collection.id)
+            role_buckets[self.role_map[role]].append(collection.id)
 
         return role_buckets
 
