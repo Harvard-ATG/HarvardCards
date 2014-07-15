@@ -230,7 +230,7 @@ def check_role(roles, entity_type):
     def decorator(func):
         def inner_decorator(request, *args, **kwargs):
             role_bucket = get_or_update_role_bucket(request)
-
+            
             entity_id = None
             if request.GET:
                 entity_id = request.GET.get('deck_id','') if entity_type == 'deck' else request.GET.get('collection_id','')
