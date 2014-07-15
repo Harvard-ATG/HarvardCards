@@ -2,9 +2,10 @@ from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse
 from django.utils import simplejson as json
 
-from harvardcards.apps.flash.models import Collection, Deck, Card, Cards_Fields, Field
+from harvardcards.apps.flash.models import Collection, Deck, Card, Cards_Fields, Field, Users_Collections
 from harvardcards.apps.flash.forms import CardEditForm
 from harvardcards.apps.flash import services, queries, utils
+from harvardcards.apps.flash.services import check_role
 from django.db import models
 
 import urllib2
@@ -14,14 +15,12 @@ from cStringIO import StringIO
 from PIL import Image, ImageFile    
 
 @require_http_methods(["POST"])
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')
 def edit(request):
     """Add/edit card."""
     result = {"success":False}
     card_id = request.POST.get('card_id', '')
     deck_id = request.POST.get('deck_id', '')
-
-    # ROLE CHECK -- make sure user has permission
-    services.check_role_deck(user=request.user, role="A", deck_id=deck_id, raise_exception=True)
 
     # fetch the fields being edited; new cards must be created from the card template
     if card_id == '':
@@ -32,7 +31,8 @@ def edit(request):
         card_fields = [cfield.field for cfield in card.cards_fields_set.all()]
     
     # attempted to validate and save the form data
-    file_url = dict(request.POST).get('image_url', '')[0]
+    file_url = dict(request.POST).get('image_url', '')
+    file_url = file_url[0] if file_url else None
 
     if file_url:
         inStream = urllib2.urlopen(file_url)
@@ -74,13 +74,11 @@ def edit(request):
 
 
 @require_http_methods(["POST"])
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')
 def delete(request):
     """Deletes a card."""
     card_id = request.POST['card_id']
     deck_id = request.POST['deck_id']
-
-    # ROLE CHECK -- make sure user has permission
-    services.check_role_deck(user=request.user, role="A", deck_id=deck_id, raise_exception=True)
 
     result = {}
     result['success'] = services.delete_card(card_id)

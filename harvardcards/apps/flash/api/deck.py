@@ -3,17 +3,16 @@ from django.http import HttpResponse
 from django.utils import simplejson as json
 from django.shortcuts import redirect
 
-from harvardcards.apps.flash.models import Collection, Deck, Card, Cards_Fields, Field
-from harvardcards.apps.flash import forms, services, queries, utils
+from harvardcards.apps.flash.models import Collection, Deck, Card, Cards_Fields, Field, Users_Collections
+from harvardcards.apps.flash import forms, queries, utils
+from harvardcards.apps.flash.services import check_role
 from django.db import models
 
 @require_http_methods(["POST"])
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')
 def delete(request):
     """Delete a deck"""
     deck_id = request.POST['deck_id']
-
-    # ROLE CHECK -- make sure user has permission
-    services.check_role_deck(user=request.user, role="A", deck_id=deck_id, raise_exception=True)
 
     result = {"success": False}
     if deck_id is None:
@@ -28,12 +27,10 @@ def delete(request):
     return HttpResponse(json.dumps(result), mimetype="application/json")
 
 @require_http_methods(["POST"])
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')
 def rename(request):
     """Rename a deck"""
     deck_id = request.POST['deck_id']
-
-    # ROLE CHECK -- make sure user has permission
-    services.check_role_deck(user=request.user, role="A", deck_id=deck_id, raise_exception=True)
 
     result = {"success": False}
     if deck_id is None:

@@ -11,19 +11,25 @@ from django.forms import widgets
 from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Users_Collections
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm, DeckImportForm
 from harvardcards.apps.flash import services, queries, utils
+from harvardcards.apps.flash.services import check_role
 from PIL import Image
 import urllib
 
 
 def index(request, deck_id=None):
     """Displays the deck of cards for review/quiz."""
-    collections = Collection.objects.all().prefetch_related('deck_set')
     deck = Deck.objects.get(id=deck_id)
     deck_cards = Decks_Cards.objects.filter(deck=deck).order_by('sort_order').prefetch_related('card__cards_fields_set__field')
     current_collection = Collection.objects.get(id=deck.collection.id)
-    user_collection_role = Users_Collections.get_role_buckets(request.user, collections)
+    collections = Collection.objects.all().prefetch_related('deck_set')
+
+    user_collection_role = request.session.get('role_bucket',{})
+    if not user_collection_role:
+        user_collection_role = Users_Collections.get_role_buckets(request.user, collections)
+        request.session['role_bucket'] = user_collection_role
+
     is_quiz_mode = request.GET.get('mode') == 'quiz'
-    is_deck_admin = next((True for cid in user_collection_role['ADMIN'] if cid == current_collection.id), False)
+    is_deck_admin = deck.collection.id in user_collection_role['ADMINISTRATOR']
     card_id = request.GET.get('card_id', '')
 
     cards = []
@@ -57,11 +63,9 @@ def index(request, deck_id=None):
 
     return render(request, "deck_view.html", context)
 
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')
 def delete(request, deck_id=None):
     """Deletes a deck."""
-
-    # ROLE CHECK -- make sure user has permission
-    services.check_role_deck(user=request.user, role="A", deck_id=deck_id, raise_exception=True)
 
     collection_id = queries.getDeckCollectionId(deck_id)
     services.delete_deck(deck_id)
@@ -69,14 +73,12 @@ def delete(request, deck_id=None):
     response['Location'] += '?instructor=edit'
     return response
 
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')  
 def upload_deck(request, deck_id=None):
     '''
     Imports a deck of cards from an excel spreadsheet.
     '''
-
-    # ROLE CHECK -- make sure user has permission
-    services.check_role_deck(user=request.user, role="A", deck_id=deck_id, raise_exception=True)
-
+    
     deck = Deck.objects.get(id=deck_id)
     collections = Collection.objects.all()
     collection = Collection.objects.get(id=deck.collection.id)
@@ -112,22 +114,17 @@ def download_deck(request, deck_id=None):
 
     return response
 
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')  
 def create_edit_card(request, deck_id=None):
     """Create a new card or edit an existing one from the collection card template."""
 
-    IMAGE_UPLOAD_TYPE = (('F', 'File'),
-            ('U', 'URL'))
-
-    # ROLE CHECK -- make sure user has permission
-    services.check_role_deck(user=request.user, role="A", deck_id=deck_id, raise_exception=True)
+    IMAGE_UPLOAD_TYPE = (('F', 'File'),('U', 'URL'))
 
     deck = Deck.objects.get(id=deck_id)
     current_collection = Collection.objects.get(id=deck.collection.id)
     collections = Collection.objects.all().prefetch_related('deck_set')
     card_color_select = widgets.Select(attrs=None, choices=Card.COLOR_CHOICES)
     image_upload_select = widgets.Select(attrs= {'onchange' :'switch_upload_image_type(this)'}, choices=IMAGE_UPLOAD_TYPE)
-
-    card_fields = {'show':[], 'reveal':[]}
 
     # Only has card_id if we are editing a card
     card_id = request.GET.get('card_id', '')
@@ -137,36 +134,44 @@ def create_edit_card(request, deck_id=None):
     else:
         card_color = Card.DEFAULT_COLOR
 
-    for field in [cfield.field for cfield in card.cards_fields_set.all()] if card_id else current_collection.card_template.fields.all():
-        if field.display:
-            bucket = 'show'
-        else:
-            bucket = 'reveal'
-        card_fields[bucket].append({
-            'id': field.id,
-            'type': field.field_type,
-            'label': field.label,
-            'show_label': field.show_label,
-            'value': ''
-            })
+    if card_id:
+        field_list = [{
+            "id":cfield.field.id, 
+            "type": cfield.field.field_type,
+            "label": cfield.field.label,
+            "bucket": "show" if cfield.field.display else "reveal",
+            "show_label": cfield.field.show_label,
+            "value": cfield.value
+        } for cfield in card.cards_fields_set.all()]
+    else:
+        field_list = [{
+            "id": field.id, 
+            "type": field.field_type,
+            "bucket": "show" if field.display else "reveal",
+            "label": field.label,
+            "show_label": field.show_label,
+            "value": ""
+        } for field in current_collection.card_template.fields.all()]
 
-        context = {
-                "deck": deck,
-                "card_id": card_id if card_id else '',
-                "collection": current_collection,
-                "collections": collections,
-                "card_fields": card_fields,
-                "card_color_select":  card_color_select.render("card_color", card_color),
-                "upload_type_select": image_upload_select.render("image_upload", 'F')
-                }
+    card_fields = {'show':[], 'reveal':[]}
+    for field in field_list:
+        card_fields[field['bucket']].append(field)
+
+    context = {
+        "deck": deck,
+        "card_id": card_id if card_id else '',
+        "collection": current_collection,
+        "collections": collections,
+        "card_fields": card_fields,
+        "card_color_select":  card_color_select.render("card_color", card_color),
+        "upload_type_select": image_upload_select.render("image_upload", 'F')
+    }
     
     return render(request, 'decks/edit_card.html', context)
 
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')  
 def delete_card(request, deck_id=None):
     """Deletes a card."""
-
-    # ROLE CHECK -- make sure user has permission
-    services.check_role_deck(user=request.user, role="A", deck_id=deck_id, raise_exception=True)
 
     deck = Deck.objects.get(id=deck_id)
     card_id = request.GET.get('card_id', None)
