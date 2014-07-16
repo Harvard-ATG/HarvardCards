@@ -4,23 +4,23 @@
         {% spaceless %}
             <h2 class="courseTitle">{{ collection.title }}</h2>
             <h3>{% if collection.decks|length == 1 %}1 Deck{% else %}{{collection.decks|length}} Decks{% endif %}</h3>
-        {% endspaceless %}
+            {% endspaceless %}
         </a>
-        {% if collection.id in user_collection_role.ADMIN %}
+        {% if user.is_authenticated %}
             <ul class="adminMenu adminMenuRight">
-				<li><a href="{% url 'collectionEdit' collection.id %}"><i class="fa fa-pencil"></i> Edit</a></li>
-				<li><a href="{% url 'collectionDelete' collection.id %}" data-confirm="Are you sure you want to delete: {{collection.title|escape}}?"><i class="fa fa-times-circle"></i> Delete</a></li>
+                <li><a href="{% url 'collectionEdit' collection.id %}?collection_id={{collection.id}}"><i class="fa fa-pencil"></i> Edit</a></li>
+                <li><a href="{% url 'collectionDelete' collection.id %}?collection_id={{collection.id}}" data-confirm="Are you sure you want to delete: {{collection.title|escape}}?"><i class="fa fa-times-circle"></i> Delete</a></li>
             </ul>
         {% endif %}
     </div>
 
     <div class="slider">
+        {% if user.is_authenticated %}
         <ul class="courseDecks">
-            {% if collection.id in user_collection_role.ADMIN %}
                 <li class="deck add">
-                    <a href="{% url 'collectionAddDeck' collection.id %}">Add a Deck</a>
+                <a href="{% url 'collectionAddDeck' collection.id %}?collection_id={{collection.id}}">Add a Deck</a>
                 </li>
-            {% endif %}
+        {% endif %}
 
             {% for deck in collection.decks %}
             <li class="deck">

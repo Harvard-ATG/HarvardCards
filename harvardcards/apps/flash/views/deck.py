@@ -7,27 +7,34 @@ from django.core.exceptions import ViewDoesNotExist
 from django.utils import simplejson as json
 
 from django.forms.formsets import formset_factory
+from django.forms import widgets
 from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Users_Collections
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm, DeckImportForm
 from harvardcards.apps.flash import services, queries, utils
-
+from harvardcards.apps.flash.services import check_role
+from PIL import Image
 import urllib
+
 
 def index(request, deck_id=None):
     """Displays the deck of cards for review/quiz."""
-    collections = Collection.objects.all().prefetch_related('deck_set')
     deck = Deck.objects.get(id=deck_id)
     deck_cards = Decks_Cards.objects.filter(deck=deck).order_by('sort_order').prefetch_related('card__cards_fields_set__field')
     current_collection = Collection.objects.get(id=deck.collection.id)
-    user_collection_role = Users_Collections.get_role_buckets(request.user, collections)
+    collections = Collection.objects.all().prefetch_related('deck_set')
+
+    user_collection_role = request.session.get('role_bucket',{})
+    if not user_collection_role:
+        user_collection_role = Users_Collections.get_role_buckets(request.user, collections)
+        request.session['role_bucket'] = user_collection_role
+
     is_quiz_mode = request.GET.get('mode') == 'quiz'
-    is_deck_admin = next((True for cid in user_collection_role['ADMIN'] if cid == current_collection.id), False)
+    is_deck_admin = deck.collection.id in user_collection_role['ADMINISTRATOR']
     card_id = request.GET.get('card_id', '')
 
     cards = []
     for dcard in deck_cards:
         card_fields = {'show':[],'reveal':[]}
-        print dcard.card.cards_fields_set.all()
         for cfield in dcard.card.cards_fields_set.all():
             if cfield.field.display:
                 bucket = 'show'
@@ -38,37 +45,40 @@ def index(request, deck_id=None):
                 'label': cfield.field.label,
                 'show_label': cfield.field.show_label,
                 'value': cfield.value,
-            })
+                })
         cards.append({
             'card_id': dcard.card.id,
             'color': dcard.card.color,
             'fields': card_fields
-        })
-
-    context = {
-        "collection": current_collection,
-        "collections": collections,
-        "deck": deck,
-        "cards": cards,
-        "is_quiz_mode": is_quiz_mode,
-        "is_deck_admin": is_deck_admin,
-        "card_id": card_id,
-    }
+            })
+    context = {  
+            "collection": current_collection,
+            "collections": collections,
+            "deck": deck,
+            "cards": cards,
+            "is_quiz_mode": is_quiz_mode,
+            "is_deck_admin": is_deck_admin,
+            "card_id": card_id,
+            }
 
     return render(request, "deck_view.html", context)
 
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')
 def delete(request, deck_id=None):
     """Deletes a deck."""
+
     collection_id = queries.getDeckCollectionId(deck_id)
     services.delete_deck(deck_id)
     response =  redirect('collectionIndex', collection_id)
     response['Location'] += '?instructor=edit'
     return response
 
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')  
 def upload_deck(request, deck_id=None):
     '''
     Imports a deck of cards from an excel spreadsheet.
     '''
+    
     deck = Deck.objects.get(id=deck_id)
     collections = Collection.objects.all()
     collection = Collection.objects.get(id=deck.collection.id)
@@ -83,11 +93,11 @@ def upload_deck(request, deck_id=None):
         deck_form = DeckImportForm()
 
     context = {
-        "deck": deck,
-        "deck_form": deck_form, 
-        "collections": collections,
-        "collection": collection
-    }
+            "deck": deck,
+            "deck_form": deck_form, 
+            "collections": collections,
+            "collection": collection
+            }
 
     return render(request, 'decks/upload.html', context)
 
@@ -104,80 +114,65 @@ def download_deck(request, deck_id=None):
 
     return response
 
-def edit_card(request, deck_id=None):
-    """Add a new card to the deck."""
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')  
+def create_edit_card(request, deck_id=None):
+    """Create a new card or edit an existing one from the collection card template."""
+
+    IMAGE_UPLOAD_TYPE = (('F', 'File'),('U', 'URL'))
+
     deck = Deck.objects.get(id=deck_id)
     current_collection = Collection.objects.get(id=deck.collection.id)
     collections = Collection.objects.all().prefetch_related('deck_set')
+    card_color_select = widgets.Select(attrs=None, choices=Card.COLOR_CHOICES)
+    image_upload_select = widgets.Select(attrs= {'onchange' :'switch_upload_image_type(this)'}, choices=IMAGE_UPLOAD_TYPE)
 
-    if request.method == 'POST':
-        errorMsg = ''
-        field_prefix = 'field_'
-        fields = []
-        for field_name, field_value in request.FILES.items():
-            if field_name.startswith(field_prefix):
-                field_id = field_name.replace(field_prefix, '')
-                if field_id.isdigit():
-                    if request.FILES[field_name].size > 0:
-                        path = services.handle_uploaded_img_file(request.FILES[field_name], deck.id, deck.collection.id)
-                        fields.append({"field_id": int(field_id), "value": path})
-
-        for field_name, field_value in request.POST.items():
-            if field_name.startswith(field_prefix):
-                field_id = field_name.replace(field_prefix, '')
-                if field_id.isdigit():
-                    fields.append({"field_id": int(field_id), "value": field_value})
-
-        if request.POST.get('card_id', '') == '':
-            card = services.add_card_to_deck(deck, fields)
-        else:
-            card = Card.objects.get(id=request.POST.get('card_id'))
-            services.update_card_fields(card, fields)
-
-        params = {"card_id":card.id}
-        return redirect(deck.get_absolute_url() + '?' + urllib.urlencode(params))
-
-    card_fields = {'show':[],'reveal':[]}
-    if request.GET.get('card_id', '') == '':
-        for field in current_collection.card_template.fields.all():
-            if field.display:
-                bucket = 'show'
-            else:
-                bucket = 'reveal'
-            card_fields[bucket].append({
-                'id': field.id,
-                'type': field.field_type,
-                'label': field.label,
-                'show_label': field.show_label,
-                'value': ''
-            })
+    # Only has card_id if we are editing a card
+    card_id = request.GET.get('card_id', '')
+    if card_id:
+        card = Card.objects.get(id=card_id)
+        card_color = card.color
     else:
-        card = Card.objects.get(id=request.GET.get('card_id'))
-        for cfield in card.cards_fields_set.all():
-            if cfield.field.display:
-                bucket = 'show'
-            else:
-                bucket = 'reveal'
-            card_fields[bucket].append({
-                'id': cfield.field.id,
-                'type': cfield.field.field_type,
-                'label': cfield.field.label,
-                'show_label': cfield.field.show_label,
-                'value': cfield.value,
-            })
+        card_color = Card.DEFAULT_COLOR
+
+    if card_id:
+        field_list = [{
+            "id":cfield.field.id, 
+            "type": cfield.field.field_type,
+            "label": cfield.field.label,
+            "bucket": "show" if cfield.field.display else "reveal",
+            "show_label": cfield.field.show_label,
+            "value": cfield.value
+        } for cfield in card.cards_fields_set.all()]
+    else:
+        field_list = [{
+            "id": field.id, 
+            "type": field.field_type,
+            "bucket": "show" if field.display else "reveal",
+            "label": field.label,
+            "show_label": field.show_label,
+            "value": ""
+        } for field in current_collection.card_template.fields.all()]
+
+    card_fields = {'show':[], 'reveal':[]}
+    for field in field_list:
+        card_fields[field['bucket']].append(field)
 
     context = {
         "deck": deck,
-        "card_id": request.GET.get('card_id', ''),
+        "card_id": card_id if card_id else '',
         "collection": current_collection,
         "collections": collections,
         "card_fields": card_fields,
+        "card_color_select":  card_color_select.render("card_color", card_color),
+        "upload_type_select": image_upload_select.render("image_upload", 'F')
     }
-
+    
     return render(request, 'decks/edit_card.html', context)
 
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')  
 def delete_card(request, deck_id=None):
     """Deletes a card."""
+
     deck = Deck.objects.get(id=deck_id)
     card_id = request.GET.get('card_id', None)
     if queries.isCardInDeck(card_id, deck_id):

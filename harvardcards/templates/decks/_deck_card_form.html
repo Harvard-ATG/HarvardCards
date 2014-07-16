@@ -11,3 +11,10 @@
         {% include "decks/_deck_card_form_field.html" with field=field %}
     {% endfor %}
 </div>
+<div class="editFields">
+    <h2>Card attributes</h2>
+    <fieldset>
+        <label>Card color</label>
+        {{card_color_select}}
+        <div class="field-error field-error-card_color" style="display:none"></div>
+    </fieldset>

@@ -2,14 +2,19 @@
 This module contains services and commands that may change the state of the system
 (i.e. called for their side effects).
 """
+from functools import wraps
 from django.db import transaction
 
-from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Cards_Fields, Field
-from harvardcards.apps.flash import utils
+from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Cards_Fields, Field, Users_Collections
+from harvardcards.apps.flash import utils, queries
 import os
 import shutil
 from harvardcards.settings.common import MEDIA_ROOT, APPS_ROOT
 from  PIL import Image
+import urllib2
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError, PermissionDenied
+
 
 def delete_collection(collection_id):
     """Deletes a collection and returns true on success, false otherwise."""
@@ -56,6 +61,7 @@ def resize_uploaded_img(path, file_name, dir_name):
     resized versions.
     """
     full_path = os.path.join(path, file_name)
+
     img = Image.open(full_path)
 
     # original
@@ -88,8 +94,15 @@ def resize_uploaded_img(path, file_name, dir_name):
     img_thumb = img.resize((int(t_width), int(t_height)), Image.ANTIALIAS)
     img_thumb.save(os.path.join(path1, file_name))
 
-def handle_uploaded_img_file(file, deck, collection):
-    """Handles an uploaded image file and returns the path to the saved image."""
+def valid_uploaded_file(uploaded_file, file_type):
+    if file_type == 'I':
+        try:
+            img = Image.open(uploaded_file)
+        except:
+            return False
+        return True
+
+def handle_media_folders(collection, deck, file_name):
     # create the MEDIA_ROOT folder if it doesn't exist
     if not os.path.exists(MEDIA_ROOT):
         os.mkdir(MEDIA_ROOT)
@@ -99,16 +112,21 @@ def handle_uploaded_img_file(file, deck, collection):
     path = os.path.abspath(os.path.join(MEDIA_ROOT, dir_name))
     if not os.path.exists(path):
         os.mkdir(path)
-
     # allow files with same names to be uploaded to the same deck
-    file_name = file.name
+    original_filename = file_name
     full_path = os.path.join(path, file_name)
     counter = 1
     while os.path.exists(full_path):
-        file_name = str(counter)+ '_' + file.name
+        file_name = str(counter)+ '_' + original_filename
         full_path = os.path.join(path, file_name)
         counter = counter + 1
+    return [full_path, path, dir_name, file_name]
 
+def handle_uploaded_img_file(file, deck, collection):
+    """Handles an uploaded image file and returns the path to the saved image."""
+
+    file_name = file.name
+    [full_path, path, dir_name, file_name] = handle_media_folders(collection, deck, file_name)
     dest = open(full_path, 'wb+')
     if file.multiple_chunks:
         for c in file.chunks():
@@ -116,10 +134,25 @@ def handle_uploaded_img_file(file, deck, collection):
     else:
         dest.write(file.read())
     dest.close()
-
     resize_uploaded_img(path, file_name, dir_name)
 
     return os.path.join(dir_name, file_name)
+
+
+def upload_img_from_path(path_original, deck, collection):
+    head, file_name = os.path.split(path_original)
+    [full_path, path, dir_name, file_name] = handle_media_folders(collection.id, deck.id, file_name)
+    try:
+        webpage = urllib2.urlopen(path_original)
+        img = open(full_path,"wb")
+        img.write(webpage.read())
+        img.close()
+    except:
+        img = Image.open(path_original)
+        img.save(full_path)
+    resize_uploaded_img(path, file_name, dir_name)
+    return os.path.join(dir_name, file_name)
+
 
 def handle_uploaded_deck_file(deck, uploaded_file):
     """Handles an uploaded deck file."""
@@ -132,10 +165,22 @@ def update_card_fields(card, field_items):
     field_ids = [f['field_id'] for f in field_items]
     field_map = dict((f['field_id'],f) for f in field_items)
     cfields = card.cards_fields_set.filter(field__id__in=field_ids)
+
+    # update fields
     for cfield in cfields:
         field_id = cfield.field.id
         cfield.value = field_map[field_id]['value']
         cfield.save()
+        field_map.pop(field_id)
+
+    # create fields that did not exist
+    if len(field_map) > 0:
+        fields = Field.objects.all()
+        for field_id, field_item in field_map.items():
+            field_object = fields.get(pk=field_id)
+            field_value = field_item['value']
+            Cards_Fields.objects.create(card=card, field=field_object, value=field_value)
+    return card
 
 @transaction.commit_on_success
 def add_cards_to_deck(deck, card_list):
@@ -149,24 +194,13 @@ def add_cards_to_deck(deck, card_list):
         card = Card.objects.create(collection=deck.collection, sort_order=card_sort_order)
         Decks_Cards.objects.create(deck=deck, card=card, sort_order=deck_sort_order)
         for field_item in card_item:
-            field_object = fields.get(pk=field_item['field_id']) 
-            field_value = field_item['value']
+            field_object = fields.get(pk=field_item['field_id'])
+            if field_object.field_type == 'I':
+                field_value = upload_img_from_path(field_item['value'], deck, deck.collection)
+            else:
+                field_value = field_item['value']
             Cards_Fields.objects.create(card=card, field=field_object, value=field_value)
     return deck
-
-@transaction.commit_on_success
-def add_card_to_deck(deck, card_item):
-    """Adds a single card with fields to a deck."""
-    fields = Field.objects.all()
-    card_sort_order = deck.collection.card_set.count() + 1
-    deck_sort_order = deck.cards.count() + 1
-    card = Card.objects.create(collection=deck.collection, sort_order=card_sort_order)
-    Decks_Cards.objects.create(deck=deck, card=card, sort_order=deck_sort_order)
-    for field_item in card_item:
-        field_object = fields.get(pk=field_item['field_id']) 
-        field_value = field_item['value']
-        Cards_Fields.objects.create(card=card, field=field_object, value=field_value)
-    return card
 
 @transaction.commit_on_success
 def create_deck_with_cards(collection_id, deck_title, card_list):
@@ -175,3 +209,65 @@ def create_deck_with_cards(collection_id, deck_title, card_list):
     deck = Deck.objects.create(title=deck_title, collection=collection)
     add_cards_to_deck(deck, card_list)
     return deck
+
+@transaction.commit_on_success
+def create_card_in_deck(deck):
+    fields = Field.objects.all()
+    card_sort_order = deck.collection.card_set.count() + 1
+    deck_sort_order = deck.cards.count() + 1
+    card = Card.objects.create(collection=deck.collection, sort_order=card_sort_order)
+    Decks_Cards.objects.create(deck=deck, card=card, sort_order=deck_sort_order)
+    return card
+
+def check_role(roles, entity_type):
+    """
+    A decortor that checks to see if a user has the required role in a collection. Allows the user to enter the function
+    if the user has the role. Raises a PermissionDenied exception if the user doesn't have the role.
+
+    Input: a list of roles allowed for this function
+    Output: the function if user has role, else a PermissionDenied
+    """
+    def decorator(func):
+        def inner_decorator(request, *args, **kwargs):
+            role_bucket = get_or_update_role_bucket(request)
+            
+            entity_id = None
+            if request.GET:
+                entity_id = request.GET.get('deck_id','') if entity_type == 'deck' else request.GET.get('collection_id','')
+            elif not entity_id and request.POST:
+                entity_id = request.POST.get('deck_id','') if entity_type == 'deck' else request.POST.get('collection_id','')
+            else:
+                raise PermissionDenied
+            
+            entity_id = int(entity_id)
+            if entity_type == 'deck':
+                deck = Deck.objects.get(id=entity_id)
+                entity_id = deck.collection.id
+
+            for role in roles:
+                if entity_id in role_bucket[Users_Collections.role_map[role]]:
+                    return func(request, *args, **kwargs)
+            raise PermissionDenied
+        return wraps(func)(inner_decorator)
+    return decorator
+
+def is_superuser_or_staff(user):
+    """ Checks if the user is superuser or staff. Returns True or False """
+    return user.is_staff or user.is_superuser
+
+def get_or_update_role_bucket(request, collection_id = None, role = None):
+    """ Get, create, and/or update the user's role_bucket.
+        Returns the uptodate role_bucket dictionary.
+    """
+    role_bucket = request.session.get('role_bucket',{})
+
+    if role_bucket and collection_id:
+        if not role or not role_bucket.has_key(role):
+            raise Exception("Invalid role provided. %s does not exist" % role)
+        role_bucket[role].append(collection_id)
+    else:
+        all_collections = Collection.objects.all() 
+        role_bucket = Users_Collections.get_role_buckets(request.user, all_collections)
+        request.session['role_bucket'] = role_bucket
+   
+    return role_bucket

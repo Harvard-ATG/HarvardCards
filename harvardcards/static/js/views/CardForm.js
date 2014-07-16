@@ -20,7 +20,7 @@ define(['lodash', 'jquery', 'jquery.form'], function(_, $, $form) {
 
         // use the jQuery.form plugin to AJAXify the form
         this.formEl.ajaxForm({
-            resetForm: true,
+            resetForm: false,
             beforeSubmit: this.beforeSubmit,
             error: this.error,
             success: this.success
@@ -34,10 +34,42 @@ define(['lodash', 'jquery', 'jquery.form'], function(_, $, $form) {
 
     CardForm.prototype.beforeSubmit = function() {
         this.msg("Saving card...", MSG_INFO);
+        this.hideErrors();
     };
 
     CardForm.prototype.success = function(data, statusText, xhr, formEl) {
-        this.msg("Card save.", MSG_SUCCESS);
+        console.log("success", arguments);
+        var that = this;
+        if (data.success){
+            this.msg("Card saved", MSG_SUCCESS);
+            if(data.data.card_url) {
+                window.setTimeout(this.makeRedirect(data.data.card_url), 500)
+            }
+        } else {
+            this.msg("Error saving card", MSG_ERROR);
+            $.each(data.errors, function(key, val) {
+                that.setFieldError(key, val);
+            });
+            this.showErrors();
+        }
+    };
+
+    CardForm.prototype.setFieldError = function(key, val) {
+        this.formEl.find('.field-error-'+key).html(val);
+    };
+
+    CardForm.prototype.showErrors = function() {
+        this.formEl.find('.field-error').show();
+    };
+
+    CardForm.prototype.hideErrors = function() {
+        this.formEl.find('.field-error').hide();
+    };
+
+    CardForm.prototype.makeRedirect = function(location) {
+        return function() {
+            window.location = location;
+        };
     };
 
     CardForm.prototype.error = function(xhr, textStatus, errorThrown) {
@@ -46,6 +78,7 @@ define(['lodash', 'jquery', 'jquery.form'], function(_, $, $form) {
 
     // Displays a message about the status of the form.
     CardForm.prototype.msg = function(html, statusType) {
+        this.formMessageEl.css('display', 'block');
         var css, css_for = {};
         css_for[MSG_SUCCESS] = {color:"green"};
         css_for[MSG_ERROR] = {color:"red"};
@@ -55,7 +88,6 @@ define(['lodash', 'jquery', 'jquery.form'], function(_, $, $form) {
         if(!css) {
             css = css_for[MSG_INFO];
         }
-
         this.formMessageEl.css(css).html(html);
     };
 

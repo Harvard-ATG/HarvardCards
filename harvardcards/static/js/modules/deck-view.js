@@ -27,15 +27,15 @@ var initModule = function() {
 			this.el.html(current + " / " + total);
 		}
 	};
-	var $allCards = $("#allCards");
+	var $cardDetail = $("#singleCardHolder");
 
 	card_counter.update = $.proxy(card_counter.update, card_counter);
 
 	deck_slider.bind("beforeslide", function(slider, card_id) {
-		$allCards.find("[data-card-id]").removeClass("show").addClass("hide");
+		$cardDetail.find("[data-card-id]").removeClass("show").addClass("hide");
 	});
 	deck_slider.bind("slide", function(slider, card_id) {
-		$allCards.find("[data-card-id="+card_id+"]").removeClass("hide").addClass("show");
+		$cardDetail.find("[data-card-id="+card_id+"]").removeClass("hide").addClass("show");
 	});
 	deck_slider.bind("slide", card_counter.update);
 	deck_slider.goToCurrent();

@@ -1,8 +1,11 @@
+import datetime
+
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
-from django.core.exceptions import ViewDoesNotExist
+from django.core.exceptions import ViewDoesNotExist, PermissionDenied
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
 from django.utils import simplejson as json
 
@@ -10,12 +13,15 @@ from django.forms.formsets import formset_factory
 from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
 from harvardcards.apps.flash import forms, services, queries, utils
-import datetime
+from harvardcards.apps.flash.services import check_role, is_superuser_or_staff
+
 
 def index(request, collection_id=None):
     """Displays a set of collections."""
     all_collections = Collection.objects.all()
     user_collection_role = Users_Collections.get_role_buckets(request.user, all_collections)
+    request.session['role_bucket'] = user_collection_role
+
     decks_by_collection = queries.getDecksByCollection()
 
     collection_list = []
@@ -57,8 +63,11 @@ def index(request, collection_id=None):
 
     return render(request, 'collections/index.html', context)
     
+#should only check on collections? allow any registered user to create their own?
+@login_required
 def create(request):
     """Creates a collection."""
+
     collections = Collection.objects.all()
     if request.method == 'POST':
         collection_form = CollectionForm(request.POST)
@@ -67,8 +76,11 @@ def create(request):
             if request.POST.get('user_id', 0):
                 user_id = int(request.POST['user_id'])
                 user = User.objects.get(id=user_id)
-                Users_Collections.objects.create(user=user, collection=collection, role='A', date_joined=datetime.date.today())
-
+                collection_id= Users_Collections.objects.create(user=user, collection=collection, role='A', date_joined=datetime.date.today())
+                
+                #update role_bucket to add admin permission to the user for this newly created collection
+                services.get_or_update_role_bucket(request, collection_id.id, 'ADMINISTRATOR')
+                
             response = redirect(collection)
             return response
     else:
@@ -81,8 +93,10 @@ def create(request):
 
     return render(request, 'collections/create.html', context)
 
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR], 'collection')
 def edit(request, collection_id=None):
     """Edits a collection."""
+
     collections = Collection.objects.all()
     collection = Collection.objects.get(id=collection_id)
 
@@ -103,47 +117,23 @@ def edit(request, collection_id=None):
     }
 
     return render(request, 'collections/edit.html', context)
-    
+
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'collection')
 def add_deck(request, collection_id=None):
-    """Adds a collection."""
+    """Adds a deck."""
+
     collection = Collection.objects.get(id=collection_id)
     deck = Deck.objects.create(collection=collection, title='Untitled Deck')
     return redirect(deck)
 
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR], 'collection') 
 def delete(request, collection_id=None):
     """Deletes a collection."""
+
     services.delete_collection(collection_id)
     response = redirect('collectionIndex')
     response['Location'] += '?instructor=edit'
     return response
-
-def upload_deck(request, collection_id=None):
-    '''
-    Uploads a deck of cards from an excel spreadsheet.
-    '''
-    collections = Collection.objects.all().prefetch_related('deck_set')
-    collection = Collection.objects.get(id=collection_id)
-
-    if request.method == 'POST':
-        form = forms.DeckImportForm(request.POST, request.FILES)
-        if form.is_valid():
-            if 'file' in request.FILES:
-                deck = services.handle_uploaded_deck_file(collection_id, form.cleaned_data['deck_title'], request.FILES['file'])
-            else:
-                deck = Deck.objects.create(collection=collection, title=form.cleaned_data['deck_title'])
-            response =  redirect(deck)
-            response['Location'] += '?instructor=edit'
-            return response
-    else:
-        form = forms.DeckImportForm()
-
-    context = {
-        "form": form, 
-        "collection": collection,
-        "collections": collections
-    }
-
-    return render(request, 'collections/upload_deck.html', context)
 
 def download_template(request, collection_id=None):
     '''

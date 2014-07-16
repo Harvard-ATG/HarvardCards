@@ -57,15 +57,14 @@ class Collection(models.Model):
         return reverse('collectionIndex', args=[str(self.id)])
 
 class Card(models.Model):
-    DEFAULT_COLOR = "white"
+    DEFAULT_COLOR = "default"
     COLOR_CHOICES = (
-        (DEFAULT_COLOR, "White"),
-        ("red", "Red"),
-        ("orange", "Orange"),
-        ("yellow", "Yellow"),
-        ("green", "Green"),
+        (DEFAULT_COLOR, "Default"),
         ("blue", "Blue"),
         ("pink", "Pink"),
+        ("green", "Green"),
+        ("orange", "Orange"),
+        ("white", "White"),
     )
     collection = models.ForeignKey(Collection)
     sort_order = models.IntegerField()
@@ -138,12 +137,23 @@ class CardTemplates_Fields(models.Model):
 class Users_Collections(models.Model):
     user = models.ForeignKey(User)
     collection = models.ForeignKey(Collection)
+    OBSERVER = 'O'
+    LEARNER = 'L'
+    TEACHING_ASSISTANT = 'T'
+    CONTENT_DEVELOPER = 'C'
+    INSTRUCTOR = 'I'
+    ADMINISTRATOR = 'A'
     ROLES = (
-        ('G', 'Guest'),
-        ('S', 'Student'),
-        ('A', 'Admin'),
-        ('O', 'Owner')
+        (OBSERVER,              'Observer'),                  # Guest
+        (LEARNER,               'Learner'),                   # Student
+        (TEACHING_ASSISTANT,    'Teaching Assistant'),
+        (CONTENT_DEVELOPER,     'Content Developer'),
+        (INSTRUCTOR,            'Instructor'),                # Owner
+        (ADMINISTRATOR,         'Administrator')
     )
+    
+    role_map = dict([(role[0], role[1].upper()) for role in ROLES])
+    
     role = models.CharField(max_length=1, choices=ROLES, default='G')
     date_joined = models.DateField()
     class Meta:
@@ -158,9 +168,8 @@ class Users_Collections(models.Model):
         ''' Given a user and a set of collections, this function returns a
         dictionary that maps roles to collections. '''
 
-        role_map = dict([(role[0], role[1].upper()) for role in self.ROLES])
-        role_buckets = dict([(bucket, []) for bucket in role_map.values()])
-
+        role_buckets = dict([(bucket, []) for bucket in self.role_map.values()])
+    
         user_collections = dict([
             (item.collection_id, item.role)
             for item in self.objects.filter(user=user.id)
@@ -172,7 +181,13 @@ class Users_Collections(models.Model):
             elif collection.id in user_collections:
                 role = user_collections[collection.id]
             else:
-                role = 'G'
-            role_buckets[role_map[role]].append(collection.id)
+                role = 'O'
+            role_buckets[self.role_map[role]].append(collection.id)
 
         return role_buckets
+
+    @classmethod
+    def check_role(self, user, role, collection):
+        if user.is_superuser:
+            return True
+        return bool(self.objects.filter(user=user.id, role=role, collection=collection.id))
