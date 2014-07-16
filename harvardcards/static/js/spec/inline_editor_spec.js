@@ -36,7 +36,7 @@ define(['lodash','jquery','components/InlineEditor'], function(_, $, InlineEdito
 
 			spyOn(options, 'success');
 			spyOn(options, 'error');
-			spyOn(options, 'edit').andCallThrough();
+			spyOn(options, 'edit').and.callThrough();
 
 			editor = new InlineEditor(fixture, options);
 			result = editor.handleEdit(editor, new_value, {});
