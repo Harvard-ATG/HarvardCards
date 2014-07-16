@@ -3,25 +3,8 @@
 <head>
   <title>Jasmine Spec Runner</title>
 
-<!--
   <link rel="shortcut icon" type="image/png" href="{{ STATIC_URL }}jasmine/lib/jasmine-latest/jasmine_favicon.png">
   <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}jasmine/lib/jasmine-latest/jasmine.css">
-
-  <script src="{{ STATIC_URL }}js/lib/jquery-1.11.0.min.js"></script>
-  <script src="{{ STATIC_URL }}jasmine/lib/jasmine-latest/jasmine.js"></script>
-  <script src="{{ STATIC_URL }}js/lib/jasmine-jquery.js"></script>
-
-  <script src="{{ STATIC_URL }}jasmine/lib/jasmine-latest/jasmine-html.js"></script>
-  <script src="{{ STATIC_URL }}jasmine/lib/jasmine-latest/boot.js"></script>
-  <script src="{{ STATIC_URL }}jasmine-reporters/src/jasmine.console_reporter.js"></script>
-	-->
-
-  <link rel="shortcut icon" type="image/png" href="{{ STATIC_URL }}jasmine/lib/jasmine-latest/jasmine_favicon.png">
-  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}jasmine/lib/jasmine-latest/jasmine.css">
-
-  <script type="text/javascript" src="{{ STATIC_URL }}jasmine/lib/jasmine-latest/jasmine.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}jasmine/lib/jasmine-latest/jasmine-html.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}jasmine/lib/jasmine-latest/boot.js"></script>
 
   <script src="{{ STATIC_URL }}js/lib/require.js"></script>
   {% include "_requirejs_config.html" with debug=True %}
@@ -30,26 +13,53 @@
 
 <body>
 <script>
-require([
-	'jquery'
-	{% for spec_file in all_specs %}
-	,'{{ spec_file }}'
-	{% endfor %}
-], function($) {
-	var jasmineEnv = jasmine.getEnv();
-	var htmlReporter = new jasmine.HtmlReporter({});
-	var consoleReporter = new jasmine.ConsoleReporter();
+(function() {
+  'use strict';
 
-	jasmineEnv.addReporter(htmlReporter)
-	jasmineEnv.addReporter(consoleReporter);
-	jasmineEnv.specFilter = function(spec) {
-		return htmlReporter.specFilter(spec);
-	};
+  // Configure RequireJS to shim Jasmine
+  require.config({
+    //baseUrl: '..',
+    paths: {
+      'jasmine': '{{ STATIC_URL }}jasmine/lib/jasmine-latest/jasmine',
+      'jasmine-html': '{{ STATIC_URL }}jasmine/lib/jasmine-latest/jasmine-html',
+      'boot': '{{ STATIC_URL }}jasmine/lib/jasmine-latest/boot'
+    },
+    shim: {
+      'jasmine': {
+        exports: 'window.jasmineRequire'
+      },
+      'jasmine-html': {
+        deps: ['jasmine'],
+        exports: 'window.jasmineRequire'
+      },
+      'boot': {
+        deps: ['jasmine', 'jasmine-html'],
+        exports: 'window.jasmineRequire'
+      }
+    }
+  });
 
-	$(document).ready(function() {
-		jasmineEnv.execute();
-	});
-});
+  // Define all of your specs here. These are RequireJS modules.
+  var specs = [
+		{% for spec_file in all_specs %}
+		,'{{ spec_file }}'
+		{% endfor %}
+  ];
+
+  // Load Jasmine - This will still create all of the normal Jasmine browser globals unless `boot.js` is re-written to use the
+  // AMD or UMD specs. `boot.js` will do a bunch of configuration and attach it's initializers to `window.onload()`. Because
+  // we are using RequireJS `window.onload()` has already been triggered so we have to manually call it again. This will
+  // initialize the HTML Reporter and execute the environment.
+  require(['boot'], function () {
+
+    // Load the specs
+    require(specs, function () {
+
+      // Initialize the HTML Reporter and execute the environment (setup by `boot.js`)
+      window.onload();
+    });
+  });
+})();
 </script>
 </body>
 </html>
