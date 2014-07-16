@@ -47,7 +47,7 @@ define(['lodash','jquery','modules/module-loader'], function(_, $, ModuleLoader)
 			spyOn(module_loader, 'loadModule');
 			module_loader.loadAll();
 			expect(module_loader.loadModule).toHaveBeenCalled();
-			expect(module_loader.loadModule.calls.length).toEqual(modules.length);
+			expect(module_loader.loadModule.calls.count()).toEqual(modules.length);
 		});
 	});
 });
