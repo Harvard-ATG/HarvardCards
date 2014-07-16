@@ -55,7 +55,7 @@ define(['lodash', 'jquery', 'views/CardForm'], function(_, $, CardForm) {
                     spyOn(card_form, 'msg');
                     card_form[fn]();
                     expect(card_form.msg).toHaveBeenCalled();
-                    expect(card_form.msg.mostRecentCall.args[1]).toBe(msgType);
+                    expect(card_form.msg.calls.mostRecent().args[1]).toBe(msgType);
                 });
             });
         });
