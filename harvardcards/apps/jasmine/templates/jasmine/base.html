@@ -3,13 +3,25 @@
 <head>
   <title>Jasmine Spec Runner</title>
 
+<!--
   <link rel="shortcut icon" type="image/png" href="{{ STATIC_URL }}jasmine/lib/jasmine-latest/jasmine_favicon.png">
   <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}jasmine/lib/jasmine-latest/jasmine.css">
 
-
+  <script src="{{ STATIC_URL }}js/lib/jquery-1.11.0.min.js"></script>
   <script src="{{ STATIC_URL }}jasmine/lib/jasmine-latest/jasmine.js"></script>
+  <script src="{{ STATIC_URL }}js/lib/jasmine-jquery.js"></script>
+
   <script src="{{ STATIC_URL }}jasmine/lib/jasmine-latest/jasmine-html.js"></script>
+  <script src="{{ STATIC_URL }}jasmine/lib/jasmine-latest/boot.js"></script>
   <script src="{{ STATIC_URL }}jasmine-reporters/src/jasmine.console_reporter.js"></script>
+	-->
+
+  <link rel="shortcut icon" type="image/png" href="{{ STATIC_URL }}jasmine/lib/jasmine-latest/jasmine_favicon.png">
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}jasmine/lib/jasmine-latest/jasmine.css">
+
+  <script type="text/javascript" src="{{ STATIC_URL }}jasmine/lib/jasmine-latest/jasmine.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}jasmine/lib/jasmine-latest/jasmine-html.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}jasmine/lib/jasmine-latest/boot.js"></script>
 
   <script src="{{ STATIC_URL }}js/lib/require.js"></script>
   {% include "_requirejs_config.html" with debug=True %}
@@ -25,7 +37,7 @@ require([
 	{% endfor %}
 ], function($) {
 	var jasmineEnv = jasmine.getEnv();
-	var htmlReporter = new jasmine.HtmlReporter();
+	var htmlReporter = new jasmine.HtmlReporter({});
 	var consoleReporter = new jasmine.ConsoleReporter();
 
 	jasmineEnv.addReporter(htmlReporter)
