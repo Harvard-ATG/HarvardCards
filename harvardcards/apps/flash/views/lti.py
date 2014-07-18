@@ -10,7 +10,7 @@ class LTILaunchView(CsrfExemptMixin, LoginRequiredMixin, RedirectView):
     """
     LTI consumers will POST to this view.
     """
-    pattern_name = 'index'
+    url = '/'
 
 class ToolConfigView(View):
     """
