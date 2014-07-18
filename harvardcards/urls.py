@@ -2,6 +2,8 @@ from django.conf.urls import patterns, include, url
 from django.conf import settings
 from django.conf.urls.static import static
 
+from harvardcards.apps.flash.views.lti import LTILaunchView, ToolConfigView
+
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
@@ -35,6 +37,9 @@ urlpatterns = patterns('',
     url(r'^login-complete/$', 'django_openid_auth.views.login_complete', name='openid-complete'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/',}, name='logout'),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+
+    url(r'^lti_launch$', LTILaunchView.as_view(), name='lti-launch'),
+    url(r'^lti_tool_config$', ToolConfigView.as_view(), name='lti-tool-config'),
 
     # API
     url(r'^api$', 'harvardcards.apps.flash.api.api.root', name='apiRoot'),
