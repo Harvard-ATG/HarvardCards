@@ -24,3 +24,6 @@ django-debug-toolbar==0.11
 # For image manipulation
 Pillow==2.2.1
 
+# For LTI
+django-cached-authentication-middleware>=0.2.0
+git+https://github.com/Harvard-University-iCommons/django-auth-lti.git@v0.7#egg=django-auth-lti
