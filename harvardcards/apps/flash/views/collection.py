@@ -17,35 +17,40 @@ from harvardcards.apps.flash.services import check_role, is_superuser_or_staff
 
 
 def index(request, collection_id=None):
-    """Displays a set of collections."""
+    """Displays a set of collections to the user depending on whether 
+    or not the collections are private or public and whether or not the 
+    user has permission."""
     all_collections = Collection.objects.all()
-    user_collection_role = Users_Collections.get_role_buckets(request.user, all_collections)
+    user_collection_role = Users_Collections.get_role_buckets(request.user, collections = all_collections)
     request.session['role_bucket'] = user_collection_role
 
     decks_by_collection = queries.getDecksByCollection()
 
     collection_list = []
     for collection in all_collections:
-        collection_decks = []
-        if decks_by_collection.get(collection.id, 0):
-            for deck in decks_by_collection[collection.id]:
-                collection_decks.append({
-                    'id': deck.id,
-                    'title': deck.title,
-                    'num_cards': deck.cards.count()
+        if not collection.private or services.has_role(request, [Users_Collections.ADMINISTRATOR, 
+                        Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, 
+                        Users_Collections.CONTENT_DEVELOPER, Users_Collections.LEARNER], collection.id):
+            collection_decks = []
+            if decks_by_collection.get(collection.id, 0):
+                for deck in decks_by_collection[collection.id]:
+                    collection_decks.append({
+                        'id': deck.id,
+                        'title': deck.title,
+                        'num_cards': deck.cards.count()
+                    })
+                collection_list.append({
+                    'id': collection.id,
+                    'title':collection.title,
+                    'decks': collection_decks
                 })
-            collection_list.append({
-                'id': collection.id,
-                'title':collection.title,
-                'decks': collection_decks
-            })
-        else:
-            collection_list.append({
-                'id': collection.id,
-                'title':collection.title,
-                'decks': []
-            })
-
+            else:
+                collection_list.append({
+                    'id': collection.id,
+                    'title':collection.title,
+                    'decks': []
+                })
+    
     if collection_id:
         cur_collection = all_collections.get(id=collection_id)
         display_collections = [c for c in collection_list if c['id'] == cur_collection.id]
@@ -76,10 +81,10 @@ def create(request):
             if request.POST.get('user_id', 0):
                 user_id = int(request.POST['user_id'])
                 user = User.objects.get(id=user_id)
-                collection_id= Users_Collections.objects.create(user=user, collection=collection, role='A', date_joined=datetime.date.today())
+                collection_id= Users_Collections.objects.create(user=user, collection=collection, role=Users_Collections.ADMINISTRATOR, date_joined=datetime.date.today())
                 
                 #update role_bucket to add admin permission to the user for this newly created collection
-                services.get_or_update_role_bucket(request, collection_id.id, 'ADMINISTRATOR')
+                services.get_or_update_role_bucket(request, collection_id.id, Users_Collections.role_map[Users_Collections.ADMINISTRATOR])
                 
             response = redirect(collection)
             return response
@@ -117,6 +122,11 @@ def edit(request, collection_id=None):
     }
 
     return render(request, 'collections/edit.html', context)
+
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR], 'collection')
+def share_collection(request, collection_id=None):
+    """Share a collection with users"""
+    
 
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'collection')
 def add_deck(request, collection_id=None):

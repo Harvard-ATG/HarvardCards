@@ -42,6 +42,8 @@ class Collection(models.Model):
     users = models.ManyToManyField(User, through='Users_Collections')
     card_template = models.ForeignKey(CardTemplate)
 
+    private = models.BooleanField(default=True)
+
     class Meta:
         verbose_name = 'Collection'
         verbose_name_plural = 'Collections'
@@ -130,13 +132,8 @@ class CardTemplates_Fields(models.Model):
     def __unicode__(self):
         return "CardTemplate: " + str(self.card_template.id) + "; Field: " + str(self.field.id)
 
-#class User(models.Model):
-#    name = models.CharField(max_length=200)
-#    email = models.CharField(max_length=200)
-    
 class Users_Collections(models.Model):
-    user = models.ForeignKey(User)
-    collection = models.ForeignKey(Collection)
+
     OBSERVER = 'O'
     LEARNER = 'L'
     TEACHING_ASSISTANT = 'T'
@@ -149,13 +146,15 @@ class Users_Collections(models.Model):
         (TEACHING_ASSISTANT,    'Teaching Assistant'),
         (CONTENT_DEVELOPER,     'Content Developer'),
         (INSTRUCTOR,            'Instructor'),                # Owner
-        (ADMINISTRATOR,         'Administrator')
-    )
-    
+        (ADMINISTRATOR,         'Administrator'))
+
     role_map = dict([(role[0], role[1].upper()) for role in ROLES])
-    
-    role = models.CharField(max_length=1, choices=ROLES, default='G')
+
+    user = models.ForeignKey(User)
+    collection = models.ForeignKey(Collection)
     date_joined = models.DateField()
+    role = models.CharField(max_length=1, choices=ROLES, default='O')
+    
     class Meta:
         verbose_name = 'Users Collections'
         verbose_name_plural = 'Users Collections'
@@ -164,12 +163,15 @@ class Users_Collections(models.Model):
         return "User: " + str(self.user.email) + " Collection: " + str(self.collection.title) + " Role: " + str(self.role)
 
     @classmethod
-    def get_role_buckets(self, user, collections):
+    def get_role_buckets(self, user, collections = None):
         ''' Given a user and a set of collections, this function returns a
         dictionary that maps roles to collections. '''
 
         role_buckets = dict([(bucket, []) for bucket in self.role_map.values()])
-    
+        
+        if not collections:
+            collections = Collection.objects.all()
+
         user_collections = dict([
             (item.collection_id, item.role)
             for item in self.objects.filter(user=user.id)
