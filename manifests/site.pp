@@ -20,7 +20,7 @@ class init {
 
 	# install some system dependencies
 	package {
-		["python", "python-dev", "python-pip", "python-setuptools", "python-mysqldb", "mysql-server", "mysql-client"]:
+		["python", "python-dev", "python-pip", "python-setuptools", "python-mysqldb", "mysql-server", "mysql-client", "libxml2-dev", "libxslt1-dev"]:
 		ensure => installed,
 		require => Exec['update-apt']
 	}
@@ -71,6 +71,7 @@ class djangoapp {
 	exec { "django-syncdb":
 		environment => $DJANGO_ENV,
 		command => "python manage.py syncdb --noinput",
+		onlyif => "test ! -e $PROJ_DIR/NO_SYNC_DB.flag",
 		cwd => "$PROJ_DIR",
 		require => Exec["mysql-config"],
 		logoutput => true,

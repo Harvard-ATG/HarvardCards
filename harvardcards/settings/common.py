@@ -100,9 +100,12 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
+    #'cached_auth.Middleware',
+    'django_auth_lti.middleware.LTIAuthMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'django.contrib.messages.middleware.MessageMiddleware',
 ]
 
 ROOT_URLCONF = 'harvardcards.urls'
@@ -175,6 +178,8 @@ AUTHENTICATION_BACKENDS = (
 	#'libs.auth.GoogleBackend',
     'django_openid_auth.auth.OpenIDBackend',
 	'django.contrib.auth.backends.ModelBackend',
+
+    'django_auth_lti.backends.LTIAuthBackend',
 )
 OPENID_CREATE_USERS = True
 OPENID_UPDATE_DETAILS_FROM_SREG = True
@@ -182,3 +187,5 @@ LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_URL = '/logout/'
 OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
+
+LTI_OAUTH_CREDENTIALS = {"flashkey":"flashsecret"}
