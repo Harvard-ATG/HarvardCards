@@ -15,12 +15,12 @@
     </div>
 
     <div class="slider">
-        {% if user.is_authenticated %}
         <ul class="courseDecks">
+            {% if user.is_authenticated %}
                 <li class="deck add">
                 <a href="{% url 'collectionAddDeck' collection.id %}?collection_id={{collection.id}}">Add a Deck</a>
                 </li>
-        {% endif %}
+            {% endif %}
 
             {% for deck in collection.decks %}
             <li class="deck">

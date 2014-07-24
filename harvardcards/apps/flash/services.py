@@ -229,8 +229,6 @@ def check_role(roles, entity_type):
     """
     def decorator(func):
         def inner_decorator(request, *args, **kwargs):
-            role_bucket = get_or_update_role_bucket(request)
-            
             entity_id = None
             if request.GET:
                 entity_id = request.GET.get('deck_id','') if entity_type == 'deck' else request.GET.get('collection_id','')
@@ -243,13 +241,23 @@ def check_role(roles, entity_type):
             if entity_type == 'deck':
                 deck = Deck.objects.get(id=entity_id)
                 entity_id = deck.collection.id
-
-            for role in roles:
-                if entity_id in role_bucket[Users_Collections.role_map[role]]:
-                    return func(request, *args, **kwargs)
+            
+            if has_role(request, roles, entity_id):
+                return func(request, *args, **kwargs)
             raise PermissionDenied
         return wraps(func)(inner_decorator)
     return decorator
+
+def has_role(request, roles, collection_id):
+    """
+    Checks if a particular user (based on the cached session) has
+    a particular set of roles. Return True/False
+    """
+    role_bucket = get_or_update_role_bucket(request)
+    for role in roles:
+        if collection_id in role_bucket[Users_Collections.role_map[role]]:
+            return True
+    return False
 
 def is_superuser_or_staff(user):
     """ Checks if the user is superuser or staff. Returns True or False """
@@ -266,8 +274,7 @@ def get_or_update_role_bucket(request, collection_id = None, role = None):
             raise Exception("Invalid role provided. %s does not exist" % role)
         role_bucket[role].append(collection_id)
     else:
-        all_collections = Collection.objects.all() 
-        role_bucket = Users_Collections.get_role_buckets(request.user, all_collections)
+        role_bucket = Users_Collections.get_role_buckets(request.user)
         request.session['role_bucket'] = role_bucket
    
     return role_bucket

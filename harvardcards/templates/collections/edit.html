@@ -10,7 +10,7 @@
         <div class="courseHeader">
             <h2>Edit course</h2>
         </div>
-        <form action="{% url 'collectionEdit' collection.id %}" method="post">{% csrf_token %}
+        <form action="{% url 'collectionEdit' collection.id %}?collection_id={{ collection.id }}" method="post">{% csrf_token %}
             <p>
                 {{ collection_form.title.errors }}
                 <label for="id_title">Title:</label>
@@ -20,6 +20,11 @@
                 {{ collection_form.card_template.errors }}
                 <label for="id_card_template">Template:</label>
                 {{ collection_form.card_template }}
+            </p>
+            <p>
+                {{ collection_form.private.errors }}
+                <label for="id_private">Private:</label>
+                {{ collection_form.private }}
             </p>
             <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
             <a href="{% url 'collectionIndex' collection.id %}" class="adminMenuBtn cancelBtn">Cancel</a>

@@ -21,11 +21,14 @@ def index(request, deck_id=None):
     deck = Deck.objects.get(id=deck_id)
     deck_cards = Decks_Cards.objects.filter(deck=deck).order_by('sort_order').prefetch_related('card__cards_fields_set__field')
     current_collection = Collection.objects.get(id=deck.collection.id)
-    collections = Collection.objects.all().prefetch_related('deck_set')
+    collections = [collection for collection in Collection.objects.all().prefetch_related('deck_set') 
+            if not collection.private or services.has_role(request, [Users_Collections.ADMINISTRATOR, 
+            Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER, 
+            Users_Collections.LEARNER], collection.id)]
 
     user_collection_role = request.session.get('role_bucket',{})
     if not user_collection_role:
-        user_collection_role = Users_Collections.get_role_buckets(request.user, collections)
+        user_collection_role = Users_Collections.get_role_buckets(request.user, collections = collections)
         request.session['role_bucket'] = user_collection_role
 
     is_quiz_mode = request.GET.get('mode') == 'quiz'

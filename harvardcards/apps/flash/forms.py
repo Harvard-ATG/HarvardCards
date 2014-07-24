@@ -6,7 +6,7 @@ import logging
 class CollectionForm(forms.ModelForm):
     class Meta:
         model = Collection
-        fields = ['title', 'card_template']
+        fields = ['title', 'card_template', 'private']
         
 class FieldForm(forms.ModelForm):
     class Meta:

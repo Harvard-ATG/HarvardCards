@@ -35,6 +35,14 @@
             <div id="cardTemplateContainer" data-fetch-url="{% url 'cardTemplatePreview' %}">
                 Select a template
             </div>
+
+            <div class="clear"><!-- empty --></div>
+            
+            <div id="cardPrivateContainer">
+                <label for="id_private">Private:</label> 
+                {{ collection_form.private }}
+            </div>
+
             <div>
                 <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
                 <a href="{% url 'collectionIndex' %}" class="adminMenuBtn cancelBtn">Cancel</a>
