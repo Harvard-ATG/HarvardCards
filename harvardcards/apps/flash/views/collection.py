@@ -1,6 +1,9 @@
-import datetime
+import datetime, base64
 
-from django.http import HttpResponse
+from Crypto.Cipher import AES
+from Crypto import Random
+
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
 from django.core.exceptions import ViewDoesNotExist, PermissionDenied
@@ -124,9 +127,77 @@ def edit(request, collection_id=None):
     return render(request, 'collections/edit.html', context)
 
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR], 'collection')
-def share_collection(request, collection_id=None):
-    """Share a collection with users"""
-    
+def share_collection(request, collection_id=None, role=None, expire_in=None):
+    """
+    Share a collection with users by creating a temporary url for authorized
+    users to use in order to add themselves into the collection's authorized
+    users list
+    """
+   
+    if not role:
+        role = 'A'
+    if not expire_in:
+        expire_in = datetime.timedelta(hours = 12)
+
+    static_url = 'collection/share/'
+    generated_url = 'collection_id=%s&!!!role=%s&!!!current_time=%s&!!!expired_in=%s' % (collection_id, role, str(datetime.datetime.now()), expire_in)
+    print static_url + generated_url
+    print '------'
+    print static_url + encrypt_info(generated_url)
+    return HttpResponseRedirect("/")
+
+@login_required
+def add_user_to_shared_collection(request):
+    """
+    Decrypt the encrypted URL and add the user to the appropriate
+    collection with the appropriate role
+    """
+    print request.GET 
+    encrypted_info = request.GET.keys()[0]
+    print encrypted_info
+    decrypted_info = decode_info(encrypted_info)
+    collection_id, role, generated_at, expire_in = decrypted_info.split('&!!!')
+
+    collection_id = int(collection_id.split('=')[1])
+    role = role.split('=')[1]
+    generated_at = generated_at.split('=')[1]
+    expire_in = expire_in('=')[1]
+
+    generated_at = datetime.datetime.strptime(generated_at, "%Y-%m-%d %H:%M:%S.%f")
+    expire_in = datetime.datetime.time_delta(days=int(expire_in))
+    current_time = datetime.datetime.now()
+
+    if generated_at + expire_in < current_time:
+        return HttpResponseBadRequest('This URL has expired.')
+
+    collection = Collection.objects.get(collection_id)
+
+    user_collection = Users_Collections(user = request.user, collection = collection, role = role)
+    user_collection.save()
+
+    return render(request, 'index.html', context)
+
+my_key = 'harvard-atg-pitf' # move this into settings
+
+def encrypt_info(link):
+    """
+    Encode a link with AES algorithm
+    """
+    iv = Random.new().read(AES.block_size)
+    encrypt_obj = AES.new(my_key, AES.MODE_CFB, iv)
+    return iv + encrypt_obj.encrypt(link)
+
+def decode_info(link):
+    """
+    Decode a link with AES algorithm
+    """
+    print link
+    iv = link[:16]
+    print iv
+    print len(iv)
+    print '-----'
+    decrypt_obj = AES.new(my_key, AES.MODE_CFB, iv)
+    return iv + decrypt_obj.decrypt(link)
 
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'collection')
 def add_deck(request, collection_id=None):
