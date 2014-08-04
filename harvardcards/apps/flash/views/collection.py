@@ -1,8 +1,5 @@
 import datetime, base64
 
-from Crypto.Cipher import AES
-from Crypto import Random
-
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
@@ -141,63 +138,37 @@ def share_collection(request, collection_id=None, role=None, expire_in=None):
 
     static_url = 'collection/share/'
     generated_url = 'collection_id=%s&!!!role=%s&!!!current_time=%s&!!!expired_in=%s' % (collection_id, role, str(datetime.datetime.now()), expire_in)
-    print static_url + generated_url
-    print '------'
-    print static_url + encrypt_info(generated_url)
+    print static_url + base64.b64encode(generated_url)
     return HttpResponseRedirect("/")
 
 @login_required
-def add_user_to_shared_collection(request):
+def add_user_to_shared_collection(request, parameters):
     """
     Decrypt the encrypted URL and add the user to the appropriate
     collection with the appropriate role
     """
-    print request.GET 
-    encrypted_info = request.GET.keys()[0]
-    print encrypted_info
-    decrypted_info = decode_info(encrypted_info)
+    decrypted_info = base64.b64decode(parameters)
     collection_id, role, generated_at, expire_in = decrypted_info.split('&!!!')
-
     collection_id = int(collection_id.split('=')[1])
+    
     role = role.split('=')[1]
     generated_at = generated_at.split('=')[1]
-    expire_in = expire_in('=')[1]
-
+    expire_in = expire_in.split('=')[1]
+    expire_in = datetime.datetime.strptime(expire_in,"%H:%M:%S")
+    expire_in = datetime.timedelta(hours=expire_in.hour, minutes=expire_in.minute, seconds=expire_in.second)
+    
     generated_at = datetime.datetime.strptime(generated_at, "%Y-%m-%d %H:%M:%S.%f")
-    expire_in = datetime.datetime.time_delta(days=int(expire_in))
     current_time = datetime.datetime.now()
 
     if generated_at + expire_in < current_time:
         return HttpResponseBadRequest('This URL has expired.')
 
-    collection = Collection.objects.get(collection_id)
+    collection = Collection.objects.get(id=collection_id)
 
-    user_collection = Users_Collections(user = request.user, collection = collection, role = role)
+    user_collection = Users_Collections(user = request.user, collection = collection, role = role, date_joined = datetime.date.today())
     user_collection.save()
 
-    return render(request, 'index.html', context)
-
-my_key = 'harvard-atg-pitf' # move this into settings
-
-def encrypt_info(link):
-    """
-    Encode a link with AES algorithm
-    """
-    iv = Random.new().read(AES.block_size)
-    encrypt_obj = AES.new(my_key, AES.MODE_CFB, iv)
-    return iv + encrypt_obj.encrypt(link)
-
-def decode_info(link):
-    """
-    Decode a link with AES algorithm
-    """
-    print link
-    iv = link[:16]
-    print iv
-    print len(iv)
-    print '-----'
-    decrypt_obj = AES.new(my_key, AES.MODE_CFB, iv)
-    return iv + decrypt_obj.decrypt(link)
+    return HttpResponseRedirect("/")
 
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'collection')
 def add_deck(request, collection_id=None):

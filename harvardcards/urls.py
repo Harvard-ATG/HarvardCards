@@ -19,7 +19,7 @@ urlpatterns = patterns('',
     url(r'^collection/(?P<collection_id>\d+)/download-template', 'harvardcards.apps.flash.views.collection.download_template', name='collectionDownloadTemplate'),
     url(r'^collection/(?P<collection_id>\d+)/delete', 'harvardcards.apps.flash.views.collection.delete', name='collectionDelete'),
     url(r'collection/(?P<collection_id>\d+)/share', 'harvardcards.apps.flash.views.collection.share_collection', name='collectionShare'),
-    url(r'collection/share/$', 'harvardcards.apps.flash.views.collection.add_user_to_shared_collection', name='collectionShareValidate'),  
+    url(r'collection/share/(?P<parameters>.*)', 'harvardcards.apps.flash.views.collection.add_user_to_shared_collection', name='collectionShareValidate'),  
     url(r'^card_template/preview$', 'harvardcards.apps.flash.views.card_template.preview', name='cardTemplatePreview'),
 
     url(r'^deck$', 'harvardcards.apps.flash.views.deck.index', name='deckIndex'),
