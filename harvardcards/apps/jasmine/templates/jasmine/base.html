@@ -22,6 +22,7 @@
     paths: {
       'jasmine': '{{ STATIC_URL }}jasmine/lib/jasmine-latest/jasmine',
       'jasmine-html': '{{ STATIC_URL }}jasmine/lib/jasmine-latest/jasmine-html',
+      'jasmine-jquery': '{{ STATIC_URL }}jasmine/lib/jasmine-jquery',
       'boot': '{{ STATIC_URL }}jasmine/lib/jasmine-latest/boot'
     },
     shim: {
@@ -31,6 +32,9 @@
       'jasmine-html': {
         deps: ['jasmine'],
         exports: 'window.jasmineRequire'
+      },
+      'jasmine-jquery': {
+        deps: ['jasmine', 'jquery']
       },
       'boot': {
         deps: ['jasmine', 'jasmine-html'],
@@ -50,7 +54,7 @@
   // AMD or UMD specs. `boot.js` will do a bunch of configuration and attach it's initializers to `window.onload()`. Because
   // we are using RequireJS `window.onload()` has already been triggered so we have to manually call it again. This will
   // initialize the HTML Reporter and execute the environment.
-  require(['boot'], function () {
+  require(['boot', 'jasmine-jquery'], function () {
 
     // Load the specs
     require(specs, function () {
