@@ -1,0 +1,40 @@
+{% extends "__layout_left_sidebar.html" %}
+
+{% block sidebar_content %}
+{% include "_collection_nav.html" with collections=collections collection=collection %}
+{% endblock %}
+
+{% block main_content %}
+<div id="content">
+    <div class="courseWrapper">
+        <div class="courseHeader">
+            <h2>Share course</h2>
+        </div>
+        <form action="{% url 'collectionShare' collection.id %}?collection_id={{ collection.id }}" method="post">{% csrf_token %}
+            <p>
+            {{ share_form.title.errors }}
+            <label for="id_title">Collection Title:</label>
+            {{ collection.title }}
+            </p>
+            {% if share_link %}
+            <p>                                                                                                                                                                                <label for="id_link">Share This Link:</label>
+            {{ share_link }}
+            </p> 
+            {% else %}
+            <p>
+            {{ share_form.role.errors }}
+            <label for="id_role">User Role:</label>
+            {{ share_form.role }}
+            </p>
+            <p>
+            {{ share_form.exired_in.errors }}
+            <label for="id_expiration">Link Expired In:</label>
+            {{ share_form.expired_in }}
+            </p>
+            {% endif %}
+            <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
+            <a href="{% url 'collectionIndex' collection.id %}" class="adminMenuBtn cancelBtn">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

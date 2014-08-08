@@ -11,7 +11,7 @@ from django.utils import simplejson as json
 
 from django.forms.formsets import formset_factory
 from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field
-from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
+from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm, CollectionShareForm
 from harvardcards.apps.flash import forms, services, queries, utils
 from harvardcards.apps.flash.services import check_role, is_superuser_or_staff
 
@@ -124,22 +124,35 @@ def edit(request, collection_id=None):
     return render(request, 'collections/edit.html', context)
 
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR], 'collection')
-def share_collection(request, collection_id=None, role=None, expire_in=None):
+def share_collection(request, collection_id=None):
     """
     Share a collection with users by creating a temporary url for authorized
     users to use in order to add themselves into the collection's authorized
     users list
     """
-   
-    if not role:
-        role = 'A'
-    if not expire_in:
-        expire_in = datetime.timedelta(hours = 12)
+    print not request.POST
 
-    static_url = 'collection/share/'
-    generated_url = 'collection_id=%s&!!!role=%s&!!!current_time=%s&!!!expired_in=%s' % (collection_id, role, str(datetime.datetime.now()), expire_in)
-    print static_url + base64.b64encode(generated_url)
-    return HttpResponseRedirect("/")
+    collections = Collection.objects.all()
+    collection = Collection.objects.get(id=collection_id)
+    collection_share_form = CollectionShareForm()
+    context = {
+            'share_form': collection_share_form,
+            'collections': collections,
+            'collection': collection,
+             } 
+
+    if request.POST:
+        collection_share_form = CollectionShareForm(request.POST)
+        if collection_share_form.is_valid():
+        
+            static_url = 'collection/share/'
+            generated_url = 'collection_id=%s&!!!role=%s&!!!current_time=%s&!!!expired_in=%s' % (collection_id, collection_share_form.cleaned_data['role'], str(datetime.datetime.now()), collection_share_form.cleaned_data['expired_in'])
+            print static_url + base64.b64encode(generated_url)
+            context['share_link'] = static_url + base64.b64encode(generated_url)
+        else:
+            print collection_share_form.errors
+
+    return render(request, 'collections/share.html', context)
 
 @login_required
 def add_user_to_shared_collection(request, parameters):
@@ -154,8 +167,8 @@ def add_user_to_shared_collection(request, parameters):
     role = role.split('=')[1]
     generated_at = generated_at.split('=')[1]
     expire_in = expire_in.split('=')[1]
-    expire_in = datetime.datetime.strptime(expire_in,"%H:%M:%S")
-    expire_in = datetime.timedelta(hours=expire_in.hour, minutes=expire_in.minute, seconds=expire_in.second)
+    expire_in = datetime.datetime.strptime(expire_in,"%Y-%m-%d")
+    expire_in = datetime.timedelta(days=expire_in.day)
     
     generated_at = datetime.datetime.strptime(generated_at, "%Y-%m-%d %H:%M:%S.%f")
     current_time = datetime.datetime.now()
