@@ -146,11 +146,10 @@ def share_collection(request, collection_id=None):
         if collection_share_form.is_valid():
         
             static_url = 'collection/share/'
-            generated_url = 'collection_id=%s&!!!role=%s&!!!current_time=%s&!!!expired_in=%s' % (collection_id, collection_share_form.cleaned_data['role'], str(datetime.datetime.now()), collection_share_form.cleaned_data['expired_in'])
-            print static_url + base64.b64encode(generated_url)
+            generated_url = 'collection_id=%s&!!!role=%s&!!!expired_in=%s' % (collection_id, collection_share_form.cleaned_data['role'], collection_share_form.cleaned_data['expired_in'])
             context['share_link'] = static_url + base64.b64encode(generated_url)
         else:
-            print collection_share_form.errors
+            context['share_form'] = collection_share_form
 
     return render(request, 'collections/share.html', context)
 
@@ -161,19 +160,16 @@ def add_user_to_shared_collection(request, parameters):
     collection with the appropriate role
     """
     decrypted_info = base64.b64decode(parameters)
-    collection_id, role, generated_at, expire_in = decrypted_info.split('&!!!')
+    collection_id, role, expire_in = decrypted_info.split('&!!!')
     collection_id = int(collection_id.split('=')[1])
     
     role = role.split('=')[1]
-    generated_at = generated_at.split('=')[1]
     expire_in = expire_in.split('=')[1]
     expire_in = datetime.datetime.strptime(expire_in,"%Y-%m-%d")
-    expire_in = datetime.timedelta(days=expire_in.day)
     
-    generated_at = datetime.datetime.strptime(generated_at, "%Y-%m-%d %H:%M:%S.%f")
     current_time = datetime.datetime.now()
 
-    if generated_at + expire_in < current_time:
+    if expire_in <= current_time:
         return HttpResponseBadRequest('This URL has expired.')
 
     collection = Collection.objects.get(id=collection_id)
