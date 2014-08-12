@@ -4,12 +4,12 @@ import os
 
 FORCE_SCRIPT_NAME = None
 STATIC_URL = '/static'
-if os.environ.get('SERVER_NAME') == 'flashcards.fas.harvard.edu':                                             
-    FORCE_SCRIPT_NAME = '/'                                                                                   
-	STATIC_URL = '/static'
-elif os.environ.get('SERVER_NAME') == 'sites.test.fas.harvard.edu':                                           
+if os.environ.get('SERVER_NAME') == 'flashcards.fas.harvard.edu':
+    FORCE_SCRIPT_NAME = '/'
+    STATIC_URL = '/static'
+elif os.environ.get('SERVER_NAME') == 'sites.test.fas.harvard.edu':
     FORCE_SCRIPT_NAME = '/~harvardcards/'
-	STATIC_URL = '/~harvardcards/static'
+    STATIC_URL = '/~harvardcards/static'
 
 DATABASES = {
     'default': {
