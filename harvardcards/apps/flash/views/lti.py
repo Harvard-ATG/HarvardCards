@@ -92,7 +92,7 @@ class ToolConfigView(View):
             # 'url': 'http://library.harvard.edu',
             'text':'Harvard Cards'
         })
-        lti_tool_config.description = 'Harmony Lab is an application for music theory students and instructors.'
+        lti_tool_config.description = 'HarvardCards is a web-based flashcard application for students who want to memorize words, media, or concepts and instructors who want to assess student progress.'
 
     def get_tool_config(self, request):
         '''
