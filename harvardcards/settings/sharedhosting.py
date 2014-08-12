@@ -2,13 +2,14 @@
 from harvardcards.settings.common import *
 import os
 
-#STATIC_URL = '/~harvardcards/static/'
-
 FORCE_SCRIPT_NAME = None
+STATIC_URL = '/static'
 if os.environ.get('SERVER_NAME') == 'flashcards.fas.harvard.edu':                                             
     FORCE_SCRIPT_NAME = '/'                                                                                   
+	STATIC_URL = '/static'
 elif os.environ.get('SERVER_NAME') == 'sites.test.fas.harvard.edu':                                           
-    FORCE_SCRIPT_NAME = '/~harvardcards/index.py'               
+    FORCE_SCRIPT_NAME = '/~harvardcards/'
+	STATIC_URL = '/~harvardcards/static'
 
 DATABASES = {
     'default': {
