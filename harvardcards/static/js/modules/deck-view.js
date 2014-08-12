@@ -75,17 +75,7 @@ var initModule = function() {
 
 
 	$('.reveal').click(function() {
-		var $show = $(this).parent().next();
-		if ($show.hasClass('show')){
-			$show.removeClass('show');
-			$show.addClass('hide');
-			$(this).text('Reveal');
-		}else{
-			$show.removeClass('hide');
-			$show.addClass('show');
-			$(this).text('Hide');
-		}
-		return false;
+		revealCard(this);
 	});
 
 
@@ -141,6 +131,7 @@ var initModule = function() {
 	utils.setupConfirm();
 
 	setupEditableDeckTitle();
+	setupKeyboardShortcuts();
 };
 
 // Add ability to edit inline every element with data-editable=yes.
@@ -171,6 +162,50 @@ function setupEditableDeckTitle() {
 				window.alert("Error saving: "+ errorThrown);
 			}
 		});
+	});
+}
+
+
+function revealCard(buttonEl, state) {
+	var $button_el = $(buttonEl);
+	var $reveal_content = $button_el.parent().next();
+	var button_text = ['Reveal', 'Hide'];
+	var css_cls = ['show', 'hide'];
+
+	// if no state is explicitly passed (true=reveal, false=hide), 
+	// then assume we want to toggle the card
+	if(typeof state === 'undefined') {
+		state = !$reveal_content.hasClass('show');
+	}
+
+	if(state) {
+		css_cls.reverse();
+		button_text.reverse();
+	}
+
+	$reveal_content.removeClass(css_cls[0]).addClass(css_cls[1]);
+	$button_el.text(button_text[0]);
+
+	return false;
+}
+
+
+function setupKeyboardShortcuts() {
+	$(document).on('keydown', function(e) {
+		var keyCode = e.keyCode;;
+		var $button_el, state;
+
+		switch(keyCode) {
+			// Reveal card when the "down" arrow is pressed
+			// Hide card when the "up" arrow is pressed
+			case 40: case 38:
+				$button_el = $('#allCards > li.show .reveal');
+				state = (keyCode == 40 ? true : false); // state=true when down arrow is pressed
+				revealCard($button_el, state);
+				break;
+			default:
+				break;
+		}
 	});
 }
 

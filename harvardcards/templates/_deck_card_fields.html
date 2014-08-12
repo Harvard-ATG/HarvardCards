@@ -1,4 +1,4 @@
-<div class="showRevealWrapper {% if hide %}hide{% endif %}">
+<div class="showRevealWrapper {% if show_content %}show_content{% else %}reveal_content{% endif %} {% if hide %}hide{% endif %}">
 	{% if field.show_label %}
 		<span class="cardFieldLabel">{{ field.label }}:</span>
 	{% endif %}
