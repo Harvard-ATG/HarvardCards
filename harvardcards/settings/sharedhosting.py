@@ -7,7 +7,7 @@ STATIC_URL = '/static'
 if os.environ.get('SERVER_NAME') == 'flashcards.fas.harvard.edu':
     FORCE_SCRIPT_NAME = '/'
     STATIC_URL = '/static'
-elif os.environ.get('SERVER_NAME') == 'sites.test.fas.harvard.edu':
+elif os.environ.get('SERVER_NAME') == 'sites.dev.fas.harvard.edu':
     FORCE_SCRIPT_NAME = '/~harvardcards/'
     STATIC_URL = '/~harvardcards/static'
 
