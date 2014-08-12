@@ -4,14 +4,18 @@ import os
 
 #STATIC_URL = '/~harvardcards/static/'
 
-#FORCE_SCRIPT_NAME = '/~harvardcards/index.py'
+FORCE_SCRIPT_NAME = None
+if os.environ.get('SERVER_NAME') == 'flashcards.fas.harvard.edu':                                             
+    FORCE_SCRIPT_NAME = '/'                                                                                   
+elif os.environ.get('SERVER_NAME') == 'sites.test.fas.harvard.edu':                                           
+    FORCE_SCRIPT_NAME = '/~harvardcards/index.py'               
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-		'OPTIONS': {
-			'read_default_file': os.path.join(ROOT_DIR, 'config', 'my.cnf'),
-		},
+        'OPTIONS': {
+            'read_default_file': os.path.join(ROOT_DIR, 'config', 'my.cnf'),
+        },
         #'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         #'NAME': os.path.join(ROOT_DIR, 'flash.db'),
         # The following settings are not used with sqlite3:
