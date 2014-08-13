@@ -24,7 +24,7 @@
             </p> 
             <a href="{% url 'collectionShare' collection.id %}?collection_id={{collection.id}}" class="adminMenuBtn">Back to Share Course</a>
             <a href="{% url 'collectionIndex' collection.id %}" class="adminMenuBtn cancelBtn">Cancel</a>
-			{% else %}
+            {% else %}
             <p>
                 {{ share_form.role.errors }}
                 <label for="id_role">User Role:</label>
