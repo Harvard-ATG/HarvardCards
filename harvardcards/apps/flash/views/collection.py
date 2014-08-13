@@ -130,8 +130,6 @@ def share_collection(request, collection_id=None):
     users to use in order to add themselves into the collection's authorized
     users list
     """
-    print not request.POST
-
     collections = Collection.objects.all()
     collection = Collection.objects.get(id=collection_id)
     collection_share_form = CollectionShareForm()
@@ -144,22 +142,20 @@ def share_collection(request, collection_id=None):
     if request.POST:
         collection_share_form = CollectionShareForm(request.POST)
         if collection_share_form.is_valid():
-        
-            static_url = 'collection/share/'
-            generated_url = 'collection_id=%s&!!!role=%s&!!!expired_in=%s' % (collection_id, collection_share_form.cleaned_data['role'], collection_share_form.cleaned_data['expired_in'])
-            context['share_link'] = static_url + base64.b64encode(generated_url)
+            share_key = 'collection_id=%s&!!!role=%s&!!!expired_in=%s' % (collection_id, collection_share_form.cleaned_data['role'], collection_share_form.cleaned_data['expired_in'])
+            context['secret_share_key'] = base64.b64encode(share_key)
         else:
             context['share_form'] = collection_share_form
 
     return render(request, 'collections/share.html', context)
 
 @login_required
-def add_user_to_shared_collection(request, parameters):
+def add_user_to_shared_collection(request, secret_share_key=''):
     """
     Decrypt the encrypted URL and add the user to the appropriate
     collection with the appropriate role
     """
-    decrypted_info = base64.b64decode(parameters)
+    decrypted_info = base64.b64decode(secret_share_key)
     collection_id, role, expire_in = decrypted_info.split('&!!!')
     collection_id = int(collection_id.split('=')[1])
     

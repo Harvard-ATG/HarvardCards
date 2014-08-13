@@ -12,26 +12,30 @@
         </div>
         <form action="{% url 'collectionShare' collection.id %}?collection_id={{ collection.id }}" method="post">{% csrf_token %}
             <p>
-            {{ share_form.title.errors }}
-            <label for="id_title">Collection Title:</label>
-            {{ collection.title }}
+                {{ share_form.title.errors }}
+                <label for="id_title">Collection Title:</label>
+                {{ collection.title }}
             </p>
-            {% if share_link %}
-            <p>                                                                                                                                                                                <label for="id_link">Share This Link:</label>
-            {{ share_link }}
+            {% if secret_share_key %}
+            <p>                                                                                                                                                                                
+                <label for="id_link">Share Link:</label>
+                <div style="margin: 10px 0 20px 0; padding: 20px 10px; border: 1px solid #ccc;">
+                    <a href="{% url 'collectionShareValidate' secret_share_key=secret_share_key %}">{% if request.is_secure %}https{% else %}http{% endif %}://{{request.get_host}}{% url 'collectionShareValidate' secret_share_key=secret_share_key %}</a>
+                </div>
             </p> 
             {% else %}
             <p>
-            {{ share_form.role.errors }}
-            <label for="id_role">User Role:</label>
-            {{ share_form.role }}
+                {{ share_form.role.errors }}
+                <label for="id_role">User Role:</label>
+                {{ share_form.role }}
             </p>
             <p>
-            {{ share_form.exired_in.errors }}
-            <label for="id_expiration">Link Expired In:</label>
-            {{ share_form.expired_in }}
+                {{ share_form.exired_in.errors }}
+                <label for="id_expiration">Link Expired In:</label>
+                {{ share_form.expired_in }}
             </p>
             {% endif %}
+
             <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
             <a href="{% url 'collectionIndex' collection.id %}" class="adminMenuBtn cancelBtn">Cancel</a>
         </form>
