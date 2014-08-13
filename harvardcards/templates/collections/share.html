@@ -10,7 +10,7 @@
         <div class="courseHeader">
             <h2>Share course</h2>
         </div>
-        <form action="{% url 'collectionShare' collection.id %}?collection_id={{ collection.id }}" method="post">{% csrf_token %}
+        <form class="js-share" action="{% url 'collectionShare' collection.id %}?collection_id={{ collection.id }}" method="post">{% csrf_token %}
             <p>
                 {{ share_form.title.errors }}
                 <label for="id_title">Collection Title:</label>
@@ -18,12 +18,13 @@
             </p>
             {% if secret_share_key %}
             <p>                                                                                                                                                                                
-                <label for="id_link">Share Link:</label>
-                <div style="margin: 10px 0 20px 0; padding: 20px 10px; border: 1px solid #ccc;">
-                    <a href="{% url 'collectionShareValidate' secret_share_key=secret_share_key %}">{% if request.is_secure %}https{% else %}http{% endif %}://{{request.get_host}}{% url 'collectionShareValidate' secret_share_key=secret_share_key %}</a>
-                </div>
+                <label for="id_link">Share this link:</label>
+                <input class="sharelink" style="padding: 5px" value="{% if request.is_secure %}https{% else %}http{% endif %}://{{request.get_host}}{% url 'collectionShareValidate' secret_share_key=secret_share_key %}" readonly="readonly" size="100" onclick="this.select()" />
+                <a target="_blank" href="{% url 'collectionShareValidate' secret_share_key=secret_share_key %}"><i class="fa fa-share"></i> Share link</a>
             </p> 
-            {% else %}
+            <a href="{% url 'collectionShare' collection.id %}?collection_id={{collection.id}}" class="adminMenuBtn">Back to Share Course</a>
+            <a href="{% url 'collectionIndex' collection.id %}" class="adminMenuBtn cancelBtn">Cancel</a>
+			{% else %}
             <p>
                 {{ share_form.role.errors }}
                 <label for="id_role">User Role:</label>
@@ -31,13 +32,13 @@
             </p>
             <p>
                 {{ share_form.exired_in.errors }}
-                <label for="id_expiration">Link Expired In:</label>
+                <label for="id_expiration">Link Expires:</label>
                 {{ share_form.expired_in }}
             </p>
-            {% endif %}
-
             <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
             <a href="{% url 'collectionIndex' collection.id %}" class="adminMenuBtn cancelBtn">Cancel</a>
+            {% endif %}
+
         </form>
     </div>
 </div>

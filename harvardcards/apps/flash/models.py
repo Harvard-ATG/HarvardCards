@@ -163,6 +163,21 @@ class Users_Collections(models.Model):
         return "User: " + str(self.user.email) + " Collection: " + str(self.collection.title) + " Role: " + str(self.role)
 
     @classmethod
+    def is_valid_role(self, role):
+        '''
+        Returns true if the given role is valid, otherwise false.
+
+        Note: the role parameter can be a string or tuple:
+            role='A' 
+            role=('A','Administrator')
+
+        Both are equivalent and should return true.
+        '''
+        if not isinstance(role, basestring):
+            return role[0] in self.role_map
+        return role in self.role_map
+
+    @classmethod
     def get_role_buckets(self, user, collections = None):
         ''' Given a user and a set of collections, this function returns a
         dictionary that maps roles to collections. '''

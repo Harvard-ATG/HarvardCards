@@ -142,7 +142,8 @@ def share_collection(request, collection_id=None):
     if request.POST:
         collection_share_form = CollectionShareForm(request.POST)
         if collection_share_form.is_valid():
-            share_key = 'collection_id=%s&!!!role=%s&!!!expired_in=%s' % (collection_id, collection_share_form.cleaned_data['role'], collection_share_form.cleaned_data['expired_in'])
+            share_key = '!!!'.join([collection_id, collection_share_form.cleaned_data['role'], str(collection_share_form.cleaned_data['expired_in'])])
+            context['share_form'] = collection_share_form
             context['secret_share_key'] = base64.b64encode(share_key)
         else:
             context['share_form'] = collection_share_form
@@ -156,22 +157,26 @@ def add_user_to_shared_collection(request, secret_share_key=''):
     collection with the appropriate role
     """
     decrypted_info = base64.b64decode(secret_share_key)
-    collection_id, role, expire_in = decrypted_info.split('&!!!')
-    collection_id = int(collection_id.split('=')[1])
+    (collection_id, role, expired_in) = decrypted_info.split('!!!')
+
+    if not collection_id.isdigit():
+        return HttpResponseBadRequest('Invalid share URL [C]')
+    if not Users_Collections.is_valid_role(role):
+        return HttpResponseBadRequest('Invalid share URL [R]') 
     
-    role = role.split('=')[1]
-    expire_in = expire_in.split('=')[1]
-    expire_in = datetime.datetime.strptime(expire_in,"%Y-%m-%d")
-    
-    current_time = datetime.datetime.now()
+    try:
+        expired_in = datetime.datetime.strptime(expired_in,"%Y-%m-%d")
+        current_time = datetime.datetime.now()
+        if expired_in <= current_time:
+            return HttpResponseBadRequest('This share URL has **expired** and is no longer valid.')
+    except ValueError:
+        return HttpResponseBadRequest('Invalid share URL [E]')
 
-    if expire_in <= current_time:
-        return HttpResponseBadRequest('This URL has expired.')
-
-    collection = Collection.objects.get(id=collection_id)
-
-    user_collection = Users_Collections(user = request.user, collection = collection, role = role, date_joined = datetime.date.today())
-    user_collection.save()
+    collection = Collection.objects.get(id=int(collection_id))
+    uc_kwargs = {'user':request.user,'collection':collection,'role':role}
+    if not Users_Collections.objects.filter(**uc_kwargs):
+        uc_kwargs['date_joined'] = datetime.date.today()
+        Users_Collections(**uc_kwargs).save()
 
     return HttpResponseRedirect("/")
 
