@@ -10,7 +10,7 @@ class CollectionForm(forms.ModelForm):
         fields = ['title', 'card_template', 'private']
 
 class CollectionShareForm(forms.Form):
-    role = forms.ChoiceField(choices=Users_Collections.ROLES, initial=Users_Collections.OBSERVER)
+    #role = forms.ChoiceField(choices=Users_Collections.ROLES, initial=Users_Collections.OBSERVER)
     expired_in = forms.DateField(widget=SelectDateWidget(), initial=datetime.datetime.now()+datetime.timedelta(days=365))
 
 class FieldForm(forms.ModelForm):

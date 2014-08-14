@@ -142,9 +142,32 @@ def share_collection(request, collection_id=None):
     if request.POST:
         collection_share_form = CollectionShareForm(request.POST)
         if collection_share_form.is_valid():
-            share_key = '!!!'.join([collection_id, collection_share_form.cleaned_data['role'], str(collection_share_form.cleaned_data['expired_in'])])
+            expired_in = str(collection_share_form.cleaned_data['expired_in'])
+
+            # This creates an array of the share data (collection id and expiration data
+            # for the url).  Random data is appended/prepended to "obfuscate" the url.
+            # This isn't intended to be secure by any means, just make it harder to guess.
+            # The assumption is that a share URL will only grant a user student-level
+            # access, so they can't do any damage if they "guess" the URL. If that
+            # assumption changes, then this implementation should be revisited to make it
+            # more secure and tamper-proof.
+            share_data = [collection_id, expired_in]
+            share_data.insert(0, utils.generate_random_id(3))
+            share_data.append(utils.generate_random_id(3))
+            share_key = '!!'.join(share_data)
+
+            # This pads the share key so that the base64 encoded string doesn't include
+            # base64 padding, which is typically the equals sign ("=").  The equals sign
+            # must be percent encoded as %3D which looks bad.  Since 3 ascii characters (8
+            # bits) are encoded with 4 base64 characters (6 bits each) this should ensure
+            # that the share_key is always a multiple of 3.
+            if (len(share_key) % 3) > 0:
+                share_key = share_key + utils.generate_random_id(3 - (len(share_key) % 3))
+
+            secret_share_key = base64.urlsafe_b64encode(share_key.encode("ascii", "ignore"))
+
             context['share_form'] = collection_share_form
-            context['secret_share_key'] = base64.b64encode(share_key)
+            context['secret_share_key'] = secret_share_key
         else:
             context['share_form'] = collection_share_form
 
@@ -156,8 +179,15 @@ def add_user_to_shared_collection(request, secret_share_key=''):
     Decrypt the encrypted URL and add the user to the appropriate
     collection with the appropriate role
     """
-    decrypted_info = base64.b64decode(secret_share_key)
-    (collection_id, role, expired_in) = decrypted_info.split('!!!')
+    decrypted_info = base64.urlsafe_b64decode(secret_share_key.encode("ascii", "ignore"))
+    (random_id, collection_id, expired_in, random_id) = decrypted_info.split('!!')
+
+    # NOTE: hard coding the role as LEARNER (i.e. student) instead of passing
+    # the role via the share URL as before. That's insecure without encryption
+    # and proper validation that the URL hasn't been tampered with. The main purpose
+    # of the sharing functionality is to give other students access to the collection,
+    # so this accomplishes that.
+    role = Users_Collections.LEARNER
 
     if not collection_id.isdigit():
         return HttpResponseBadRequest('Invalid share URL [C]')
@@ -171,6 +201,9 @@ def add_user_to_shared_collection(request, secret_share_key=''):
             return HttpResponseBadRequest('This share URL has **expired** and is no longer valid.')
     except ValueError:
         return HttpResponseBadRequest('Invalid share URL [E]')
+
+    if not Collection.objects.filter(id=int(collection_id)):
+        return HttpResponseBadRequest('Invalid share URL [CC]')
 
     collection = Collection.objects.get(id=int(collection_id))
     uc_kwargs = {'user':request.user,'collection':collection,'role':role}

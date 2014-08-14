@@ -26,11 +26,6 @@
             <a href="{% url 'collectionIndex' collection.id %}" class="adminMenuBtn cancelBtn">Cancel</a>
             {% else %}
             <p>
-                {{ share_form.role.errors }}
-                <label for="id_role">User Role:</label>
-                {{ share_form.role }}
-            </p>
-            <p>
                 {{ share_form.exired_in.errors }}
                 <label for="id_expiration">Link Expires:</label>
                 {{ share_form.expired_in }}
