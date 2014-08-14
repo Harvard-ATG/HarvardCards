@@ -148,7 +148,7 @@ class Users_Collections(models.Model):
         (INSTRUCTOR,            'Instructor'),                # Owner
         (ADMINISTRATOR,         'Administrator'))
 
-    role_map = dict([(role[0], role[1].upper()) for role in ROLES])
+    role_map = dict([(role[0], role[1].upper().replace(" ", "_")) for role in ROLES])
 
     user = models.ForeignKey(User)
     collection = models.ForeignKey(Collection)
