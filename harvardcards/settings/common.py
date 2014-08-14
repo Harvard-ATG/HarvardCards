@@ -1,4 +1,5 @@
 # Common settings for all environments
+import logging
 from os import path
 from glob import glob
 
@@ -98,14 +99,10 @@ TEMPLATE_LOADERS = (
 MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    #'cached_auth.Middleware',
     'django_auth_lti.middleware.LTIAuthMiddleware',
-    # Uncomment the next line for simple clickjacking protection:
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    'django.contrib.messages.middleware.MessageMiddleware',
 ]
 
 ROOT_URLCONF = 'harvardcards.urls'
@@ -131,61 +128,31 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_openid_auth',
+    #'django_openid_auth',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-	'harvardcards.apps.flash',
-	#'harvardcards.apps.jasmine',
+    'harvardcards.apps.flash',
+    #'harvardcards.apps.jasmine',
     'south'
 ]
 
 FIXTURE_DIRS = (
     'harvardcards.apps.flash.fixtures'
-
 )
-# A sample logging configuration. The only tangible logging
-# performed by this configuration is to send an email to
-# the site admins on every HTTP 500 error when DEBUG=False.
-# See http://docs.djangoproject.com/en/dev/topics/logging for
-# more details on how to customize your logging configuration.
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-    }
-}
 
 AUTHENTICATION_BACKENDS = (
-	#'libs.auth.GoogleBackend',
-    'django_openid_auth.auth.OpenIDBackend',
-	'django.contrib.auth.backends.ModelBackend',
-
+    #'libs.auth.GoogleBackend',
+    #'django_openid_auth.auth.OpenIDBackend',
+    'django.contrib.auth.backends.ModelBackend',
     'django_auth_lti.backends.LTIAuthBackend',
 )
-OPENID_CREATE_USERS = True
-OPENID_UPDATE_DETAILS_FROM_SREG = True
-LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_URL = '/logout/'
-OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
+#OPENID_CREATE_USERS = True
+#OPENID_UPDATE_DETAILS_FROM_SREG = True
+#LOGIN_URL = '/login/'
+#LOGIN_REDIRECT_URL = '/'
+#LOGOUT_URL = '/logout/'
+#OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
 
 LTI_OAUTH_CREDENTIALS = {"flashkey":"flashsecret"}
