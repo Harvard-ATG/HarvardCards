@@ -4,7 +4,6 @@ from os import path
 from glob import glob
 
 # Django settings for harvardcards project.
-
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -86,9 +85,6 @@ STATICFILES_FINDERS = (
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = '#5g0vp545jp644!hha1)fb7v1hd!*t#b@fv&amp;1(mrnt5)$q%w0g'
-
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
@@ -148,11 +144,10 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'django_auth_lti.backends.LTIAuthBackend',
 )
-#OPENID_CREATE_USERS = True
-#OPENID_UPDATE_DETAILS_FROM_SREG = True
-#LOGIN_URL = '/login/'
-#LOGIN_REDIRECT_URL = '/'
-#LOGOUT_URL = '/logout/'
-#OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
 
-LTI_OAUTH_CREDENTIALS = {"flashkey":"flashsecret"}
+OPENID_CREATE_USERS = True
+OPENID_UPDATE_DETAILS_FROM_SREG = True
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_URL = '/logout/'
+OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'

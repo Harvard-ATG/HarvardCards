@@ -1,5 +1,7 @@
-# Google App Engine Settinsg
 from harvardcards.settings.common import *
+
+SECRET_KEY = '#5g0vp545jp644!hha1)fb7v1hd!*t#b@fv&amp;1(mrnt5)$q%w0g'
+LTI_OAUTH_CREDENTIALS = {"flashkey":"flashsecret"}
 
 DATABASES = {
     'default': {
