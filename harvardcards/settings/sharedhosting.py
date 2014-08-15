@@ -2,27 +2,43 @@
 from harvardcards.settings.common import *
 import os
 
+DEBUG = False
+ALLOWED_HOSTS = ['.fas.harvard.edu'] # Required when Debug=False
 FORCE_SCRIPT_NAME = None
 STATIC_URL = '/static/'
+
+# Configuration specific to shared hosting PROD/DEV environments
+# PRODUCTION
 if os.environ.get('SERVER_NAME') == 'flashcards.fas.harvard.edu':
     FORCE_SCRIPT_NAME = '/'
     STATIC_URL = '/static/'
+    DEBUG = False
+# DEVELOPMENT
 elif os.environ.get('SERVER_NAME') == 'sites.dev.fas.harvard.edu':
     FORCE_SCRIPT_NAME = '/~harvardcards/'
     STATIC_URL = '/~harvardcards/static/'
+    DEBUG = True
+
+
+# Configuration common to both PROD/DEV 
+CONFIG_DIR = os.path.join(ROOT_DIR, 'config')
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'OPTIONS': {
-            'read_default_file': os.path.join(ROOT_DIR, 'config', 'my.cnf'),
-        },
-        #'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        #'NAME': os.path.join(ROOT_DIR, 'flash.db'),
-        # The following settings are not used with sqlite3:
-        #'USER': '',
-        #'PASSWORD': '',
-        #'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        #'PORT': '',                      # Set to empty string for default.
+            'read_default_file': os.path.join(CONFIG_DIR, 'my.cnf'),
+        }
     }
 }
+
+# These are sensitive values that should be retrieved from separate configuration files.
+# Note that these config files should *NEVER* be stored in version control.
+SECRET_KEY = None
+with open(os.path.join(CONFIG_DIR, 'django_secret.txt')) as f:
+    SECRET_KEY = f.read().strip()
+
+LTI_OAUTH_CREDENTIALS = {}
+with open(os.path.join(CONFIG_DIR, 'lti_oauth_credentials.txt')) as f:
+    oauth_key_and_secret = f.read().strip().split(':',2)
+    LTI_OAUTH_CREDENTIALS = dict([tuple(oauth_key_and_secret)])
