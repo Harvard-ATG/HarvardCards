@@ -16,7 +16,7 @@ define([
 	utils
 ) {
 
-var initModule = function() {
+function initModule() {
 	var deck_slider = new DeckSlider($(".slider").first());
 	var card_counter = {
 		el: $("#counter"),
@@ -75,7 +75,8 @@ var initModule = function() {
 
 
 	$('.reveal').click(function() {
-		revealCard(this);
+		MODULE.revealCard($(this), $(this).parent().next());
+		return false;
 	});
 
 
@@ -125,89 +126,93 @@ var initModule = function() {
 	    return false;
 	});
 	
-	// initialize flip-mode
-	var flipMode = new FlipMode;
-
 	utils.setupConfirm();
-
-	setupEditableDeckTitle();
-	setupKeyboardShortcuts();
+	this.setupFlipMode();
+	this.setupEditableDeckTitle();
+	this.setupKeyboardShortcuts();
 };
 
-// Add ability to edit inline every element with data-editable=yes.
-// Note: also requires data-editable-url (API endpoint)
-// and data-editable-field (name of the field to POST to the API)
-function setupEditableDeckTitle() {
-	$("[data-editable]").each(function(index, el) {
-		var $el = $(el);
-		var editable = $el.data('editable') || 'no';
-		var id = $el.data('editable-id') || '';
-		if(editable !== 'yes') {
-			return;
-		}
-
-		var editor = new InlineEditor($el, {
-			edit: function(editor, value, settings) {
-				var deck = new Deck({ id: id });
-				return deck.rename(value);
-			},
-			success: function(data, textStatus, xhr) {
-				var success = data.success;
-				if(!success) {
-					window.alert("Error saving: "+ data.errors[field]);
+	var MODULE = {
+		initModule:initModule,
+		// This function initializes flip mode
+		setupFlipMode: function() {
+			var flipMode = new FlipMode();
+			return flipMode;
+		},
+		// This function adds the ability to inline edit elements with data-editable=yes.
+		//
+		// Assumes the element also has these data attributes:
+		//		- data-editable-url: API endpoint URL
+		//		- data-editable-field: name of the field to POST
+		setupEditableDeckTitle: function() {
+			$("[data-editable]").each(function(index, el) {
+				var $el = $(el);
+				var editable = $el.data('editable') || 'no';
+				var id = $el.data('editable-id') || '';
+				if(editable !== 'yes') {
+					return;
 				}
-				return success;
-			},
-			error: function(xhr, textStatus, errorThrown) {
-				window.alert("Error saving: "+ errorThrown);
+
+				var editor = new InlineEditor($el, {
+					edit: function(editor, value, settings) {
+						var deck = new Deck({ id: id });
+						return deck.rename(value);
+					},
+					success: function(data, textStatus, xhr) {
+						var success = data.success;
+						if(!success) {
+							window.alert("Error saving: "+ data.errors[field]);
+						}
+						return success;
+					},
+					error: function(xhr, textStatus, errorThrown) {
+						window.alert("Error saving: "+ errorThrown);
+					}
+				});
+			});
+		},
+		setupKeyboardShortcuts: function() {
+			$(document).on('keydown', function(e) {
+				MODULE.onKeyDownRevealCard(e.keyCode, function(state) {
+					$button_el = $('#allCards > li.show .reveal');
+					$reveal_content_el = $button_el.parent().next();
+					MODULE.revealCard($button_el, $reveal_content_el, state);
+				});
+			});
+		},
+		onKeyDownRevealCard: function(keyCode, callback) {
+			// reveal content when down arrow is pressed
+			if(keyCode == 40) {
+				callback(true);
+			} else if(keyCode == 38) {
+				callback(false);
 			}
-		});
-	});
-}
+		},
+		revealCard: function(buttonEl, revealContentEl, state) {
+			var $button_el = $(buttonEl);
+			var $reveal_content_el = $(revealContentEl);
+			var button_text = ['Reveal', 'Hide'];
+			var css_cls = ['show', 'hide'];
 
+			// if no state is explicitly passed (true=reveal, false=hide), 
+			// then assume we want to toggle the card
+			if(typeof state === 'undefined') {
+				state = !$reveal_content_el.hasClass('show');
+			} else {
+				state = !!state; // force boolean
+			}
 
-function revealCard(buttonEl, state) {
-	var $button_el = $(buttonEl);
-	var $reveal_content = $button_el.parent().next();
-	var button_text = ['Reveal', 'Hide'];
-	var css_cls = ['show', 'hide'];
+			if(state) {
+				css_cls.reverse();
+				button_text.reverse();
+			}
 
-	// if no state is explicitly passed (true=reveal, false=hide), 
-	// then assume we want to toggle the card
-	if(typeof state === 'undefined') {
-		state = !$reveal_content.hasClass('show');
-	}
+			$reveal_content_el.removeClass(css_cls[0]).addClass(css_cls[1]);
+			$button_el.text(button_text[0]);
 
-	if(state) {
-		css_cls.reverse();
-		button_text.reverse();
-	}
-
-	$reveal_content.removeClass(css_cls[0]).addClass(css_cls[1]);
-	$button_el.text(button_text[0]);
-
-	return false;
-}
-
-
-function setupKeyboardShortcuts() {
-	$(document).on('keydown', function(e) {
-		var keyCode = e.keyCode;;
-		var $button_el, state;
-
-		switch(keyCode) {
-			// Reveal card when the "down" arrow is pressed
-			// Hide card when the "up" arrow is pressed
-			case 40: case 38:
-				$button_el = $('#allCards > li.show .reveal');
-				state = (keyCode == 40 ? true : false); // state=true when down arrow is pressed
-				revealCard($button_el, state);
-				break;
-			default:
-				break;
+			return state;
 		}
-	});
-}
+	};
 
-	return {initModule:initModule};
+	return MODULE;
 });
