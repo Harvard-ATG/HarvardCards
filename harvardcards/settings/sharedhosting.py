@@ -3,6 +3,7 @@ from harvardcards.settings.common import *
 import os
 
 DEBUG = False
+ALLOWED_HOSTS = ['.fas.harvard.edu'] # Required when Debug=False
 FORCE_SCRIPT_NAME = None
 STATIC_URL = '/static/'
 
