@@ -1,4 +1,20 @@
-define(['jquery','components/slider/DeckSlider', 'components/InlineEditor', 'models/Deck', 'views/CardForm', 'utils/utils'], function($, DeckSlider, InlineEditor, Deck, CardForm, utils) {
+define([
+	'jquery',
+	'components/slider/DeckSlider', 
+	'components/InlineEditor', 
+	'components/FlipMode',
+	'models/Deck', 
+	'views/CardForm', 
+	'utils/utils'
+], function(
+	$, 
+	DeckSlider, 
+	InlineEditor, 
+	FlipMode,
+	Deck, 
+	CardForm, 
+	utils
+) {
 
 var initModule = function() {
 	var deck_slider = new DeckSlider($(".slider").first());
@@ -118,6 +134,9 @@ var initModule = function() {
 	    }
 	    return false;
 	});
+	
+	// initialize flip-mode
+	var flipMode = new FlipMode;
 
 	utils.setupConfirm();
 

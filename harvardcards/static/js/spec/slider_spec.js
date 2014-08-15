@@ -130,8 +130,8 @@ define(['lodash','jquery','components/slider/slider'], function(_, $, Slider) {
 				expect(my.onSlide).toHaveBeenCalled();
 			}
 
-			expect(my.onBeforeSlide.callCount).toBe(num_items - 1);
-			expect(my.onSlide.callCount).toBe(num_items - 1);
+			expect(my.onBeforeSlide.calls.count()).toBe(num_items - 1);
+			expect(my.onSlide.calls.count()).toBe(num_items - 1);
 		});
 	});
 });

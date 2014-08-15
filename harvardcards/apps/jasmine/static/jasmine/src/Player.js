@@ -1,5 +1,3 @@
-define([], function() {
-
 function Player() {
 }
 Player.prototype.play = function(song) {
@@ -22,6 +20,3 @@ Player.prototype.resume = function() {
 Player.prototype.makeFavorite = function() {
   this.currentlyPlayingSong.persistFavoriteStatus(true);
 };
-
-return Player;
-});

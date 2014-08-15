@@ -24,9 +24,10 @@ define(['lodash', 'jquery', 'models/API'], function(_, $, API) {
 			var api = new API({url: path});
 			var deferred = new $.Deferred();
 			deferred.resolve();
-			spyOn(api, '_ajax').andCallFake(function() {
+			spyOn(api, '_ajax').and.callFake(function() {
 				return deferred;
 			});
+			
 			var result = api.execute();
 			expect(result).toBe(deferred);	
 		});

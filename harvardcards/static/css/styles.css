@@ -475,6 +475,21 @@ ul.adminMenu
 		background-image:     -ms-linear-gradient(top, #f1f1f1, #f5f5f5);
 		background-image:      -o-linear-gradient(top, #f1f1f1, #f5f5f5);
 		border: solid 1px #dcdcdc;
+		cursor: pointer;
+	}
+
+	ul.adminMenu li a.down
+	, .adminMenuBtn.down
+	, li.sliderPrev a.down
+	, li.sliderNext a.down
+	, a.reveal.down
+	, .controls a.down
+	, .courseHeader div a.down{
+		background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#c1c1c1), to(#f5f5f5));
+		background-image: -webkit-linear-gradient(top, #c1c1c1, #f5f5f5);
+		background-image:    -moz-linear-gradient(top, #c1c1c1, #f5f5f5);
+		background-image:     -ms-linear-gradient(top, #c1c1c1, #f5f5f5);
+		background-image:      -o-linear-gradient(top, #c1c1c1, #f5f5f5);
 	}
     .control-text { margin-left: 4px }
 

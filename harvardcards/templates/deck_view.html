@@ -30,6 +30,7 @@
                 <li><a href="{% url 'deckDelete' deck.id %}?deck_id={{deck.id}}" data-confirm="Are you sure you want to delete: {{deck.title|escape}}"><i class="fa fa-times-circle"></i> Delete Deck</a></li>
                 {% endif %}
                 <li>
+                  <button type="button" class="adminMenuBtn" id="flip_mode" aria-role="button" aria-pressed="false">Flip Mode</button>
                 {% if is_quiz_mode %}
                     <a href="{% url 'deckIndex' deck.id %}" id="review_mode">Review Mode</a>
                 {% else %}
@@ -105,17 +106,21 @@
             <ul id="allCards">
                 {% for card in cards %}
                 <li class="{% if card.color %}card-color-{{card.color}}{% endif %} hide" role="tabpanel"  data-card-id="{{ card.card_id }}">
+										<article class="show_content">
                     {% for field in card.fields.show %}
                         {% include "_deck_card_fields.html" with field=field hide=False %}
                     {% endfor %}
+										</article>
                     <div class="hideRevealHr">
                         {% if is_quiz_mode %}
                         <a href="javascript:void(0)" class="reveal">Reveal</a>
                         {% endif %}
                     </div>
+										<article class="reveal_content">
                     {% for field in card.fields.reveal %}
                         {% include "_deck_card_fields.html" with field=field hide=is_quiz_mode%}
                     {% endfor %}
+										</article>
                 </li>
                 {% endfor %}
             </ul>
