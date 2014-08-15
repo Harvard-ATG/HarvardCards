@@ -1,13 +1,18 @@
-from models import Collection, Field, Deck, Decks_Cards, Card, Cards_Fields
+from models import Collection, Field, Deck, Decks_Cards, Card, Cards_Fields, Users_Collections
+from django.forms.extras.widgets import SelectDateWidget
 from . import services
 from django import forms
-import logging
+import logging, datetime
 
 class CollectionForm(forms.ModelForm):
     class Meta:
         model = Collection
         fields = ['title', 'card_template', 'private']
-        
+
+class CollectionShareForm(forms.Form):
+    #role = forms.ChoiceField(choices=Users_Collections.ROLES, initial=Users_Collections.OBSERVER)
+    expired_in = forms.DateField(widget=SelectDateWidget(), initial=datetime.datetime.now()+datetime.timedelta(days=365))
+
 class FieldForm(forms.ModelForm):
     class Meta:
         model = Field
