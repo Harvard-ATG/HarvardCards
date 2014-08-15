@@ -6,17 +6,18 @@
             <h3>{% if collection.decks|length == 1 %}1 Deck{% else %}{{collection.decks|length}} Decks{% endif %}</h3>
             {% endspaceless %}
         </a>
-        {% if user.is_authenticated %}
+        {% if collection.id in user_collection_role.ADMINISTRATOR %}
             <ul class="adminMenu adminMenuRight">
                 <li><a href="{% url 'collectionEdit' collection.id %}?collection_id={{collection.id}}"><i class="fa fa-pencil"></i> Edit</a></li>
                 <li><a href="{% url 'collectionDelete' collection.id %}?collection_id={{collection.id}}" data-confirm="Are you sure you want to delete: {{collection.title|escape}}?"><i class="fa fa-times-circle"></i> Delete</a></li>
+                <li><a href="{% url 'collectionShare' collection.id %}?collection_id={{collection.id}}"><i class="fa fa-pencil"></i>Share</a></li>
             </ul>
         {% endif %}
     </div>
 
     <div class="slider">
         <ul class="courseDecks">
-            {% if user.is_authenticated %}
+            {% if collection.id in user_collection_role.ADMINISTRATOR %}
                 <li class="deck add">
                 <a href="{% url 'collectionAddDeck' collection.id %}?collection_id={{collection.id}}">Add a Deck</a>
                 </li>

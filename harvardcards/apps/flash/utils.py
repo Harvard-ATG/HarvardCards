@@ -4,6 +4,8 @@ This module conatins helper functions and utilities.
 
 from harvardcards.apps.flash.models import Collection, Deck
 from harvardcards.apps.flash import queries
+import string
+import random
 
 # For treating strings like files
 import StringIO
@@ -74,4 +76,11 @@ def create_deck_file(deck_id):
     output.close()
 
     return file_output
+
+def generate_random_id(size=10, chars=string.ascii_uppercase + string.digits):
+	'''
+	Returns a random id with the given size and from the given set of characters.
+	Adapted from http://stackoverflow.com/questions/2257441/random-string-generation-with-upper-case-letters-and-digits-in-python
+	'''
+	return ''.join(random.choice(chars) for _ in range(size))
 
