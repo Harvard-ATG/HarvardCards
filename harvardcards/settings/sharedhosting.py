@@ -11,12 +11,12 @@ STATIC_URL = '/static/'
 if os.environ.get('SERVER_NAME') == 'flashcards.fas.harvard.edu':
     FORCE_SCRIPT_NAME = '/'
     STATIC_URL = '/static/'
-	DEBUG = False
+    DEBUG = False
 # DEVELOPMENT
 elif os.environ.get('SERVER_NAME') == 'sites.dev.fas.harvard.edu':
     FORCE_SCRIPT_NAME = '/~harvardcards/'
     STATIC_URL = '/~harvardcards/static/'
-	DEBUG = True
+    DEBUG = True
 
 
 # Configuration common to both PROD/DEV 
