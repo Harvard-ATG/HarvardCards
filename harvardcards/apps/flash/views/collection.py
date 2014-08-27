@@ -15,7 +15,6 @@ from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm, C
 from harvardcards.apps.flash import forms, services, queries, utils
 from harvardcards.apps.flash.services import check_role, is_superuser_or_staff
 from harvardcards.apps.flash.lti_service import LTIService
-import harvardcards.apps.flash.lti_service
 
 
 def index(request, collection_id=None):
