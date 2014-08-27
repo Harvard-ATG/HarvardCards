@@ -208,3 +208,15 @@ class Users_Collections(models.Model):
         if user.is_superuser:
             return True
         return bool(self.objects.filter(user=user.id, role=role, collection=collection.id))
+
+class Canvas_Course_Map(models.Model):
+    canvas_course_id = models.CharField(max_length=255, blank=False)
+    collection = models.ForeignKey(Collection)
+    
+    class Meta:
+        verbose_name = 'Canvas Course Map'
+        verbose_name_plural = 'Canvas Course Maps'
+        ordering = ['canvas_course_id','collection__id']
+
+    def __unicode__(self):
+        return "Canvas course id: " + str(self.canvas_course_id) + " Collection id: " + str(self.collection.id)

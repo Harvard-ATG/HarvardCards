@@ -9,14 +9,20 @@ from django.core.urlresolvers import reverse
 from django.forms.formsets import formset_factory
 from django.test.client import RequestFactory, Client
 from django.contrib.auth.models import User
+from django.http.request import HttpRequest
 
-from harvardcards.apps.flash.models import Collection, Deck, Field, CardTemplate, CardTemplates_Fields, Card
+from django_auth_lti import const
+
+from harvardcards.apps.flash.models import Collection, Deck, Field, CardTemplate, CardTemplates_Fields, Card, Canvas_Course_Map
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
 from harvardcards.apps.flash.views.collection import *
 from harvardcards.apps.flash import services, queries
+from harvardcards.apps.flash.lti_service import LTIService
 from harvardcards.settings.common import MEDIA_ROOT
+
 import os
 import unittest
+import mock
 
 class CollectionTest(TestCase):
     admin_user = None
@@ -162,3 +168,63 @@ class QueriesTest(TestCase):
         collection_id = queries.getDeckCollectionId(deck.id)
 
         self.assertEqual(collection.id, collection_id)
+
+class LTIServiceTest(TestCase):
+    def setUp(self):
+        """ Every test needs access to the request factory. """
+        self.request = mock.Mock(spec=HttpRequest)
+        self.request.session = {"LTI_LAUNCH":{}}
+        pass
+
+    def test_isLTILaunch(self):
+        request = mock.Mock(spec=HttpRequest)
+        request.session = {"LTI_LAUNCH":{}}
+        self.assertTrue(LTIService(request).isLTILaunch())
+
+    def test_isNotLTILaunch(self):
+        request = mock.Mock(spec=HttpRequest)
+        request.session = {}
+        self.assertFalse(LTIService(request).isLTILaunch())
+
+    def test_associateCanvasCourse(self):
+        card_template = CardTemplate.objects.create(title='Test', description='Test')
+        collection = Collection.objects.create(title='Test', description='Test', card_template=card_template)
+
+        canvas_course_id = 123
+        request = mock.Mock(spec=HttpRequest)
+        request.session = {"LTI_LAUNCH":{
+            "custom_canvas_course_id": canvas_course_id,
+            "roles": [const.INSTRUCTOR]
+        }}
+
+        lti_service = LTIService(request)
+        self.assertTrue(lti_service.associateCanvasCourse(collection.id), msg="Mapping should NOT exist, so should return True")
+        self.assertFalse(lti_service.associateCanvasCourse(collection.id), msg="Mapping should already exist, so should return False")
+
+        found = Canvas_Course_Map.objects.filter(canvas_course_id=canvas_course_id, collection=collection)
+        self.assertEqual(len(found), 1, msg="A single instance of the mapping should exist")
+
+    def test_subscribeToCourseCollections(self):
+        card_template = CardTemplate.objects.create(title='Test', description='Test')
+        a_collection = Collection.objects.create(title='Test', description='Test', card_template=card_template)
+        b_collection = Collection.objects.create(title='Test2', description='Test2', card_template=card_template)
+        c_collection = Collection.objects.create(title='Test3', description='Test3', card_template=card_template)
+        user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+
+        canvas_course_id = 123
+
+        Canvas_Course_Map.objects.create(canvas_course_id=canvas_course_id, collection=a_collection)
+        Canvas_Course_Map.objects.create(canvas_course_id=canvas_course_id, collection=b_collection)
+        Canvas_Course_Map.objects.create(canvas_course_id=canvas_course_id + 1, collection=c_collection)
+        
+        request = mock.Mock(spec=HttpRequest)
+        request.session = {"LTI_LAUNCH":{
+            "custom_canvas_course_id": canvas_course_id,
+            "roles": [const.LEARNER]
+        }}
+        request.user = user
+
+        self.assertTrue(LTIService(request).subscribeToCourseCollections())
+        subscribed = Users_Collections.objects.filter(user=user)
+        self.assertEqual(len(subscribed), 2)
+        self.assertFalse(Users_Collections.objects.filter(user=user,collection=c_collection))

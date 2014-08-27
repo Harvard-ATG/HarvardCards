@@ -110,11 +110,11 @@ TEMPLATE_DIRS = [
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-	path.join(PROJECT_ROOT, 'templates'),
+    path.join(PROJECT_ROOT, 'templates'),
 ]
 
 TEMPLATE_DIRS.extend([
-	f for f in glob(path.join(APPS_ROOT, '*', 'templates')) if path.isdir(f)
+    f for f in glob(path.join(APPS_ROOT, '*', 'templates')) if path.isdir(f)
 ])
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -153,6 +153,30 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'django_auth_lti.backends.LTIAuthBackend',
 )
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False, # don't override default django logging config
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': path.join(PROJECT_ROOT, 'logs', 'debug.log'),
+        }
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'harvardcards': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        }
+    }
+}
 
 OPENID_CREATE_USERS = True
 OPENID_UPDATE_DETAILS_FROM_SREG = True
