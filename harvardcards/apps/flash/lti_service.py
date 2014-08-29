@@ -8,23 +8,43 @@ import logging
 log = logging.getLogger(__name__)
 
 class LTIService:
+    '''
+    This class provides services for when the tool is running as an LTI tool in the context
+    of a canvas course.
+    '''
     def __init__(self, request):
         self.request = request
 
     def isLTILaunch(self):
+        '''Returns true if an LTI launch is detected, false otherwise.'''
         return "LTI_LAUNCH" in self.request.session
 
     def getLTILaunchParam(self, param, param_default):
+        '''Returns an LTI launch parameter saved in the session.'''
         LTI_LAUNCH = self.request.session.get("LTI_LAUNCH", {})
         return LTI_LAUNCH.get(param, param_default)
 
     def getCanvasCourseId(self):
+        '''Returns the canvas course id associated with the LTI launch.'''
         return self.getLTILaunchParam('custom_canvas_course_id', None)
 
     def hasRole(self, role):
+        '''Returns true if the user that initiated the LTI launch has a given role, false otherwise.'''
         return role in self.getLTILaunchParam('roles', [])
 
     def associateCanvasCourse(self, collection_id):
+        '''
+        This creates a mapping between a canvas course, the context in which the LTI tool is operating,
+        and a given collection. 
+        
+        If the user that initiated the LTI launch is an instructor, the subscribe flag is enabled. 
+        Otherwise, if the user is a student learner, then the subscribe flag is disabled.
+
+        The subscribe flag is used to differentiate instructor-created collections from student-created
+        collections. This flag is used to automatically subscribe students to collections created by 
+        instructors for the course.
+        '''
+
         if not self.isLTILaunch():
             return False
 
@@ -48,6 +68,10 @@ class LTIService:
         return True
 
     def subscribeToCourseCollections(self):
+        '''
+        This subscribes the user to instructor-created collections associated with the 
+        canvas course that they don't already subscribe to. 
+        '''
         if not self.isLTILaunch():
             return False
 
