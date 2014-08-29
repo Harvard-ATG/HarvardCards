@@ -14,18 +14,18 @@ class LTIService:
     def isLTILaunch(self):
         return "LTI_LAUNCH" in self.request.session
 
-    def hasRole(self, role):
-        roles = self.request.session["LTI_LAUNCH"].get('roles', [])
-        return True
-        return role in roles
+    def getLTILaunchParam(self, param, param_default):
+        LTI_LAUNCH = self.request.session.get("LTI_LAUNCH", {})
+        return LTI_LAUNCH.get(param, param_default)
 
     def getCanvasCourseId(self):
-        return self.request.session['LTI_LAUNCH'].get('custom_canvas_course_id',None)
+        return self.getLTILaunchParam('custom_canvas_course_id', None)
+
+    def hasRole(self, role):
+        return role in self.getLTILaunchParam('roles', [])
 
     def associateCanvasCourse(self, collection_id):
         if not self.isLTILaunch():
-            return False
-        if not self.hasRole(const.INSTRUCTOR):
             return False
 
         canvas_course_id = self.getCanvasCourseId()
@@ -41,7 +41,8 @@ class LTIService:
             return False
 
         collection = Collection.objects.get(id=collection_id)
-        canvas_course_map = Canvas_Course_Map(canvas_course_id=canvas_course_id, collection=collection)
+        subscribe = self.hasRole(const.INSTRUCTOR)
+        canvas_course_map = Canvas_Course_Map(canvas_course_id=canvas_course_id, collection=collection, subscribe=subscribe)
         canvas_course_map.save()
         log.debug("setupCanvasCourseMap(): created mapping [%s]" % canvas_course_map.id)
         return True
@@ -49,25 +50,24 @@ class LTIService:
     def subscribeToCourseCollections(self):
         if not self.isLTILaunch():
             return False
-        if not self.hasRole(const.LEARNER):
-            return False
 
         canvas_course_id = self.getCanvasCourseId()
         if canvas_course_id is None:
-            log.debug("No canvas course id")
+            log.debug("No canvas course id. Aborting.")
             return False
 
-        canvas_course_maps = Canvas_Course_Map.objects.filter(canvas_course_id=canvas_course_id)
+        canvas_course_maps = Canvas_Course_Map.objects.filter(canvas_course_id=canvas_course_id, subscribe=True)
         canvas_course_collection_ids = [m.collection.id for m in canvas_course_maps]
         subscribed = Users_Collections.objects.filter(user=self.request.user, collection__in=canvas_course_collection_ids)
         subscribed_collection_ids = [s.collection.id for s in subscribed]
     
         unsubscribed_collection_ids = set(canvas_course_collection_ids).difference(set(subscribed_collection_ids))
-        log.debug("Canvas course collections: %s - Subscribed: %s - Unsubscribed: %s" % (canvas_course_collection_ids, subscribed_collection_ids, unsubscribed_collection_ids))
+        log.debug("Canvas course collections: %s Subscribed: %s Unsubscribed: %s" % (canvas_course_collection_ids, subscribed_collection_ids, unsubscribed_collection_ids))
         if len(unsubscribed_collection_ids) == 0:
+            log.debug("Nothing to subscribe... done")
             return False
 
-        log.debug("Preparing to subscribe user [%s] to course [%s] collections [%s]" % (self.request.user.id, canvas_course_id, unsubscribed_collection_ids))
+        log.debug("Subscribing user %s to all canvas course collections: %s => %s" % (self.request.user.id, canvas_course_id, unsubscribed_collection_ids))
         for collection_id in unsubscribed_collection_ids:
             collection = Collection.objects.get(id=collection_id)
             Users_Collections.objects.create(user=self.request.user, collection=collection, role=Users_Collections.LEARNER, date_joined=datetime.date.today())

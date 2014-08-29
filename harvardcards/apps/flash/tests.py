@@ -209,13 +209,15 @@ class LTIServiceTest(TestCase):
         a_collection = Collection.objects.create(title='Test', description='Test', card_template=card_template)
         b_collection = Collection.objects.create(title='Test2', description='Test2', card_template=card_template)
         c_collection = Collection.objects.create(title='Test3', description='Test3', card_template=card_template)
+        d_collection = Collection.objects.create(title='Test4', description='Test4', card_template=card_template)
         user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
 
         canvas_course_id = 123
 
-        Canvas_Course_Map.objects.create(canvas_course_id=canvas_course_id, collection=a_collection)
-        Canvas_Course_Map.objects.create(canvas_course_id=canvas_course_id, collection=b_collection)
-        Canvas_Course_Map.objects.create(canvas_course_id=canvas_course_id + 1, collection=c_collection)
+        Canvas_Course_Map.objects.create(canvas_course_id=canvas_course_id, collection=a_collection, subscribe=True)
+        Canvas_Course_Map.objects.create(canvas_course_id=canvas_course_id, collection=b_collection, subscribe=True)
+        Canvas_Course_Map.objects.create(canvas_course_id=canvas_course_id, collection=c_collection, subscribe=False)
+        Canvas_Course_Map.objects.create(canvas_course_id=canvas_course_id + 1, collection=d_collection, subscribe=True)
         
         request = mock.Mock(spec=HttpRequest)
         request.session = {"LTI_LAUNCH":{
