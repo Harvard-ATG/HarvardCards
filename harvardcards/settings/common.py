@@ -172,7 +172,7 @@ LOGGING = {
             'level': 'WARNING',
             'class': 'logging.FileHandler',
             'filename': path.join(ROOT_DIR, 'logs', 'warning.log'),
-        }
+        },
         'file': {
             'level': 'ERROR',
             'class': 'logging.FileHandler',
@@ -182,7 +182,7 @@ LOGGING = {
             'level': 'CRITICAL',
             'class': 'logging.FileHandler',
             'filename': path.join(ROOT_DIR, 'logs', 'critical.log'),
-        }
+        },
     },
     'loggers': {
         'django.request': {
@@ -194,7 +194,7 @@ LOGGING = {
             'handlers': ['file'],
             'level': 'INFO',
             'propagate': True,
-        }
+        },
     }
 }
 
