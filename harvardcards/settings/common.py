@@ -161,7 +161,27 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': path.join(PROJECT_ROOT, 'logs', 'debug.log'),
+            'filename': path.join(ROOT_DIR, 'logs', 'debug.log'),
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': path.join(ROOT_DIR, 'logs', 'info.log'),
+        },
+        'file': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': path.join(ROOT_DIR, 'logs', 'warning.log'),
+        }
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': path.join(ROOT_DIR, 'logs', 'error.log'),
+        },
+        'file': {
+            'level': 'CRITICAL',
+            'class': 'logging.FileHandler',
+            'filename': path.join(ROOT_DIR, 'logs', 'critical.log'),
         }
     },
     'loggers': {
@@ -172,11 +192,14 @@ LOGGING = {
         },
         'harvardcards': {
             'handlers': ['file'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': True,
         }
     }
 }
+
+if DEBUG:
+    LOGGING['loggers']['harvardcards']['level'] = 'DEBUG'
 
 OPENID_CREATE_USERS = True
 OPENID_UPDATE_DETAILS_FROM_SREG = True
