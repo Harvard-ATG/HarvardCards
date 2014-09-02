@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.conf import settings
 from django.http import HttpResponse
 from django.views.generic import View, TemplateView, RedirectView
@@ -6,11 +6,31 @@ from django.core.urlresolvers import reverse
 from ims_lti_py.tool_config import ToolConfig
 from braces.views import CsrfExemptMixin, LoginRequiredMixin
 
-class LTILaunchView(CsrfExemptMixin, LoginRequiredMixin, RedirectView):
+from harvardcards.apps.flash.lti_service import LTIService
+import json
+import logging
+
+log = logging.getLogger(__name__)
+
+class LTILaunchView(CsrfExemptMixin, LoginRequiredMixin, View):
     """
     LTI consumers will POST to this view.
     """
     url = '/'
+    def post(self, request, *args, **kwargs):
+        '''
+        Handles the LTI launch request and redirects to the main page.
+        '''
+        lti_launch_json = json.dumps(request.session['LTI_LAUNCH'], sort_keys=True, indent=4, separators=(',',': '))
+        log.debug("LTI launch parameters: %s" % lti_launch_json)
+        LTIService(request).subscribeToCourseCollections()
+        return redirect(self.url)
+
+    def get(self, request, *args, **kwargs):
+        '''
+        Shows an error message because LTI launch requests must be POSTed.
+        '''
+        return HttpResponse('Invalid LTI launch request.', content_type='text/html', status=200)
 
 class ToolConfigView(View):
     """

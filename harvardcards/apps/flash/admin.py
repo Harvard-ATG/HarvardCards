@@ -1,5 +1,5 @@
 from django.contrib import admin
-from harvardcards.apps.flash.models import Collection, Field, Card, Users_Collections, Deck, Decks_Cards, Cards_Fields, CardTemplate, CardTemplates_Fields
+from harvardcards.apps.flash.models import Collection, Field, Card, Users_Collections, Deck, Decks_Cards, Cards_Fields, CardTemplate, CardTemplates_Fields, Canvas_Course_Map
 from django.contrib.auth.models import User
 
 class CardsInLine(admin.StackedInline):
@@ -53,3 +53,4 @@ admin.site.register(Decks_Cards)
 admin.site.register(Cards_Fields)
 admin.site.register(CardTemplate)
 admin.site.register(CardTemplates_Fields)
+admin.site.register(Canvas_Course_Map)

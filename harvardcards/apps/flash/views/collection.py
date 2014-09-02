@@ -14,6 +14,7 @@ from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, 
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm, CollectionShareForm
 from harvardcards.apps.flash import forms, services, queries, utils
 from harvardcards.apps.flash.services import check_role, is_superuser_or_staff
+from harvardcards.apps.flash.lti_service import LTIService
 
 
 def index(request, collection_id=None):
@@ -78,6 +79,7 @@ def create(request):
         collection_form = CollectionForm(request.POST)
         if collection_form.is_valid():
             collection = collection_form.save()
+            LTIService(request).associateCanvasCourse(collection.id)
             if request.POST.get('user_id', 0):
                 user_id = int(request.POST['user_id'])
                 user = User.objects.get(id=user_id)

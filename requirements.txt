@@ -3,6 +3,9 @@ Django==1.5.1
 # For migrations
 South==0.8.4
 
+# For unit testing
+mock==1.0.1
+
 # For openid authentication
 python-openid==2.2.5
 

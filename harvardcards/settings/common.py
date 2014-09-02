@@ -110,11 +110,11 @@ TEMPLATE_DIRS = [
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-	path.join(PROJECT_ROOT, 'templates'),
+    path.join(PROJECT_ROOT, 'templates'),
 ]
 
 TEMPLATE_DIRS.extend([
-	f for f in glob(path.join(APPS_ROOT, '*', 'templates')) if path.isdir(f)
+    f for f in glob(path.join(APPS_ROOT, '*', 'templates')) if path.isdir(f)
 ])
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -153,6 +153,53 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'django_auth_lti.backends.LTIAuthBackend',
 )
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False, # don't override default django logging config
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': path.join(ROOT_DIR, 'logs', 'debug.log'),
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': path.join(ROOT_DIR, 'logs', 'info.log'),
+        },
+        'file': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': path.join(ROOT_DIR, 'logs', 'warning.log'),
+        },
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': path.join(ROOT_DIR, 'logs', 'error.log'),
+        },
+        'file': {
+            'level': 'CRITICAL',
+            'class': 'logging.FileHandler',
+            'filename': path.join(ROOT_DIR, 'logs', 'critical.log'),
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'harvardcards': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    }
+}
+
+if DEBUG:
+    LOGGING['loggers']['harvardcards']['level'] = 'DEBUG'
 
 OPENID_CREATE_USERS = True
 OPENID_UPDATE_DETAILS_FROM_SREG = True
