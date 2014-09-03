@@ -21,12 +21,12 @@
 	});
 	</script>
 
-	<title>{% block title %}Harvard Cards{% endblock %}</title>
+	<title>{% block title %}Flashcards{% endblock %}</title>
 </head>
 <body data-module="main">
 	<div class="container">
 		{% block header %}
-		<div id="fc_headerWrapper" class="sectionWrapper"><!-- sectionWrapper (start) -->
+		<div id="fc_headerWrapper" class="sectionWrapper hide"><!-- sectionWrapper (start) -->
 			<div id="fc_header" class="section"><!-- section (start) -->
 				<a href="{% url 'index' %}"><img src="{{ STATIC_URL }}img/harvardLogo.png" alt="Harvard University" title="Harvard University" border="0" /></a>
 				<ul id="userInfo">

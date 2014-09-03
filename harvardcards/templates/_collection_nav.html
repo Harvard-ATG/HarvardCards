@@ -1,7 +1,7 @@
 <div id="navigation">
     {% if not collection %}
         {% if user.is_authenticated %}
-            <a href="{% url 'collectionCreate' %}" id="addAcourse">Add a course</a>
+            <a href="{% url 'collectionCreate' %}" id="addAcourse">Add Collection</a>
         {% endif %}
 	{% endif %}
     <nav class="desktopNav" data-set="mobileNav">

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.conf import settings
 from django.http import HttpResponse
 from django.views.generic import View, TemplateView, RedirectView
@@ -6,11 +6,31 @@ from django.core.urlresolvers import reverse
 from ims_lti_py.tool_config import ToolConfig
 from braces.views import CsrfExemptMixin, LoginRequiredMixin
 
-class LTILaunchView(CsrfExemptMixin, LoginRequiredMixin, RedirectView):
+from harvardcards.apps.flash.lti_service import LTIService
+import json
+import logging
+
+log = logging.getLogger(__name__)
+
+class LTILaunchView(CsrfExemptMixin, LoginRequiredMixin, View):
     """
     LTI consumers will POST to this view.
     """
     url = '/'
+    def post(self, request, *args, **kwargs):
+        '''
+        Handles the LTI launch request and redirects to the main page.
+        '''
+        lti_launch_json = json.dumps(request.session['LTI_LAUNCH'], sort_keys=True, indent=4, separators=(',',': '))
+        log.debug("LTI launch parameters: %s" % lti_launch_json)
+        LTIService(request).subscribeToCourseCollections()
+        return redirect(self.url)
+
+    def get(self, request, *args, **kwargs):
+        '''
+        Shows an error message because LTI launch requests must be POSTed.
+        '''
+        return HttpResponse('Invalid LTI launch request.', content_type='text/html', status=200)
 
 class ToolConfigView(View):
     """
@@ -58,12 +78,13 @@ class ToolConfigView(View):
 
     """
     # This is the tool title
-    TOOL_TITLE = 'Harvard Cards'
+    TOOL_TITLE = 'Flashcards'
 
     # This is the launch URL 
     LAUNCH_URL = 'lti-launch'
 
-    # This is how to tell Canvas that this tool provides a course navigation link:
+    # List of GET parameters that can be passed to override values in the LTI config
+    OVERRIDES = ["course_nav_text", "course_nav_enabled"]
 
     def get_launch_url(self, request):
         '''
@@ -76,7 +97,7 @@ class ToolConfigView(View):
             host = 'http://' + request.get_host()
         return host + reverse(self.LAUNCH_URL);
 
-    def set_extra_params(self, lti_tool_config):
+    def set_extra_params(self, request, lti_tool_config):
         '''
         Sets extra parameters on the ToolConfig() instance using
         the following method or by directly mutating attributes 
@@ -84,15 +105,30 @@ class ToolConfigView(View):
         
         lti_tool_config.set_ext_param(ext_key, ext_params)
         lti_tool_config.description = "my description..."
+
+        Some parameters may be overridden by setting GET parameters. 
         '''
-        lti_tool_config.set_ext_param('canvas.instructure.com', 'privacy_level', 'public')
-        lti_tool_config.set_ext_param('canvas.instructure.com', 'course_navigation', {
-            'enabled':'true', 
+        ext_params = {
+            'privacy_level': 'public',
+            'course_nav_default': 'enabled',
+            'course_nav_enabled':  'true',
+            'course_nav_text': self.TOOL_TITLE,
+        }
+        for override_param in self.OVERRIDES:
+            if override_param in request.GET:
+                ext_params[override_param] = request.GET.get(override_param)
+
+        course_navigation = {
+            'default': ext_params['course_nav_default'],
+            'enabled': ext_params['course_nav_enabled'],
+            'text': ext_params['course_nav_text'],
             # optionally, supply a different URL for the link:
             # 'url': 'http://library.harvard.edu',
-            'text':'Harvard Cards'
-        })
-        lti_tool_config.description = 'HarvardCards is a web-based flashcard application for students who want to memorize words, media, or concepts and instructors who want to assess student progress.'
+        }
+
+        lti_tool_config.set_ext_param('canvas.instructure.com', 'privacy_level', ext_params['privacy_level'])
+        lti_tool_config.set_ext_param('canvas.instructure.com', 'course_navigation', course_navigation)
+        lti_tool_config.description = 'Flashcards is a web-based flashcard application for students who want to memorize words, media, or concepts and instructors who want to assess student progress.'
 
     def get_tool_config(self, request):
         '''
@@ -110,5 +146,5 @@ class ToolConfigView(View):
         Returns the LTI tool configuration as XML.
         '''
         lti_tool_config = self.get_tool_config(request)
-        self.set_extra_params(lti_tool_config)
+        self.set_extra_params(request, lti_tool_config)
         return HttpResponse(lti_tool_config.to_xml(), content_type='text/xml', status=200)

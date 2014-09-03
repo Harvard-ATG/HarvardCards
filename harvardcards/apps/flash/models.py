@@ -208,3 +208,21 @@ class Users_Collections(models.Model):
         if user.is_superuser:
             return True
         return bool(self.objects.filter(user=user.id, role=role, collection=collection.id))
+
+class Canvas_Course_Map(models.Model):
+    """
+    The purpose of this model is to setup a many-to-many mapping between 
+    Canvas courses and collections.
+    """
+    canvas_course_id = models.CharField(max_length=255, blank=False)
+    collection = models.ForeignKey(Collection)
+    subscribe = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name = 'Canvas Course Map'
+        verbose_name_plural = 'Canvas Course Maps'
+        ordering = ['canvas_course_id','collection__id','subscribe']
+
+    def __unicode__(self):
+        return "Canvas course id: " + str(self.canvas_course_id) + " Collection id: " + str(self.collection.id)
