@@ -78,7 +78,7 @@ class ToolConfigView(View):
 
     """
     # This is the tool title
-    TOOL_TITLE = 'Harvard Cards'
+    TOOL_TITLE = 'Flashcards'
 
     # This is the launch URL 
     LAUNCH_URL = 'lti-launch'
@@ -126,7 +126,7 @@ class ToolConfigView(View):
 
         lti_tool_config.set_ext_param('canvas.instructure.com', 'privacy_level', ext_params['privacy_level'])
         lti_tool_config.set_ext_param('canvas.instructure.com', 'course_navigation', course_navigation)
-        lti_tool_config.description = 'HarvardCards is a web-based flashcard application for students who want to memorize words, media, or concepts and instructors who want to assess student progress.'
+        lti_tool_config.description = 'Flashcards is a web-based flashcard application for students who want to memorize words, media, or concepts and instructors who want to assess student progress.'
 
     def get_tool_config(self, request):
         '''
