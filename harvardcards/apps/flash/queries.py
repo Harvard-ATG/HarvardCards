@@ -3,7 +3,74 @@ This module contains common queries that return a result and DO NOT change the
 observable state of the system (are free of side effects).
 """
 
-from harvardcards.apps.flash.models import Collection, Deck, Decks_Cards
+from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Decks_Cards
+
+import logging
+log = logging.getLogger(__name__)
+
+def is_superuser_or_staff(user):
+    """ Checks if the user is superuser or staff. Returns True or False """
+    return user.is_staff or user.is_superuser
+
+def has_role_in_bucket(role_bucket, roles, collection_id):
+    """
+    Checks if the collection id has any roles in the bucket.
+    Returns true if the collection id maps to any of the given roles,
+    False otherwise.
+    """
+    role_map = Users_Collections.role_map
+    for role in roles:
+        if collection_id in role_bucket[role_map[role]]:
+            return True
+    return False
+
+def getCollectionRoleList():
+    """gets a list of roles that may grant access to a collection """
+    role_list = [
+        Users_Collections.ADMINISTRATOR, 
+        Users_Collections.INSTRUCTOR, 
+        Users_Collections.TEACHING_ASSISTANT, 
+        Users_Collections.CONTENT_DEVELOPER, 
+        Users_Collections.LEARNER]
+    return role_list
+
+def getCollectionList(role_bucket):
+    """gets the list of collections that the user has permission to access"""
+    log.debug("getCollectionList()")
+    log.debug("role_bucket = %s" % role_bucket)
+
+    all_collections = Collection.objects.all()
+    decks_by_collection = getDecksByCollection()
+    collection_roles = getCollectionRoleList()
+
+    collection_list = []
+    for collection in all_collections:
+        has_access = True
+        has_access = has_access and not collection.private
+        has_access = has_access or has_role_in_bucket(role_bucket, collection_roles, collection.id)
+        log.debug("collection id: [%s] has access: [%s]" % (collection.id, has_access))
+        if has_access:
+            collection_decks = []
+            if decks_by_collection.get(collection.id, False):
+                for deck in decks_by_collection[collection.id]:
+                    collection_decks.append({
+                        'id': deck.id,
+                        'title': deck.title,
+                        'num_cards': deck.cards.count()
+                    })
+                collection_list.append({
+                    'id': collection.id,
+                    'title':collection.title,
+                    'decks': collection_decks
+                })
+            else:
+                collection_list.append({
+                    'id': collection.id,
+                    'title':collection.title,
+                    'decks': []
+                })
+
+    return collection_list
 
 def getDecksByCollection():
     """gets the decks associated with a collection"""

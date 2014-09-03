@@ -1,23 +1,23 @@
 <div id="navigation">
-    {% if not collection %}
+    {% if not active_collection %}
         {% if user.is_authenticated %}
             <a href="{% url 'collectionCreate' %}" id="addAcourse">Add Collection</a>
         {% endif %}
-	{% endif %}
+    {% endif %}
     <nav class="desktopNav" data-set="mobileNav">
         <ul class="appNav">
             <li>
                 <a href="{% url 'index' %}">Home</a>
             </li>
-            {% for c in collections %}
+            {% for c in nav_collections %}
                 <li>
-                    {% if c == collection %}
+                    {% if c == active_collection %}
                         <a href="{% url 'collectionIndex' c.id %}" class="active">{{ c.title|truncatechars:30 }}</a>
                     {% else %}
                          <a href="{% url 'collectionIndex' c.id %}">{{ c.title|truncatechars:30 }}</a>
                     {% endif %}
 
-                    {% if c == collection %}
+                    {% if c == active_collection %}
                         {% if c.decks|length > 0 %}
                             <ul>
                                 {% for deck in c.decks %}
