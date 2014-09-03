@@ -110,6 +110,7 @@ class ToolConfigView(View):
         '''
         ext_params = {
             'privacy_level': 'public',
+            'course_nav_default': 'enabled',
             'course_nav_enabled':  'true',
             'course_nav_text': self.TOOL_TITLE,
         }
@@ -118,6 +119,7 @@ class ToolConfigView(View):
                 ext_params[override_param] = request.GET.get(override_param)
 
         course_navigation = {
+            'default': ext_params['course_nav_default'],
             'enabled': ext_params['course_nav_enabled'],
             'text': ext_params['course_nav_text'],
             # optionally, supply a different URL for the link:
