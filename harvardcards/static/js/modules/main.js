@@ -36,6 +36,18 @@ define(['jquery', 'jquery.cookie', 'jquery.appendAround', 'jquery.scrollTo'], fu
 					$("html,body").scrollTo(target, 300);
 				}
 			});
+
+            var inIframe = function(){
+                try {
+                    return window.self !== window.top;
+                } catch (e) {
+                    return true;
+                }
+            };
+            // if the content is in an iFrame, we don't want to show the header, which defaults to hidden
+            if(!inIframe()){
+                $('#fc_headerWrapper').show();
+            }
 		}
 	};
 });
