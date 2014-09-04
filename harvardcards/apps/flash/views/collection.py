@@ -1,6 +1,6 @@
 import datetime, base64
 
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, HttpRequest, Http404
 from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
 from django.core.exceptions import ViewDoesNotExist, PermissionDenied
@@ -14,6 +14,7 @@ from harvardcards.apps.flash import forms, services, queries, utils
 from harvardcards.apps.flash.services import check_role
 from harvardcards.apps.flash.queries import is_superuser_or_staff
 from harvardcards.apps.flash.lti_service import LTIService
+from harvardcards.apps.flash.views import card_template
 
 
 def index(request, collection_id=None):
@@ -56,6 +57,7 @@ def create(request):
 
     if request.method == 'POST':
         collection_form = CollectionForm(request.POST)
+        card_template_id = collection_form.data['card_template']
         if collection_form.is_valid():
             collection = collection_form.save()
             LTIService(request).associateCanvasCourse(collection.id)
@@ -68,12 +70,23 @@ def create(request):
                 services.get_or_update_role_bucket(request, collection_id.id, Users_Collections.role_map[Users_Collections.ADMINISTRATOR])
             return redirect(collection)
     else:
-        collection_form = CollectionForm()
+        initial = {'card_template': '1'}
+        card_template_id = initial['card_template']
+        collection_form = CollectionForm(initial=initial)
+    
+    # Pre-populate the "preview" of the card template
+    # This view is also called via AJAX on the page.
+    prev_request = HttpRequest()
+    prev_request.method = 'GET'
+    prev_request.GET['card_template_id'] = card_template_id
+    prev_response = card_template.preview(prev_request)
+    card_template_preview_html = prev_response.content
         
     context = {
         "nav_collections": collection_list,
         "active_collection": None,
         "collection_form": collection_form, 
+        "card_template_preview_html": card_template_preview_html
     }
 
     return render(request, 'collections/create.html', context)

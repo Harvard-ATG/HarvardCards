@@ -5,46 +5,53 @@ define(['jquery'], function($) {
         this.selectEl = $(options.selectEl); // the <select> element
         this.previewEl = $(options.previewEl); // the <div> element that will hold the preview
         this.url = this.previewEl.data('fetch-url'); // url to fetch preview
-        this.defaultText = this.previewEl.html(); // default text to display
+        this.defaultText = this.previewEl.data('default-text'); // default text to display
         this.cache = {}; // cache for the template previews to minimize network traffic
     };
 
     // Initializes the listeners
     CardTemplatePreview.prototype.init = function() {
-		this.onSelect = $.proxy(this.onSelect, this); // bind context 
-        this.selectEl.on("change", this.onSelect);
+        this.refresh = $.proxy(this.refresh, this); // bind context 
+        this.selectEl.on("change", this.refresh);
     };
 
-	// Handles the select element change event.
-	CardTemplatePreview.prototype.onSelect = function() {
-		var card_template_id = this.selectEl.find(":selected").val();
-		this.select(card_template_id);
-	};
+    // Updates the view to show the currently selected template.
+    CardTemplatePreview.prototype.refresh = function() {
+        var card_template_id = this.getSelectedValue();
+        this.select(card_template_id);
+    };
 
-	// Selects the template to show.
-	CardTemplatePreview.prototype.select = function(cardTemplateId) {
-		if(cardTemplateId) {
-			this.load(cardTemplateId);
-		} else {
-			this.reset();
-		}
-	};
+    // Returns the currently selected value.
+    CardTemplatePreview.prototype.getSelectedValue = function() {
+        return this.selectEl.find(":selected").val();
+    };
+
+    // Selects the template to show.
+    CardTemplatePreview.prototype.select = function(cardTemplateId) {
+        is_numeric = /^\d+$/.test(cardTemplateId);
+        if(is_numeric && cardTemplateId) {
+            this.load(cardTemplateId);
+        } else {
+            this.reset();
+        }
+    };
 
     // Updates the preview 
-    CardTemplatePreview.prototype.update = function(html) {
+    CardTemplatePreview.prototype.render = function(html) {
         this.previewEl.html(html);
     };
 
     // Resets the preview to the default text
     CardTemplatePreview.prototype.reset = function() {
-        this.update(this.defaultText);
+        this.render(this.defaultText);
     };
 
     // Loads the preview for the given card template ID
     CardTemplatePreview.prototype.load = function(cardTemplateId) {
+        this.beforeLoad();
         var that = this;
         if(this.cache[cardTemplateId]) {
-            this.update(this.cache[cardTemplateId]);
+            this.render(this.cache[cardTemplateId]);
         } else {
             $.ajax({
                 url: this.url,
@@ -52,10 +59,14 @@ define(['jquery'], function($) {
                 dataType: 'html',
                 success: function(data) {
                     that.cache[cardTemplateId] = data;
-                    that.update.call(that, data);
+                    that.render.call(that, data);
                 }
             });
         }
+    };
+
+    CardTemplatePreview.prototype.beforeLoad = function() {
+        this.render('<div class="ajax-loader">loading...</div>');
     };
 
     return CardTemplatePreview;

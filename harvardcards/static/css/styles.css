@@ -847,6 +847,23 @@ a#mobileMenu{
 #cardTemplateContainer .field-label:after { content: ":"; }
 #cardTemplateContainer .field-value { color: darkgray; }
 
+.errorlist {
+	color: red;
+}
+.ajax-loader {
+	background: transparent url('../img/ajax-loader.gif') no-repeat;
+	width: 16px;
+	height: 16px;
+	padding-left: 20px;
+}
+.ajax-loader.centered {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-left: -16px;
+	margin-top: -16px;
+}
+
 @media screen and (min-width: 320px){
 /*
 * iPhone portrait
