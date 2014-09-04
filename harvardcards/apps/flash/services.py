@@ -2,19 +2,20 @@
 This module contains services and commands that may change the state of the system
 (i.e. called for their side effects).
 """
-from functools import wraps
-from django.db import transaction
-
-from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Cards_Fields, Field, Users_Collections
-from harvardcards.apps.flash import utils, queries
+import urllib2
 import os
 import shutil
-from harvardcards.settings.common import MEDIA_ROOT, APPS_ROOT
+from functools import wraps
 from  PIL import Image
-import urllib2
+
+from django.db import transaction
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError, PermissionDenied
 
+from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Cards_Fields, Field, Users_Collections
+from harvardcards.apps.flash import utils
+from harvardcards.apps.flash import queries
+from harvardcards.settings.common import MEDIA_ROOT, APPS_ROOT
 
 def delete_collection(collection_id):
     """Deletes a collection and returns true on success, false otherwise."""
@@ -242,26 +243,19 @@ def check_role(roles, entity_type):
                 deck = Deck.objects.get(id=entity_id)
                 entity_id = deck.collection.id
             
-            if has_role(request, roles, entity_id):
+            if has_role_with_request(request, roles, entity_id):
                 return func(request, *args, **kwargs)
             raise PermissionDenied
         return wraps(func)(inner_decorator)
     return decorator
 
-def has_role(request, roles, collection_id):
+def has_role_with_request(request, roles, collection_id):
     """
     Checks if a particular user (based on the cached session) has
     a particular set of roles. Return True/False
     """
     role_bucket = get_or_update_role_bucket(request)
-    for role in roles:
-        if collection_id in role_bucket[Users_Collections.role_map[role]]:
-            return True
-    return False
-
-def is_superuser_or_staff(user):
-    """ Checks if the user is superuser or staff. Returns True or False """
-    return user.is_staff or user.is_superuser
+    return queries.has_role_in_bucket(role_bucket, roles, collection_id)
 
 def get_or_update_role_bucket(request, collection_id = None, role = None):
     """ Get, create, and/or update the user's role_bucket.

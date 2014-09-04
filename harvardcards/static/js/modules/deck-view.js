@@ -148,18 +148,27 @@ function initModule() {
 			$("[data-editable]").each(function(index, el) {
 				var $el = $(el);
 				var editable = $el.data('editable') || 'no';
-				var id = $el.data('editable-id') || '';
+				var deck_id = $el.data('editable-id') || '';
 				if(editable !== 'yes') {
 					return;
 				}
 
 				var editor = new InlineEditor($el, {
 					edit: function(editor, value, settings) {
-						var deck = new Deck({ id: id });
-						return deck.rename(value);
+						var deck = new Deck({ id: deck_id });
+						var result = deck.rename(value);
+						editor.value = value;
+						return result;
 					},
 					success: function(data, textStatus, xhr) {
 						var success = data.success;
+						var value = editor.value;
+						if(success === true) {
+							this.highlight({color: 'yellow'});
+							$("#navigation").find("[data-deck-id='"+deck_id+"']").text(value);
+						} else if(success === false) {
+							this.highlight({color: 'false'});
+						}
 						if(!success) {
 							window.alert("Error saving: "+ data.errors[field]);
 						}
