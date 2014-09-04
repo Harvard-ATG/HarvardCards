@@ -1,5 +1,6 @@
 # Common settings for all environments
 import logging
+import sys
 from os import path
 from glob import glob
 
@@ -183,6 +184,10 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'filename': path.join(ROOT_DIR, 'logs', 'critical.log'),
         },
+		'console': {
+			'class': 'logging.StreamHandler',
+			'stream': sys.stdout,
+		}
     },
     'loggers': {
         'django.request': {
@@ -200,6 +205,7 @@ LOGGING = {
 
 if DEBUG:
     LOGGING['loggers']['harvardcards']['level'] = 'DEBUG'
+    LOGGING['loggers']['harvardcards']['handlers'] += ['console']
 
 OPENID_CREATE_USERS = True
 OPENID_UPDATE_DETAILS_FROM_SREG = True

@@ -7,7 +7,7 @@ import logging, datetime
 class CollectionForm(forms.ModelForm):
     class Meta:
         model = Collection
-        fields = ['title', 'card_template', 'private']
+        fields = ['title', 'card_template'] #'private'
 
 class CollectionShareForm(forms.Form):
     #role = forms.ChoiceField(choices=Users_Collections.ROLES, initial=Users_Collections.OBSERVER)

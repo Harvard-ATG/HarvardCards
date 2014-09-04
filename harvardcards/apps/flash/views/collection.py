@@ -1,13 +1,11 @@
 import datetime, base64
 
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, HttpRequest
 from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
 from django.core.exceptions import ViewDoesNotExist, PermissionDenied
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-
-from django.utils import simplejson as json
 
 from django.forms.formsets import formset_factory
 from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field
@@ -15,6 +13,7 @@ from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm, C
 from harvardcards.apps.flash import forms, services, queries, utils
 from harvardcards.apps.flash.services import check_role, is_superuser_or_staff
 from harvardcards.apps.flash.lti_service import LTIService
+from harvardcards.apps.flash.views import card_template
 
 
 def index(request, collection_id=None):
@@ -77,6 +76,7 @@ def create(request):
     collections = Collection.objects.all()
     if request.method == 'POST':
         collection_form = CollectionForm(request.POST)
+        card_template_id = collection_form.data['card_template']
         if collection_form.is_valid():
             collection = collection_form.save()
             LTIService(request).associateCanvasCourse(collection.id)
@@ -91,11 +91,22 @@ def create(request):
             response = redirect(collection)
             return response
     else:
-        collection_form = CollectionForm()
+        initial = {'card_template': '1'}
+        card_template_id = initial['card_template']
+        collection_form = CollectionForm(initial=initial)
+    
+    # Pre-populate the "preview" of the card template
+    # This view is also called via AJAX on the page.
+    prev_request = HttpRequest()
+    prev_request.method = 'GET'
+    prev_request.GET['card_template_id'] = card_template_id
+    prev_response = card_template.preview(prev_request)
+    card_template_preview_html = prev_response.content
         
     context = {
         "collection_form": collection_form, 
-        "collections": collections
+        "collections": collections,
+        "card_template_preview_html": card_template_preview_html
     }
 
     return render(request, 'collections/create.html', context)

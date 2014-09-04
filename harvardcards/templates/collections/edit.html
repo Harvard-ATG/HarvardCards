@@ -21,11 +21,13 @@
                 <label for="id_card_template">Template:</label>
                 {{ collection_form.card_template }}
             </p>
+            {# Commented out because public/private needs to be reworked for canvas -abarrett 9/4/14
             <p>
                 {{ collection_form.private.errors }}
                 <label for="id_private">Private:</label>
                 {{ collection_form.private }}
             </p>
+            #}
             <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
             <a href="{% url 'collectionIndex' collection.id %}" class="adminMenuBtn cancelBtn">Cancel</a>
         </form>

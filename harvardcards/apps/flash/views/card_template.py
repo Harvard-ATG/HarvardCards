@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods, require_GET, require_POST
 
@@ -9,8 +9,15 @@ def preview(request):
     '''
     Returns a snippet of HTML that shows a "preview" of the card template.
     '''
-    card_template_id = request.GET['card_template_id']
-    card_template = CardTemplate.objects.get(id=card_template_id)
+    card_template_id = request.GET.get('card_template_id', '')
+    if not card_template_id:
+        return HttpResponseNotFound('')
+
+    try:
+        card_template = CardTemplate.objects.get(id=card_template_id)
+    except CardTemplate.DoesNotExist:
+        return HttpResponseNotFound('')
+
     card_template_fields = {'show':[],'reveal':[]}
     for field in card_template.fields.all():
         if field.display:
