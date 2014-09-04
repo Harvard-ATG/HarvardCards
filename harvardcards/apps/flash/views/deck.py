@@ -22,7 +22,7 @@ def index(request, deck_id=None):
     deck_cards = Decks_Cards.objects.filter(deck=deck).order_by('sort_order').prefetch_related('card__cards_fields_set__field')
     current_collection = Collection.objects.get(id=deck.collection.id)
     collections = [collection for collection in Collection.objects.all().prefetch_related('deck_set') 
-            if not collection.private or services.has_role(request, [Users_Collections.ADMINISTRATOR, 
+            if not collection.private or services.has_role_with_request(request, [Users_Collections.ADMINISTRATOR, 
             Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER, 
             Users_Collections.LEARNER], collection.id)]
 
