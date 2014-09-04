@@ -184,10 +184,10 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'filename': path.join(ROOT_DIR, 'logs', 'critical.log'),
         },
-		'console': {
-			'class': 'logging.StreamHandler',
-			'stream': sys.stdout,
-		}
+        'console': {
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout,
+        },
     },
     'loggers': {
         'django.request': {
