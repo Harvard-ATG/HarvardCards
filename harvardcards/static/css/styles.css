@@ -869,6 +869,7 @@ a#mobileMenu{
 * iPhone portrait
 */
 	/*body{ background-color: blue; background-image:none; }*/
+	.hidden-mobile { display: none !important; }
 
 	.section{
 		padding: 0 1%;
@@ -985,6 +986,9 @@ a#mobileMenu{
 		padding: 0 1%;
 		width: 98%;
 	}
+
+	.hidden-mobile { display: none !important; }
+
 	#navigation
 	, a#addCard
 	, .addCards { display: none; }

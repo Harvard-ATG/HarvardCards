@@ -91,7 +91,7 @@
             <div class="controls">
               <a class="pull-right" id="shuffle_cards" href="javascript:void(0)"><i id="shuffle" class="fa fa-random"></i><span class="control-text">Shuffle</span></a>
               <a class="pull-right" id="play_cards" href="javascript:void(0)"><i id="play" class="fa fa-play"></i><span class="control-text">Play</span></a>
-              <a class="pull-right" id="full_screen" href="javascript:void(0)"><i id="full" class="fa fa-expand"></i><span class="control-text">Full Screen</span></a>
+              <a class="pull-right hidden-mobile" id="full_screen" href="javascript:void(0)"><i id="full" class="fa fa-expand"></i><span class="control-text">Full Screen</span></a>
             </div>
             {% for card in cards %}
                 {% if is_deck_admin %}
