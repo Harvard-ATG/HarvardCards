@@ -451,15 +451,10 @@ ul.adminMenu
 		display: inline-block;
 		margin-right: 0.25em;
 	}
-		/*ul.adminMenuRight li { margin: 0; } no margin needed for right hand menu*/
 
-	ul.adminMenu li a
-	, .adminMenuBtn
-	, li.sliderPrev a
-	, li.sliderNext a
-	, a.reveal
-	, .controls a
-	, .courseHeader div a{
+	/*ul.adminMenuRight li { margin: 0; } no margin needed for right hand menu*/
+
+	.adminMenuBtn {
 		display: inline-block;
 		padding: 0.5em 1em;
 		color: #444444;
@@ -869,7 +864,6 @@ a#mobileMenu{
 * iPhone portrait
 */
 	/*body{ background-color: blue; background-image:none; }*/
-	.hidden-mobile { display: none !important; }
 
 	.section{
 		padding: 0 1%;
@@ -986,8 +980,6 @@ a#mobileMenu{
 		padding: 0 1%;
 		width: 98%;
 	}
-
-	.hidden-mobile { display: none !important; }
 
 	#navigation
 	, a#addCard
@@ -1480,4 +1472,8 @@ fieldset {
 }
 
 /********** add cards UI (end) *************/
+
+@media screen and (min-width: 320px) and (max-width: 768px){
+	.hidden-mobile { display: none !important; }
+}
 
