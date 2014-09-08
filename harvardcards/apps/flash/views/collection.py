@@ -1,70 +1,48 @@
 import datetime, base64
 
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, HttpRequest, Http404
 from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
 from django.core.exceptions import ViewDoesNotExist, PermissionDenied
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
-from django.utils import simplejson as json
-
 from django.forms.formsets import formset_factory
 from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm, CollectionShareForm
 from harvardcards.apps.flash import forms, services, queries, utils
-from harvardcards.apps.flash.services import check_role, is_superuser_or_staff
+from harvardcards.apps.flash.services import check_role
+from harvardcards.apps.flash.queries import is_superuser_or_staff
 from harvardcards.apps.flash.lti_service import LTIService
+from harvardcards.apps.flash.views import card_template
 
 
 def index(request, collection_id=None):
     """Displays a set of collections to the user depending on whether 
     or not the collections are private or public and whether or not the 
     user has permission."""
-    all_collections = Collection.objects.all()
-    user_collection_role = Users_Collections.get_role_buckets(request.user, collections = all_collections)
-    request.session['role_bucket'] = user_collection_role
 
-    decks_by_collection = queries.getDecksByCollection()
-
-    collection_list = []
-    for collection in all_collections:
-        if not collection.private or services.has_role(request, [Users_Collections.ADMINISTRATOR, 
-                        Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, 
-                        Users_Collections.CONTENT_DEVELOPER, Users_Collections.LEARNER], collection.id):
-            collection_decks = []
-            if decks_by_collection.get(collection.id, 0):
-                for deck in decks_by_collection[collection.id]:
-                    collection_decks.append({
-                        'id': deck.id,
-                        'title': deck.title,
-                        'num_cards': deck.cards.count()
-                    })
-                collection_list.append({
-                    'id': collection.id,
-                    'title':collection.title,
-                    'decks': collection_decks
-                })
-            else:
-                collection_list.append({
-                    'id': collection.id,
-                    'title':collection.title,
-                    'decks': []
-                })
+    role_bucket = services.get_or_update_role_bucket(request)
+    collection_list = queries.getCollectionList(role_bucket)
+    active_collection = None
+    display_collections = collection_list
     
     if collection_id:
-        cur_collection = all_collections.get(id=collection_id)
+        try:
+            cur_collection = Collection.objects.get(id=collection_id)
+        except Collection.DoesNotExist:
+            raise Http404
         display_collections = [c for c in collection_list if c['id'] == cur_collection.id]
-        display_collection = display_collections[0]
-    else:
-        display_collections = collection_list
-        display_collection = None
+        if len(display_collections) == 0:
+            raise Http404
+        else:
+            active_collection = display_collections[0]
 
     context = {
-        "collections": collection_list,
+        "nav_collections": collection_list,
         "display_collections": display_collections,
-        "display_collection": display_collection,
-        "user_collection_role": user_collection_role,
+        "active_collection": active_collection,
+        "user_collection_role": role_bucket,
     }
 
     return render(request, 'collections/index.html', context)
@@ -74,9 +52,12 @@ def index(request, collection_id=None):
 def create(request):
     """Creates a collection."""
 
-    collections = Collection.objects.all()
+    role_bucket = services.get_or_update_role_bucket(request)
+    collection_list = queries.getCollectionList(role_bucket)
+
     if request.method == 'POST':
         collection_form = CollectionForm(request.POST)
+        card_template_id = collection_form.data['card_template']
         if collection_form.is_valid():
             collection = collection_form.save()
             LTIService(request).associateCanvasCourse(collection.id)
@@ -87,15 +68,25 @@ def create(request):
                 
                 #update role_bucket to add admin permission to the user for this newly created collection
                 services.get_or_update_role_bucket(request, collection_id.id, Users_Collections.role_map[Users_Collections.ADMINISTRATOR])
-                
-            response = redirect(collection)
-            return response
+            return redirect(collection)
     else:
-        collection_form = CollectionForm()
+        initial = {'card_template': '1'}
+        card_template_id = initial['card_template']
+        collection_form = CollectionForm(initial=initial)
+    
+    # Pre-populate the "preview" of the card template
+    # This view is also called via AJAX on the page.
+    prev_request = HttpRequest()
+    prev_request.method = 'GET'
+    prev_request.GET['card_template_id'] = card_template_id
+    prev_response = card_template.preview(prev_request)
+    card_template_preview_html = prev_response.content
         
     context = {
+        "nav_collections": collection_list,
+        "active_collection": None,
         "collection_form": collection_form, 
-        "collections": collections
+        "card_template_preview_html": card_template_preview_html
     }
 
     return render(request, 'collections/create.html', context)

@@ -98,17 +98,21 @@
             <ul id="allCards">
                 {% for card in cards %}
                 <li class="{% if card.color %}card-color-{{card.color}}{% endif %} hide" role="tabpanel"  data-card-id="{{ card.card_id }}">
+                    <div class="show_content">
                     {% for field in card.fields.show %}
-                        {% include "_deck_card_fields.html" with field=field hide=False show_content=True %}
+                        {% include "_deck_card_fields.html" with field=field hide=False %}
                     {% endfor %}
+                    </div>
                     <div class="hideRevealHr">
                         {% if is_quiz_mode %}
                         <a href="javascript:void(0)" class="reveal">Reveal</a>
                         {% endif %}
                     </div>
+                    <div class="reveal_content {% if is_quiz_mode %}hide{% endif %}">
                     {% for field in card.fields.reveal %}
-                        {% include "_deck_card_fields.html" with field=field hide=is_quiz_mode show_content=False %}
+                        {% include "_deck_card_fields.html" with field=field %}
                     {% endfor %}
+                    </div>
                 </li>
                 {% endfor %}
             </ul>

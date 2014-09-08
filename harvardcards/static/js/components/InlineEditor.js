@@ -44,10 +44,7 @@ define(['jquery', 'jquery.jeditable', 'jqueryui'], function($) {
 	};
 
 	InlineEditor.prototype.onSuccess = function(data, textStatus, xhr) {
-		var result = this.success.apply(this, arguments);
-		if(result === true || result === false) {
-			this.highlight({color: result ? "yellow" : "red"});
-		}
+		return this.success.apply(this, arguments);
 	};
 
 	InlineEditor.prototype.onError = function(xhr, textStatus, errorThrown) {
