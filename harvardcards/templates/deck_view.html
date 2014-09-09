@@ -42,9 +42,9 @@
 
         <!-- SECTION: Card Slider -->
         {% if is_deck_admin %}
-            <div class="addCards">
-                <a href="{% url 'deckCreateCard' deck.id %}?deck_id={{deck.id}}" class="btn-dashed">Add Card</a>
-                <a href="{% url 'deckUpload' deck.id %}?deck_id={{deck.id}}" class="btn-dashed">Upload Cards</a>
+            <div class="addCards hidden-mobile">
+                <a class="btn-dashed" href="{% url 'deckCreateCard' deck.id %}?deck_id={{deck.id}}">Add Card</a>
+                <a class="btn-dashed" href="{% url 'deckUpload' deck.id %}?deck_id={{deck.id}}">Upload Cards</a>
             </div>
         {% endif %}
         <div id="{% if is_deck_admin %}cardSlider{% else %}cardSliderNotAdmin{% endif %}" role="scrollbar" tabindex="0" aria-orientation="horizontal" class="slider" data-start-card-id="{{card_id}}">
