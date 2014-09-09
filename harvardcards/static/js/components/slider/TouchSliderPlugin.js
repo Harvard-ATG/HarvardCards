@@ -26,12 +26,14 @@ define(['jquery'], function($) {
 	 */
 	var TouchSliderPlugin = function(config) {
 		config = config || {};
+		this.config = config;
 		this.handleTouchEvents = $.proxy(this.handleTouchEvents, this);
 	};
 
 	// Initializes the plugin.
 	TouchSliderPlugin.prototype.init = function(slider) {
 		this.slider = slider;
+		this.touchEl = this.config.touchEl || this.slider.el;
 		if(this.hasTouchSupport()) {
 			this.hideNav();
 			this.attachTouchEvents();
@@ -50,71 +52,43 @@ define(['jquery'], function($) {
 
 	// Attaches touch event handles to the slider.
 	TouchSliderPlugin.prototype.attachTouchEvents = function() {
-		$(this.slider.el).on("touchmove touchstart touchend", this.handleTouchEvents);
+		$(this.touchEl).on("touchmove touchstart touchend", this.handleTouchEvents);
 	};
 
 	// Handler for touch events.
 	TouchSliderPlugin.prototype.handleTouchEvents = function(evt) {
 		var e = evt.originalEvent;
-		var direction = 0;
-		var scrollTop = false;
-        var $parentEl = $(this.slider.el).parent();
-		var index = $parentEl.index();
+		var swipeWidth = 50; 
+		var x, y;
 
-		//console.log("touch event", evt.type, "index", index, "event object", evt);
+		//console.log("touch event", evt.type, "event object", evt, "touches", e.touches, "onetouch", e.touches[0]);
 
 		switch(e.type) {
 			case 'touchstart':
-				this.startPos = e.touches[0].clientX;
-				this.lastPos = this.startPos;
-				direction = 0;
-				this.startPosY = e.touches[0].clientY;
-				this.lastPosY = this.startPosY;
+				x = e.touches[0].clientX;
+				y = e.touches[0].clientY;
+				this.startPos = {x:x,y:y};
+				this.lastPos = {x:x,y:y};
 				break;
 			case 'touchmove':
-				e.preventDefault();
-				direction = (this.lastPos > this.startPos) ? -1 : 1;
-				this.lastPosY = e.touches[0].clientY;
-				this.lastPos = e.touches[0].clientX;
-				//console.log('last down: ' + lastPosY);
+				x = e.touches[0].clientX;
+				y = e.touches[0].clientY;
+				this.lastPos = {x:x,y:y};
+				//console.log("touchmove", x, y, "last", this.lastPos.x, this.lastPos.y);
 				break;
 			case 'touchend':
-				if(this.lastPosY - this.startPosY > 50) {
-					index--;
-					if(index <= 0) {
-						//first slider scroll to top of page
-						scrollTop = $('html').position().top;
-					} else {
-						//page up
-						if($parentEl.prev().position()) {
-							scrollTop = $parentEl.prev().position().top;
-						}
-					}
-					this.scrollTop(scrollTop);
-				} else if (this.lastPosY - this.startPosY < -50) {
-					index++;
-					if (index >= this.slider.getNumItems()) {
-						//first slider scroll to top of page
-						scrollTop = $('html').position().bottom;
-					} else {
-						//page down
-						if($parentEl.next().position()) {
-							scrollTop = $parentEl.next().position().top;
-						}
-					}
-					this.scrollTop(scrollTop);
-				} else {
-					if(this.lastPos - this.startPos > 100) {
-						this.slider.goToPrev();
-					} else if(this.lastPos - this.startPos < -100) {
-						this.slider.goToNext();
-					}
+				if(this.lastPos.x - this.startPos.x > swipeWidth) {
+					this.slider.goToPrev();
+				} else if(this.lastPos.x - this.startPos.x < -swipeWidth) {
+					this.slider.goToNext();
 				}
 				break;
 			default:
 				//console.log("touch event not handled", e.type);
 				break;
 		}
+
+		return true;
 	};
 
 	// Helper function to scroll the screen.

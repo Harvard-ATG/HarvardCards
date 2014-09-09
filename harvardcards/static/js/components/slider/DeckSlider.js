@@ -58,7 +58,8 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 				responsive: {
 					maxShowItems: 4
 				},
-				keyboard: {}
+				keyboard: {},
+				touch: {touchEl: '#singleCardHolder'}
 			}
 		});
 
