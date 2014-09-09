@@ -8,9 +8,9 @@
         </a>
         {% if collection.id in user_collection_role.ADMINISTRATOR %}
             <ul class="adminMenu adminMenuRight">
-                <li><a href="{% url 'collectionEdit' collection.id %}?collection_id={{collection.id}}"><i class="fa fa-pencil"></i> Edit</a></li>
-                <li><a href="{% url 'collectionDelete' collection.id %}?collection_id={{collection.id}}" data-confirm="Are you sure you want to delete: {{collection.title|escape}}?"><i class="fa fa-times-circle"></i> Delete</a></li>
-                <li><a href="{% url 'collectionShare' collection.id %}?collection_id={{collection.id}}"><i class="fa fa-pencil"></i>Share</a></li>
+                <li><a class="adminMenuBtn hidden-mobile" href="{% url 'collectionEdit' collection.id %}?collection_id={{collection.id}}"><i class="fa fa-pencil"></i> Edit</a></li>
+                <li><a class="adminMenuBtn hidden-mobile" href="{% url 'collectionDelete' collection.id %}?collection_id={{collection.id}}" data-confirm="Are you sure you want to delete: {{collection.title|escape}}?"><i class="fa fa-times-circle"></i> Delete</a></li>
+                <li><a class="adminMenuBtn hidden-mobile" href="{% url 'collectionShare' collection.id %}?collection_id={{collection.id}}"><i class="fa fa-pencil"></i>Share</a></li>
             </ul>
         {% endif %}
     </div>
@@ -18,7 +18,7 @@
     <div class="slider">
         <ul class="courseDecks">
             {% if collection.id in user_collection_role.ADMINISTRATOR %}
-                <li class="deck add">
+                <li class="deck add hidden-mobile">
                 <a href="{% url 'collectionAddDeck' collection.id %}?collection_id={{collection.id}}">Add a Deck</a>
                 </li>
             {% endif %}
@@ -36,8 +36,8 @@
         </ul>
         <div class="sliderNav">
             <ul class="sliderNavNextPrev">
-                <li class="sliderPrev"><a href="javascript:void(0)">&laquo; Prev</a></li>
-                <li class="sliderNext"><a href="javascript:void(0)">Next &raquo;</a></li>
+                <li class="sliderPrev"><a class="adminMenuBtn" href="javascript:void(0)">&laquo; Prev</a></li>
+                <li class="sliderNext"><a class="adminMenuBtn" href="javascript:void(0)">Next &raquo;</a></li>
             </ul>
         </div>
     </div>
