@@ -15,6 +15,7 @@ define(['jquery', 'jquery.jeditable', 'jqueryui'], function($) {
 	InlineEditor.prototype.init = function() {
 		var that = this;
 		var editorConfig = {
+			cssclass: 'jq-editable-courseHeader',
 			select: true,
 			submit: "Save",
 			cancel: "Cancel"
