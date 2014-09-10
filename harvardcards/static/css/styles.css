@@ -842,6 +842,7 @@ a#mobileMenu{
 #cardTemplateContainer .field-label:after { content: ":"; }
 #cardTemplateContainer .field-value { color: darkgray; }
 
+/********** misc utils *************/
 .errorlist {
 	color: red;
 }
@@ -857,6 +858,15 @@ a#mobileMenu{
 	left: 50%;
 	margin-left: -16px;
 	margin-top: -16px;
+}
+
+.jq-editable-courseHeader input {
+	font-size: 1em;
+	font-family: 'League Gothic', Arial, sans-serif;
+	color: #a51c30 !important;
+	background: transparent;
+	padding: 2px;
+	margin: 2px;
 }
 
 @media screen and (min-width: 320px){
