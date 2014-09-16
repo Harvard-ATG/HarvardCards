@@ -205,7 +205,7 @@ LOGGING = {
 
 if DEBUG:
     LOGGING['loggers']['harvardcards']['level'] = 'DEBUG'
-    #LOGGING['loggers']['harvardcards']['handlers'] += ['console']
+    LOGGING['loggers']['harvardcards']['handlers'] += ['console']
 
 OPENID_CREATE_USERS = True
 OPENID_UPDATE_DETAILS_FROM_SREG = True

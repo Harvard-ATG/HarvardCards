@@ -6,26 +6,19 @@
     {% endif %}
     <nav class="desktopNav" data-set="mobileNav">
         <ul class="appNav">
-            <li>
-                <a href="{% url 'index' %}">Home</a>
-            </li>
+			<li><a href="{% url 'index' %}">Home</a></li>
             {% for c in nav_collections %}
                 <li>
-                    {% if c == active_collection %}
-                        <a href="{% url 'collectionIndex' c.id %}" class="active">{{ c.title|truncatechars:30 }}</a>
-                    {% else %}
-                         <a href="{% url 'collectionIndex' c.id %}">{{ c.title|truncatechars:30 }}</a>
-                    {% endif %}
-
-                    {% if c == active_collection %}
-                        {% if c.decks|length > 0 %}
-                            <ul>
-                                {% for deck in c.decks %}
-                                    <li><a href="{% url 'deckIndex' deck.id %}">{{ deck.title|truncatechars:30}}</a></li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    {% endif %}
+					<a href="{% url 'collectionIndex' c.id %}" class="{% if c.id == active_collection.id %}active{% endif %}" data-collection-id="{{c.id}}">{{ c.title|truncatechars:30 }}</a>
+					{% if c.id == active_collection.id %}
+						{% if c.decks|length > 0 %}
+						<ul>
+							{% for d in c.decks %}
+								<li><a href="{% url 'deckIndex' d.id %}{% if is_quiz_mode %}?mode=quiz{% endif %}" class="{% if d.id == active_deck.id %}active{% endif %}" data-deck-id="{{d.id}}">{{ d.title|truncatechars:30}}</a></li>
+							{% endfor %}
+						</ul>
+						{% endif %}
+					{% endif %}
                 </li>
             {% endfor %}
         </ul>

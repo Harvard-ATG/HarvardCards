@@ -51,6 +51,7 @@ def getCollectionList(role_bucket):
         log.debug("collection id: [%s] has access: [%s]" % (collection.id, has_access))
         if has_access:
             collection_decks = []
+            log.debug("decks for collection id [%s]: %s" % (collection.id, decks_by_collection.get(collection.id, None)))
             if decks_by_collection.get(collection.id, False):
                 for deck in decks_by_collection[collection.id]:
                     collection_decks.append({

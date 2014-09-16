@@ -15,24 +15,18 @@ from harvardcards.apps.flash.services import check_role
 from PIL import Image
 import urllib
 
-
 def index(request, deck_id=None):
     """Displays the deck of cards for review/quiz."""
+
     deck = Deck.objects.get(id=deck_id)
     deck_cards = Decks_Cards.objects.filter(deck=deck).order_by('sort_order').prefetch_related('card__cards_fields_set__field')
     current_collection = Collection.objects.get(id=deck.collection.id)
-    collections = [collection for collection in Collection.objects.all().prefetch_related('deck_set') 
-            if not collection.private or services.has_role_with_request(request, [Users_Collections.ADMINISTRATOR, 
-            Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER, 
-            Users_Collections.LEARNER], collection.id)]
 
-    user_collection_role = request.session.get('role_bucket',{})
-    if not user_collection_role:
-        user_collection_role = Users_Collections.get_role_buckets(request.user, collections = collections)
-        request.session['role_bucket'] = user_collection_role
+    role_bucket = services.get_or_update_role_bucket(request)
+    collection_list = queries.getCollectionList(role_bucket)
 
     is_quiz_mode = request.GET.get('mode') == 'quiz'
-    is_deck_admin = deck.collection.id in user_collection_role['ADMINISTRATOR']
+    is_deck_admin = deck.collection.id in role_bucket['ADMINISTRATOR']
     card_id = request.GET.get('card_id', '')
 
     cards = []
@@ -54,15 +48,16 @@ def index(request, deck_id=None):
             'color': dcard.card.color,
             'fields': card_fields
             })
+
     context = {  
-            "collection": current_collection,
-            "collections": collections,
-            "deck": deck,
-            "cards": cards,
-            "is_quiz_mode": is_quiz_mode,
-            "is_deck_admin": is_deck_admin,
-            "card_id": card_id,
-            }
+        "collection": current_collection,
+        "nav_collections": collection_list,
+        "deck": deck,
+        "cards": cards,
+        "is_quiz_mode": is_quiz_mode,
+        "is_deck_admin": is_deck_admin,
+        "card_id": card_id,
+    }
 
     return render(request, "deck_view.html", context)
 
@@ -83,8 +78,10 @@ def upload_deck(request, deck_id=None):
     '''
     
     deck = Deck.objects.get(id=deck_id)
-    collections = Collection.objects.all()
-    collection = Collection.objects.get(id=deck.collection.id)
+    current_collection = Collection.objects.get(id=deck.collection.id)
+
+    role_bucket = services.get_or_update_role_bucket(request)
+    collection_list = queries.getCollectionList(role_bucket)
 
     if request.method == 'POST':
         deck_form = DeckImportForm(request.POST, request.FILES)
@@ -98,8 +95,8 @@ def upload_deck(request, deck_id=None):
     context = {
             "deck": deck,
             "deck_form": deck_form, 
-            "collections": collections,
-            "collection": collection
+            "nav_collections": collection_list,
+            "collection": current_collection
             }
 
     return render(request, 'decks/upload.html', context)
@@ -125,9 +122,11 @@ def create_edit_card(request, deck_id=None):
 
     deck = Deck.objects.get(id=deck_id)
     current_collection = Collection.objects.get(id=deck.collection.id)
-    collections = Collection.objects.all().prefetch_related('deck_set')
     card_color_select = widgets.Select(attrs=None, choices=Card.COLOR_CHOICES)
     image_upload_select = widgets.Select(attrs= {'onchange' :'switch_upload_image_type(this)'}, choices=IMAGE_UPLOAD_TYPE)
+
+    role_bucket = services.get_or_update_role_bucket(request)
+    collection_list = queries.getCollectionList(role_bucket)
 
     # Only has card_id if we are editing a card
     card_id = request.GET.get('card_id', '')
@@ -164,7 +163,7 @@ def create_edit_card(request, deck_id=None):
         "deck": deck,
         "card_id": card_id if card_id else '',
         "collection": current_collection,
-        "collections": collections,
+        "nav_collections": collection_list,
         "card_fields": card_fields,
         "card_color_select":  card_color_select.render("card_color", card_color),
         "upload_type_select": image_upload_select.render("image_upload", 'F')

@@ -2,7 +2,7 @@
 
 
 {% block sidebar_content %}
-    {% include "_deck_nav.html" with collection=collection deck=deck is_quiz_mode=is_quiz_mode %}
+    {% include "_deck_nav.html" with nav_collections=nav_collections active_collection=collection active_deck=deck is_quiz_mode=is_quiz_mode %}
 {% endblock %}
 
 
