@@ -95,8 +95,10 @@ def create(request):
 def edit(request, collection_id=None):
     """Edits a collection."""
 
-    collections = Collection.objects.all()
     collection = Collection.objects.get(id=collection_id)
+
+    role_bucket = services.get_or_update_role_bucket(request)
+    collection_list = queries.getCollectionList(role_bucket)
 
     if request.method == 'POST':
         collection_form = CollectionForm(request.POST, instance=collection)
@@ -110,7 +112,7 @@ def edit(request, collection_id=None):
         
     context = {
         "collection_form": collection_form, 
-        "collections": collections,
+        "nav_collections": collection_list,
         "collection": collection
     }
 
@@ -123,12 +125,14 @@ def share_collection(request, collection_id=None):
     users to use in order to add themselves into the collection's authorized
     users list
     """
-    collections = Collection.objects.all()
+    role_bucket = services.get_or_update_role_bucket(request)
+    collection_list = queries.getCollectionList(role_bucket)
+
     collection = Collection.objects.get(id=collection_id)
     collection_share_form = CollectionShareForm()
     context = {
             'share_form': collection_share_form,
-            'collections': collections,
+            'nav_collections': collection_list,
             'collection': collection,
              } 
 
