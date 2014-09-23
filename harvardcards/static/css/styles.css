@@ -236,6 +236,10 @@ h1, h2, h3, h4
 		padding: 0.3em 0 0.3em 20%;
 	}
 
+    #navigation .collectionNavItem {
+        margin-left: 5%;    
+    }
+
 		#navigation nav ul ul a:hover
 		, .footerNav ul ul li a:hover{
 			background: transparent url('../img/subNavHover.png') no-repeat 2em 0.65em;

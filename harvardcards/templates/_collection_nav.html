@@ -8,7 +8,7 @@
         <ul class="appNav">
             <li><a href="{% url 'index' %}">Home</a></li>
             {% for c in nav_collections %}
-                <li>
+                <li class="collectionNavItem">
                     <a href="{% url 'collectionIndex' c.id %}" class="{% if c.id == active_collection.id %}active{% endif %}" data-collection-id="{{c.id}}">{{ c.title|truncatechars:30 }}</a>
                     {% if c.id == active_collection.id %}
                         {% if c.decks|length > 0 %}
