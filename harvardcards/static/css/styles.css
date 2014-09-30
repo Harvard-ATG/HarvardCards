@@ -1463,16 +1463,27 @@ fieldset {
 	}
 
 .saveBtn{
+	color: #FFF;
 	background: #4E84C4;
 	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#4E84C4), to(#4075b3));
 	background-image: -webkit-linear-gradient(top, #4E84C4, #4075b3);
 	background-image:    -moz-linear-gradient(top, #4E84C4, #4075b3);
 	background-image:     -ms-linear-gradient(top, #4E84C4, #4075b3);
 	background-image:      -o-linear-gradient(top, #4E84C4, #4075b3);
-
 }
 
 .cancelBtn{
+	color: #333;
+	background: #CCC;
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#CCC), to(#D3D3D3));
+	background-image: -webkit-linear-gradient(top, #CCC, #D3D3D3);
+	background-image:    -moz-linear-gradient(top, #CCC, #D3D3D3);
+	background-image:     -ms-linear-gradient(top, #CCC, #D3D3D3);
+	background-image:      -o-linear-gradient(top, #CCC, #D3D3D3);
+}
+
+.deleteBtn{
+	color: #FFF;
 	background: #A51C30;
 	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#A51C30), to(#8a1526));
 	background-image: -webkit-linear-gradient(top, #A51C30, #8a1526);
