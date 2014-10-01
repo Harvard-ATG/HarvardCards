@@ -158,17 +158,12 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 		return this.currentCardId;
 	};
 
-	// Returns the minimum card ID.
-	DeckSlider.prototype.getCurrentCardId = function() {
-		return this.currentCardId;
-	};
-
-
 	// Returns the current card number.
-	DeckSlider.prototype.getMinCardId = function() {
-	    var ids = this.findCardIds();
-		return  Math.min.apply(null, ids);
+	DeckSlider.prototype.getCurrentCardNum = function() {
+        var card = $("ul").find("[data-card-id='" + this.getCurrentCardId() + "']");
+		return card.data('card-num');
 	};
+
 
 	// Returns true if the element is a card, false otherwise.
 	DeckSlider.prototype.isCard = function(el) {

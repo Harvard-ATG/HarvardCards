@@ -22,7 +22,7 @@ function initModule() {
 		el: $("#counter"),
 		slider: deck_slider,
 		update: function() {
-			var current = this.slider.getCurrentCardId() - this.slider.getMinCardId() + 1;
+			var current = this.slider.getCurrentCardNum();
 			var total = this.slider.getNumItems();
 			this.el.html(current + " / " + total);
 		}
