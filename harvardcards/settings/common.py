@@ -141,7 +141,7 @@ INSTALLED_APPS = [
     # 'django.contrib.admindocs',
     'harvardcards.apps.flash',
     #'harvardcards.apps.jasmine',
-    'south'
+    'south',
 ]
 
 FIXTURE_DIRS = (
@@ -213,3 +213,4 @@ LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_URL = '/logout/'
 OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
+

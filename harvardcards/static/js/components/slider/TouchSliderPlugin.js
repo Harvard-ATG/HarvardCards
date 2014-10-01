@@ -60,8 +60,8 @@ define(['jquery'], function($) {
 		var e = evt.originalEvent;
 		var swipeWidth = 50; 
 		var x, y;
-
-		//console.log("touch event", evt.type, "event object", evt, "touches", e.touches, "onetouch", e.touches[0]);
+		
+        //console.log("touch event", evt.type, "event object", evt, "touches", e.touches, "onetouch", e.touches[0]);
 
 		switch(e.type) {
 			case 'touchstart':

@@ -32,10 +32,10 @@ function initModule() {
 	card_counter.update = $.proxy(card_counter.update, card_counter);
 
 	deck_slider.bind("beforeslide", function(slider, card_id) {
-		$cardDetail.find("[data-card-id]").removeClass("show").addClass("hide");
+		$cardDetail.find("[data-card-id]").hide('scale', {percent: 0});
 	});
 	deck_slider.bind("slide", function(slider, card_id) {
-		$cardDetail.find("[data-card-id="+card_id+"]").removeClass("hide").addClass("show");
+		$cardDetail.find("[data-card-id="+card_id+"]").show(1000);
 	});
 	deck_slider.bind("slide", card_counter.update);
 	deck_slider.goToCurrent();
