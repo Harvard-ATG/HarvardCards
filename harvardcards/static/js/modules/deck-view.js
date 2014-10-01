@@ -40,7 +40,7 @@ function initModule() {
 	});
 	deck_slider.bind("slide", function(slider, card_id) {
         _direction = ( _currentCardID > card_id ) ? "left" : "right";
-		$cardDetail.find("[data-card-id="+card_id+"]").show("slide", { direction: _direction }, 2000);
+		$cardDetail.find("[data-card-id="+card_id+"]").show("slide", { direction: _direction }, 1000);
 	});
 	deck_slider.bind("slide", card_counter.update);
 	deck_slider.goToCurrent();
