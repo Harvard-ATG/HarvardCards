@@ -158,9 +158,16 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 		return this.currentCardId;
 	};
 
+	// Returns the minimum card ID.
+	DeckSlider.prototype.getCurrentCardId = function() {
+		return this.currentCardId;
+	};
+
+
 	// Returns the current card number.
-	DeckSlider.prototype.getCurrentCardNum = function() {
-		return this.slider.getCurrentIndex() + 1;
+	DeckSlider.prototype.getMinCardId = function() {
+	    var ids = this.findCardIds();
+		return  Math.min.apply(null, ids);
 	};
 
 	// Returns true if the element is a card, false otherwise.
