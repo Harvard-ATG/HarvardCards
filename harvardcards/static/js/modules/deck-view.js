@@ -28,14 +28,19 @@ function initModule() {
 		}
 	};
 	var $cardDetail = $("#singleCardHolder");
+    var _currentCardID = null;
+    var _direction = null;
 
 	card_counter.update = $.proxy(card_counter.update, card_counter);
 
-	deck_slider.bind("beforeslide", function(slider, card_id) {
-		$cardDetail.find("[data-card-id]").hide('scale', {percent: 0});
+	deck_slider.bind("beforeslide", function(slider, card_id, next_card_id) {
+        _direction = ( card_id > next_card_id ) ? "right" : "left";
+		$cardDetail.find("[data-card-id]").hide("slide", { direction: _direction }, 1000);
+        _currentCardID = card_id;
 	});
 	deck_slider.bind("slide", function(slider, card_id) {
-		$cardDetail.find("[data-card-id="+card_id+"]").show(1000);
+        _direction = ( _currentCardID > card_id ) ? "left" : "right";
+		$cardDetail.find("[data-card-id="+card_id+"]").show("slide", { direction: _direction }, 2000);
 	});
 	deck_slider.bind("slide", card_counter.update);
 	deck_slider.goToCurrent();
