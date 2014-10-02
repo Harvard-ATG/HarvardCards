@@ -113,7 +113,7 @@ define(['jquery'], function($) {
 				if(index < numItems - 1) {
 					el.style.marginRight = layout.itemMarginRight;
 				} else {
-					el.style.marginRight = 0;
+					el.style.marginRight = layout.itemMarginRight;
 				}
 			} else {
 				el.style.marginRight = 0;
@@ -161,7 +161,7 @@ define(['jquery'], function($) {
 		var itemWidth = Math.floor((sliderWidth - totalItemMargin - totalBorderWidth) / showItems);
 		var slide = itemWidth + itemMargin + (itemBorderWidth * 2) + "px";
 
-		this.layout.containerWidth = ((itemWidth + itemMargin + (itemBorderWidth * 2)) * numItems) - itemMargin + "px";
+		this.layout.containerWidth = ((itemWidth + itemMargin + (itemBorderWidth * 2)) * numItems)  + "px";
 		this.layout.itemWidth =  itemWidth + "px";
 		this.layout.itemMarginRight = itemMargin + "px";
 		this.layout.slideWindow = showItems;
