@@ -160,8 +160,10 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 
 	// Returns the current card number.
 	DeckSlider.prototype.getCurrentCardNum = function() {
-		return this.slider.getCurrentIndex() + 1;
+        var card = this.findByCardId(this.getCurrentCardId());
+		return card.data('card-num');
 	};
+
 
 	// Returns true if the element is a card, false otherwise.
 	DeckSlider.prototype.isCard = function(el) {
