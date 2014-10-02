@@ -96,7 +96,7 @@
         }
     },
     {
-        "pk": 9, 
+        "pk": 9,
         "model": "flash.field", 
         "fields": {
             "field_type": "T", 
@@ -104,151 +104,31 @@
             "label": "Word", 
             "display": true,
             "sort_order": 1,
-			"example_value": "красная площадь"
+			"example_value": "Danke schon"
         }
     },
     {
-        "pk": 10, 
-        "model": "flash.field", 
-        "fields": {
-            "field_type": "T", 
-            "show_label": true, 
-            "label": "Definition", 
-            "display": false,
-            "sort_order": 2,
-			"example_value": "Red Square"
-        }
-    },
-    {
-        "pk": 11, 
-        "model": "flash.field", 
-        "fields": {
-            "field_type": "T", 
-            "show_label": true, 
-            "label": "Pronunciation", 
-            "display": false,
-            "sort_order": 3,
-			"example_value": "krasnaya ploshat"
-        }
-    },
-    {
-        "pk": 12, 
-        "model": "flash.field", 
-        "fields": {
-            "field_type": "T", 
-            "show_label": true, 
-            "label": "Gender", 
-            "display": false,
-            "sort_order": 4,
-			"example_value": "F"
-        }
-    },
-    {
-        "pk": 13,
-        "model": "flash.field", 
-        "fields": {
-            "field_type": "T", 
-            "show_label": true, 
-            "label": "Example", 
-            "display": false,
-            "sort_order": 5,
-			"example_value": ""
-        }
-    },
-    {
-        "pk": 14,
-        "model": "flash.field", 
-        "fields": {
-            "field_type": "T", 
-            "show_label": true, 
-            "label": "Notes", 
-            "display": false,
-            "sort_order": 6,
-			"example_value": ""
-        }
-    },
-    {
-        "pk": 15,
-        "model": "flash.field", 
-        "fields": {
-            "field_type": "T", 
-            "show_label": false, 
-            "label": "Character", 
-            "display": true,
-            "sort_order": 1,
-			"example_value": "北京"
-        }
-    },
-    {
-        "pk": 16,
-        "model": "flash.field", 
-        "fields": {
-            "field_type": "T", 
-            "show_label": true, 
-            "label": "Definition(s)", 
-            "display": false,
-            "sort_order": 2,
-			"example_value": "Beijing; Literal meaning: Northern Capital"
-        }
-    },
-    {
-        "pk": 17,
-        "model": "flash.field", 
-        "fields": {
-            "field_type": "T", 
-            "show_label": true, 
-            "label": "Pinyin", 
-            "display": false,
-            "sort_order": 3,
-			"example_value": "Běijīng"
-        }
-    },
-    {
-        "pk": 18,
-        "model": "flash.field", 
-        "fields": {
-            "field_type": "T", 
-            "show_label": true, 
-            "label": "Source(s)", 
-            "display": false,
-            "sort_order": 4,
-			"example_value": "None"
-        }
-    },
-    {
-        "pk": 19,
-        "model": "flash.field", 
-        "fields": {
-            "field_type": "T", 
-            "show_label": false, 
-            "label": "Word", 
-            "display": true,
-            "sort_order": 1,
-			"example_value": ""
-        }
-    },
-    {
-        "pk": 20,
-        "model": "flash.field", 
-        "fields": {
-            "field_type": "T", 
-            "show_label": true, 
-            "label": "Definition", 
-            "display": false,
-            "sort_order": 2,
-			"example_value": ""
-        }
-    },
-    {
-        "pk": 21,
+        "pk": 10,
         "model": "flash.field", 
         "fields": {
             "field_type": "A", 
             "show_label": true, 
-            "label": "Pronunciation", 
+            "label": "Audio", 
+            "display": true,
+            "sort_order": 2,
+			"example_value": "/static/audio/example_danke_schon.ogg"
+        }
+    },
+    {
+        "pk": 11,
+        "model": "flash.field", 
+        "fields": {
+            "field_type": "T", 
+            "show_label": true, 
+            "label": "Definition", 
             "display": false,
             "sort_order": 3,
-			"example_value": ""
+			"example_value": "Thank you very much"
         }
     },
     {
@@ -269,22 +149,6 @@
     },
     {
         "pk": 3,
-        "model": "flash.CardTemplate",
-        "fields": {
-            "title": "Russian",
-            "description": "Russian vocabulary flashcard template."
-        }
-    },
-    {
-        "pk": 4,
-        "model": "flash.CardTemplate",
-        "fields": {
-            "title": "Chinese",
-            "description": "Chinese vocabulary flashcard template."
-        }
-    },
-    {
-        "pk": 5,
         "model": "flash.CardTemplate",
         "fields": {
             "title": "Language with Audio",
@@ -360,7 +224,7 @@
         "model": "flash.CardTemplates_Fields",
         "fields": {
             "card_template": 3,
-            "field": 9
+            "field": 9 
         }
     },
     {
@@ -368,7 +232,7 @@
         "model": "flash.CardTemplates_Fields",
         "fields": {
             "card_template": 3,
-            "field": 10 
+            "field":10 
         }
     },
     {
@@ -377,86 +241,6 @@
         "fields": {
             "card_template": 3,
             "field": 11
-        }
-    },
-    {
-        "pk": 12,
-        "model": "flash.CardTemplates_Fields",
-        "fields": {
-            "card_template": 3,
-            "field": 12 
-        }
-    },
-    {
-        "pk": 13,
-        "model": "flash.CardTemplates_Fields",
-        "fields": {
-            "card_template": 3,
-            "field": 13 
-        }
-    },
-    {
-        "pk": 14,
-        "model": "flash.CardTemplates_Fields",
-        "fields": {
-            "card_template": 3,
-            "field": 14 
-        }
-    },
-    {
-        "pk": 15,
-        "model": "flash.CardTemplates_Fields",
-        "fields": {
-            "card_template": 4,
-            "field": 15 
-        }
-    },
-    {
-        "pk": 16,
-        "model": "flash.CardTemplates_Fields",
-        "fields": {
-            "card_template": 4,
-            "field": 16 
-        }
-    },
-    {
-        "pk": 17,
-        "model": "flash.CardTemplates_Fields",
-        "fields": {
-            "card_template": 4,
-            "field": 17 
-        }
-    },
-    {
-        "pk": 18,
-        "model": "flash.CardTemplates_Fields",
-        "fields": {
-            "card_template": 4,
-            "field": 18 
-        }
-    },
-    {
-        "pk": 19,
-        "model": "flash.CardTemplates_Fields",
-        "fields": {
-            "card_template": 5,
-            "field": 19 
-        }
-    },
-    {
-        "pk": 20,
-        "model": "flash.CardTemplates_Fields",
-        "fields": {
-            "card_template": 5,
-            "field": 20
-        }
-    },
-    {
-        "pk": 21,
-        "model": "flash.CardTemplates_Fields",
-        "fields": {
-            "card_template": 5,
-            "field": 21
         }
     }
 ]

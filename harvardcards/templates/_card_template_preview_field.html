@@ -36,7 +36,8 @@
 	            {% endif %}
 	        {% elif field.type == 'A' %}
 	            {% if field.example_value %}
-					<audio src="{{field.example_value}}" alt="{{field.label}}" controls="controls">
+					<audio alt="{{field.label}}" controls="controls" preload="auto">
+						<source src="{{field.example_value}}" />
 						Your browser does not support the <code>audio</code> element.
 					</audio>
 	            {% else %}
