@@ -28,8 +28,8 @@ DEBUG_TOOLBAR_CONFIG = {
     'ENABLE_STACKTRACES': True,
 }
 
-MIDDLEWARE_CLASSES.append('debug_toolbar.middleware.DebugToolbarMiddleware')
-INSTALLED_APPS.append('debug_toolbar')
+#MIDDLEWARE_CLASSES.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+#INSTALLED_APPS.append('debug_toolbar')
 
 def true(request):
 	'''For the django debug toolbar callback. Returns true to enable it.'''
