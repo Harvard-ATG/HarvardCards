@@ -57,7 +57,7 @@ def getCollectionList(role_bucket):
                     collection_decks.append({
                         'id': deck.id,
                         'title': deck.title,
-                        'num_cards': deck.cards.count()
+                        'num_cards': deck.cards__count
                     })
                 collection_list.append({
                     'id': collection.id,
@@ -75,7 +75,8 @@ def getCollectionList(role_bucket):
 
 def getDecksByCollection():
     """gets the decks associated with a collection"""
-    decks = Deck.objects.all().prefetch_related('collection', 'cards')
+    from django.db.models import Count
+    decks = Deck.objects.all().select_related('collection').annotate(Count('cards'))
     decks_by_collection = {}
     for deck in decks:
         if deck.collection.id not in decks_by_collection:

@@ -19,17 +19,24 @@ DATABASES = {
     }
 }
 
+
+#########################################
 # Configuration for the django-debug-toolbar 
-# (pip install django-debug-toolbar)
 #
-# Uncomment these lines to enable the toolbar
-#MIDDLEWARE_CLASSES.append('debug_toolbar.middleware.DebugToolbarMiddleware')
-#INSTALLED_APPS.append('debug_toolbar')
+#		pip install django-debug-toolbar
+#
+# Uncomment the MIDDLEWARE_CLASSES and INSTALLED_APPS lines
+# to enable the django debug toolbar.
+DEBUG_TOOLBAR_PATCH_SETTINGS = False
 DEBUG_TOOLBAR_CONFIG = {
-    'INTERCEPT_REDIRECTS': False,
-    'SHOW_TOOLBAR_CALLBACK': lambda x: True,
-    'HIDE_DJANGO_SQL': False,
-    'TAG': 'div',
+    'SHOW_TOOLBAR_CALLBACK': "%s.true" % __name__,
     'ENABLE_STACKTRACES': True,
-    #'HIDDEN_STACKTRACE_MODULES': ('gunicorn', 'newrelic'),
 }
+
+MIDDLEWARE_CLASSES.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+INSTALLED_APPS.append('debug_toolbar')
+
+def true(request):
+	'''For the django debug toolbar callback. Returns true to enable it.'''
+	return True
+
