@@ -63,9 +63,3 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the jasmine test runner:
     url(r'^jasmine/', include('harvardcards.apps.jasmine.urls'))
 )
-
-if settings.DEBUG:
-    import debug_toolbar
-    urlpatterns += patterns('',
-        url(r'^__debug__/', include(debug_toolbar.urls)),
-    )
