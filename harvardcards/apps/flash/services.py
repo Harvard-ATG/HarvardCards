@@ -197,7 +197,10 @@ def add_cards_to_deck(deck, card_list):
         for field_item in card_item:
             field_object = fields.get(pk=field_item['field_id'])
             if field_object.field_type == 'I':
-                field_value = upload_img_from_path(field_item['value'], deck, deck.collection)
+                if field_item['value']:
+                    field_value = upload_img_from_path(field_item['value'], deck, deck.collection)
+                else:
+                    field_value = field_item['value']
             else:
                 field_value = field_item['value']
             Cards_Fields.objects.create(card=card, field=field_object, value=field_value)
