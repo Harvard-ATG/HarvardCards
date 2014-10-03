@@ -58,6 +58,7 @@ def edit(request):
         uploaded_file = request.FILES
     
     card_edit_form = CardEditForm(request.POST, uploaded_file, card_fields=card_fields)
+
     if card_edit_form.is_valid():
         card_edit_form.save()
         card = card_edit_form.get_card()
@@ -68,6 +69,7 @@ def edit(request):
             "card_url": "{0}?card_id={1}".format(deck.get_absolute_url(), card.id)
         }
     else:
+        card_edit_form.get_card().delete()
         result['errors'] = card_edit_form.errors
 
     return HttpResponse(json.dumps(result), mimetype="application/json")

@@ -16,6 +16,7 @@ from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, 
 from harvardcards.apps.flash import utils
 from harvardcards.apps.flash import queries
 from harvardcards.settings.common import MEDIA_ROOT, APPS_ROOT
+import imghdr
 
 def delete_collection(collection_id):
     """Deletes a collection and returns true on success, false otherwise."""
@@ -99,6 +100,9 @@ def valid_uploaded_file(uploaded_file, file_type):
     if file_type == 'I':
         try:
             img = Image.open(uploaded_file)
+            img_type = imghdr.what(img)
+            if img_type not in ['rgb', 'gif', 'png', 'bmp', 'gif', 'jpeg']:
+                return False
         except:
             return False
         return True

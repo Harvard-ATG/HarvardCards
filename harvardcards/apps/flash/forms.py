@@ -35,7 +35,6 @@ class CardEditForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         """Initializes the form."""
-
         self.card_fields = kwargs.pop('card_fields', []) # custom: defines fields in this form
 
         super(CardEditForm, self).__init__(*args, **kwargs)
