@@ -31,19 +31,20 @@ function initModule() {
 
 	card_counter.update = $.proxy(card_counter.update, card_counter);
 
-	var _currentCardID=null;
-	var _direction;
-
-	deck_slider.bind("beforeslide", function(slider, card_id) {
-		console.log("beforeslide", card_id);
+	deck_slider.bind("beforeslide", function(slider, data){
 		$cardDetail.find("[data-card-id]").hide(); 
-		_currentCardID = card_id;
+		if(data.toIndex >= data.fromIndex) {
+			deck_slider._slideDirection = "right";
+		} else {
+			deck_slider._slideDirection = "left";
+		}
 	});
-	deck_slider.bind("slide", function(slider, card_id) {
-		console.log("slide", card_id);
-		_direction = ( _currentCardID == null || _currentCardID > card_id) ? "right" : "left";
-		$cardDetail.find("[data-card-id="+card_id+"]").show('slide', {direction: _direction}, 1000);
+	deck_slider.bind("slide", function(slider, data) {
+		var slideOpts = {direction: deck_slider._slideDirection};
+		var animDuration = 500;
+		$cardDetail.find("[data-card-id="+data.card_id+"]").show('slide', slideOpts, animDuration);
 	});
+
 	deck_slider.bind("slide", card_counter.update);
 	deck_slider.goToCurrent();
 	card_counter.update();
