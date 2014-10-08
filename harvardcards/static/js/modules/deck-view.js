@@ -31,11 +31,18 @@ function initModule() {
 
 	card_counter.update = $.proxy(card_counter.update, card_counter);
 
+	var _currentCardID=null;
+	var _direction;
+
 	deck_slider.bind("beforeslide", function(slider, card_id) {
-		$cardDetail.find("[data-card-id]").removeClass("show").addClass("hide");
+		console.log("beforeslide", card_id);
+		$cardDetail.find("[data-card-id]").hide(); 
+		_currentCardID = card_id;
 	});
 	deck_slider.bind("slide", function(slider, card_id) {
-		$cardDetail.find("[data-card-id="+card_id+"]").removeClass("hide").addClass("show");
+		console.log("slide", card_id);
+		_direction = ( _currentCardID == null || _currentCardID > card_id) ? "right" : "left";
+		$cardDetail.find("[data-card-id="+card_id+"]").show('slide', {direction: _direction}, 1000);
 	});
 	deck_slider.bind("slide", card_counter.update);
 	deck_slider.goToCurrent();
