@@ -4,16 +4,16 @@ from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
 from django.core.exceptions import ViewDoesNotExist
 
-from django.utils import simplejson as json
-
 from django.forms.formsets import formset_factory
 from django.forms import widgets
 from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Users_Collections
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm, DeckImportForm
 from harvardcards.apps.flash import services, queries, utils
 from harvardcards.apps.flash.services import check_role
+
 from PIL import Image
 import urllib
+import json
 
 def index(request, deck_id=None):
     """Displays the deck of cards for review/quiz."""
