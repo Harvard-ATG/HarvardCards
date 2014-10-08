@@ -108,7 +108,8 @@ define([
 		if(!this.isValidIndex(index)) {
 			return false;
 		}
-		this.trigger("beforeslide", this, this.currentIndex, index);
+
+		this.trigger("beforeslide", this, this.currentIndex);
 		this._slide(index);
 		this.currentIndex = index;
 		this.trigger("slide", this, index);

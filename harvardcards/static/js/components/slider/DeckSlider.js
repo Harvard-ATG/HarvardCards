@@ -112,10 +112,9 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 	};
 
 	// Handles slider event triggered before the slide.
-	DeckSlider.prototype.onBeforeSlide = function(slider, index, next_index) {
+	DeckSlider.prototype.onBeforeSlide = function(slider, index) {
 		var card_id = this.card_ids[index];
-        var next_card_id = this.card_ids[next_index];
-		this.trigger("beforeslide", this, card_id, next_card_id);
+		this.trigger("beforeslide", this, card_id);
 	};
 
 	// Handles slider event triggered after the slide.
