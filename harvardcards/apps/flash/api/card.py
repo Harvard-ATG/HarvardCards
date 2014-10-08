@@ -13,6 +13,7 @@ from django.utils.datastructures import MultiValueDict
 from django.core.files import File
 from cStringIO import StringIO
 from PIL import Image, ImageFile    
+import imghdr
 
 @require_http_methods(["POST"])
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')
