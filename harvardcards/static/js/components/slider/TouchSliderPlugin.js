@@ -1,4 +1,4 @@
-define(['jquery'], function($) {
+define(['jquery', 'jquery.mobile'], function($) {
 
 	var TRANSITION  = 'transition';
 	var TRANSFORM   = 'transform';
@@ -28,6 +28,7 @@ define(['jquery'], function($) {
 		config = config || {};
 		this.config = config;
 		this.handleTouchEvents = $.proxy(this.handleTouchEvents, this);
+        this.handleTapEvent = $.proxy(this.handleTapEvent, this)
 	};
 
 	// Initializes the plugin.
@@ -53,7 +54,13 @@ define(['jquery'], function($) {
 	// Attaches touch event handles to the slider.
 	TouchSliderPlugin.prototype.attachTouchEvents = function() {
 		$(this.touchEl).on("touchmove touchstart touchend", this.handleTouchEvents);
+        //$(this.touchEl).on("tap", this.handleTapEvent);
 	};
+
+    //Wrapper for jquery tap event handle
+    TouchSliderPlugin.prototype.handleTapEvent = function(evt) {
+        this.slider.goToNext();
+    }
 
 	// Handler for touch events.
 	TouchSliderPlugin.prototype.handleTouchEvents = function(evt) {
