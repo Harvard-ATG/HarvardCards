@@ -99,6 +99,9 @@ def valid_uploaded_file(uploaded_file, file_type):
     if file_type == 'I':
         try:
             img = Image.open(uploaded_file)
+            img_type = (img.format).lower()
+            if img_type not in ['rgb', 'gif', 'png', 'bmp', 'gif', 'jpeg']:
+                return False
         except:
             return False
         return True
