@@ -100,7 +100,6 @@ def valid_uploaded_file(uploaded_file, file_type):
         try:
             img = Image.open(uploaded_file)
             img_type = (img.format).lower()
-            print img_type
             if img_type not in ['rgb', 'gif', 'png', 'bmp', 'gif', 'jpeg']:
                 return False
         except:

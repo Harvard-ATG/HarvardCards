@@ -11,14 +11,18 @@
             <h2>Edit card</h2>
         </div>
         <form id="cardForm" action="{% url 'apiCardEdit' %}" method="post" enctype="multipart/form-data">
-            <div class="formMessage" style="text-align:left;margin:0 0 1em 0; display:none;"></div>
             {% csrf_token %}
             <input type="hidden" name="card_id" value="{{card_id}}" />
             <input type="hidden" name="deck_id" value="{{deck.id}}" />
 
+            <div class="formMessage error" style="display:none"></div>
+
             {% include "decks/_deck_card_form.html" with card_fields=card_fields %}
+
             <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
             <a href="{% url 'deckIndex' deck.id %}" class="adminMenuBtn cancelBtn">Cancel</a>
+
+            <div class="formMessage error" style="display:none"></div>
         </form>
     </div>
 </div>

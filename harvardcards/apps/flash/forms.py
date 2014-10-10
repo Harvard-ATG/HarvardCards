@@ -111,4 +111,4 @@ class CardEditForm(forms.Form):
         for f in self.files:
             is_valid_type = services.valid_uploaded_file(self.files[f], 'I')
             if not is_valid_type:
-                self.errors[f] = "File image type is not supported. Must be JPG or PNG."
+                self.errors[f] = "File image type is not supported. Must be: .jpg, .png, or .gif"
