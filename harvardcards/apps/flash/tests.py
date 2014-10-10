@@ -3,7 +3,6 @@ from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
 from django.core.exceptions import ViewDoesNotExist
 
-from django.utils import simplejson as json
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.forms.formsets import formset_factory
@@ -23,6 +22,7 @@ from harvardcards.settings.common import MEDIA_ROOT
 import os
 import unittest
 import mock
+import json
 
 class CollectionTest(TestCase):
     admin_user = None

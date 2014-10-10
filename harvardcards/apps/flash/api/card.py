@@ -1,6 +1,5 @@
 from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse
-from django.utils import simplejson as json
 
 from harvardcards.apps.flash.models import Collection, Deck, Card, Cards_Fields, Field, Users_Collections
 from harvardcards.apps.flash.forms import CardEditForm
@@ -8,6 +7,7 @@ from harvardcards.apps.flash import services, queries, utils
 from harvardcards.apps.flash.services import check_role
 from django.db import models
 
+import json
 import urllib2
 from django.utils.datastructures import MultiValueDict
 from django.core.files import File
