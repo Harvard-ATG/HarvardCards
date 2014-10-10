@@ -31,12 +31,20 @@ function initModule() {
 
 	card_counter.update = $.proxy(card_counter.update, card_counter);
 
-	deck_slider.bind("beforeslide", function(slider, card_id) {
-		$cardDetail.find("[data-card-id]").removeClass("show").addClass("hide");
+	deck_slider.bind("beforeslide", function(slider, data){
+		$cardDetail.find("[data-card-id]").hide(); 
+		if(data.toIndex >= data.fromIndex) {
+			deck_slider._slideDirection = "right";
+		} else {
+			deck_slider._slideDirection = "left";
+		}
 	});
-	deck_slider.bind("slide", function(slider, card_id) {
-		$cardDetail.find("[data-card-id="+card_id+"]").removeClass("hide").addClass("show");
+	deck_slider.bind("slide", function(slider, data) {
+		var slideOpts = {direction: deck_slider._slideDirection};
+		var animDuration = 500;
+		$cardDetail.find("[data-card-id="+data.card_id+"]").show('slide', slideOpts, animDuration);
 	});
+
 	deck_slider.bind("slide", card_counter.update);
 	deck_slider.goToCurrent();
 	card_counter.update();
