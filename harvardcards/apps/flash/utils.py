@@ -13,7 +13,7 @@ import StringIO
 # For excel reading/writing
 import xlrd, xlwt
 
-def parse_deck_template_file(card_template, file_contents, img_mapping=None):
+def parse_deck_template_file(card_template, file_contents, mappings=None):
     """Parses a spreadsheet into a list of cards."""
     fields = card_template.fields.all().order_by('sort_order')
     nfields = len(fields)
@@ -26,8 +26,11 @@ def parse_deck_template_file(card_template, file_contents, img_mapping=None):
         card = []
         for col_index in range(nfields):
             val = sheet.cell(row_index, col_index).value
-            if fields[col_index].get_field_type() ==  'I' and img_mapping is not None:
-                val = img_mapping.get(val, '')
+            if mappings is not None:
+                if fields[col_index].get_field_type() ==  'I':
+                    val = mappings['Image'].get(val, '')
+                if fields[col_index].get_field_type() ==  'A':
+                    val = mappings['Audio'].get(val, '')
             card.append({
                 "field_id": fields[col_index].id,
                 "value": val,

@@ -18,6 +18,7 @@ from harvardcards.apps.flash import queries
 from harvardcards.settings.common import MEDIA_ROOT, APPS_ROOT
 import zipfile
 from StringIO import StringIO
+from mutagen.mp3 import MP3
 
 def delete_collection(collection_id):
     """Deletes a collection and returns true on success, false otherwise."""
@@ -108,6 +109,7 @@ def valid_uploaded_file(uploaded_file, file_type):
             return False
         return True
 
+
 def handle_media_folders(collection, deck, file_name):
     # create the MEDIA_ROOT folder if it doesn't exist
     if not os.path.exists(MEDIA_ROOT):
@@ -160,26 +162,40 @@ def upload_img_from_path(path_original, deck, collection):
     return os.path.join(dir_name, file_name)
 
 
+def handle_zipped_deck_file(deck, uploaded_file):
+    mappings = {'Image':{}, 'Audio':{}}
+    zfile = zipfile.ZipFile(uploaded_file, 'r')
+    file_names = zfile.namelist()
+    for file in file_names:
+        data = zfile.read(file)
+        if os.path.splitext(file)[1][1:].strip().lower() in ['xls', 'xlsx']:
+            file_contents = data
+
+        elif valid_uploaded_file(StringIO(data), 'I'):
+            img = Image.open(StringIO(data))
+            [full_path, path, dir_name, file_name] = handle_media_folders(deck.collection.id, deck.id, file)
+            img.save(full_path)
+            resize_uploaded_img(path, file_name, dir_name)
+            mappings['Image'][file] = os.path.join(dir_name, file_name)
+
+        elif os.path.splitext(file)[1][1:].strip().lower() in ['mp3']:
+            [full_path, path, dir_name, file_name] = handle_media_folders(deck.collection.id, deck.id, file)
+            zfile.extract(file, os.path.join(path, 'temp_dir'))
+            os.rename(os.path.join(path, 'temp_dir', file), os.path.join(path, 'temp_dir', file_name))
+            shutil.move(os.path.join(path, 'temp_dir', file_name), os.path.join(path, file_name))
+            mappings['Audio'][file] = os.path.join(dir_name, file_name)
+
+    return [file_contents, mappings]
+
 def handle_uploaded_deck_file(deck, uploaded_file):
     """Handles an uploaded deck file."""
     file_contents = uploaded_file.read()
-    img_mapping = None
-    if zipfile.is_zipfile(uploaded_file):
-        zfile = zipfile.ZipFile(uploaded_file, 'r')
-        file_names = zfile.namelist()
-        img_mapping = {}
-        for file in file_names:
-            data = zfile.read(file)
-            if os.path.splitext(file)[1][1:].strip().lower() in ['xls', 'xlsx']:
-                file_contents = data
+    mappings = None
 
-            elif valid_uploaded_file(StringIO(data), 'I'):
-                img = Image.open(StringIO(data))
-                [full_path, path, dir_name, file_name] = handle_media_folders(deck.collection.id, deck.id, file)
-                img.save(full_path)
-                resize_uploaded_img(path, file_name, dir_name)
-                img_mapping[file] = os.path.join(dir_name, file_name)
-    parsed_cards = utils.parse_deck_template_file(deck.collection.card_template, file_contents, img_mapping)
+    if zipfile.is_zipfile(uploaded_file):
+        [file_contents, mappings] = handle_zipped_deck_file(deck, uploaded_file)
+
+    parsed_cards = utils.parse_deck_template_file(deck.collection.card_template, file_contents, mappings)
     add_cards_to_deck(deck, parsed_cards)
  
 @transaction.commit_on_success
