@@ -36,14 +36,6 @@ class CollectionAdmin(admin.ModelAdmin):
     inlines = (UsersInLine,)
 
 
-def user_unicode(self):
-    return self.email
-
-User.__unicode__ = user_unicode
-
-admin.site.unregister(User)
-admin.site.register(User)
-
 admin.site.register(Collection, CollectionAdmin)
 admin.site.register(Field)
 admin.site.register(Card, CardAdmin)

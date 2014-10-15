@@ -80,17 +80,22 @@ define(['lodash', 'jquery', 'jquery.form'], function(_, $, $form) {
 
 	// Displays a message about the status of the form.
 	CardForm.prototype.msg = function(html, statusType) {
-		this.formMessageEl.css('display', 'block');
-		var css, css_for = {};
-		css_for[MSG_SUCCESS] = {color:"green"};
-		css_for[MSG_ERROR] = {color:"red"};
-		css_for[MSG_INFO] = {color:"black"};
+		var el = this.formMessageEl, css, css_for = {};
+
+		css_for[MSG_SUCCESS] = {cls:"success"};
+		css_for[MSG_ERROR] = {cls:"error"};
+		css_for[MSG_INFO] = {cls:"info"};
 
 		css = css_for[statusType];
 		if(!css) {
 			css = css_for[MSG_INFO];
 		}
-		this.formMessageEl.css(css).html(html);
+
+		el.css('display', 'none');
+		el.removeClass('success error info');
+		el.addClass(css.cls);
+		el.html(html);
+		el.css('display', 'block');
 	};
 
 	return CardForm;

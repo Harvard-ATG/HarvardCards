@@ -185,7 +185,7 @@ class Users_Collections(models.Model):
         role_buckets = dict([(bucket, []) for bucket in self.role_map.values()])
         
         if not collections:
-            collections = Collection.objects.all()
+            collections = Collection.objects.only('id')
 
         user_collections = dict([
             (item.collection_id, item.role)

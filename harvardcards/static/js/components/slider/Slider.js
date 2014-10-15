@@ -109,7 +109,7 @@ define([
 			return false;
 		}
 
-		this.trigger("beforeslide", this, this.currentIndex);
+		this.trigger("beforeslide", this, this.currentIndex, index);
 		this._slide(index);
 		this.currentIndex = index;
 		this.trigger("slide", this, index);

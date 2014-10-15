@@ -4,29 +4,29 @@ from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
 from django.core.exceptions import ViewDoesNotExist
 
-from django.utils import simplejson as json
-
 from django.forms.formsets import formset_factory
 from django.forms import widgets
 from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Users_Collections
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm, DeckImportForm
 from harvardcards.apps.flash import services, queries, utils
 from harvardcards.apps.flash.services import check_role
+
 from PIL import Image
 import urllib
+import json
 
 def index(request, deck_id=None):
     """Displays the deck of cards for review/quiz."""
 
     deck = Deck.objects.get(id=deck_id)
     deck_cards = Decks_Cards.objects.filter(deck=deck).order_by('sort_order').prefetch_related('card__cards_fields_set__field')
-    current_collection = Collection.objects.get(id=deck.collection.id)
+    current_collection = deck.collection 
 
     role_bucket = services.get_or_update_role_bucket(request)
     collection_list = queries.getCollectionList(role_bucket)
 
     is_quiz_mode = request.GET.get('mode') == 'quiz'
-    is_deck_admin = deck.collection.id in role_bucket['ADMINISTRATOR']
+    is_deck_admin = current_collection.id in role_bucket['ADMINISTRATOR']
     card_id = request.GET.get('card_id', '')
 
     cards = []
@@ -78,7 +78,7 @@ def upload_deck(request, deck_id=None):
     '''
     
     deck = Deck.objects.get(id=deck_id)
-    current_collection = Collection.objects.get(id=deck.collection.id)
+    current_collection = deck.collection
 
     role_bucket = services.get_or_update_role_bucket(request)
     collection_list = queries.getCollectionList(role_bucket)
@@ -121,7 +121,7 @@ def create_edit_card(request, deck_id=None):
     IMAGE_UPLOAD_TYPE = (('F', 'File'),('U', 'URL'))
 
     deck = Deck.objects.get(id=deck_id)
-    current_collection = Collection.objects.get(id=deck.collection.id)
+    current_collection = deck.collection
     card_color_select = widgets.Select(attrs=None, choices=Card.COLOR_CHOICES)
     image_upload_select = widgets.Select(attrs= {'onchange' :'switch_upload_image_type(this)'}, choices=IMAGE_UPLOAD_TYPE)
 

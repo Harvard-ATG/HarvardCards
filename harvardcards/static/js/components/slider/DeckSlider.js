@@ -112,16 +112,16 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 	};
 
 	// Handles slider event triggered before the slide.
-	DeckSlider.prototype.onBeforeSlide = function(slider, index) {
-		var card_id = this.card_ids[index];
-		this.trigger("beforeslide", this, card_id);
+	DeckSlider.prototype.onBeforeSlide = function(slider, fromIndex, toIndex) {
+		var card_id = this.card_ids[fromIndex];
+		this.trigger("beforeslide", this, {fromIndex:fromIndex, toIndex:toIndex, card_id:card_id});
 	};
 
 	// Handles slider event triggered after the slide.
 	DeckSlider.prototype.onSlide = function(slider, index) {
 		var card_id = this.card_ids[index];
 		this.selectCard(card_id);
-		this.trigger("slide", this, card_id);
+		this.trigger("slide", this, {index:index, card_id:card_id});
 	};
 
 	// Handles a click on a card element.
@@ -160,8 +160,10 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 
 	// Returns the current card number.
 	DeckSlider.prototype.getCurrentCardNum = function() {
-		return this.slider.getCurrentIndex() + 1;
+        var card = this.findByCardId(this.getCurrentCardId());
+		return card.data('card-num');
 	};
+
 
 	// Returns true if the element is a card, false otherwise.
 	DeckSlider.prototype.isCard = function(el) {

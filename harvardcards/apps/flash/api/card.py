@@ -1,6 +1,5 @@
 from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse
-from django.utils import simplejson as json
 
 from harvardcards.apps.flash.models import Collection, Deck, Card, Cards_Fields, Field, Users_Collections
 from harvardcards.apps.flash.forms import CardEditForm
@@ -8,11 +7,13 @@ from harvardcards.apps.flash import services, queries, utils
 from harvardcards.apps.flash.services import check_role
 from django.db import models
 
+import json
 import urllib2
 from django.utils.datastructures import MultiValueDict
 from django.core.files import File
 from cStringIO import StringIO
 from PIL import Image, ImageFile    
+import imghdr
 
 @require_http_methods(["POST"])
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')
@@ -58,6 +59,7 @@ def edit(request):
         uploaded_file = request.FILES
     
     card_edit_form = CardEditForm(request.POST, uploaded_file, card_fields=card_fields)
+
     if card_edit_form.is_valid():
         card_edit_form.save()
         card = card_edit_form.get_card()
@@ -68,6 +70,7 @@ def edit(request):
             "card_url": "{0}?card_id={1}".format(deck.get_absolute_url(), card.id)
         }
     else:
+        card_edit_form.get_card().delete()
         result['errors'] = card_edit_form.errors
 
     return HttpResponse(json.dumps(result), mimetype="application/json")
