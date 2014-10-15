@@ -107,7 +107,7 @@ define(['jquery'], function($) {
 	};
 	
 	// Handles a tap.
-	TouchSliderPlugin.prototoype.tap = function() {
+	TouchSliderPlugin.prototype.tap = function() {
 		this.slider.goToNext();
 	};
 
