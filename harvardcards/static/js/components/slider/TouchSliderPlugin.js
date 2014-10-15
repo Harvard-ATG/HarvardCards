@@ -97,22 +97,22 @@ define(['jquery'], function($) {
 	};
 
 	// Checks if the swipe was to the left.
-	TouchSlider.prototype.isSwipeLeft = function() {
+	TouchSliderPlugin.prototype.isSwipeLeft = function() {
 		return this.lastPos.x - this.startPos.x > this.swipeWidth;
 	};
 
 	// Checks if the swipe was to the right.
-	TouchSlider.prototype.isSwipeRight = function() {
+	TouchSliderPlugin.prototype.isSwipeRight = function() {
 		return this.lastPos.x - this.startPos.x < -this.swipeWidth;
 	};
 	
 	// Handles a tap.
-	TouchSlider.prototoype.tap = function() {
+	TouchSliderPlugin.prototoype.tap = function() {
 		this.slider.goToNext();
 	};
 
 	// Helper to initiate a timer to check for a tap event
-	TouchSlider.prototype.startTapTimer = function() {
+	TouchSliderPlugin.prototype.startTapTimer = function() {
 		setTimeout(this.checkTapEvent, 200);
 	};
 
