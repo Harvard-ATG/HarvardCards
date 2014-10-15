@@ -108,7 +108,9 @@ def valid_uploaded_file(uploaded_file, file_type):
         except:
             return False
         return True
-
+    if file_type == 'A':
+        # need a better method to check for validity
+        return os.path.splitext(uploaded_file)[1][1:].strip().lower() in ['mp3']
 
 def handle_media_folders(collection, deck, file_name):
     # create the MEDIA_ROOT folder if it doesn't exist
@@ -178,7 +180,7 @@ def handle_zipped_deck_file(deck, uploaded_file):
             resize_uploaded_img(path, file_name, dir_name)
             mappings['Image'][file] = os.path.join(dir_name, file_name)
 
-        elif os.path.splitext(file)[1][1:].strip().lower() in ['mp3']:
+        elif valid_uploaded_file(file, 'A'):
             [full_path, path, dir_name, file_name] = handle_media_folders(deck.collection.id, deck.id, file)
             zfile.extract(file, os.path.join(path, 'temp_dir'))
             os.rename(os.path.join(path, 'temp_dir', file), os.path.join(path, 'temp_dir', file_name))
