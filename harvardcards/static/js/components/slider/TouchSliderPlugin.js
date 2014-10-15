@@ -114,7 +114,7 @@ define(['jquery'], function($) {
 	// Helper to initiate a timer to check for a tap event
 	TouchSlider.prototype.startTapTimer = function() {
 		setTimeout(this.checkTapEvent, 200);
-	});
+	};
 
 	// Helper to check if a "tap" is detected
 	TouchSliderPlugin.prototype.checkTapEvent = function() {
