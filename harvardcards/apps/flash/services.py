@@ -16,6 +16,8 @@ from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, 
 from harvardcards.apps.flash import utils
 from harvardcards.apps.flash import queries
 from harvardcards.settings.common import MEDIA_ROOT, APPS_ROOT
+import zipfile
+from StringIO import StringIO
 
 def delete_collection(collection_id):
     """Deletes a collection and returns true on success, false otherwise."""
@@ -161,7 +163,23 @@ def upload_img_from_path(path_original, deck, collection):
 def handle_uploaded_deck_file(deck, uploaded_file):
     """Handles an uploaded deck file."""
     file_contents = uploaded_file.read()
-    parsed_cards = utils.parse_deck_template_file(deck.collection.card_template, file_contents)
+    img_mapping = None
+    if zipfile.is_zipfile(uploaded_file):
+        zfile = zipfile.ZipFile(uploaded_file, 'r')
+        file_names = zfile.namelist()
+        img_mapping = {}
+        for file in file_names:
+            data = zfile.read(file)
+            if os.path.splitext(file)[1][1:].strip().lower() in ['xls', 'xlsx']:
+                file_contents = data
+
+            elif valid_uploaded_file(StringIO(data), 'I'):
+                img = Image.open(StringIO(data))
+                [full_path, path, dir_name, file_name] = handle_media_folders(deck.collection.id, deck.id, file)
+                img.save(full_path)
+                resize_uploaded_img(path, file_name, dir_name)
+                img_mapping[file] = os.path.join(dir_name, file_name)
+    parsed_cards = utils.parse_deck_template_file(deck.collection.card_template, file_contents, img_mapping)
     add_cards_to_deck(deck, parsed_cards)
  
 @transaction.commit_on_success
@@ -199,13 +217,13 @@ def add_cards_to_deck(deck, card_list):
         Decks_Cards.objects.create(deck=deck, card=card, sort_order=deck_sort_order)
         for field_item in card_item:
             field_object = fields.get(pk=field_item['field_id'])
-            if field_object.field_type == 'I':
-                if field_item['value']:
-                    field_value = upload_img_from_path(field_item['value'], deck, deck.collection)
-                else:
-                    field_value = field_item['value']
-            else:
-                field_value = field_item['value']
+            #if field_object.field_type == 'I':
+            #    if field_item['value']:
+            #        field_value = upload_img_from_path(field_item['value'], deck, deck.collection)
+            #    else:
+            #        field_value = field_item['value']
+            #else:
+            field_value = field_item['value']
             Cards_Fields.objects.create(card=card, field=field_object, value=field_value)
     return deck
 

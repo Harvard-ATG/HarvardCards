@@ -12,7 +12,15 @@
         </div>
 
         <div style="margin: 0 0 1em 0">
-              Add cards to the <a href="{% url 'collectionDownloadTemplate' collection.id %}">flashcard template <i class="fa fa-download"></i></a> and then upload it using the form below.
+            <div>
+            Add cards to the <a href="{% url 'collectionDownloadTemplate' collection.id %}">flashcard template
+            <i class="fa fa-download"></i></a> and then upload it using the form below.
+            </div>
+            <br />
+            <div>
+            If the cards have images as fields, add the image files to the same folder as the template and upload the zipped folder
+            using the same form below. Make sure to input the image file names only when completing the template.
+            </div>
         </div>
 
         <form action="{% url 'deckUpload' deck.id %}?deck_id={{ deck.id }}" method="post" {% if deck_form.is_multipart %}enctype="multipart/form-data"{% endif %}>{% csrf_token %}
