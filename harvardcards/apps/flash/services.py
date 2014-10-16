@@ -230,8 +230,9 @@ def create_card_in_deck(deck):
 def create_deck(collection_id, deck_title):
     collection = Collection.objects.get(id=collection_id)
     result = Deck.objects.aggregate(Max('sort_order'))
-    max_sort_order = result['sort_order__max']
-    deck = Deck.objects.create(title=deck_title, collection=collection, sort_order=max_sort_order + 1)
+    sort_order = result.get('sort_order__max', 0)
+    sort_order = sort_order + 1
+    deck = Deck.objects.create(title=deck_title, collection=collection, sort_order=sort_order)
     return deck
 
 def check_role(roles, entity_type):
