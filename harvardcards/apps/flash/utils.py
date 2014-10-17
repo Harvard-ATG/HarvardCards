@@ -13,23 +13,24 @@ import StringIO
 # For excel reading/writing
 import xlrd, xlwt
 
-def parse_deck_template_file(card_template, file_contents):
+def parse_deck_template_file(card_template, file_contents, img_mapping=None):
     """Parses a spreadsheet into a list of cards."""
     fields = card_template.fields.all().order_by('sort_order')
     nfields = len(fields)
-
     workbook = xlrd.open_workbook(file_contents=file_contents)
     sheet = workbook.sheet_by_index(0)
-
     cards = []
     for row_index in range(sheet.nrows):
         if row_index == 0:
             continue # Skip header row
         card = []
         for col_index in range(nfields):
+            val = sheet.cell(row_index, col_index).value
+            if fields[col_index].get_field_type() ==  'I' and img_mapping is not None:
+                val = img_mapping.get(val, '')
             card.append({
                 "field_id": fields[col_index].id,
-                "value": sheet.cell(row_index, col_index).value,
+                "value": val,
             })
         cards.append(card)
 
