@@ -84,7 +84,7 @@ class Deck(models.Model):
     class Meta:
         verbose_name = 'Deck'
         verbose_name_plural = 'Decks'
-        ordering = ["sort_order"]
+        ordering = ["sort_order","title"]
 
     def __unicode__(self):
         return self.title
