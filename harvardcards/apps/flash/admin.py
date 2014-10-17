@@ -23,7 +23,7 @@ class CardsInLine(admin.StackedInline):
     model=Decks_Cards
 
 class DeckAdmin(admin.ModelAdmin):
-    list_display = ('title', 'collection')
+    list_display = ('title', 'collection', 'sort_order')
     inlines=(CardsInLine,)
 
 class UsersInLine(admin.StackedInline):

@@ -12,7 +12,7 @@ class Field(models.Model):
     field_type = models.CharField(max_length=1, choices=FIELD_TYPES)
     show_label = models.BooleanField()
     display = models.BooleanField()
-    sort_order = models.IntegerField()
+    sort_order = models.IntegerField(default=1)
     example_value = models.CharField(max_length=500, blank=True)
 
     class Meta:
@@ -41,7 +41,6 @@ class Collection(models.Model):
     description = models.TextField(blank=True)
     users = models.ManyToManyField(User, through='Users_Collections')
     card_template = models.ForeignKey(CardTemplate)
-
     private = models.BooleanField(default=True)
 
     class Meta:
@@ -69,7 +68,7 @@ class Card(models.Model):
         ("white", "White"),
     )
     collection = models.ForeignKey(Collection)
-    sort_order = models.IntegerField()
+    sort_order = models.IntegerField(default=1)
     fields = models.ManyToManyField(Field, through='Cards_Fields')
     color = models.CharField(max_length=12, choices=COLOR_CHOICES, default=DEFAULT_COLOR)
 
@@ -80,6 +79,12 @@ class Deck(models.Model):
     title = models.CharField(max_length=200)
     collection = models.ForeignKey(Collection)
     cards = models.ManyToManyField(Card, through='Decks_Cards')
+    sort_order = models.IntegerField(default=1)
+
+    class Meta:
+        verbose_name = 'Deck'
+        verbose_name_plural = 'Decks'
+        ordering = ["sort_order","title"]
 
     def __unicode__(self):
         return self.title
@@ -94,7 +99,7 @@ class Deck(models.Model):
 class Decks_Cards(models.Model):
     deck = models.ForeignKey(Deck)
     card = models.ForeignKey(Card)
-    sort_order = models.IntegerField()
+    sort_order = models.IntegerField(default=1)
 
     class Meta:
         verbose_name = 'Deck Cards'
@@ -107,9 +112,6 @@ class Decks_Cards(models.Model):
 class Cards_Fields(models.Model):
     card = models.ForeignKey(Card)
     field = models.ForeignKey(Field)
-    # if field.get_field_type() == 'I':
-    #     value = models.FileField(upload_to='documents/%Y/%m/%d')
-    # else:
     value = models.CharField(max_length=500)
 
     class Meta:
