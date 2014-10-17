@@ -163,9 +163,13 @@ def upload_img_from_path(path_original, deck, collection):
 
 def handle_uploaded_deck_file(deck, uploaded_file):
     """Handles an uploaded deck file."""
-    file_contents = uploaded_file.read()
+    cached_file_contents = uploaded_file.read()
     img_mapping = None
-    if zipfile.is_zipfile(uploaded_file):
+
+    # NOTE: replaced the zipfile.is_zipfile() check with a try..except block
+    # because is_zipfile was throwing this error on sharedhosting:
+    # "coercing to Unicode: need string or buffer, InMemoryUploadedFile found is_zipfile"
+    try:
         zfile = zipfile.ZipFile(uploaded_file, 'r')
         file_names = zfile.namelist()
         img_mapping = {}
@@ -180,6 +184,8 @@ def handle_uploaded_deck_file(deck, uploaded_file):
                 img.save(full_path)
                 resize_uploaded_img(path, file_name, dir_name)
                 img_mapping[file] = os.path.join(dir_name, file_name)
+    except zipfile.BadZipfile:
+        file_contents = cached_file_contents
     parsed_cards = utils.parse_deck_template_file(deck.collection.card_template, file_contents, img_mapping)
     add_cards_to_deck(deck, parsed_cards)
  
