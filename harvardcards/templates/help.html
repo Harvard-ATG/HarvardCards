@@ -1,1 +1,46 @@
-This is a placeholder for help.
+{% extends "__base.html" %}
+
+{% block content %}
+<div class="sectionWrapper">
+<div class="section">
+<div class="contentWrapper">
+<div class="help-content">
+
+<h2>HarvardCards</h2>
+<p>HarvardCards is a flashcard application to help learners memorize vocabulary, images, or other information. </p>
+
+<h2>The Basic Concepts (Collection/Deck/Card)</h2>
+<p>HarvardCards has three key concepts that are helpful to understand, <b>Collections</b>, <b>Decks</b>, and <b>Cards</b>.</p>
+
+<p>
+<b>Collection</b>: 
+The first step an instructor will take when setting up Harvard Cards will be to create and name a Collection.  A Collection is like the "folder" concept in personal computers. However, instead of containing files, it will contain "Decks".  A Collection will often be created that corresponds to a particular course (and will often given the name of the course, such as, French 101).  Only after the Collection is created, will the instructor create Decks of Cards that will exist within that Collection.
+</p>
+
+<p>
+<b>Deck</b>:
+ As mentioned above, a Collection will contain any number of Decks. After the instructor creates a Collection, in the example, let's say the Collection is named, "French 101". The next step will be to add one or more Decks, which correspond to groups of cards.  So to extend the French 10 example, a deck may be created the contains all the verbs from Chapter 1, and that Deck might be given the name, "verbs". 
+</p>
+
+<p>
+<b>Card</b>:
+Just as <b>Collections</b> contain <b>Decks</b>, <b>Decks</b> contain <b>Cards</b>.  The Card is the most basic item in the application, and is analogous to a 3 x 5 card you may have used as a student. So, in the above example, where a Deck has been created called "verbs", you can imagine individual Cards being created, one for each verb to be studied.  
+</p>
+
+<p>
+<b>To recap</b>:
+A <b>Collection</b> is a grouping of any number of <b>Decks</b>, and often corresponds to a course.  A <b>Deck</b> is a grouping containing any number of <b>Cards</b>, usually a deck contains a logical grouping, such as vocabulary from a particular chapter. A Card, the most basic unit, corresponds to an item being studied, such as a vocabulary word, or an image in an art history class. When using the application, the steps to set up your course will be to create a Collection, then create one or more Decks. Finally, you will either manually add cards to the Deck, or batch upload cards to a Deck. 
+</p>
+
+<h2>Getting Started</h2>
+<p>TODO...</p>
+
+<h2>A word about templates</h2>
+<p>TODO...</p>
+
+</div>
+</div>
+</div>
+</div>
+
+{% endblock %}

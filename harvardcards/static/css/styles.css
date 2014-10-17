@@ -856,7 +856,18 @@ a#mobileMenu{
 #cardTemplateContainer .field-label:after { content: ":"; }
 #cardTemplateContainer .field-value { color: darkgray; }
 
-/********** help list ************/
+/********** help styling ***********/
+.help-content {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size: 1em;
+	line-height: 1;
+	font-weight: normal;
+	text-align: left;
+	color: #464646;
+	margin: 1em 0;
+}
+.help-content p { margin: 1em 0; }
+.help-content b { font-weight: bold; }
 ol.help {
 	list-style-type:none;
 	list-style-type: decimal !ie; /* IE 7- hack */
