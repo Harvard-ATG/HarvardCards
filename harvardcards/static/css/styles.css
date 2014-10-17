@@ -901,6 +901,18 @@ ol.help > li:before {
 	content: counter(ol-counter);
 	counter-increment: ol-counter;
 }
+ol.help > li > ol {
+	position: relative;
+	list-style-type: none;
+	list-style-type: lower-alpha;
+	margin-left: 3em;
+}
+ol.help > li > ol > li > ol {
+	position: relative;
+	list-style-type: none;
+	list-style-type: lower-roman;
+	margin-left: 3em;
+}
 
 /********** misc utils *************/
 .errorlist {
