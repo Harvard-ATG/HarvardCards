@@ -13,4 +13,5 @@ install: "pip install -r requirements.txt --use-mirrors"
 
 script: 
     - python manage.py syncdb --noinput
+    - python manage.py migrate --noinput
     - nosetests
