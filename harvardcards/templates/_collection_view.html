@@ -10,7 +10,7 @@
             <ul class="adminMenu adminMenuRight">
                 <li><a class="adminMenuBtn hidden-mobile" href="{% url 'collectionEdit' collection.id %}?collection_id={{collection.id}}"><i class="fa fa-pencil"></i> Edit</a></li>
                 <li><a class="adminMenuBtn hidden-mobile" href="{% url 'collectionDelete' collection.id %}?collection_id={{collection.id}}" data-confirm="Are you sure you want to delete: {{collection.title|escape}}?"><i class="fa fa-times-circle"></i> Delete</a></li>
-                <li><a class="adminMenuBtn hidden-mobile" href="/help"><i class="fa fa-question-circle"></i> Help</a></li>
+				<li><a class="adminMenuBtn hidden-mobile" href="{% url 'help' %}"><i class="fa fa-question-circle"></i> Help</a></li>
                 <li><a class="adminMenuBtn hidden-mobile" href="{% url 'collectionShare' collection.id %}?collection_id={{collection.id}}"><i class="fa fa-share"></i> Share</a></li>
             </ul>
         {% endif %}
