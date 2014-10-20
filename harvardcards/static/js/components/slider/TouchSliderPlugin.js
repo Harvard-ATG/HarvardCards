@@ -25,8 +25,13 @@ define(['jquery'], function($) {
 	 *      plugin.init(slider);
 	 */
 	var TouchSliderPlugin = function(config) {
-		config = config || {};
-		this.config = config;
+		var defaultConfig = {
+			touchEl: null,
+			enableTap: false,
+			enableSwipe: true
+		};
+
+		this.config = $.extend({}, defaultConfig, config);
 		this.handleTouchEvents = $.proxy(this.handleTouchEvents, this);
 		this.checkTapEvent = $.proxy(this.checkTapEvent, this);
 		this.swipeWidth = 50; // amount to swipe to trigger a swipe event
@@ -71,7 +76,9 @@ define(['jquery'], function($) {
 				this.startPos = {x:x,y:y};
 				this.lastPos = {x:x,y:y};
 				this.touchStarted = true;
-				this.startTapTimer();
+				if(this.isTapEnabled()) {
+					this.startTapTimer();
+				}
 				break;
 			case 'touchmove':
 				x = e.touches[0].clientX;
@@ -82,10 +89,12 @@ define(['jquery'], function($) {
 			case 'touchend':
 			case 'touchcancel':
 				this.touchStarted = false;
-				if(this.isSwipeLeft()) {
-					this.slider.goToPrev();
-				} else if(this.isSwipeRight()) {
-					this.slider.goToNext();
+				if(this.isSwipeEnabled()) {
+					if(this.isSwipeLeft()) {
+						this.slider.goToPrev();
+					} else if(this.isSwipeRight()) {
+						this.slider.goToNext();
+					}
 				}
 				break;
 			default:
@@ -94,6 +103,16 @@ define(['jquery'], function($) {
 		}
 
 		return true;
+	};
+
+	// Checks if tapping is enabled.
+	TouchSliderPlugin.prototype.isTapEnabled = function() {
+		return this.config.enableTap ? true : false;
+	};
+
+	// Checks if swiping is enabled.
+	TouchSliderPlugin.prototype.isSwipeEnabled = function() {
+		return this.config.enableSwipe ? true : false;
 	};
 
 	// Checks if the swipe was to the left.
