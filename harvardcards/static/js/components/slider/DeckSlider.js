@@ -59,7 +59,11 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 					maxShowItems: 4
 				},
 				keyboard: {},
-				touch: {touchEl: '#singleCardHolder'}
+				touch: {
+					touchEl: '#singleCardHolder',
+					enableTap:false,
+					enableSwipe:true
+				}
 			}
 		});
 
