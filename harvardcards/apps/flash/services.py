@@ -9,6 +9,7 @@ from functools import wraps
 from  PIL import Image
 
 from django.db import transaction
+from django.db.models import Avg, Max, Min
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError, PermissionDenied
 
@@ -16,6 +17,8 @@ from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, 
 from harvardcards.apps.flash import utils
 from harvardcards.apps.flash import queries
 from harvardcards.settings.common import MEDIA_ROOT, APPS_ROOT
+import zipfile
+from StringIO import StringIO
 
 def delete_collection(collection_id):
     """Deletes a collection and returns true on success, false otherwise."""
@@ -160,8 +163,30 @@ def upload_img_from_path(path_original, deck, collection):
 
 def handle_uploaded_deck_file(deck, uploaded_file):
     """Handles an uploaded deck file."""
-    file_contents = uploaded_file.read()
-    parsed_cards = utils.parse_deck_template_file(deck.collection.card_template, file_contents)
+    cached_file_contents = uploaded_file.read()
+    img_mapping = None
+
+    # NOTE: replaced the zipfile.is_zipfile() check with a try..except block
+    # because is_zipfile was throwing this error on sharedhosting:
+    # "coercing to Unicode: need string or buffer, InMemoryUploadedFile found is_zipfile"
+    try:
+        zfile = zipfile.ZipFile(uploaded_file, 'r')
+        file_names = zfile.namelist()
+        img_mapping = {}
+        for file in file_names:
+            data = zfile.read(file)
+            if os.path.splitext(file)[1][1:].strip().lower() in ['xls', 'xlsx']:
+                file_contents = data
+
+            elif valid_uploaded_file(StringIO(data), 'I'):
+                img = Image.open(StringIO(data))
+                [full_path, path, dir_name, file_name] = handle_media_folders(deck.collection.id, deck.id, file)
+                img.save(full_path)
+                resize_uploaded_img(path, file_name, dir_name)
+                img_mapping[file] = os.path.join(dir_name, file_name)
+    except zipfile.BadZipfile:
+        file_contents = cached_file_contents
+    parsed_cards = utils.parse_deck_template_file(deck.collection.card_template, file_contents, img_mapping)
     add_cards_to_deck(deck, parsed_cards)
  
 @transaction.commit_on_success
@@ -199,13 +224,13 @@ def add_cards_to_deck(deck, card_list):
         Decks_Cards.objects.create(deck=deck, card=card, sort_order=deck_sort_order)
         for field_item in card_item:
             field_object = fields.get(pk=field_item['field_id'])
-            if field_object.field_type == 'I':
-                if field_item['value']:
-                    field_value = upload_img_from_path(field_item['value'], deck, deck.collection)
-                else:
-                    field_value = field_item['value']
-            else:
-                field_value = field_item['value']
+            #if field_object.field_type == 'I':
+            #    if field_item['value']:
+            #        field_value = upload_img_from_path(field_item['value'], deck, deck.collection)
+            #    else:
+            #        field_value = field_item['value']
+            #else:
+            field_value = field_item['value']
             Cards_Fields.objects.create(card=card, field=field_object, value=field_value)
     return deck
 
@@ -213,7 +238,7 @@ def add_cards_to_deck(deck, card_list):
 def create_deck_with_cards(collection_id, deck_title, card_list):
     """Creates and populates a new deck with cards."""
     collection = Collection.objects.get(id=collection_id)
-    deck = Deck.objects.create(title=deck_title, collection=collection)
+    deck = create_deck(collection_id, deck_title)
     add_cards_to_deck(deck, card_list)
     return deck
 
@@ -225,6 +250,17 @@ def create_card_in_deck(deck):
     card = Card.objects.create(collection=deck.collection, sort_order=card_sort_order)
     Decks_Cards.objects.create(deck=deck, card=card, sort_order=deck_sort_order)
     return card
+
+def create_deck(collection_id, deck_title):
+    collection = Collection.objects.get(id=collection_id)
+    result = Deck.objects.filter(collection=collection).aggregate(Max('sort_order'))
+    sort_order = result['sort_order__max']
+    if sort_order is None:
+        sort_order = 1
+    else:
+        sort_order = sort_order + 1
+    deck = Deck.objects.create(title=deck_title, collection=collection, sort_order=sort_order)
+    return deck
 
 def check_role(roles, entity_type):
     """
