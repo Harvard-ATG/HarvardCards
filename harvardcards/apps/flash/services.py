@@ -18,7 +18,6 @@ from harvardcards.apps.flash import queries
 from harvardcards.settings.common import MEDIA_ROOT, APPS_ROOT
 import zipfile
 from StringIO import StringIO
-from mutagen.mp3 import MP3
 
 def delete_collection(collection_id):
     """Deletes a collection and returns true on success, false otherwise."""
@@ -191,11 +190,13 @@ def handle_zipped_deck_file(deck, uploaded_file):
 
 def handle_uploaded_deck_file(deck, uploaded_file):
     """Handles an uploaded deck file."""
-    file_contents = uploaded_file.read()
+    cached_file_contents = uploaded_file.read()
     mappings = None
 
-    if zipfile.is_zipfile(uploaded_file):
+    try:
         [file_contents, mappings] = handle_zipped_deck_file(deck, uploaded_file)
+    except zipfile.BadZipfile:
+        file_contents = cached_file_contents
 
     parsed_cards = utils.parse_deck_template_file(deck.collection.card_template, file_contents, mappings)
     add_cards_to_deck(deck, parsed_cards)
