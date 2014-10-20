@@ -40,6 +40,31 @@ def parse_deck_template_file(card_template, file_contents, mappings=None):
 
     return cards
 
+def get_file_names(card_template, file_contents):
+    fields = card_template.fields.all().order_by('sort_order')
+    nfields = len(fields)
+    columns_to_parse = []
+    col_index_to_parse = []
+    for field in fields:
+        if field.get_field_type() in ['A','I']:
+            columns_to_parse.append(str(field))
+    workbook = xlrd.open_workbook(file_contents=file_contents)
+    sheet = workbook.sheet_by_index(0)
+
+    for col_index in range(nfields):
+        val = sheet.cell(0, col_index).value
+        if val in columns_to_parse:
+            col_index_to_parse.append(col_index)
+
+    files = []
+    for row_index in range(1, sheet.nrows):
+        for col_index in col_index_to_parse:
+            val = sheet.cell(row_index, col_index).value
+            if val not in files and val != '':
+                files.append(val)
+
+    return files
+
 def create_deck_template_file(card_template):
     """Creates a spreadsheet template for populating a deck of cards."""
     card_template_fields = card_template.fields.all().order_by('sort_order')

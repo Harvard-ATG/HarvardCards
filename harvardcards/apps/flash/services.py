@@ -19,7 +19,7 @@ from harvardcards.settings.common import MEDIA_ROOT, APPS_ROOT
 import zipfile
 from StringIO import StringIO
 from mutagen.mp3 import MP3
-
+from sets import Set
 
 def delete_collection(collection_id):
     """Deletes a collection and returns true on success, false otherwise."""
@@ -173,26 +173,32 @@ def handle_zipped_deck_file(deck, uploaded_file):
     mappings = {'Image':{}, 'Audio':{}}
     zfile = zipfile.ZipFile(uploaded_file, 'r')
     file_names = zfile.namelist()
-    temp_dir_path = None
-    for file in file_names:
-        data = zfile.read(file)
-        if os.path.splitext(file)[1][1:].strip().lower() in ['xls', 'xlsx']:
-            file_contents = data
-        else:
-            [full_path, path, dir_name, file_name] = handle_media_folders(deck.collection.id, deck.id, file)
-            zfile.extract(file, os.path.join(path, 'temp_dir'))
-            file_path = os.path.join(path, 'temp_dir', file)
 
-            if valid_uploaded_file(file_path, 'I'):
-                os.rename(file_path, os.path.join(path, 'temp_dir', file_name))
-                shutil.move(os.path.join(path, 'temp_dir', file_name), os.path.join(path, file_name))
-                resize_uploaded_img(path, file_name, dir_name)
-                mappings['Image'][file] = os.path.join(dir_name, file_name)
+    excel_files = filter(lambda f: os.path.splitext(f)[1][1:].strip().lower() in ['xls', 'xlsx'], file_names)
+    if len(excel_files) > 1:
+        raise Exception, "More than one excel files found."
+    if len(excel_files) == 0:
+        raise Exception, "No flashcard template excel file found."
 
-            elif valid_uploaded_file(file_path, 'A'):
-                os.rename(file_path, os.path.join(path, 'temp_dir', file_name))
-                shutil.move(os.path.join(path, 'temp_dir', file_name), os.path.join(path, file_name))
-                mappings['Audio'][file] = os.path.join(dir_name, file_name)
+    file_contents = zfile.read(excel_files[0])
+    files_to_upload = utils.get_file_names(deck.collection.card_template, file_contents)
+    files = list(Set(files_to_upload).intersection(file_names))
+    print files_to_upload
+    for file in files:
+        [full_path, path, dir_name, file_name] = handle_media_folders(deck.collection.id, deck.id, file)
+        zfile.extract(file, os.path.join(path, 'temp_dir'))
+        file_path = os.path.join(path, 'temp_dir', file)
+
+        if valid_uploaded_file(file_path, 'I'):
+            os.rename(file_path, os.path.join(path, 'temp_dir', file_name))
+            shutil.move(os.path.join(path, 'temp_dir', file_name), os.path.join(path, file_name))
+            resize_uploaded_img(path, file_name, dir_name)
+            mappings['Image'][file] = os.path.join(dir_name, file_name)
+
+        elif valid_uploaded_file(file_path, 'A'):
+            os.rename(file_path, os.path.join(path, 'temp_dir', file_name))
+            shutil.move(os.path.join(path, 'temp_dir', file_name), os.path.join(path, file_name))
+            mappings['Audio'][file] = os.path.join(dir_name, file_name)
 
     shutil.rmtree(os.path.join(path, 'temp_dir'))
     return [file_contents, mappings]
@@ -206,7 +212,10 @@ def handle_uploaded_deck_file(deck, uploaded_file):
         [file_contents, mappings] = handle_zipped_deck_file(deck, uploaded_file)
     except zipfile.BadZipfile:
         file_contents = cached_file_contents
-    parsed_cards = utils.parse_deck_template_file(deck.collection.card_template, file_contents, mappings)
+    try:
+        parsed_cards = utils.parse_deck_template_file(deck.collection.card_template, file_contents, mappings)
+    except:
+        raise Exception, "Uploaded file type not supported."
     add_cards_to_deck(deck, parsed_cards)
  
 @transaction.commit_on_success
