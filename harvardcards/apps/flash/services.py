@@ -183,7 +183,6 @@ def handle_zipped_deck_file(deck, uploaded_file):
     file_contents = zfile.read(excel_files[0])
     files_to_upload = utils.get_file_names(deck.collection.card_template, file_contents)
     files = list(Set(files_to_upload).intersection(file_names))
-    print files_to_upload
     for file in files:
         [full_path, path, dir_name, file_name] = handle_media_folders(deck.collection.id, deck.id, file)
         zfile.extract(file, os.path.join(path, 'temp_dir'))
@@ -200,7 +199,8 @@ def handle_zipped_deck_file(deck, uploaded_file):
             shutil.move(os.path.join(path, 'temp_dir', file_name), os.path.join(path, file_name))
             mappings['Audio'][file] = os.path.join(dir_name, file_name)
 
-    shutil.rmtree(os.path.join(path, 'temp_dir'))
+    if len(files):
+        shutil.rmtree(os.path.join(path, 'temp_dir'))
     return [file_contents, mappings]
 
 def handle_uploaded_deck_file(deck, uploaded_file):
