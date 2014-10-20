@@ -27,6 +27,9 @@ django-debug-toolbar==0.11
 # For image manipulation
 Pillow==2.2.1
 
+# For audio manipulation
+mutagen==1.25.1
+
 # For django mixins
 django-braces>=1.3
 

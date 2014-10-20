@@ -26,6 +26,7 @@ def parse_deck_template_file(card_template, file_contents, mappings=None):
         card = []
         for col_index in range(nfields):
             val = sheet.cell(row_index, col_index).value
+
             if mappings is not None:
                 if fields[col_index].get_field_type() ==  'I':
                     val = mappings['Image'].get(val, '')

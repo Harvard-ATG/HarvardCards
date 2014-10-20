@@ -18,6 +18,8 @@ from harvardcards.apps.flash import queries
 from harvardcards.settings.common import MEDIA_ROOT, APPS_ROOT
 import zipfile
 from StringIO import StringIO
+from mutagen.mp3 import MP3
+
 
 def delete_collection(collection_id):
     """Deletes a collection and returns true on success, false otherwise."""
@@ -107,9 +109,13 @@ def valid_uploaded_file(uploaded_file, file_type):
         except:
             return False
         return True
+
     if file_type == 'A':
-        # need a better method to check for validity
-        return os.path.splitext(uploaded_file)[1][1:].strip().lower() in ['mp3']
+        try:
+            audio = MP3(uploaded_file)
+        except:
+            return False
+        return True
 
 def handle_media_folders(collection, deck, file_name):
     # create the MEDIA_ROOT folder if it doesn't exist
@@ -167,25 +173,28 @@ def handle_zipped_deck_file(deck, uploaded_file):
     mappings = {'Image':{}, 'Audio':{}}
     zfile = zipfile.ZipFile(uploaded_file, 'r')
     file_names = zfile.namelist()
+    temp_dir_path = None
     for file in file_names:
         data = zfile.read(file)
         if os.path.splitext(file)[1][1:].strip().lower() in ['xls', 'xlsx']:
             file_contents = data
-
-        elif valid_uploaded_file(StringIO(data), 'I'):
-            img = Image.open(StringIO(data))
-            [full_path, path, dir_name, file_name] = handle_media_folders(deck.collection.id, deck.id, file)
-            img.save(full_path)
-            resize_uploaded_img(path, file_name, dir_name)
-            mappings['Image'][file] = os.path.join(dir_name, file_name)
-
-        elif valid_uploaded_file(file, 'A'):
+        else:
             [full_path, path, dir_name, file_name] = handle_media_folders(deck.collection.id, deck.id, file)
             zfile.extract(file, os.path.join(path, 'temp_dir'))
-            os.rename(os.path.join(path, 'temp_dir', file), os.path.join(path, 'temp_dir', file_name))
-            shutil.move(os.path.join(path, 'temp_dir', file_name), os.path.join(path, file_name))
-            mappings['Audio'][file] = os.path.join(dir_name, file_name)
+            file_path = os.path.join(path, 'temp_dir', file)
 
+            if valid_uploaded_file(file_path, 'I'):
+                os.rename(file_path, os.path.join(path, 'temp_dir', file_name))
+                shutil.move(os.path.join(path, 'temp_dir', file_name), os.path.join(path, file_name))
+                resize_uploaded_img(path, file_name, dir_name)
+                mappings['Image'][file] = os.path.join(dir_name, file_name)
+
+            elif valid_uploaded_file(file_path, 'A'):
+                os.rename(file_path, os.path.join(path, 'temp_dir', file_name))
+                shutil.move(os.path.join(path, 'temp_dir', file_name), os.path.join(path, file_name))
+                mappings['Audio'][file] = os.path.join(dir_name, file_name)
+
+    shutil.rmtree(os.path.join(path, 'temp_dir'))
     return [file_contents, mappings]
 
 def handle_uploaded_deck_file(deck, uploaded_file):
@@ -197,7 +206,6 @@ def handle_uploaded_deck_file(deck, uploaded_file):
         [file_contents, mappings] = handle_zipped_deck_file(deck, uploaded_file)
     except zipfile.BadZipfile:
         file_contents = cached_file_contents
-
     parsed_cards = utils.parse_deck_template_file(deck.collection.card_template, file_contents, mappings)
     add_cards_to_deck(deck, parsed_cards)
  
