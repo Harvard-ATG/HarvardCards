@@ -213,9 +213,7 @@ def add_user_to_shared_collection(request, secret_share_key=''):
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'collection')
 def add_deck(request, collection_id=None):
     """Adds a deck."""
-
-    collection = Collection.objects.get(id=collection_id)
-    deck = Deck.objects.create(collection=collection, title='Untitled Deck')
+    deck = services.create_deck(collection_id=collection_id, deck_title='Untitled Deck')
     return redirect(deck)
 
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR], 'collection') 

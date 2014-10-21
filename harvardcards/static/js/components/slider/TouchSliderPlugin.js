@@ -25,9 +25,16 @@ define(['jquery'], function($) {
 	 *      plugin.init(slider);
 	 */
 	var TouchSliderPlugin = function(config) {
-		config = config || {};
-		this.config = config;
+		var defaultConfig = {
+			touchEl: null,
+			enableTap: false,
+			enableSwipe: true
+		};
+
+		this.config = $.extend({}, defaultConfig, config);
 		this.handleTouchEvents = $.proxy(this.handleTouchEvents, this);
+		this.checkTapEvent = $.proxy(this.checkTapEvent, this);
+		this.swipeWidth = 50; // amount to swipe to trigger a swipe event
 	};
 
 	// Initializes the plugin.
@@ -58,7 +65,6 @@ define(['jquery'], function($) {
 	// Handler for touch events.
 	TouchSliderPlugin.prototype.handleTouchEvents = function(evt) {
 		var e = evt.originalEvent;
-		var swipeWidth = 50; 
 		var x, y;
 
 		//console.log("touch event", evt.type, "event object", evt, "touches", e.touches, "onetouch", e.touches[0]);
@@ -69,6 +75,10 @@ define(['jquery'], function($) {
 				y = e.touches[0].clientY;
 				this.startPos = {x:x,y:y};
 				this.lastPos = {x:x,y:y};
+				this.touchStarted = true;
+				if(this.isTapEnabled()) {
+					this.startTapTimer();
+				}
 				break;
 			case 'touchmove':
 				x = e.touches[0].clientX;
@@ -77,10 +87,14 @@ define(['jquery'], function($) {
 				//console.log("touchmove", x, y, "last", this.lastPos.x, this.lastPos.y);
 				break;
 			case 'touchend':
-				if(this.lastPos.x - this.startPos.x > swipeWidth) {
-					this.slider.goToPrev();
-				} else if(this.lastPos.x - this.startPos.x < -swipeWidth) {
-					this.slider.goToNext();
+			case 'touchcancel':
+				this.touchStarted = false;
+				if(this.isSwipeEnabled()) {
+					if(this.isSwipeLeft()) {
+						this.slider.goToPrev();
+					} else if(this.isSwipeRight()) {
+						this.slider.goToNext();
+					}
 				}
 				break;
 			default:
@@ -91,7 +105,46 @@ define(['jquery'], function($) {
 		return true;
 	};
 
-	// Helper function to scroll the screen.
+	// Checks if tapping is enabled.
+	TouchSliderPlugin.prototype.isTapEnabled = function() {
+		return this.config.enableTap ? true : false;
+	};
+
+	// Checks if swiping is enabled.
+	TouchSliderPlugin.prototype.isSwipeEnabled = function() {
+		return this.config.enableSwipe ? true : false;
+	};
+
+	// Checks if the swipe was to the left.
+	TouchSliderPlugin.prototype.isSwipeLeft = function() {
+		return this.lastPos.x - this.startPos.x > this.swipeWidth;
+	};
+
+	// Checks if the swipe was to the right.
+	TouchSliderPlugin.prototype.isSwipeRight = function() {
+		return this.lastPos.x - this.startPos.x < -this.swipeWidth;
+	};
+	
+	// Handles a tap.
+	TouchSliderPlugin.prototype.tap = function() {
+		this.slider.goToNext();
+	};
+
+	// Helper to initiate a timer to check for a tap event
+	TouchSliderPlugin.prototype.startTapTimer = function() {
+		setTimeout(this.checkTapEvent, 200);
+	};
+
+	// Helper to check if a "tap" is detected
+	TouchSliderPlugin.prototype.checkTapEvent = function() {
+		var is_same_x = (this.lastPos.x === this.startPos.x);
+		var is_same_y = (this.lastPos.y === this.startPos.y);
+		if(is_same_x && !this.touchStarted && is_same_y) {
+			this.tap();
+		}
+	};
+
+	// **NOT USED**
 	TouchSliderPlugin.prototype.scrollTop = function(scrollTop) {
 		var duration = 500;
 		if(typeof scrollTop === 'number') {
@@ -99,17 +152,15 @@ define(['jquery'], function($) {
 		}
 	};
 
-	// Not used.
+	// **NOT USED**
 	TouchSliderPlugin.prototype.cleanTransitions = function(node) {
 		node.style[TRANSITION] = 'none';
 	};
 
-	// Not used.
+	// **NOT USED**
 	TouchSliderPlugin.prototype.setPosition = function(node, left) {
 		node.style[TRANSFORM] =  "translate3d("+left+"px, 0, 0)";
 	};
-
-
 
 	return TouchSliderPlugin;
 });

@@ -9,6 +9,7 @@ from functools import wraps
 from  PIL import Image
 
 from django.db import transaction
+from django.db.models import Avg, Max, Min
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError, PermissionDenied
 
@@ -267,7 +268,7 @@ def add_cards_to_deck(deck, card_list):
 def create_deck_with_cards(collection_id, deck_title, card_list):
     """Creates and populates a new deck with cards."""
     collection = Collection.objects.get(id=collection_id)
-    deck = Deck.objects.create(title=deck_title, collection=collection)
+    deck = create_deck(collection_id, deck_title)
     add_cards_to_deck(deck, card_list)
     return deck
 
@@ -279,6 +280,17 @@ def create_card_in_deck(deck):
     card = Card.objects.create(collection=deck.collection, sort_order=card_sort_order)
     Decks_Cards.objects.create(deck=deck, card=card, sort_order=deck_sort_order)
     return card
+
+def create_deck(collection_id, deck_title):
+    collection = Collection.objects.get(id=collection_id)
+    result = Deck.objects.filter(collection=collection).aggregate(Max('sort_order'))
+    sort_order = result['sort_order__max']
+    if sort_order is None:
+        sort_order = 1
+    else:
+        sort_order = sort_order + 1
+    deck = Deck.objects.create(title=deck_title, collection=collection, sort_order=sort_order)
+    return deck
 
 def check_role(roles, entity_type):
     """

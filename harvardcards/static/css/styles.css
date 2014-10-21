@@ -856,6 +856,64 @@ a#mobileMenu{
 #cardTemplateContainer .field-label:after { content: ":"; }
 #cardTemplateContainer .field-value { color: darkgray; }
 
+/********** help styling ***********/
+.help-content {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size: 1em;
+	line-height: 1;
+	font-weight: normal;
+	text-align: left;
+	color: #464646;
+	margin: 1em 0;
+}
+.help-content p { margin: 1em 0; }
+.help-content b { font-weight: bold; }
+ol.help {
+	list-style-type:none;
+	list-style-type: decimal !ie; /* IE 7- hack */
+
+	margin: 0;
+	margin-left: 3em;
+	padding: 0;
+
+	counter-reset: ol-counter;
+}
+ol.help > li {
+	position: relative;
+	margin-bottom: 20px;
+	padding-left: 0.5em;
+	min-height: 2em;
+	border-left: 2px solid #CCC;
+}
+ol.help > li:before {
+	position: absolute;
+	top: 0;
+	left: -1em;
+	width: 0.8em;
+
+	font-family:Arial, Helvetica, sans-serif;
+	font-size: 2em;
+	line-height: 1;
+	font-weight: bold;
+	text-align: right;
+	color: #464646;
+
+	content: counter(ol-counter);
+	counter-increment: ol-counter;
+}
+ol.help > li > ol {
+	position: relative;
+	list-style-type: none;
+	list-style-type: lower-alpha;
+	margin-left: 3em;
+}
+ol.help > li > ol > li > ol {
+	position: relative;
+	list-style-type: none;
+	list-style-type: lower-roman;
+	margin-left: 3em;
+}
+
 /********** misc utils *************/
 .errorlist {
 	color: red;
