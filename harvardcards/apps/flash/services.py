@@ -32,15 +32,15 @@ def delete_collection(collection_id):
 def delete_deck(deck_id):
     """Deletes a deck and returns true on success, false otherwise."""
     deck = Deck.objects.get(id=deck_id)
-    delete_deck_images(deck_id)
+    delete_deck_files(deck_id)
     deck.delete()
     if not Deck.objects.filter(id=deck_id):
         return True
     return False
 
-def delete_deck_images(deck_id):
+def delete_deck_files(deck_id):
     """
-    Deletes all the images associated with a deck. 
+    Deletes all the files (images, audio) associated with the deck. 
     Raises an exception if there is a problem deleting the images.
     """
     deck = Deck.objects.get(id=deck_id)
