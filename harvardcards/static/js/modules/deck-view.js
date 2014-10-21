@@ -198,7 +198,6 @@ function initModule() {
 		},
 		onKeyDownRevealCard: function(keyCode, callback) {
 			// reveal content when down arrow is pressed
-			console.log("keyCode", keyCode);
 			if(keyCode == 40) {
 				callback(true);
 			} else if(keyCode == 38) {
