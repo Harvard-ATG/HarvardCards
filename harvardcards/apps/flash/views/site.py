@@ -6,4 +6,6 @@ def splash(request):
     
 def main(request):
     return render(request, 'main.html')
-    
+
+def help(request):
+    return render(request, 'help.html')
