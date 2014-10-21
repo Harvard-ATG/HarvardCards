@@ -174,6 +174,10 @@ def handle_zipped_deck_file(deck, uploaded_file):
     mappings = {'Image':{}, 'Audio':{}}
     zfile = zipfile.ZipFile(uploaded_file, 'r')
     file_names = zfile.namelist()
+    
+    # This filters the __MACOSX/ folder entries from the zip file, which
+    # should be ignored for the upload (only relevant for MAC-created zip files).
+    file_names = [file_name for file_name in file_names if "__MACOSX" not in file_name]
 
     excel_files = filter(lambda f: os.path.splitext(f)[1][1:].strip().lower() in ['xls', 'xlsx'], file_names)
     if len(excel_files) > 1:
