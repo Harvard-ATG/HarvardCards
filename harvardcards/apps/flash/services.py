@@ -181,9 +181,9 @@ def handle_zipped_deck_file(deck, uploaded_file):
 
     excel_files = filter(lambda f: os.path.splitext(f)[1][1:].strip().lower() in ['xls', 'xlsx'], file_names)
     if len(excel_files) > 1:
-        raise Exception, "More than one excel files found."
+        raise Exception, "More than one excel files found in the zipped folder."
     if len(excel_files) == 0:
-        raise Exception, "No flashcard template excel file found."
+        raise Exception, "No flashcard template excel file found in the zipped folder."
 
     file_contents = zfile.read(excel_files[0])
 
@@ -192,6 +192,12 @@ def handle_zipped_deck_file(deck, uploaded_file):
 
     files_to_upload = utils.get_file_names(deck.collection.card_template, file_contents)
     files = list(Set(files_to_upload).intersection(file_names))
+
+    files_not_found = map(lambda f: str(f), filter(lambda f: f not in file_names, files_to_upload))
+
+    if len(files_not_found):
+        raise Exception, "File(s) not found in the zipped folder: %s" %str(files_not_found)[1:-1]
+
     for file in files:
         [full_path, path, dir_name, file_name] = handle_media_folders(deck.collection.id, deck.id, file)
         zfile.extract(file, os.path.join(path, 'temp_dir'))

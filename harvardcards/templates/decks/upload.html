@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block main_content %}
-<div id="content"><!-- content (start) -->
+<div id="content" data-module="deck-upload"><!-- content (start) -->
     <div class="courseWrapper">
         <div class="courseHeader">
             <h2>Upload cards to deck</h2>
@@ -18,12 +18,19 @@
             <li>Upload the file using the form below.</li>
         </ol>
 
-        <form action="{% url 'deckUpload' deck.id %}?deck_id={{ deck.id }}" method="post" {% if deck_form.is_multipart %}enctype="multipart/form-data"{% endif %}>{% csrf_token %}
+        <form id="deckForm" action="{% url 'deckUpload' deck.id %}?deck_id={{ deck.id }}" method="post" {% if deck_form.is_multipart %}enctype="multipart/form-data"{% endif %}>{% csrf_token %}
+            {% if error %}
+             <div class="formMessage error" style="">Deck Upload Failed</div>
+            {% endif %}
             {{ deck_form.as_p }}
+            {% if error %}
+            <div class="field-error" style="padding-top:5px;"> {{error}}</div>
+            {% endif %}
             <div style="margin-top:1em">
                 <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
                 <a href="{% url 'deckIndex' deck.id %}" class="adminMenuBtn cancelBtn">Cancel</a>
             </div>
+
         </form>
     </div>
 </div>
