@@ -19,11 +19,11 @@
         </ol>
 
         <form id="deckForm" action="{% url 'deckUpload' deck.id %}?deck_id={{ deck.id }}" method="post" {% if deck_form.is_multipart %}enctype="multipart/form-data"{% endif %}>{% csrf_token %}
-            {% if error %}
+            {% if upload_error %}
              <div class="formMessage error" style="">Deck Upload Failed</div>
             {% endif %}
             {{ deck_form.as_p }}
-            {% if error %}
+            {% if upload_error %}
             <div class="field-error" style="padding-top:5px;"> {{error}}</div>
             {% endif %}
             <div style="margin-top:1em">

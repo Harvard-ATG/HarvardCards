@@ -76,7 +76,7 @@ def upload_deck(request, deck_id=None):
     '''
     Imports a deck of cards from an excel spreadsheet.
     '''
-    error = ''
+    upload_error = ''
     deck = Deck.objects.get(id=deck_id)
     current_collection = deck.collection
 
@@ -91,7 +91,7 @@ def upload_deck(request, deck_id=None):
                     services.handle_uploaded_deck_file(deck, request.FILES['file'])
                     return redirect(deck)
                 except Exception, e:
-                    error = str(e)
+                    upload_error = str(e)
 
     else:
         deck_form = DeckImportForm()
@@ -101,7 +101,7 @@ def upload_deck(request, deck_id=None):
             "deck_form": deck_form, 
             "nav_collections": collection_list,
             "collection": current_collection,
-            "error": error
+            "error": upload_error
             }
     return render(request, 'decks/upload.html', context)
 
