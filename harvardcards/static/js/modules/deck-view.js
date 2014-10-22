@@ -32,7 +32,7 @@ function initModule() {
 	card_counter.update = $.proxy(card_counter.update, card_counter);
 
 	deck_slider.bind("beforeslide", function(slider, data){
-		$cardDetail.find("[data-card-id]").hide(); 
+		$cardDetail.find("[data-card-id]").removeClass('card-active').hide(); 
 		if(data.toIndex >= data.fromIndex) {
 			deck_slider._slideDirection = "right";
 		} else {
@@ -40,9 +40,8 @@ function initModule() {
 		}
 	});
 	deck_slider.bind("slide", function(slider, data) {
-		var slideOpts = {direction: deck_slider._slideDirection};
-		var animDuration = 500;
-		$cardDetail.find("[data-card-id="+data.card_id+"]").show('slide', slideOpts, animDuration);
+		var slideOpts = {direction: deck_slider._slideDirection}, animDuration = 500;
+		$cardDetail.find("[data-card-id="+data.card_id+"]").addClass('card-active').show('slide', slideOpts, animDuration);
 	});
 
 	deck_slider.bind("slide", card_counter.update);
@@ -191,7 +190,7 @@ function initModule() {
 		setupKeyboardShortcuts: function() {
 			$(document).on('keydown', function(e) {
 				MODULE.onKeyDownRevealCard(e.keyCode, function(state) {
-					$button_el = $('#allCards > li.show .reveal');
+					$button_el = $('#allCards > .card-active .reveal');
 					$reveal_content_el = $button_el.parent().next();
 					MODULE.revealCard($button_el, $reveal_content_el, state);
 				});

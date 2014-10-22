@@ -856,7 +856,18 @@ a#mobileMenu{
 #cardTemplateContainer .field-label:after { content: ":"; }
 #cardTemplateContainer .field-value { color: darkgray; }
 
-/********** help list ************/
+/********** help styling ***********/
+.help-content {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size: 1em;
+	line-height: 1;
+	font-weight: normal;
+	text-align: left;
+	color: #464646;
+	margin: 1em 0;
+}
+.help-content p { margin: 1em 0; }
+.help-content b { font-weight: bold; }
 ol.help {
 	list-style-type:none;
 	list-style-type: decimal !ie; /* IE 7- hack */
@@ -889,6 +900,18 @@ ol.help > li:before {
 
 	content: counter(ol-counter);
 	counter-increment: ol-counter;
+}
+ol.help > li > ol {
+	position: relative;
+	list-style-type: none;
+	list-style-type: lower-alpha;
+	margin-left: 3em;
+}
+ol.help > li > ol > li > ol {
+	position: relative;
+	list-style-type: none;
+	list-style-type: lower-roman;
+	margin-left: 3em;
 }
 
 /********** misc utils *************/
