@@ -101,7 +101,7 @@ def upload_deck(request, deck_id=None):
             "deck_form": deck_form, 
             "nav_collections": collection_list,
             "collection": current_collection,
-            "error": upload_error
+            "upload_error": upload_error
             }
     return render(request, 'decks/upload.html', context)
 
