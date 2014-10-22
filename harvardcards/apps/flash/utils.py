@@ -40,6 +40,20 @@ def parse_deck_template_file(card_template, file_contents, mappings=None):
 
     return cards
 
+def template_matches_file(card_template, file_contents):
+    fields = card_template.fields.all().order_by('sort_order')
+    nfields = len(fields)
+    workbook = xlrd.open_workbook(file_contents=file_contents)
+    sheet = workbook.sheet_by_index(0)
+
+    for col_index in range(nfields):
+        val = sheet.cell(0, col_index).value
+        if val != str(fields[col_index]):
+            return False
+    return True
+
+
+
 def get_file_names(card_template, file_contents):
     fields = card_template.fields.all().order_by('sort_order')
     nfields = len(fields)

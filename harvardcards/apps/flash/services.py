@@ -186,6 +186,10 @@ def handle_zipped_deck_file(deck, uploaded_file):
         raise Exception, "No flashcard template excel file found."
 
     file_contents = zfile.read(excel_files[0])
+
+    if not utils.template_matches_file(deck.collection.card_template, file_contents):
+        raise Exception, "The fields in the spreadsheet don't match those in the template."
+
     files_to_upload = utils.get_file_names(deck.collection.card_template, file_contents)
     files = list(Set(files_to_upload).intersection(file_names))
     for file in files:
