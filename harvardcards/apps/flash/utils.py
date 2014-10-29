@@ -57,6 +57,21 @@ def template_matches_file(card_template, file_contents):
             return False
     return True
 
+
+def correct_custom_format(file_contents):
+    workbook = xlrd.open_workbook(file_contents=file_contents)
+    sheet = workbook.sheet_by_index(0)
+
+    for col_index in range(sheet.ncols):
+        val = sheet.cell(1, col_index).value
+        if val not in ['F', 'B']:
+            return False
+        val = sheet.cell(2, col_index).value
+        if val not in ['A', 'I', 'T', 'V']:
+            return False
+    return True
+
+
 def get_card_template(file_contents):
     workbook = xlrd.open_workbook(file_contents=file_contents)
     sheet = workbook.sheet_by_index(0)

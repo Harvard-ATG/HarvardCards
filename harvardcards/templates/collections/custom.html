@@ -23,12 +23,16 @@
                 <li>Optionally, if the cards have <i>images</i> or <i>audio</i> and you would like to upload them together with the spreadsheet: create a .ZIP file that contains both the spreadsheet and the media files. The files should be in the same folder as the spreadsheet. Make sure to input the exact name of the file in the spreadsheet.</li>
                 <li>Upload the file using the form below.</li>
             </ol>
-
+            {% if upload_error %}
+             <div class="formMessage error" style="">Deck Upload Failed</div>
+            {% endif %}
             <p>
                 <label for="id_file">File:</label>
                 <input id="id_file" name="file" type="file">
             </p>
-
+            {% if upload_error %}
+            <div class="field-error" style="padding-top:5px;"> {{upload_error}}</div>
+            {% endif %}
             <div style="margin-top:1em">
                 <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
                 <a href="{% url 'collectionIndex' %}" class="adminMenuBtn cancelBtn">Cancel</a>

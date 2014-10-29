@@ -252,7 +252,8 @@ def handle_custom_file(uploaded_file, course_name, user):
     except zipfile.BadZipfile:
         file_contents = cached_file_contents
         is_zip = False
-
+    if not utils.correct_custom_format(file_contents):
+        raise Exception, "Incorrect format of the spreadsheet."
     card_template_fields = utils.get_card_template(file_contents)
     card_template = CardTemplate(title=course_name)
     card_template.save()
