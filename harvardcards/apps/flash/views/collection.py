@@ -264,3 +264,17 @@ def download_template(request, collection_id=None):
     response.write(file_output)
 
     return response
+
+def download_custom_template(request, collection_id=None):
+    '''
+    Downloads an excel spreadsheet that may be used as a template for uploading
+    a deck of cards.
+    '''
+
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=flashcards_template.xls'
+
+    file_output = utils.create_custom_template_file()
+    response.write(file_output)
+
+    return response

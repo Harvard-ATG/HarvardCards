@@ -148,3 +148,24 @@ def generate_random_id(size=10, chars=string.ascii_uppercase + string.digits):
 	'''
 	return ''.join(random.choice(chars) for _ in range(size))
 
+def create_custom_template_file():
+
+    output = StringIO.StringIO()
+    workbook = xlwt.Workbook(encoding='utf8')
+    worksheet = workbook.add_sheet('sheet1')
+    rows = [['Image', 'Artist','Date', 'Title', 'Materials', 'Location', 'Audio'],
+            ['F', 'F', 'F', 'B', 'B', 'B', 'F'],
+            ['I', 'T', 'T', 'T', 'T', 'T', 'A'],
+            ['','Some artist','','','','','sound.mp3'],
+            ['pisa_tower.jpeg', '','','','','','']]
+
+    for i in range(len(rows)):
+        row = rows[i]
+        for j in range(len(row)):
+            worksheet.write(i, j, label=row[j])
+
+    workbook.save(output)
+    file_output = output.getvalue()
+    output.close()
+
+    return file_output
