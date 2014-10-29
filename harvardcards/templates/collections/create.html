@@ -25,7 +25,7 @@
                 {{ collection_form.card_template }}
                 <span class="form-help">Choose a template to use when creating flashcards.</span>
             </div>
-
+            <a href="{% url 'collectionCustom' %}" class="adminMenuBtn cancelBtn">Create Custom Collection</a>
             <div class="clear"><!-- empty --></div>
             
             <div id="cardTemplateContainer" data-fetch-url="{% url 'cardTemplatePreview' %}" data-default-text="Select a template">

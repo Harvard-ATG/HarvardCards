@@ -46,7 +46,32 @@ def index(request, collection_id=None):
     }
 
     return render(request, 'collections/index.html', context)
-    
+
+@login_required
+def custom_create(request):
+
+    role_bucket = services.get_or_update_role_bucket(request)
+    collection_list = queries.getCollectionList(role_bucket)
+    if request.method == 'POST':
+        try:
+            user = request.user
+        except:
+            raise Exception, "Invalid user"
+        course_name = request.POST.get('course', '')
+        if course_name == '':
+            raise Exception, "Course name needed."
+
+        if 'file' in request.FILES:
+            deck = services.handle_custom_file(request.FILES['file'], course_name, user)
+            return redirect(deck)
+
+    else:
+        context = {
+            "nav_collections": collection_list,
+            "active_collection": None
+        }
+        return render(request, 'collections/custom.html', context)
+
 #should only check on collections? allow any registered user to create their own?
 @login_required
 def create(request):

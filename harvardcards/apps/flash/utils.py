@@ -13,7 +13,7 @@ import StringIO
 # For excel reading/writing
 import xlrd, xlwt
 
-def parse_deck_template_file(card_template, file_contents, mappings=None):
+def parse_deck_template_file(card_template, file_contents, mappings=None, custom=False):
     """Parses a spreadsheet into a list of cards."""
     fields = card_template.fields.all().order_by('sort_order')
     nfields = len(fields)
@@ -21,8 +21,13 @@ def parse_deck_template_file(card_template, file_contents, mappings=None):
     sheet = workbook.sheet_by_index(0)
     cards = []
     for row_index in range(sheet.nrows):
-        if row_index == 0:
+        if custom:
+            rows_to_skip = [0, 1, 2]
+        else:
+            rows_to_skip = [0]
+        if row_index in rows_to_skip:
             continue # Skip header row
+
         card = []
         for col_index in range(nfields):
             val = sheet.cell(row_index, col_index).value
@@ -52,9 +57,20 @@ def template_matches_file(card_template, file_contents):
             return False
     return True
 
+def get_card_template(file_contents):
+    workbook = xlrd.open_workbook(file_contents=file_contents)
+    sheet = workbook.sheet_by_index(0)
+    fields = []
+    for col_index in range(sheet.ncols):
+        field = {
+                "label": sheet.cell(0, col_index).value,
+                "side": sheet.cell(1, col_index).value,
+                "type": sheet.cell(2, col_index).value
+                }
+        fields.append(field)
+    return fields
 
-
-def get_file_names(card_template, file_contents):
+def get_file_names(card_template, file_contents, custom=False):
     fields = card_template.fields.all().order_by('sort_order')
     nfields = len(fields)
     columns_to_parse = []
@@ -71,7 +87,11 @@ def get_file_names(card_template, file_contents):
             col_index_to_parse.append(col_index)
 
     files = []
-    for row_index in range(1, sheet.nrows):
+    if custom:
+        start_row = 3
+    else:
+        start_row = 1
+    for row_index in range(start_row, sheet.nrows):
         for col_index in col_index_to_parse:
             val = sheet.cell(row_index, col_index).value
             if val not in files and val != '':
