@@ -14,16 +14,23 @@
         <div style="margin: 1em 0;">Steps to upload flashcards to this deck:</div>
         <ol class="help" style="margin-bottom: 1em">
             <li>Download the <a href="{% url 'collectionDownloadTemplate' collection.id %}">flashcard spreadsheet (XLS) <i class="fa fa-download"></i></a>. Use this template to enter your flashcards. Each row represents one card, and each column represents a field on that card.</li>
-            <li>Optionally, if the cards have images and you would like to upload the images together with the spreadsheet: create a .ZIP file that contains both the spreadsheet and image files. The image files should be in the same folder as the spreadsheet. Make sure to input the exact name of the image file in the spreadsheet.</li>
+			<li>Optionally, if the cards have <i>images</i> or <i>audio</i> and you would like to upload them together with the spreadsheet: create a .ZIP file that contains both the spreadsheet and the media files. The files should be in the same folder as the spreadsheet. Make sure to input the exact name of the file in the spreadsheet.</li>
             <li>Upload the file using the form below.</li>
         </ol>
 
-        <form action="{% url 'deckUpload' deck.id %}?deck_id={{ deck.id }}" method="post" {% if deck_form.is_multipart %}enctype="multipart/form-data"{% endif %}>{% csrf_token %}
+        <form id="deckForm" action="{% url 'deckUpload' deck.id %}?deck_id={{ deck.id }}" method="post" {% if deck_form.is_multipart %}enctype="multipart/form-data"{% endif %}>{% csrf_token %}
+            {% if upload_error %}
+             <div class="formMessage error" style="">Deck Upload Failed</div>
+            {% endif %}
             {{ deck_form.as_p }}
+            {% if upload_error %}
+            <div class="field-error" style="padding-top:5px;"> {{upload_error}}</div>
+            {% endif %}
             <div style="margin-top:1em">
                 <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
                 <a href="{% url 'deckIndex' deck.id %}" class="adminMenuBtn cancelBtn">Cancel</a>
             </div>
+
         </form>
     </div>
 </div>
