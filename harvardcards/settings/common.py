@@ -160,29 +160,8 @@ LOGGING = {
     'disable_existing_loggers': False, # don't override default django logging config
     'handlers': {
         'file': {
-            'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': path.join(ROOT_DIR, 'logs', 'debug.log'),
-        },
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': path.join(ROOT_DIR, 'logs', 'info.log'),
-        },
-        'file': {
-            'level': 'WARNING',
-            'class': 'logging.FileHandler',
-            'filename': path.join(ROOT_DIR, 'logs', 'warning.log'),
-        },
-        'file': {
-            'level': 'ERROR',
-            'class': 'logging.FileHandler',
-            'filename': path.join(ROOT_DIR, 'logs', 'error.log'),
-        },
-        'file': {
-            'level': 'CRITICAL',
-            'class': 'logging.FileHandler',
-            'filename': path.join(ROOT_DIR, 'logs', 'critical.log'),
+            'filename': path.join(ROOT_DIR, 'logs', 'app.log'),
         },
         'console': {
             'class': 'logging.StreamHandler',
