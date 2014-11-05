@@ -64,8 +64,11 @@ class CollectionTest(TestCase):
         logged_in = self.client.login(username=self.admin_user.username, password=self.admin_password)
         self.assertTrue(logged_in, 'super user logged in')
 
+        card_template = CardTemplate(title="foobar_template")
+        card_template.save()
+
         url = reverse('collectionCreate')
-        post_data = {'title':'foobar', 'card_template':'1'}
+        post_data = {'title':'foobar', 'card_template':card_template.id}
 
         len_collections_before = len(Collection.objects.filter(title__exact=post_data['title']))
         response = self.client.post(url, post_data)
@@ -74,7 +77,9 @@ class CollectionTest(TestCase):
         self.assertEqual(len_collections_before + 1, len_collections_after)
 
     def test_collection_form(self):
-        post_data = {'title':'foobar', 'card_template':'1'}
+        card_template = CardTemplate(title="foobar_template")
+        card_template.save()
+        post_data = {'title':'foobar', 'card_template':card_template.id}
         form = CollectionForm(post_data)
         self.assertEqual(form.is_valid(), True)
         form1 = CollectionForm({})

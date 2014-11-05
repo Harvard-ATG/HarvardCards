@@ -8,15 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'Deck.sort_order'
-        db.add_column(u'flash_deck', 'sort_order',
-                      self.gf('django.db.models.fields.IntegerField')(default=1),
+        # Adding field 'CardTemplate.owner'
+        db.add_column(u'flash_cardtemplate', 'owner',
+                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True, blank=True),
                       keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting field 'Deck.sort_order'
-        db.delete_column(u'flash_deck', 'sort_order')
+        # Deleting field 'CardTemplate.owner'
+        db.delete_column(u'flash_cardtemplate', 'owner_id')
 
 
     models = {
@@ -38,7 +38,7 @@ class Migration(SchemaMigration):
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "u'user_set'", 'blank': 'True', 'to': u"orm['auth.Group']"}),
+            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
@@ -46,7 +46,7 @@ class Migration(SchemaMigration):
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "u'user_set'", 'blank': 'True', 'to': u"orm['auth.Permission']"}),
+            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
         u'contenttypes.contenttype': {
@@ -84,8 +84,9 @@ class Migration(SchemaMigration):
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'fields': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['flash.Field']", 'through': u"orm['flash.CardTemplates_Fields']", 'symmetrical': 'False'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'})
-		},
+        },
         u'flash.cardtemplates_fields': {
             'Meta': {'ordering': "['field__sort_order']", 'object_name': 'CardTemplates_Fields'},
             'card_template': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['flash.CardTemplate']"}),
@@ -102,7 +103,7 @@ class Migration(SchemaMigration):
             'users': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.User']", 'through': u"orm['flash.Users_Collections']", 'symmetrical': 'False'})
         },
         u'flash.deck': {
-            'Meta': {'ordering': "['sort_order']", 'object_name': 'Deck'},
+            'Meta': {'ordering': "['sort_order', 'title']", 'object_name': 'Deck'},
             'cards': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['flash.Card']", 'through': u"orm['flash.Decks_Cards']", 'symmetrical': 'False'}),
             'collection': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['flash.Collection']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -118,12 +119,12 @@ class Migration(SchemaMigration):
         },
         u'flash.field': {
             'Meta': {'ordering': "['sort_order']", 'object_name': 'Field'},
-            'display': ('django.db.models.fields.BooleanField', [], {}),
+            'display': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'example_value': ('django.db.models.fields.CharField', [], {'max_length': '500', 'blank': 'True'}),
             'field_type': ('django.db.models.fields.CharField', [], {'max_length': '1'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'label': ('django.db.models.fields.CharField', [], {'max_length': '200', 'blank': 'True'}),
-            'show_label': ('django.db.models.fields.BooleanField', [], {}),
+            'show_label': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'sort_order': ('django.db.models.fields.IntegerField', [], {'default': '1'})
         },
         u'flash.users_collections': {
