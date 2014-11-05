@@ -32,7 +32,7 @@ define(['jquery', 'jqueryui'], function($) {
 			// that will be POSTed along with the rest of the form
 			deck_json = JSON.stringify({"deck": deck_order});
 
-			$("#deck_order").val(deck_json);
+			$("#deck_order").val(deck_json).effect("highlight");
 
 			console.log("--> new deck order:");
 			console.log("deck_ids:", deck_ids);
