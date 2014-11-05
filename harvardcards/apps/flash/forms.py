@@ -8,9 +8,16 @@ class CollectionForm(forms.ModelForm):
     class Meta:
         model = Collection
         fields = ['title', 'card_template'] #'private'
-    def __init__(self, query_set, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
+        card_template_query_set = None
+        if 'query_set' in kwargs:
+            card_template_query_set = kwargs.get('query_set', None)
+            del kwargs['query_set']
+
         super(CollectionForm, self).__init__(*args, **kwargs)
-        self.fields['card_template'].queryset = query_set
+
+        if card_template_query_set is not None:
+            self.fields['card_template'].queryset = card_template_query_set
 
 
 class CollectionShareForm(forms.Form):
