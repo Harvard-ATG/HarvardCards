@@ -6,6 +6,7 @@ from django.core.context_processors import csrf
 from django.core.exceptions import ViewDoesNotExist, PermissionDenied
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 from django.forms.formsets import formset_factory
 from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field, CardTemplate
@@ -103,7 +104,7 @@ def create(request):
                 services.get_or_update_role_bucket(request, collection_id.id, Users_Collections.role_map[Users_Collections.ADMINISTRATOR])
             return redirect(collection)
     else:
-        rel_templates = CardTemplate.objects.filter(owner__isnull=True) | CardTemplate.objects.filter(owner=request.user)
+        rel_templates = CardTemplate.objects.filter(Q(owner__isnull=True) | Q(owner=request.user))
         initial = {'card_template': '1'}
         card_template_id = initial['card_template']
         collection_form = CollectionForm(query_set=rel_templates,initial=initial)

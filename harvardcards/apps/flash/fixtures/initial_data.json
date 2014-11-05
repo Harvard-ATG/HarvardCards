@@ -137,7 +137,7 @@
         "fields": {
             "title": "Default",
             "description": "Default flashcards with a term on the front and a definition on the back.",
-			"owner":false
+			"owner":null
         }
     },
     {
@@ -146,7 +146,7 @@
         "fields": {
             "title": "Art History",
             "description": "Art History flashcard template.",
-			"owner":false
+			"owner":null
         }
     },
     {
@@ -155,7 +155,7 @@
         "fields": {
             "title": "Language with Audio",
             "description": "Language flashcards with audio component.",
-			"owner":false
+			"owner":null
         }
     },
     {
