@@ -136,7 +136,8 @@
         "model": "flash.CardTemplate",
         "fields": {
             "title": "Default",
-            "description": "Default flashcards with a term on the front and a definition on the back."
+            "description": "Default flashcards with a term on the front and a definition on the back.",
+			"owner":false
         }
     },
     {
@@ -144,7 +145,8 @@
         "model": "flash.CardTemplate",
         "fields": {
             "title": "Art History",
-            "description": "Art History flashcard template."
+            "description": "Art History flashcard template.",
+			"owner":false
         }
     },
     {
@@ -152,7 +154,8 @@
         "model": "flash.CardTemplate",
         "fields": {
             "title": "Language with Audio",
-            "description": "Language flashcards with audio component."
+            "description": "Language flashcards with audio component.",
+			"owner":false
         }
     },
     {

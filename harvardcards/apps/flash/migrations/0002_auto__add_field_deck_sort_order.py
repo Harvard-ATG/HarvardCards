@@ -85,7 +85,7 @@ class Migration(SchemaMigration):
             'fields': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['flash.Field']", 'through': u"orm['flash.CardTemplates_Fields']", 'symmetrical': 'False'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'})
-        },
+		},
         u'flash.cardtemplates_fields': {
             'Meta': {'ordering': "['field__sort_order']", 'object_name': 'CardTemplates_Fields'},
             'card_template': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['flash.CardTemplate']"}),

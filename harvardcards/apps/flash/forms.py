@@ -8,6 +8,10 @@ class CollectionForm(forms.ModelForm):
     class Meta:
         model = Collection
         fields = ['title', 'card_template'] #'private'
+    def __init__(self, query_set, *args, **kwargs):
+        super(CollectionForm, self).__init__(*args, **kwargs)
+        self.fields['card_template'].queryset = query_set
+
 
 class CollectionShareForm(forms.Form):
     #role = forms.ChoiceField(choices=Users_Collections.ROLES, initial=Users_Collections.OBSERVER)
