@@ -160,7 +160,7 @@ LOGGING = {
     'disable_existing_loggers': False, # don't override default django logging config
     'formatters': {
         'verbose': {
-            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'format' : "[%(asctime)s] %(levelname)s %(user)s [%(name)s:%(lineno)s] %(message)s",
             'datefmt' : "%d/%b/%Y %H:%M:%S"
         },
         'simple': {

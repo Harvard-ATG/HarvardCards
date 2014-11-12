@@ -23,6 +23,7 @@ from mutagen.mp3 import MP3
 from sets import Set
 from datetime import date
 
+
 def delete_collection(collection_id):
     """Deletes a collection and returns true on success, false otherwise."""
     Collection.objects.get(id=collection_id).delete()
@@ -192,6 +193,7 @@ def extract_from_zip(uploaded_file):
 
     return [file_contents, zfile, file_names]
 
+
 def get_mappings_from_zip(deck, file_contents, file_names, zfile):
     """
     Checks if all the files in the excel file are in the zipped folder.
@@ -245,10 +247,13 @@ def handle_uploaded_deck_file(deck, uploaded_file):
         [file_contents, mappings] = handle_zipped_deck_file(deck, uploaded_file)
     except zipfile.BadZipfile:
         file_contents = cached_file_contents
+        if not utils.template_matches_file(deck.collection.card_template, file_contents):
+            raise Exception, "The fields in the spreadsheet don't match those in the template."
     try:
         parsed_cards = utils.parse_deck_template_file(deck.collection.card_template, file_contents, mappings)
     except:
         raise Exception, "Uploaded file type not supported."
+
     add_cards_to_deck(deck, parsed_cards)
 
 def handle_custom_file(uploaded_file, course_name, user):

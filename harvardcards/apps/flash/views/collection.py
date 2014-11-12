@@ -17,6 +17,9 @@ from harvardcards.apps.flash.queries import is_superuser_or_staff
 from harvardcards.apps.flash.lti_service import LTIService
 from harvardcards.apps.flash.views import card_template
 
+import logging
+
+log = logging.getLogger(__name__)
 
 def index(request, collection_id=None):
     """Displays a set of collections to the user depending on whether 
@@ -58,6 +61,8 @@ def custom_create(request):
     role_bucket = services.get_or_update_role_bucket(request)
     collection_list = queries.getCollectionList(role_bucket)
     if request.method == 'POST':
+        d = {'user': request.user}
+        log.info('The user is uploading a custom deck.', extra=d)
 
         course_name = request.POST.get('course', '')
         if course_name == '' or 'file' not in request.FILES:
@@ -70,9 +75,13 @@ def custom_create(request):
         else:
             try:
                 deck = services.handle_custom_file(request.FILES['file'], course_name, request.user)
+                log.info('Custom deck %(d)s successfully added to the new collection %(c)s.'
+                         %{'c': str(deck.collection.id), 'd':str(deck.id)}, extra=d)
                 return redirect(deck)
             except Exception, e:
                     upload_error = str(e)
+        msg = 'The following error occurred when the user tried uploading a deck: '
+        log.error(msg + upload_error , extra=d)
 
     context = {
         "nav_collections": collection_list,

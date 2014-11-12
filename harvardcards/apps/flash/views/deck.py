@@ -88,23 +88,24 @@ def upload_deck(request, deck_id=None):
     collection_list = queries.getCollectionList(role_bucket)
 
     if request.method == 'POST':
-        log.info('The user %(u)s is uploading a new deck.' %{'u': str(request.user)})
+        d = {'user': request.user}
+        log.info('The user is uploading a new deck.', extra=d)
         deck_form = DeckImportForm(request.POST, request.FILES)
         if deck_form.is_valid():
             if 'file' in request.FILES:
                 try:
                     services.handle_uploaded_deck_file(deck, request.FILES['file'])
-                    log.info('New deck successfully uploaded by user %(u)s to the collection %(c)s.'
-                                                %{'c': str(deck.collection), 'u': str(request.user)})
+                    log.info('New deck successfully added to the collection %(c)s.' %{'c': str(deck.collection.id)},
+                             extra=d)
                     return redirect(deck)
                 except Exception, e:
                     upload_error = str(e)
-                    msg = 'The following error occurred when user %(u)s uploaded a deck:\n' %{'u':str(request.user)}
-                    log.error(msg + upload_error)
+                    msg = 'The following error occurred when the user tried uploading a deck: '
+                    log.error(msg + upload_error, extra=d)
             else:
-                log.info('No file selected by user %(u)s.' %{'u': str(request.user)})
+                log.info('No file selected.', extra=d)
         else:
-            log.error('Deck Form submitted by %(u)s is not valid.' %{'u': str(request.user)})
+            log.error('Deck Form is not valid.', extra=d)
 
     else:
         deck_form = DeckImportForm()
@@ -125,10 +126,11 @@ def download_deck(request, deck_id=None):
 
     response = HttpResponse(content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename=flashcards.xls'
-
+    deck = Deck.objects.get(id=deck_id)
     file_output = utils.create_deck_file(deck_id) 
     response.write(file_output)
-
+    log.info('Deck %(d)s from the collection %(c)s downloaded by the user.'
+            %{'d': str(deck.id), 'c': str(deck.collection.id)}, extra={'user': request.user})
     return response
 
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')  
@@ -192,8 +194,14 @@ def create_edit_card(request, deck_id=None):
 def delete_card(request, deck_id=None):
     """Deletes a card."""
 
+    d = {'user': request.user}
     deck = Deck.objects.get(id=deck_id)
     card_id = request.GET.get('card_id', None)
     if queries.isCardInDeck(card_id, deck_id):
         success = services.delete_card(card_id)
+
+    if success:
+        log.info('Card deleted from the deck %s' %str(deck.id), extra=d)
+    else:
+        log.error('Card could not be deleted from the deck %s' %str(deck.id), extra=d)
     return redirect(deck)
