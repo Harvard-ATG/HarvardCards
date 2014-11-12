@@ -104,7 +104,6 @@ def edit(request, collection_id=None):
     collection_list = queries.getCollectionList(role_bucket)
 
     if request.method == 'POST':
-        print request.POST
         collection_form = CollectionForm(request.POST, instance=collection)
         if collection_form.is_valid():
             data = simplejson.loads(request.POST['deck_order'])

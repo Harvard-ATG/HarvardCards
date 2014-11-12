@@ -33,12 +33,8 @@ define(['jquery', 'jquery.mobile'], function($) {
 
 		this.config = $.extend({}, defaultConfig, config);
 		this.handleTouchEvents = $.proxy(this.handleTouchEvents, this);
-<<<<<<< HEAD
-        this.handleTapEvent = $.proxy(this.handleTapEvent, this)
-=======
 		this.checkTapEvent = $.proxy(this.checkTapEvent, this);
 		this.swipeWidth = 50; // amount to swipe to trigger a swipe event
->>>>>>> dev
 	};
 
 	// Initializes the plugin.
