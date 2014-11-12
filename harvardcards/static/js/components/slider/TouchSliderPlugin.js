@@ -1,4 +1,4 @@
-define(['jquery', 'jquery.mobile'], function($) {
+define(['jquery'], function($) {
 
 	var TRANSITION  = 'transition';
 	var TRANSFORM   = 'transform';
