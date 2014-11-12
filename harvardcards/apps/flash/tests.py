@@ -256,5 +256,5 @@ class LTIServiceTest(TestCase):
 
         canvas_collections = lti_service.getCourseCollections()
         expected_collections = [c.id for c in (collection, collection3)]
-        self.assertEqual(len(canvas_collections), len(expected_collections), msg="found one collection for canvas course")
+        self.assertEqual(len(canvas_collections), len(expected_collections))
         self.assertEqual(canvas_collections, expected_collections)
