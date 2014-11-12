@@ -60,7 +60,6 @@ define(['jquery'], function($) {
 	// Attaches touch event handles to the slider.
 	TouchSliderPlugin.prototype.attachTouchEvents = function() {
 		$(this.touchEl).on("touchmove touchstart touchend", this.handleTouchEvents);
-        	$(this.touchEl).on("tap", this.handleTapEvent);
 	};
 
     //Wrapper for jquery tap event handle
