@@ -62,7 +62,6 @@ define(['jquery'], function($) {
 		$(this.touchEl).on("touchmove touchstart touchend", this.handleTouchEvents);
 	};
 
-
 	// Handler for touch events.
 	TouchSliderPlugin.prototype.handleTouchEvents = function(evt) {
 		var e = evt.originalEvent;
