@@ -13,7 +13,7 @@ from django.db.models import Avg, Max, Min
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError, PermissionDenied
 
-from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Cards_Fields, Field, Users_Collections
+from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Cards_Fields, Field, Users_Collections, CardTemplate, CardTemplates_Fields
 from harvardcards.apps.flash import utils
 from harvardcards.apps.flash import queries
 from harvardcards.settings.common import MEDIA_ROOT, APPS_ROOT
@@ -21,6 +21,7 @@ import zipfile
 from StringIO import StringIO
 from mutagen.mp3 import MP3
 from sets import Set
+from datetime import date
 
 def delete_collection(collection_id):
     """Deletes a collection and returns true on success, false otherwise."""
@@ -169,12 +170,14 @@ def upload_img_from_path(path_original, deck, collection):
     resize_uploaded_img(path, file_name, dir_name)
     return os.path.join(dir_name, file_name)
 
-
-def handle_zipped_deck_file(deck, uploaded_file):
-    mappings = {'Image':{}, 'Audio':{}}
+def extract_from_zip(uploaded_file):
+    """
+    Checks for valid spreadsheet file in the zipped folder.
+    Returns the spreadsheet, zip file and relevant file names.
+    """
     zfile = zipfile.ZipFile(uploaded_file, 'r')
     file_names = zfile.namelist()
-    
+
     # This filters the __MACOSX/ folder entries from the zip file, which
     # should be ignored for the upload (only relevant for MAC-created zip files).
     file_names = [file_name for file_name in file_names if "__MACOSX" not in file_name]
@@ -187,10 +190,19 @@ def handle_zipped_deck_file(deck, uploaded_file):
 
     file_contents = zfile.read(excel_files[0])
 
+    return [file_contents, zfile, file_names]
+
+def get_mappings_from_zip(deck, file_contents, file_names, zfile):
+    """
+    Checks if all the files in the excel file are in the zipped folder.
+    Saves the files and returns the mappings between the file names and their paths
+    """
+    mappings = {'Image':{}, 'Audio':{}}
+
     if not utils.template_matches_file(deck.collection.card_template, file_contents):
         raise Exception, "The fields in the spreadsheet don't match those in the template."
 
-    files_to_upload = utils.get_file_names(deck.collection.card_template, file_contents)
+    files_to_upload = utils.get_file_names(deck.collection.card_template, file_contents, custom=True)
     files = list(Set(files_to_upload).intersection(file_names))
 
     files_not_found = map(lambda f: str(f), filter(lambda f: f not in file_names, files_to_upload))
@@ -218,6 +230,12 @@ def handle_zipped_deck_file(deck, uploaded_file):
         shutil.rmtree(os.path.join(path, 'temp_dir'))
     return [file_contents, mappings]
 
+def handle_zipped_deck_file(deck, uploaded_file):
+    """Handles uploaded zipped deck file (not customized)"""
+    [file_contents, zfile, file_names] = extract_from_zip(uploaded_file)
+    [file_contents, mappings] = get_mappings_from_zip(deck, file_contents, file_names, zfile)
+    return [file_contents, mappings]
+
 def handle_uploaded_deck_file(deck, uploaded_file):
     """Handles an uploaded deck file."""
     cached_file_contents = uploaded_file.read()
@@ -232,7 +250,51 @@ def handle_uploaded_deck_file(deck, uploaded_file):
     except:
         raise Exception, "Uploaded file type not supported."
     add_cards_to_deck(deck, parsed_cards)
- 
+
+def handle_custom_file(uploaded_file, course_name, user):
+    """Handles an uploaded custom deck file."""
+    cached_file_contents = uploaded_file.read()
+    mappings = None
+    try:
+        [file_contents, zfile, file_names] = extract_from_zip(uploaded_file)
+        is_zip = True
+    except zipfile.BadZipfile:
+        file_contents = cached_file_contents
+        is_zip = False
+    if not utils.correct_custom_format(file_contents):
+        raise Exception, "Incorrect format of the spreadsheet."
+    card_template_fields = utils.get_card_template(file_contents)
+    card_template = CardTemplate(title=course_name, owner=user)
+    card_template.save()
+    for template_field in card_template_fields:
+        label = template_field['label']
+        side = template_field['side']
+        if side == 'Front':
+            display = True
+        else:
+            display = False
+        type = template_field['type'][0]
+        field = Field(label=label, field_type=type, show_label=True, display=display)
+        field.save()
+        card_template_field = CardTemplates_Fields(card_template=card_template, field=field)
+        card_template_field.save()
+
+    collection = Collection(title=course_name, card_template=card_template)
+    collection.save()
+    user_collection = Users_Collections(user=user, date_joined=date.today(), collection=collection, role=Users_Collections.ADMINISTRATOR)
+    user_collection.save()
+    deck = create_deck(collection_id=collection.id, deck_title='Untitled Deck')
+    if is_zip:
+        [file_contents, mappings] = get_mappings_from_zip(deck, file_contents, file_names, zfile)
+
+    try:
+        parsed_cards = utils.parse_deck_template_file(deck.collection.card_template, file_contents, mappings, custom=True)
+    except:
+        raise Exception, "Uploaded file type not supported."
+    add_cards_to_deck(deck, parsed_cards)
+    return deck
+
+
 @transaction.commit_on_success
 def update_card_fields(card, field_items):
     field_ids = [f['field_id'] for f in field_items]
