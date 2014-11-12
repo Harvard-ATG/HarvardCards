@@ -57,7 +57,8 @@ def custom_create(request):
     upload_error = ''
 
     role_bucket = services.get_or_update_role_bucket(request)
-    collection_list = queries.getCollectionList(role_bucket)
+    canvas_course_collections = LTIService(request).getCourseCollections()
+    collection_list = queries.getCollectionList(role_bucket, collection_ids=canvas_course_collections)
     if request.method == 'POST':
 
         course_name = request.POST.get('course', '')
