@@ -1,7 +1,7 @@
 define(['jquery', 'jqueryui'], function($) {
 
 	function sortDecks() {
-		console.log("init sort decks");
+		//console.log("init sort decks");
 
 		var $sortableElement = $("#sortable-decks");
 
@@ -10,7 +10,7 @@ define(['jquery', 'jqueryui'], function($) {
 
 		// get the new order when sorting has stopped 
 		$sortableElement.on("sortstop", function(event, ui) {
-			console.log("sortable event", "args:", event, ui);
+			//console.log("sortable event", "args:", event, ui);
 
 			var deck_ids = []; 
 			var deck_order = [];
@@ -34,16 +34,12 @@ define(['jquery', 'jqueryui'], function($) {
 
 			$("#deck_order").val(deck_json).effect("highlight");
 
-			console.log("--> new deck order:");
-			console.log("deck_ids:", deck_ids);
-			console.log("deck_order", deck_order);
-			console.log("deck_json:", deck_json);
+			//console.log("--> new deck order:", deck_ids, deck_order);
 		});
 	}
 
 	var MODULE = {
 		initModule: function(el) {
-			console.log("init collecitons edit");
 			sortDecks();
 		}
 	};
