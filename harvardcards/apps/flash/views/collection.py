@@ -1,4 +1,5 @@
 import datetime, base64
+import json
 
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, HttpRequest, Http404
 from django.shortcuts import render, redirect
@@ -7,7 +8,6 @@ from django.core.exceptions import ViewDoesNotExist, PermissionDenied
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.utils import simplejson
 
 from django.forms.formsets import formset_factory
 from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field
@@ -17,7 +17,6 @@ from harvardcards.apps.flash.services import check_role
 from harvardcards.apps.flash.queries import is_superuser_or_staff
 from harvardcards.apps.flash.lti_service import LTIService
 from harvardcards.apps.flash.views import card_template
-
 
 def index(request, collection_id=None):
     """Displays a set of collections to the user depending on whether 
@@ -106,7 +105,7 @@ def edit(request, collection_id=None):
     if request.method == 'POST':
         collection_form = CollectionForm(request.POST, instance=collection)
         if collection_form.is_valid():
-            data = simplejson.loads(request.POST['deck_order'])
+            data = json.loads(request.POST['deck_order'])
             if data:
                 deck_orders = data['deck']
                 for deck_order in deck_orders:
