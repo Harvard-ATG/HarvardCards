@@ -118,11 +118,18 @@ def edit(request, collection_id=None):
             return response
     else:
         collection_form = CollectionForm(instance=collection)
+
+    collection_decks = []
+    for c in collection_list:
+        if c['id'] == collection.id:
+            collection_decks = c['decks']
+            break
         
     context = {
         "collection_form": collection_form, 
         "nav_collections": collection_list,
-        "collection": collection
+        "collection": collection,
+        "collection_decks": collection_decks,
     }
 
     return render(request, 'collections/edit.html', context)
