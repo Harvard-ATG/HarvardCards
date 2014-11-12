@@ -4,8 +4,24 @@
 	{% include "_collection_nav.html" with nav_collections=nav_collections active_collection=collection %}
 {% endblock %}
 
+{% block css %}
+<style>
+#sortable-decks-label, 
+#sortable-decks {
+	margin: 10px 0;
+}
+#sortable-decks > li:not(:last-child) {
+	border-bottom: 1px solid #ccc;
+}
+#sortable-decks > li {
+	margin: 5px 0;
+	padding: 5px;
+}
+</style>
+{% endblock %}
+
 {% block main_content %}
-<div id="content">
+<div id="content" data-module="collections-edit">
     <div class="courseWrapper">
         <div class="courseHeader">
             <h2>Edit course</h2>
@@ -28,6 +44,14 @@
             <label for="id_private">Private:</label> 
             {{ collection_form.private }} </p> 
             {% endcomment %}
+
+            <div id="sortable-decks-label">Reorder decks (drag & drop):</div>
+            <ul id="sortable-decks">
+                {% for id in "12345"|make_list %}
+                <li data-deck-id="{{id}}">Deck #{{id}}</li>
+                {% endfor %}
+            </ul>
+            <input type="text" id="deck_order" name="deck_order" value="{}" />
 
             <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
             <a href="{% url 'collectionIndex' collection.id %}" class="adminMenuBtn cancelBtn">Cancel</a>

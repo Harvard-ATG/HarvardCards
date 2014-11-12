@@ -19,6 +19,8 @@ from harvardcards.apps.flash import queries
 from harvardcards.settings.common import MEDIA_ROOT, APPS_ROOT
 import zipfile
 from StringIO import StringIO
+from mutagen.mp3 import MP3
+from sets import Set
 
 def delete_collection(collection_id):
     """Deletes a collection and returns true on success, false otherwise."""
@@ -30,15 +32,15 @@ def delete_collection(collection_id):
 def delete_deck(deck_id):
     """Deletes a deck and returns true on success, false otherwise."""
     deck = Deck.objects.get(id=deck_id)
-    delete_deck_images(deck_id)
+    delete_deck_files(deck_id)
     deck.delete()
     if not Deck.objects.filter(id=deck_id):
         return True
     return False
 
-def delete_deck_images(deck_id):
+def delete_deck_files(deck_id):
     """
-    Deletes all the images associated with a deck. 
+    Deletes all the files (images, audio) associated with the deck. 
     Raises an exception if there is a problem deleting the images.
     """
     deck = Deck.objects.get(id=deck_id)
@@ -109,6 +111,13 @@ def valid_uploaded_file(uploaded_file, file_type):
             return False
         return True
 
+    if file_type == 'A':
+        try:
+            audio = MP3(uploaded_file)
+        except:
+            return False
+        return True
+
 def handle_media_folders(collection, deck, file_name):
     # create the MEDIA_ROOT folder if it doesn't exist
     if not os.path.exists(MEDIA_ROOT):
@@ -161,32 +170,67 @@ def upload_img_from_path(path_original, deck, collection):
     return os.path.join(dir_name, file_name)
 
 
+def handle_zipped_deck_file(deck, uploaded_file):
+    mappings = {'Image':{}, 'Audio':{}}
+    zfile = zipfile.ZipFile(uploaded_file, 'r')
+    file_names = zfile.namelist()
+    
+    # This filters the __MACOSX/ folder entries from the zip file, which
+    # should be ignored for the upload (only relevant for MAC-created zip files).
+    file_names = [file_name for file_name in file_names if "__MACOSX" not in file_name]
+
+    excel_files = filter(lambda f: os.path.splitext(f)[1][1:].strip().lower() in ['xls', 'xlsx'], file_names)
+    if len(excel_files) > 1:
+        raise Exception, "More than one excel files found in the zipped folder."
+    if len(excel_files) == 0:
+        raise Exception, "No flashcard template excel file found in the zipped folder."
+
+    file_contents = zfile.read(excel_files[0])
+
+    if not utils.template_matches_file(deck.collection.card_template, file_contents):
+        raise Exception, "The fields in the spreadsheet don't match those in the template."
+
+    files_to_upload = utils.get_file_names(deck.collection.card_template, file_contents)
+    files = list(Set(files_to_upload).intersection(file_names))
+
+    files_not_found = map(lambda f: str(f), filter(lambda f: f not in file_names, files_to_upload))
+
+    if len(files_not_found):
+        raise Exception, "File(s) not found in the zipped folder: %s" %str(files_not_found)[1:-1]
+
+    for file in files:
+        [full_path, path, dir_name, file_name] = handle_media_folders(deck.collection.id, deck.id, file)
+        zfile.extract(file, os.path.join(path, 'temp_dir'))
+        file_path = os.path.join(path, 'temp_dir', file)
+
+        if valid_uploaded_file(file_path, 'I'):
+            os.rename(file_path, os.path.join(path, 'temp_dir', file_name))
+            shutil.move(os.path.join(path, 'temp_dir', file_name), os.path.join(path, file_name))
+            resize_uploaded_img(path, file_name, dir_name)
+            mappings['Image'][file] = os.path.join(dir_name, file_name)
+
+        elif valid_uploaded_file(file_path, 'A'):
+            os.rename(file_path, os.path.join(path, 'temp_dir', file_name))
+            shutil.move(os.path.join(path, 'temp_dir', file_name), os.path.join(path, file_name))
+            mappings['Audio'][file] = os.path.join(dir_name, file_name)
+
+    if len(files):
+        shutil.rmtree(os.path.join(path, 'temp_dir'))
+    return [file_contents, mappings]
+
 def handle_uploaded_deck_file(deck, uploaded_file):
     """Handles an uploaded deck file."""
     cached_file_contents = uploaded_file.read()
-    img_mapping = None
+    mappings = None
 
-    # NOTE: replaced the zipfile.is_zipfile() check with a try..except block
-    # because is_zipfile was throwing this error on sharedhosting:
-    # "coercing to Unicode: need string or buffer, InMemoryUploadedFile found is_zipfile"
     try:
-        zfile = zipfile.ZipFile(uploaded_file, 'r')
-        file_names = zfile.namelist()
-        img_mapping = {}
-        for file in file_names:
-            data = zfile.read(file)
-            if os.path.splitext(file)[1][1:].strip().lower() in ['xls', 'xlsx']:
-                file_contents = data
-
-            elif valid_uploaded_file(StringIO(data), 'I'):
-                img = Image.open(StringIO(data))
-                [full_path, path, dir_name, file_name] = handle_media_folders(deck.collection.id, deck.id, file)
-                img.save(full_path)
-                resize_uploaded_img(path, file_name, dir_name)
-                img_mapping[file] = os.path.join(dir_name, file_name)
+        [file_contents, mappings] = handle_zipped_deck_file(deck, uploaded_file)
     except zipfile.BadZipfile:
         file_contents = cached_file_contents
-    parsed_cards = utils.parse_deck_template_file(deck.collection.card_template, file_contents, img_mapping)
+    try:
+        parsed_cards = utils.parse_deck_template_file(deck.collection.card_template, file_contents, mappings)
+    except:
+        raise Exception, "Uploaded file type not supported."
     add_cards_to_deck(deck, parsed_cards)
  
 @transaction.commit_on_success

@@ -22,7 +22,11 @@
 			</video>
 		{% elif field.type == 'A' %}
 			<audio alt="{{field.label}}" controls="controls" preload="auto">
-				<source src="{{field.value}}" />
+				{% if  field.value|slice:":4" == "http" or STATIC_URL in field.value %}
+					<source src="{{field.value}}" />
+				{% else %}
+					<source src="{{MEDIA_URL}}{{field.value}}" />
+				{% endif %}
 				Your browser does not support the <code>audio</code> element.
 			</audio>
 		{% else %}
