@@ -32,6 +32,13 @@ class LTIService:
         '''Returns true if the user that initiated the LTI launch has a given role, false otherwise.'''
         return role in self.getLTILaunchParam('roles', [])
 
+    def isCanvasCourseAssociated(self, canvas_course_id, collection_id):
+        '''Returns true if the given canvas course ID is associated with the given collection ID, false otherwise.'''
+        found = Canvas_Course_Map.objects.filter(collection__id=collection_id, canvas_course_id=canvas_course_id)
+        if found:
+            return True
+        return False
+
     def associateCanvasCourse(self, collection_id):
         '''
         This creates a mapping between a canvas course, the context in which the LTI tool is operating,
@@ -54,11 +61,9 @@ class LTIService:
             return False
 
         log.debug("setupCanvasCourseMap(): lookup canvas course id [%s] and collection id [%s]" % (canvas_course_id, collection_id))
-
-        found = Canvas_Course_Map.objects.filter(collection__id=collection_id, canvas_course_id=canvas_course_id)
-        if found:
-            log.debug("setupCanvasCourseMap(): found mapping")
-            return False
+        if self.isCanvasCourseAssociated(canvas_course_id, collection_id):
+            log.debug("setupCanvasCourseMap(): mapping found")
+            return True
 
         collection = Collection.objects.get(id=collection_id)
         subscribe = self.hasRole(const.INSTRUCTOR)
@@ -66,6 +71,18 @@ class LTIService:
         canvas_course_map.save()
         log.debug("setupCanvasCourseMap(): created mapping [%s]" % canvas_course_map.id)
         return True
+
+    def getCourseCollections(self):
+        '''Returns the list of collection IDs associated with the canvas course.'''
+        if not self.isLTILaunch():
+            print "not launch"
+            return []
+
+        canvas_course_id = self.getCanvasCourseId()
+        canvas_course_maps = Canvas_Course_Map.objects.filter(canvas_course_id=canvas_course_id)
+        canvas_collection_ids = [m.collection.id for m in canvas_course_maps]
+
+        return canvas_collection_ids
 
     def subscribeToCourseCollections(self):
         '''

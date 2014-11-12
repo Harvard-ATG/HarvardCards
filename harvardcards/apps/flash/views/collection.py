@@ -23,7 +23,8 @@ def index(request, collection_id=None):
     user has permission."""
 
     role_bucket = services.get_or_update_role_bucket(request)
-    collection_list = queries.getCollectionList(role_bucket)
+    canvas_course_collections = LTIService(request).getCourseCollections()
+    collection_list = queries.getCollectionList(role_bucket, collection_ids=canvas_course_collections)
     active_collection = None
     display_collections = collection_list
     
@@ -53,7 +54,8 @@ def create(request):
     """Creates a collection."""
 
     role_bucket = services.get_or_update_role_bucket(request)
-    collection_list = queries.getCollectionList(role_bucket)
+    canvas_course_collections = LTIService(request).getCourseCollections()
+    collection_list = queries.getCollectionList(role_bucket, collection_ids=canvas_course_collections)
 
     if request.method == 'POST':
         collection_form = CollectionForm(request.POST)
@@ -98,7 +100,8 @@ def edit(request, collection_id=None):
     collection = Collection.objects.get(id=collection_id)
 
     role_bucket = services.get_or_update_role_bucket(request)
-    collection_list = queries.getCollectionList(role_bucket)
+    canvas_course_collections = LTIService(request).getCourseCollections()
+    collection_list = queries.getCollectionList(role_bucket, collection_ids=canvas_course_collections)
 
     if request.method == 'POST':
         collection_form = CollectionForm(request.POST, instance=collection)
@@ -126,7 +129,8 @@ def share_collection(request, collection_id=None):
     users list
     """
     role_bucket = services.get_or_update_role_bucket(request)
-    collection_list = queries.getCollectionList(role_bucket)
+    canvas_course_collections = LTIService(request).getCourseCollections()
+    collection_list = queries.getCollectionList(role_bucket, collection_ids=canvas_course_collections)
 
     collection = Collection.objects.get(id=collection_id)
     collection_share_form = CollectionShareForm()
