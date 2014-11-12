@@ -29,19 +29,22 @@
             {{ collection_form.private }} </p> 
             {% endcomment %}
 
-            <div id="sortable-decks-label">Reorder decks (drag & drop):</div>
-            <ul id="sortable-decks">
-                {% for current_collection in nav_collections %}
-                    {% if current_collection.id == collection.id %}
-                        {% if current_collection.decks|length > 0 %}
-                            {% for deck in current_collection.decks %}
-                                <li data-deck-id="{{deck.id}}">{{ deck.title|truncatechars:30}}</li>
-                            {% endfor %}
-                        {% endif %}  
-                    {% endif %}
-                {% endfor %}
-            </ul>
-            <input type="hidden" id="deck_order" name="deck_order" value="{}" />
+            <p>
+                <label for="sortable-decks">Deck Order:</label>
+                <div class="form-help">Drag and drop to reorder the list of decks below. Click <i>Submit</i> to save.</div>
+                <ul id="sortable-decks">
+                    {% for current_collection in nav_collections %}
+                        {% if current_collection.id == collection.id %}
+                            {% if current_collection.decks|length > 0 %}
+                                {% for deck in current_collection.decks %}
+                                    <li data-deck-id="{{deck.id}}">{{ deck.title|truncatechars:40}}</li>
+                                {% endfor %}
+                            {% endif %}  
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+                <input type="hidden" id="deck_order" name="deck_order" value="{}" />
+            </p>
 
             <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
             <a href="{% url 'collectionIndex' collection.id %}" class="adminMenuBtn cancelBtn">Cancel</a>

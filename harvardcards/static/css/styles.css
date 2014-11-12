@@ -943,16 +943,23 @@ ol.help > li > ol > li > ol {
 	margin: 2px;
 }
 
-#sortable-decks-label,
 #sortable-decks {
-    margin: 10px 0;
-}
-#sortable-decks > li:not(:last-child) {
-    border-bottom: 1px solid #ccc;
+    margin: 10px 0 20px 0;
+	display: inline-block;
 }
 #sortable-decks > li {
-    margin: 5px 0;
-    padding: 5px;
+    margin: 0px 0 0 15px;
+	min-width: 300px;
+	padding: 5px 15px 5px 15px;
+	background: #fff;
+    border-top: 1px solid #ccc;
+    border-left: 3px solid #ccc;
+    border-right: 3px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+#sortable-decks > li:hover {
+	color: #a51c30;
+	cursor: move;
 }
 
 @media screen and (min-width: 320px){
