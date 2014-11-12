@@ -171,6 +171,10 @@ def upload_img_from_path(path_original, deck, collection):
     return os.path.join(dir_name, file_name)
 
 def extract_from_zip(uploaded_file):
+    """
+    Checks for valid spreadsheet file in the zipped folder.
+    Returns the spreadsheet, zip file and relevant file names.
+    """
     zfile = zipfile.ZipFile(uploaded_file, 'r')
     file_names = zfile.namelist()
 
@@ -189,6 +193,10 @@ def extract_from_zip(uploaded_file):
     return [file_contents, zfile, file_names]
 
 def get_mappings_from_zip(deck, file_contents, file_names, zfile):
+    """
+    Checks if all the files in the excel file are in the zipped folder.
+    Saves the files and returns the mappings between the file names and their paths
+    """
     mappings = {'Image':{}, 'Audio':{}}
 
     if not utils.template_matches_file(deck.collection.card_template, file_contents):
@@ -223,6 +231,7 @@ def get_mappings_from_zip(deck, file_contents, file_names, zfile):
     return [file_contents, mappings]
 
 def handle_zipped_deck_file(deck, uploaded_file):
+    """Handles uploaded zipped deck file (not customized)"""
     [file_contents, zfile, file_names] = extract_from_zip(uploaded_file)
     [file_contents, mappings] = get_mappings_from_zip(deck, file_contents, file_names, zfile)
     return [file_contents, mappings]
@@ -243,7 +252,7 @@ def handle_uploaded_deck_file(deck, uploaded_file):
     add_cards_to_deck(deck, parsed_cards)
 
 def handle_custom_file(uploaded_file, course_name, user):
-    """Handles an uploaded deck file."""
+    """Handles an uploaded custom deck file."""
     cached_file_contents = uploaded_file.read()
     mappings = None
     try:
@@ -255,16 +264,16 @@ def handle_custom_file(uploaded_file, course_name, user):
     if not utils.correct_custom_format(file_contents):
         raise Exception, "Incorrect format of the spreadsheet."
     card_template_fields = utils.get_card_template(file_contents)
-    card_template = CardTemplate(title=course_name)
+    card_template = CardTemplate(title=course_name, owner=user)
     card_template.save()
     for template_field in card_template_fields:
         label = template_field['label']
         side = template_field['side']
-        if side == 'F':
+        if side == 'Front':
             display = True
         else:
             display = False
-        type = template_field['type']
+        type = template_field['type'][0]
         field = Field(label=label, field_type=type, show_label=True, display=display)
         field.save()
         card_template_field = CardTemplates_Fields(card_template=card_template, field=field)
@@ -272,7 +281,7 @@ def handle_custom_file(uploaded_file, course_name, user):
 
     collection = Collection(title=course_name, card_template=card_template)
     collection.save()
-    user_collection = Users_Collections(user=user, date_joined=date.today(), collection=collection, role='C')
+    user_collection = Users_Collections(user=user, date_joined=date.today(), collection=collection, role=Users_Collections.ADMINISTRATOR)
     user_collection.save()
     deck = create_deck(collection_id=collection.id, deck_title='Untitled Deck')
     if is_zip:

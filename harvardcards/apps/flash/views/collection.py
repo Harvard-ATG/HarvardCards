@@ -6,9 +6,10 @@ from django.core.context_processors import csrf
 from django.core.exceptions import ViewDoesNotExist, PermissionDenied
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 from django.forms.formsets import formset_factory
-from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field
+from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field, CardTemplate
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm, CollectionShareForm
 from harvardcards.apps.flash import forms, services, queries, utils
 from harvardcards.apps.flash.services import check_role
@@ -49,6 +50,9 @@ def index(request, collection_id=None):
 
 @login_required
 def custom_create(request):
+    """
+    Creates a collection with custom template.
+    """
     upload_error = ''
 
     role_bucket = services.get_or_update_role_bucket(request)
@@ -100,10 +104,12 @@ def create(request):
                 services.get_or_update_role_bucket(request, collection_id.id, Users_Collections.role_map[Users_Collections.ADMINISTRATOR])
             return redirect(collection)
     else:
+        rel_templates = CardTemplate.objects.filter(Q(owner__isnull=True) | Q(owner=request.user))
         initial = {'card_template': '1'}
         card_template_id = initial['card_template']
-        collection_form = CollectionForm(initial=initial)
-    
+        collection_form = CollectionForm(query_set=rel_templates,initial=initial)
+
+
     # Pre-populate the "preview" of the card template
     # This view is also called via AJAX on the page.
     prev_request = HttpRequest()
@@ -111,11 +117,11 @@ def create(request):
     prev_request.GET['card_template_id'] = card_template_id
     prev_response = card_template.preview(prev_request)
     card_template_preview_html = prev_response.content
-        
+
     context = {
         "nav_collections": collection_list,
         "active_collection": None,
-        "collection_form": collection_form, 
+        "collection_form": collection_form,
         "card_template_preview_html": card_template_preview_html
     }
 

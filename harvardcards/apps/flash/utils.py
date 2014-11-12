@@ -46,12 +46,19 @@ def parse_deck_template_file(card_template, file_contents, mappings=None, custom
     return cards
 
 def template_matches_file(card_template, file_contents):
-    fields = card_template.fields.all().order_by('sort_order')
-    nfields = len(fields)
+    """
+    Checks if the uploaded spreadsheet has the same template as the collection.
+    """
     workbook = xlrd.open_workbook(file_contents=file_contents)
     sheet = workbook.sheet_by_index(0)
 
-    for col_index in range(nfields):
+    fields = card_template.fields.all().order_by('sort_order')
+    nfields = len(fields)
+
+    if nfields != sheet.ncols:
+        return False
+
+    for col_index in range(sheet.ncols):
         val = sheet.cell(0, col_index).value
         if val != str(fields[col_index]):
             return False
@@ -59,20 +66,26 @@ def template_matches_file(card_template, file_contents):
 
 
 def correct_custom_format(file_contents):
+    """
+    Checks if the uploaded spreadsheet follows the correct format.
+    """
     workbook = xlrd.open_workbook(file_contents=file_contents)
     sheet = workbook.sheet_by_index(0)
 
     for col_index in range(sheet.ncols):
         val = sheet.cell(1, col_index).value
-        if val not in ['F', 'B']:
+        if val not in ['Front', 'Back']:
             return False
         val = sheet.cell(2, col_index).value
-        if val not in ['A', 'I', 'T', 'V']:
+        if val not in ['Audio', 'Image', 'Text', 'Video']:
             return False
     return True
 
 
 def get_card_template(file_contents):
+    """
+    Returns the card template parsed from the uploaded spreadsheet.
+    """
     workbook = xlrd.open_workbook(file_contents=file_contents)
     sheet = workbook.sheet_by_index(0)
     fields = []
@@ -86,6 +99,9 @@ def get_card_template(file_contents):
     return fields
 
 def get_file_names(card_template, file_contents, custom=False):
+    """
+    Returns the file names that appear in the uploaded spreadsheet.
+    """
     fields = card_template.fields.all().order_by('sort_order')
     nfields = len(fields)
     columns_to_parse = []
@@ -157,20 +173,22 @@ def create_deck_file(deck_id):
     return file_output
 
 def generate_random_id(size=10, chars=string.ascii_uppercase + string.digits):
-	'''
+	"""
 	Returns a random id with the given size and from the given set of characters.
 	Adapted from http://stackoverflow.com/questions/2257441/random-string-generation-with-upper-case-letters-and-digits-in-python
-	'''
+	"""
 	return ''.join(random.choice(chars) for _ in range(size))
 
 def create_custom_template_file():
-
+    """
+    Creates a sample custom template spreadsheet.
+    """
     output = StringIO.StringIO()
     workbook = xlwt.Workbook(encoding='utf8')
     worksheet = workbook.add_sheet('sheet1')
     rows = [['Image', 'Artist','Date', 'Title', 'Materials', 'Location', 'Audio'],
-            ['F', 'F', 'F', 'B', 'B', 'B', 'F'],
-            ['I', 'T', 'T', 'T', 'T', 'T', 'A'],
+            ['Front', 'Front', 'Front', 'Back', 'Back', 'Back', 'Front'],
+            ['Image', 'Text', 'Text', 'Text', 'Text', 'Text', 'Audio'],
             ['','Some artist','','','','','sound.mp3'],
             ['pisa_tower.jpeg', '','','','','','']]
 
