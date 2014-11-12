@@ -169,44 +169,22 @@ LOGGING = {
     },
     'handlers': {
         'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': path.join(ROOT_DIR, 'logs', 'debug.log'),
-            'formatter': 'verbose'
-        },
-        'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': path.join(ROOT_DIR, 'logs', 'info.log'),
-            'formatter': 'verbose'
-        },
-        'file': {
-            'level': 'WARNING',
-            'class': 'logging.FileHandler',
-            'filename': path.join(ROOT_DIR, 'logs', 'warning.log'),
-            'formatter': 'verbose'
-        },
-        'file': {
-            'level': 'ERROR',
-            'class': 'logging.FileHandler',
-            'filename': path.join(ROOT_DIR, 'logs', 'error.log'),
-        },
-        'file': {
-            'level': 'CRITICAL',
-            'class': 'logging.FileHandler',
-            'filename': path.join(ROOT_DIR, 'logs', 'critical.log'),
+            'filename': path.join(ROOT_DIR, 'logs', 'app.log'),
             'formatter': 'verbose'
         },
         'console': {
-            'level' : 'DEBUG',
+            'level' : 'INFO',
             'class': 'logging.StreamHandler',
             'stream': sys.stdout,
+            'formatter': 'simple'
         },
     },
     'loggers': {
         'django.request': {
             'handlers': ['file'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': True,
         },
         'harvardcards': {

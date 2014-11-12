@@ -88,15 +88,23 @@ def upload_deck(request, deck_id=None):
     collection_list = queries.getCollectionList(role_bucket)
 
     if request.method == 'POST':
-        log.critical('The user %(u)s is uploading a new deck.' %{'u': str(request.user)})
+        log.info('The user %(u)s is uploading a new deck.' %{'u': str(request.user)})
         deck_form = DeckImportForm(request.POST, request.FILES)
         if deck_form.is_valid():
             if 'file' in request.FILES:
                 try:
                     services.handle_uploaded_deck_file(deck, request.FILES['file'])
+                    log.info('New deck successfully uploaded by user %(u)s to the collection %(c)s.'
+                                                %{'c': str(deck.collection), 'u': str(request.user)})
                     return redirect(deck)
                 except Exception, e:
                     upload_error = str(e)
+                    msg = 'The following error occurred when user %(u)s uploaded a deck:\n' %{'u':str(request.user)}
+                    log.error(msg + upload_error)
+            else:
+                log.info('No file selected by user %(u)s.' %{'u': str(request.user)})
+        else:
+            log.error('Deck Form submitted by %(u)s is not valid.' %{'u': str(request.user)})
 
     else:
         deck_form = DeckImportForm()
