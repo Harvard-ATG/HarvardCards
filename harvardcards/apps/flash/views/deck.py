@@ -68,9 +68,15 @@ def index(request, deck_id=None):
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')
 def delete(request, deck_id=None):
     """Deletes a deck."""
+    d = {'user': request.user}
 
     collection_id = queries.getDeckCollectionId(deck_id)
-    services.delete_deck(deck_id)
+    success = services.delete_deck(deck_id)
+    if success:
+        log.info('Deck %(d)s deleted from collection %(c)s' %{'d':deck_id, 'c':collection_id}, extra=d)
+    else:
+        log.info('Deck %(d)s could not be deleted from collection %(c)s' %{'d':deck_id, 'c':collection_id}, extra=d)
+
     response =  redirect('collectionIndex', collection_id)
     response['Location'] += '?instructor=edit'
     return response

@@ -111,6 +111,7 @@ def create(request):
                 
                 #update role_bucket to add admin permission to the user for this newly created collection
                 services.get_or_update_role_bucket(request, collection_id.id, Users_Collections.role_map[Users_Collections.ADMINISTRATOR])
+            log.info('Collection %s created.' %collection.id, extra={'user': request.user})
             return redirect(collection)
     else:
         rel_templates = CardTemplate.objects.filter(Q(owner__isnull=True) | Q(owner=request.user))
@@ -210,6 +211,7 @@ def share_collection(request, collection_id=None):
 
             context['share_form'] = collection_share_form
             context['secret_share_key'] = secret_share_key
+            log.info('URL generated to share collection %s.' %collection_id, extra={'user': request.user})
         else:
             context['share_form'] = collection_share_form
 
@@ -252,13 +254,14 @@ def add_user_to_shared_collection(request, secret_share_key=''):
     if not Users_Collections.objects.filter(**uc_kwargs):
         uc_kwargs['date_joined'] = datetime.date.today()
         Users_Collections(**uc_kwargs).save()
-
+    log.info('User added to the collection %s as a learner.' %collection_id, extra={'user': request.user})
     return HttpResponseRedirect("/")
 
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'collection')
 def add_deck(request, collection_id=None):
     """Adds a deck."""
     deck = services.create_deck(collection_id=collection_id, deck_title='Untitled Deck')
+    log.info('Deck %(d)s added to the collection %(c)s.' %{'d': deck.id, 'c': str(collection_id)}, extra={'user': request.user})
     return redirect(deck)
 
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR], 'collection') 
@@ -268,6 +271,7 @@ def delete(request, collection_id=None):
     services.delete_collection(collection_id)
     response = redirect('collectionIndex')
     response['Location'] += '?instructor=edit'
+    log.info('Collection %(c)s deleted.' %{'c': str(collection_id)}, extra={'user': request.user})
     return response
 
 def download_template(request, collection_id=None):
@@ -282,6 +286,8 @@ def download_template(request, collection_id=None):
 
     file_output = utils.create_deck_template_file(collection.card_template)
     response.write(file_output)
+    log.info('Template for the collection %(c)s downloaded by the user.'
+            %{'c': str(collection_id)}, extra={'user': request.user})
 
     return response
 
@@ -296,5 +302,6 @@ def download_custom_template(request, collection_id=None):
 
     file_output = utils.create_custom_template_file()
     response.write(file_output)
+    log.info('Custom template downloaded.', extra={'user': request.user})
 
     return response
