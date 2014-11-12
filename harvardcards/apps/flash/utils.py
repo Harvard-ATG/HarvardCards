@@ -167,10 +167,13 @@ def create_deck_file(deck_id):
             worksheet.write(row, idx, label=field['value'])
 
     workbook.save(output)
-    file_output = output.getvalue()
+    file_output = workbook
+    #file_output = output.getvalue()
     output.close()
 
     return file_output
+
+
 
 def generate_random_id(size=10, chars=string.ascii_uppercase + string.digits):
 	"""

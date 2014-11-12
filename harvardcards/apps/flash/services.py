@@ -170,6 +170,24 @@ def upload_img_from_path(path_original, deck, collection):
     resize_uploaded_img(path, file_name, dir_name)
     return os.path.join(dir_name, file_name)
 
+
+def create_zip_deck_file(deck):
+    folder_name = str(deck.collection.id) + '_' + str(deck.id)
+    path = os.path.abspath(os.path.join(MEDIA_ROOT, 'originals', folder_name))
+    s = StringIO()
+
+    zfile = zipfile.ZipFile(s, "w")
+
+    file_output = utils.create_deck_file(deck.id)
+    file_output.save(os.path.join(path, 'deck_file.xls'))
+
+    for file in os.listdir(path):
+        if file.endswith('.db') or file.startswith('.'):
+            continue
+        zfile.write(os.path.join(path, file), arcname=file)
+    zfile.close()
+    return s.getvalue()
+
 def extract_from_zip(uploaded_file):
     """
     Checks for valid spreadsheet file in the zipped folder.
