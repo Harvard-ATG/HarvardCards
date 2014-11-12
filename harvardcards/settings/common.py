@@ -158,21 +158,33 @@ AUTHENTICATION_BACKENDS = (
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False, # don't override default django logging config
+    'formatters': {
+        'verbose': {
+            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt' : "%d/%b/%Y %H:%M:%S"
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
     'handlers': {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': path.join(ROOT_DIR, 'logs', 'debug.log'),
+            'formatter': 'verbose'
         },
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
             'filename': path.join(ROOT_DIR, 'logs', 'info.log'),
+            'formatter': 'verbose'
         },
         'file': {
             'level': 'WARNING',
             'class': 'logging.FileHandler',
             'filename': path.join(ROOT_DIR, 'logs', 'warning.log'),
+            'formatter': 'verbose'
         },
         'file': {
             'level': 'ERROR',
@@ -183,8 +195,10 @@ LOGGING = {
             'level': 'CRITICAL',
             'class': 'logging.FileHandler',
             'filename': path.join(ROOT_DIR, 'logs', 'critical.log'),
+            'formatter': 'verbose'
         },
         'console': {
+            'level' : 'DEBUG',
             'class': 'logging.StreamHandler',
             'stream': sys.stdout,
         },
@@ -205,7 +219,7 @@ LOGGING = {
 
 if DEBUG:
     LOGGING['loggers']['harvardcards']['level'] = 'DEBUG'
-    #LOGGING['loggers']['harvardcards']['handlers'] += ['console']
+    LOGGING['loggers']['harvardcards']['handlers'] += ['console']
 
 OPENID_CREATE_USERS = True
 OPENID_UPDATE_DETAILS_FROM_SREG = True

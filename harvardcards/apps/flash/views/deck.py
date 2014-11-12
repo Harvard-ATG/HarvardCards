@@ -14,6 +14,10 @@ from harvardcards.apps.flash.services import check_role
 from PIL import Image
 import urllib
 import json
+import logging
+
+log = logging.getLogger(__name__)
+
 
 def index(request, deck_id=None):
     """Displays the deck of cards for review/quiz."""
@@ -84,6 +88,7 @@ def upload_deck(request, deck_id=None):
     collection_list = queries.getCollectionList(role_bucket)
 
     if request.method == 'POST':
+        log.critical('The user %(u)s is uploading a new deck.' %{'u': str(request.user)})
         deck_form = DeckImportForm(request.POST, request.FILES)
         if deck_form.is_valid():
             if 'file' in request.FILES:
