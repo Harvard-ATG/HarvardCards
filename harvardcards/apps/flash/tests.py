@@ -241,14 +241,20 @@ class LTIServiceTest(TestCase):
         card_template = CardTemplate.objects.create(title='Test', description='Test')
         collection = Collection.objects.create(title='Test', description='Test', card_template=card_template)
         collection2 = Collection.objects.create(title='Test2', description='Test2', card_template=card_template)
+        collection3 = Collection.objects.create(title='Test3', description='Test3', card_template=card_template)
 
         canvas_course_id = 123
         request = self.createMockRequest(canvas_course_id, [const.INSTRUCTOR]) 
         lti_service = LTIService(request)
 
-        result = lti_service.associateCanvasCourse(collection.id)
+        self.assertTrue(lti_service.associateCanvasCourse(collection.id))
+        self.assertTrue(lti_service.associateCanvasCourse(collection3.id))
+
         self.assertTrue(lti_service.isCanvasCourseAssociated(canvas_course_id, collection.id))
         self.assertFalse(lti_service.isCanvasCourseAssociated(canvas_course_id, collection2.id))
+        self.assertTrue(lti_service.isCanvasCourseAssociated(canvas_course_id, collection3.id))
 
         canvas_collections = lti_service.getCourseCollections()
-        self.assertEqual(len(canvas_collections), 1, msg="found one collection for canvas course")
+        expected_collections = [c.id for c in (collection, collection3)]
+        self.assertEqual(len(canvas_collections), len(expected_collections), msg="found one collection for canvas course")
+        self.assertEqual(canvas_collections, expected_collections)
