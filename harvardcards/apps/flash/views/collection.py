@@ -6,6 +6,8 @@ from django.core.context_processors import csrf
 from django.core.exceptions import ViewDoesNotExist, PermissionDenied
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
+from django.utils import simplejson
 
 from django.forms.formsets import formset_factory
 from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field
@@ -91,6 +93,7 @@ def create(request):
 
     return render(request, 'collections/create.html', context)
 
+@transaction.commit_on_success
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR], 'collection')
 def edit(request, collection_id=None):
     """Edits a collection."""
@@ -101,8 +104,16 @@ def edit(request, collection_id=None):
     collection_list = queries.getCollectionList(role_bucket)
 
     if request.method == 'POST':
+        print request.POST
         collection_form = CollectionForm(request.POST, instance=collection)
         if collection_form.is_valid():
+            data = simplejson.loads(request.POST['deck_order'])
+            if data:
+                deck_orders = data['deck']
+                for deck_order in deck_orders:
+                    deck = Deck.objects.get(pk=deck_order['deck_id'])
+                    deck.sort_order = deck_order['sort_order']
+                    deck.save()
             collection = collection_form.save()
             response = redirect(collection)
             response['Location'] += '?instructor=edit'

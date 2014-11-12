@@ -943,6 +943,18 @@ ol.help > li > ol > li > ol {
 	margin: 2px;
 }
 
+#sortable-decks-label,
+#sortable-decks {
+    margin: 10px 0;
+}
+#sortable-decks > li:not(:last-child) {
+    border-bottom: 1px solid #ccc;
+}
+#sortable-decks > li {
+    margin: 5px 0;
+    padding: 5px;
+}
+
 @media screen and (min-width: 320px){
 /*
 * iPhone portrait
