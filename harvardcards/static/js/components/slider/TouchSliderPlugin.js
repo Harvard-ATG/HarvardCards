@@ -62,10 +62,6 @@ define(['jquery'], function($) {
 		$(this.touchEl).on("touchmove touchstart touchend", this.handleTouchEvents);
 	};
 
-    //Wrapper for jquery tap event handle
-    TouchSliderPlugin.prototype.handleTapEvent = function(evt) {
-        this.slider.goToNext();
-    }
 
 	// Handler for touch events.
 	TouchSliderPlugin.prototype.handleTouchEvents = function(evt) {
