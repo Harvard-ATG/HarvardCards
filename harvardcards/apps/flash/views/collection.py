@@ -62,13 +62,10 @@ def create(request):
         if collection_form.is_valid():
             collection = collection_form.save()
             LTIService(request).associateCanvasCourse(collection.id)
-            if request.POST.get('user_id', 0):
-                user_id = int(request.POST['user_id'])
-                user = User.objects.get(id=user_id)
-                collection_id= Users_Collections.objects.create(user=user, collection=collection, role=Users_Collections.ADMINISTRATOR, date_joined=datetime.date.today())
+            services.add_user_to_collection(user=request.user, collection=collection, role=Users_Collections.ADMINISTRATOR)
                 
-                #update role_bucket to add admin permission to the user for this newly created collection
-                services.get_or_update_role_bucket(request, collection_id.id, Users_Collections.role_map[Users_Collections.ADMINISTRATOR])
+            #update role_bucket to add admin permission to the user for this newly created collection
+            services.get_or_update_role_bucket(request, collection.id, Users_Collections.role_map[Users_Collections.ADMINISTRATOR])
             return redirect(collection)
     else:
         initial = {'card_template': '1'}

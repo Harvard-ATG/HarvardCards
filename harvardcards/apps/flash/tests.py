@@ -12,7 +12,7 @@ from django.http.request import HttpRequest
 
 from django_auth_lti import const
 
-from harvardcards.apps.flash.models import Collection, Deck, Field, CardTemplate, CardTemplates_Fields, Card, Canvas_Course_Map
+from harvardcards.apps.flash.models import Collection, Deck, Field, CardTemplate, CardTemplates_Fields, Card, Canvas_Course_Map, Users_Collections
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
 from harvardcards.apps.flash.views.collection import *
 from harvardcards.apps.flash import services, queries
@@ -34,11 +34,13 @@ class CollectionTest(TestCase):
         super(CollectionTest, self).setUp()
         self.factory = RequestFactory()
         self.client = Client()
+        self.card_template = CardTemplate.objects.create(title='b', description='bbb')
         self._setupSuperUser()
 
     def tearDown(self):
         super(CollectionTest, self).tearDown()
-        self.admin_user.delete()
+        if self.admin_user:
+            self.admin_user.delete()
 
     def _setupSuperUser(self):
         self.admin_user = User.objects.create_superuser(
@@ -50,10 +52,6 @@ class CollectionTest(TestCase):
         url = reverse('index')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        #TODO why is this failing?
-	    #This test isn't failing
-
-        #self.assertTemplateUsed(response, 'index.html')
 
     def test_collection_get(self):
         url = reverse('collectionIndex')
@@ -65,27 +63,26 @@ class CollectionTest(TestCase):
         self.assertTrue(logged_in, 'super user logged in')
 
         url = reverse('collectionCreate')
-        post_data = {'title':'foobar', 'card_template':'1'}
+        post_data = {'title':'foobar', 'card_template':self.card_template.id}
 
-        len_collections_before = len(Collection.objects.filter(title__exact=post_data['title']))
+        self.assertFalse(Collection.objects.filter(title__exact=post_data['title']))
         response = self.client.post(url, post_data)
-        len_collections_after = len(Collection.objects.filter(title__exact=post_data['title']))
-
-        self.assertEqual(len_collections_before + 1, len_collections_after)
+        self.assertTrue(Collection.objects.filter(title__exact=post_data['title']))
 
     def test_collection_form(self):
-        post_data = {'title':'foobar', 'card_template':'1'}
-        form = CollectionForm(post_data)
-        self.assertEqual(form.is_valid(), True)
+        form = CollectionForm({"title":"foo","card_template":self.card_template.id})
+        self.assertTrue(form.is_valid())
+
         form1 = CollectionForm({})
-        self.assertEqual(form1.is_valid(), False)
+        self.assertFalse(form1.is_valid())
 
 class ServicesTest(TestCase):
     def setUp(self):
         """ Every test needs access to the request factory. """
         self.factory = RequestFactory()
         self.client = Client()
-        self.card_template = CardTemplate.objects.get(pk=1)
+        self.card_template = CardTemplate.objects.create(title='b', description='bbb')
+        self.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
 
     def makeCollection(self):
         card_template = CardTemplate.objects.create(title='b', description='bbb')
@@ -106,12 +103,21 @@ class ServicesTest(TestCase):
         card = Card.objects.create(collection=collection, sort_order=1)
         self.assertEqual(services.delete_card(card.id), True)
 
+    def test_addUserToCollection(self):
+        collection = self.makeCollection()
+        user = self.user
+        role = Users_Collections.LEARNER
+
+        success = services.add_user_to_collection(user=user, collection=collection, role=role)
+        self.assertTrue(success)
+        self.assertTrue(Users_Collections.objects.filter(user=user, collection=collection, role=role))
+
 class QueriesTest(TestCase):
     def setUp(self):
         """ Every test needs access to the request factory. """
         self.factory = RequestFactory()
         self.client = Client()
-        self.card_template = CardTemplate.objects.get(pk=1)
+        self.card_template = CardTemplate.objects.create(title='b', description='bbb')
 
     def test_getCollection(self):
         collection = Collection.objects.create(title='getCollectionTest', description='asdfasdfasdf', card_template=self.card_template)

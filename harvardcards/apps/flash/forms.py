@@ -9,6 +9,16 @@ class CollectionForm(forms.ModelForm):
         model = Collection
         fields = ['title', 'card_template'] #'private'
 
+    def __init__(self, *args, **kwargs):
+        """Initializes the form."""
+        return super(CollectionForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        return super(CollectionForm, self).clean()
+
+    def save(self):
+        return super(CollectionForm, self).save()
+
 class CollectionShareForm(forms.Form):
     #role = forms.ChoiceField(choices=Users_Collections.ROLES, initial=Users_Collections.OBSERVER)
     expired_in = forms.DateField(widget=SelectDateWidget(), initial=datetime.datetime.now()+datetime.timedelta(days=365))
