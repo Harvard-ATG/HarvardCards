@@ -175,12 +175,22 @@ class QueriesTest(TestCase):
 
         self.assertEqual(collection.id, collection_id)
 
+
 class LTIServiceTest(TestCase):
     def setUp(self):
         """ Every test needs access to the request factory. """
         self.request = mock.Mock(spec=HttpRequest)
         self.request.session = {"LTI_LAUNCH":{}}
         pass
+
+    def createMockRequest(self, canvas_course_id, roles):
+        """ Creates a mock LTI launch request with the given canvas course ID and roles. """
+        request = mock.Mock(spec=HttpRequest)
+        request.session = {"LTI_LAUNCH":{
+            "custom_canvas_course_id": canvas_course_id,
+            "roles": roles 
+        }}
+        return request
 
     def test_isLTILaunch(self):
         request = mock.Mock(spec=HttpRequest)
@@ -197,18 +207,13 @@ class LTIServiceTest(TestCase):
         collection = Collection.objects.create(title='Test', description='Test', card_template=card_template)
 
         canvas_course_id = 123
-        request = mock.Mock(spec=HttpRequest)
-        request.session = {"LTI_LAUNCH":{
-            "custom_canvas_course_id": canvas_course_id,
-            "roles": [const.INSTRUCTOR]
-        }}
-
+        request = self.createMockRequest(canvas_course_id, [const.INSTRUCTOR]) 
         lti_service = LTIService(request)
-        self.assertTrue(lti_service.associateCanvasCourse(collection.id), msg="Mapping should NOT exist, so should return True")
-        self.assertFalse(lti_service.associateCanvasCourse(collection.id), msg="Mapping should already exist, so should return False")
 
-        found = Canvas_Course_Map.objects.filter(canvas_course_id=canvas_course_id, collection=collection)
-        self.assertEqual(len(found), 1, msg="A single instance of the mapping should exist")
+        self.assertFalse(lti_service.isCanvasCourseAssociated(canvas_course_id, collection.id), "Canvas course NOT associated with collection")
+        result = lti_service.associateCanvasCourse(collection.id)
+        self.assertTrue(result, msg="Canvas course associated successfully")
+        self.assertTrue(lti_service.isCanvasCourseAssociated(canvas_course_id, collection.id), "Canvas course IS associated with collection")
 
     def test_subscribeToCourseCollections(self):
         card_template = CardTemplate.objects.create(title='Test', description='Test')
@@ -216,23 +221,41 @@ class LTIServiceTest(TestCase):
         b_collection = Collection.objects.create(title='Test2', description='Test2', card_template=card_template)
         c_collection = Collection.objects.create(title='Test3', description='Test3', card_template=card_template)
         d_collection = Collection.objects.create(title='Test4', description='Test4', card_template=card_template)
-        user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
 
         canvas_course_id = 123
+        
+        user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+        request = self.createMockRequest(canvas_course_id, [const.LEARNER]) 
+        request.user = user
 
         Canvas_Course_Map.objects.create(canvas_course_id=canvas_course_id, collection=a_collection, subscribe=True)
         Canvas_Course_Map.objects.create(canvas_course_id=canvas_course_id, collection=b_collection, subscribe=True)
         Canvas_Course_Map.objects.create(canvas_course_id=canvas_course_id, collection=c_collection, subscribe=False)
         Canvas_Course_Map.objects.create(canvas_course_id=canvas_course_id + 1, collection=d_collection, subscribe=True)
-        
-        request = mock.Mock(spec=HttpRequest)
-        request.session = {"LTI_LAUNCH":{
-            "custom_canvas_course_id": canvas_course_id,
-            "roles": [const.LEARNER]
-        }}
-        request.user = user
 
         self.assertTrue(LTIService(request).subscribeToCourseCollections())
         subscribed = Users_Collections.objects.filter(user=user)
         self.assertEqual(len(subscribed), 2)
         self.assertFalse(Users_Collections.objects.filter(user=user,collection=c_collection))
+
+    def test_getCourseCollections(self):
+        card_template = CardTemplate.objects.create(title='Test', description='Test')
+        collection = Collection.objects.create(title='Test', description='Test', card_template=card_template)
+        collection2 = Collection.objects.create(title='Test2', description='Test2', card_template=card_template)
+        collection3 = Collection.objects.create(title='Test3', description='Test3', card_template=card_template)
+
+        canvas_course_id = 123
+        request = self.createMockRequest(canvas_course_id, [const.INSTRUCTOR]) 
+        lti_service = LTIService(request)
+
+        self.assertTrue(lti_service.associateCanvasCourse(collection.id))
+        self.assertTrue(lti_service.associateCanvasCourse(collection3.id))
+
+        self.assertTrue(lti_service.isCanvasCourseAssociated(canvas_course_id, collection.id))
+        self.assertFalse(lti_service.isCanvasCourseAssociated(canvas_course_id, collection2.id))
+        self.assertTrue(lti_service.isCanvasCourseAssociated(canvas_course_id, collection3.id))
+
+        canvas_collections = lti_service.getCourseCollections()
+        expected_collections = [c.id for c in (collection, collection3)]
+        self.assertEqual(len(canvas_collections), len(expected_collections))
+        self.assertEqual(canvas_collections, expected_collections)
