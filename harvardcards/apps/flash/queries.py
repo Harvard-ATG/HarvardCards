@@ -44,7 +44,11 @@ def getCollectionList(role_bucket, collection_ids=False):
     if FEATURE_TOGGLE['CANVAS_COURSE_FILTER']:
         if collection_ids:
             collections = collections.filter(id__in=collection_ids)
-    decks_by_collection = getDecksByCollection(collection_ids=collection_ids)
+    if FEATURE_TOGGLE['CANVAS_COURSE_FILTER']:
+        decks_by_collection = getDecksByCollection(collection_ids=collection_ids)
+    else:
+        decks_by_collection = getDecksByCollection()
+
     collection_roles = getCollectionRoleList()
 
     collection_list = []
