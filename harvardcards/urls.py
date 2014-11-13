@@ -14,11 +14,16 @@ urlpatterns = patterns('',
 
     url(r'^collection$', 'harvardcards.apps.flash.views.collection.index', name='collectionIndex'),
 
+    url(r'^collection/custom', 'harvardcards.apps.flash.views.collection.custom_create', name='collectionCustom'),
     url(r'^collection/create$', 'harvardcards.apps.flash.views.collection.create', name='collectionCreate'),
     url(r'^collection/(?P<collection_id>\d+)$', 'harvardcards.apps.flash.views.collection.index', name='collectionIndex'),
     url(r'^collection/(?P<collection_id>\d+)/add-deck$', 'harvardcards.apps.flash.views.collection.add_deck', name='collectionAddDeck'),
+    url(r'^collection/custom/upload', 'harvardcards.apps.flash.views.collection.custom_create', name='customDeckUpload'),
+
     url(r'^collection/(?P<collection_id>\d+)/edit$', 'harvardcards.apps.flash.views.collection.edit', name='collectionEdit'),
     url(r'^collection/(?P<collection_id>\d+)/download-template', 'harvardcards.apps.flash.views.collection.download_template', name='collectionDownloadTemplate'),
+    url(r'^collection/download-custom-template', 'harvardcards.apps.flash.views.collection.download_custom_template', name='collectionDownloadCustomTemplate'),
+
     url(r'^collection/(?P<collection_id>\d+)/delete', 'harvardcards.apps.flash.views.collection.delete', name='collectionDelete'),
     url(r'collection/(?P<collection_id>\d+)/share', 'harvardcards.apps.flash.views.collection.share_collection', name='collectionShare'),
     url(r'collection/share/(?P<secret_share_key>.*)', 'harvardcards.apps.flash.views.collection.add_user_to_shared_collection', name='collectionShareValidate'),

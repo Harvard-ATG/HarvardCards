@@ -130,17 +130,21 @@ h1, h2, h3, h4
 	padding: 0.25em;
 }
 #cardForm .field-error,
- #deckForm .field-error{
+ #deckForm .field-error,
+ #customForm .field-error{
     color: red;
 }
 #cardForm .formMessage,
- #deckForm .formMessage{
+ #deckForm .formMessage,
+  #customForm .formMessage{
 	text-align: left;
 	margin: 1em 0;
 	padding: 1em;
 	color: #333;
 }
-#cardForm .formMessage.error, #deckForm .formMessage.error { background-color: rgba(255,0,0,0.3); }
+#cardForm .formMessage.error,
+#deckForm .formMessage.error,
+#customForm .formMessage.error { background-color: rgba(255,0,0,0.3); }
 #cardForm .formMessage.success { background-color: rgba(0,255,0,0.3); }
 #cardForm .formMessage.info { background-color: rgba(0,0,255,0.3); }
 

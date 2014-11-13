@@ -32,7 +32,7 @@ class CardTemplate(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     fields = models.ManyToManyField(Field, through='CardTemplates_Fields')
-
+    owner = models.ForeignKey(User, blank=True, null=True)
     def __unicode__(self):
         return self.title
 

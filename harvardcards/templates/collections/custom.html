@@ -1,0 +1,45 @@
+{% extends "__layout_left_sidebar.html" %}
+
+{% block sidebar_content %}
+    {% include "_collection_nav.html" with nav_collections=nav_collections active_collection=active_collection %}
+{% endblock %}
+
+{% block main_content %}
+<div id="content" data-module="collections-custom">
+  <div class="courseWrapper">
+
+
+        <form id="customForm" action="{% url 'customDeckUpload' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="courseHeader">
+                <label for="id_title" style="visibility:hidden;text-indent:-300px;position:absolute;">Title:</label>
+                <input id="id_title" name="course" type="text" autofocus placeholder="Enter course name here">
+            </div>
+            <div style="margin: 1em 0;">Steps to create a customized collection:</div>
+            <ol class="help" style="margin-bottom: 1em">
+                <li>Download the <a href="{% url 'collectionDownloadCustomTemplate' %}">flashcard spreadsheet (XLS) <i class="fa fa-download"></i></a>.</li>
+                <li>The first row contains the field labels, the second row contains information about the side of the card the field goes on, and the third row indicates the field type. </li>
+                <li>Modify the first three rows as you see fit. Use this template to enter your flashcards. Each row represents one card, and each column represents a field on that card.</li>
+                <li>Optionally, if the cards have <i>images</i> or <i>audio</i> and you would like to upload them together with the spreadsheet: create a .ZIP file that contains both the spreadsheet and the media files. The files should be in the same folder as the spreadsheet. Make sure to input the exact name of the file in the spreadsheet.</li>
+                <li>Upload the file using the form below.</li>
+            </ol>
+            {% if upload_error %}
+             <div class="formMessage error" style="">Deck Upload Failed</div>
+            {% endif %}
+            <p>
+                <label for="id_file">File:</label>
+                <input id="id_file" name="file" type="file">
+            </p>
+            {% if upload_error %}
+            <div class="field-error" style="padding-top:5px;"> {{upload_error}}</div>
+            {% endif %}
+            <div style="margin-top:1em">
+                <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
+                <a href="{% url 'collectionIndex' %}" class="adminMenuBtn cancelBtn">Cancel</a>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+{% endblock %}

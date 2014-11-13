@@ -3,6 +3,7 @@ from django.forms.extras.widgets import SelectDateWidget
 from . import services
 from django import forms
 from django.forms.util import ErrorList
+from django.db import transaction
 import logging, datetime
 import json
 
@@ -10,6 +11,17 @@ class CollectionForm(forms.ModelForm):
     class Meta:
         model = Collection
         fields = ['title', 'card_template'] #'private'
+    def __init__(self, *args, **kwargs):
+        card_template_query_set = None
+        if 'query_set' in kwargs:
+            card_template_query_set = kwargs.get('query_set', None)
+            del kwargs['query_set']
+
+        super(CollectionForm, self).__init__(*args, **kwargs)
+
+        if card_template_query_set is not None:
+            self.fields['card_template'].queryset = card_template_query_set
+
 
     def __init__(self, *args, **kwargs):
         """Initializes the form."""
@@ -54,6 +66,7 @@ class CollectionForm(forms.ModelForm):
         self.clean_deck_order()
         return super(CollectionForm, self).clean()
 
+    @transaction.commit_on_success
     def save_deck_order(self, deck_order):
         """Saves the new ordering."""
         for d in deck_order:
