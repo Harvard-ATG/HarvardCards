@@ -75,7 +75,6 @@ class LTIService:
     def getCourseCollections(self):
         '''Returns the list of collection IDs associated with the canvas course.'''
         if not self.isLTILaunch():
-            print "not launch"
             return []
 
         canvas_course_id = self.getCanvasCourseId()
