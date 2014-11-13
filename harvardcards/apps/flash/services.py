@@ -5,6 +5,7 @@ This module contains services and commands that may change the state of the syst
 import urllib2
 import os
 import shutil
+import datetime
 from functools import wraps
 from  PIL import Image
 
@@ -420,3 +421,21 @@ def get_or_update_role_bucket(request, collection_id = None, role = None):
         request.session['role_bucket'] = role_bucket
    
     return role_bucket
+
+def add_user_to_collection(user=None, collection=None, role=None):
+    if not (user and collection):
+        return False
+
+    exists = Users_Collections.objects.filter(user=user, collection=collection, role=role).exists()
+    if exists:
+        return True
+
+    valid_roles = queries.getCollectionRoleList()
+    if not role in valid_roles:
+        raise Exception("invalid collection role")
+
+    uc = Users_Collections.objects.create(user=user, collection=collection, role=role, date_joined=datetime.date.today())
+    if uc:
+        return True
+    return False
+
