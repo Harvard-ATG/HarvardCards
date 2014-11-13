@@ -22,11 +22,6 @@ class CollectionForm(forms.ModelForm):
         if card_template_query_set is not None:
             self.fields['card_template'].queryset = card_template_query_set
 
-
-    def __init__(self, *args, **kwargs):
-        """Initializes the form."""
-        return super(CollectionForm, self).__init__(*args, **kwargs)
-
     def clean_deck_order(self):
         """
         Cleans and validates the JSON POSTed in the deck_order field.

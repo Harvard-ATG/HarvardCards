@@ -182,6 +182,23 @@ LOGGING = {
     }
 }
 
+# This defines feature toggles for deploying new features.
+FEATURE_TOGGLE = {
+    # DESCRIPTION:
+    #   When enabled, will filter out any collections that 
+    #   are not directly associated with the canvas course.
+    #   
+    #   Feature toggle created to "dark launch" this functionality
+    #   because we want to merge the code, but don't want to change
+    #   the existing behavior until the end of the semester. 
+    # SEE ALSO: 
+    #   See github pull request #106 and Jira FLASH-200.
+    # TODO: 
+    #   Remove feature toggle here and in queries.py when activated.
+    "CANVAS_COURSE_FILTER": False 
+}
+
+
 if DEBUG:
     LOGGING['loggers']['harvardcards']['level'] = 'DEBUG'
     #LOGGING['loggers']['harvardcards']['handlers'] += ['console']
