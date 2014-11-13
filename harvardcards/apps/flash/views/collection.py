@@ -102,13 +102,6 @@ def edit(request, collection_id=None):
     if request.method == 'POST':
         collection_form = CollectionForm(request.POST, instance=collection)
         if collection_form.is_valid():
-            data = json.loads(request.POST['deck_order'])
-            if data:
-                deck_orders = data['deck']
-                for deck_order in deck_orders:
-                    deck = Deck.objects.get(pk=deck_order['deck_id'])
-                    deck.sort_order = deck_order['sort_order']
-                    deck.save()
             collection = collection_form.save()
             response = redirect(collection)
             response['Location'] += '?instructor=edit'

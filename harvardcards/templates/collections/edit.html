@@ -10,6 +10,9 @@
         <div class="courseHeader">
             <h2>Edit course</h2>
         </div>
+
+        {{ collection_form.non_field_errors }} 
+
         <form action="{% url 'collectionEdit' collection.id %}?collection_id={{ collection.id }}" method="post">{% csrf_token %}
             <p>
                 {{ collection_form.title.errors }}
@@ -32,6 +35,7 @@
             <p>
                 <label for="sortable-decks">Deck Order:</label>
                 <div class="form-help">Drag and drop to reorder the list of decks below. Click <i>Submit</i> to save.</div>
+                {{ collection_form.errors.deck_order }} 
                 {% if collection_decks|length > 0 %}
                     <ul id="sortable-decks">
                         {% for deck in collection_decks %}

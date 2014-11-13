@@ -2,7 +2,9 @@ from models import Collection, Field, Deck, Decks_Cards, Card, Cards_Fields, Use
 from django.forms.extras.widgets import SelectDateWidget
 from . import services
 from django import forms
+from django.forms.util import ErrorList
 import logging, datetime
+import json
 
 class CollectionForm(forms.ModelForm):
     class Meta:
@@ -13,10 +15,56 @@ class CollectionForm(forms.ModelForm):
         """Initializes the form."""
         return super(CollectionForm, self).__init__(*args, **kwargs)
 
+    def clean_deck_order(self):
+        """
+        Cleans and validates the JSON POSTed in the deck_order field.
+        This field describes how decks should be sorted in the collection.
+        Errors are manually added to the errorlist because this is a custom field.
+        """
+        field = 'deck_order'
+        deck_data = []
+        errstr = ''
+        errors = ErrorList() 
+
+        if field in self.data:
+            deck_order = json.loads(self.data[field])
+            if 'data' in deck_order:
+                deck_data = deck_order['data']
+
+        for d in deck_data:
+            if ('deck_id' in d and 'sort_order' in d):
+                try:
+                    int(d['sort_order'])
+                except ValueError:
+                    errstr = "deck %s has invalid sort value: %s" % (d['deck_id'], d['sort_order'])
+                    errors.append(errstr)
+            else:
+                errstr = "deck_id and sort_order required" 
+                errors.append(errstr)
+                break
+
+        if errors:
+            self._errors.setdefault(field, errors)
+            raise forms.ValidationError("Deck order field has errors")
+
+        self.cleaned_data['deck_order'] = deck_data
+
     def clean(self):
+        """Overrides the form clean() so that it also cleans the hidden deck_order field."""
+        self.clean_deck_order()
         return super(CollectionForm, self).clean()
 
+    def save_deck_order(self, deck_order):
+        """Saves the new ordering."""
+        for d in deck_order:
+            deck = Deck.objects.get(pk=d['deck_id'])
+            deck.sort_order = d['sort_order']
+            deck.save()
+
     def save(self):
+        """Overrides the form save() so that the deck ordering is saved as well."""
+        if self.cleaned_data['deck_order']:
+            self.save_deck_order(self.cleaned_data['deck_order'])
         return super(CollectionForm, self).save()
 
 class CollectionShareForm(forms.Form):

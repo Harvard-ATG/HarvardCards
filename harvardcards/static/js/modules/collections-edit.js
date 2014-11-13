@@ -30,7 +30,7 @@ define(['jquery', 'jqueryui'], function($) {
 
 			// convert to JSON format so it can be stored in a hidden input field
 			// that will be POSTed along with the rest of the form
-			deck_json = JSON.stringify({"deck": deck_order});
+			deck_json = JSON.stringify({"data": deck_order});
 
 			$("#deck_order").val(deck_json).effect("highlight");
 
