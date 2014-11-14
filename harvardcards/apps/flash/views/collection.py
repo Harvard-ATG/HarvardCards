@@ -248,8 +248,9 @@ def add_user_to_shared_collection(request, secret_share_key=''):
         return HttpResponseBadRequest('Invalid share URL [CC]')
 
     collection = Collection.objects.get(id=int(collection_id))
-    uc_kwargs = {'user':request.user,'collection':collection,'role':role}
-    if not Users_Collections.objects.filter(**uc_kwargs):
+    uc_kwargs = {'user':request.user,'collection':collection,'role':Users_Collections.OBSERVER}
+    if not Users_Collections.objects.exclude(**uc_kwargs):
+        uc_kwargs['role'] = role
         uc_kwargs['date_joined'] = datetime.date.today()
         Users_Collections(**uc_kwargs).save()
 
