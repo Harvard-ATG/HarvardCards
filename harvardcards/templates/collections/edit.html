@@ -5,11 +5,14 @@
 {% endblock %}
 
 {% block main_content %}
-<div id="content">
+<div id="content" data-module="collections-edit">
     <div class="courseWrapper">
         <div class="courseHeader">
             <h2>Edit course</h2>
         </div>
+
+        {{ collection_form.non_field_errors }} 
+
         <form action="{% url 'collectionEdit' collection.id %}?collection_id={{ collection.id }}" method="post">{% csrf_token %}
             <p>
                 {{ collection_form.title.errors }}
@@ -28,6 +31,20 @@
             <label for="id_private">Private:</label> 
             {{ collection_form.private }} </p> 
             {% endcomment %}
+
+            <p>
+                <label for="sortable-decks">Deck Order:</label>
+                <div class="form-help">Drag and drop to reorder the list of decks below. Click <i>Submit</i> to save.</div>
+                {{ collection_form.errors.deck_order }} 
+                {% if collection_decks|length > 0 %}
+                    <ul id="sortable-decks">
+                        {% for deck in collection_decks %}
+                            <li data-deck-id="{{deck.id}}">{{ deck.title|truncatechars:40}}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <input type="hidden" id="deck_order" name="deck_order" value="{}" />
+            </p>
 
             <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
             <a href="{% url 'collectionIndex' collection.id %}" class="adminMenuBtn cancelBtn">Cancel</a>

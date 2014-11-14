@@ -1,4 +1,5 @@
 import datetime, base64
+import json
 
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, HttpRequest, Http404
 from django.shortcuts import render, redirect
@@ -17,14 +18,14 @@ from harvardcards.apps.flash.queries import is_superuser_or_staff
 from harvardcards.apps.flash.lti_service import LTIService
 from harvardcards.apps.flash.views import card_template
 
-
 def index(request, collection_id=None):
     """Displays a set of collections to the user depending on whether 
     or not the collections are private or public and whether or not the 
     user has permission."""
 
     role_bucket = services.get_or_update_role_bucket(request)
-    collection_list = queries.getCollectionList(role_bucket)
+    canvas_course_collections = LTIService(request).getCourseCollections()
+    collection_list = queries.getCollectionList(role_bucket, collection_ids=canvas_course_collections)
     active_collection = None
     display_collections = collection_list
     
@@ -56,7 +57,8 @@ def custom_create(request):
     upload_error = ''
 
     role_bucket = services.get_or_update_role_bucket(request)
-    collection_list = queries.getCollectionList(role_bucket)
+    canvas_course_collections = LTIService(request).getCourseCollections()
+    collection_list = queries.getCollectionList(role_bucket, collection_ids=canvas_course_collections)
     if request.method == 'POST':
 
         course_name = request.POST.get('course', '')
@@ -87,7 +89,8 @@ def create(request):
     """Creates a collection."""
 
     role_bucket = services.get_or_update_role_bucket(request)
-    collection_list = queries.getCollectionList(role_bucket)
+    canvas_course_collections = LTIService(request).getCourseCollections()
+    collection_list = queries.getCollectionList(role_bucket, collection_ids=canvas_course_collections)
 
     if request.method == 'POST':
         collection_form = CollectionForm(request.POST)
@@ -95,13 +98,10 @@ def create(request):
         if collection_form.is_valid():
             collection = collection_form.save()
             LTIService(request).associateCanvasCourse(collection.id)
-            if request.POST.get('user_id', 0):
-                user_id = int(request.POST['user_id'])
-                user = User.objects.get(id=user_id)
-                collection_id= Users_Collections.objects.create(user=user, collection=collection, role=Users_Collections.ADMINISTRATOR, date_joined=datetime.date.today())
+            services.add_user_to_collection(user=request.user, collection=collection, role=Users_Collections.ADMINISTRATOR)
                 
-                #update role_bucket to add admin permission to the user for this newly created collection
-                services.get_or_update_role_bucket(request, collection_id.id, Users_Collections.role_map[Users_Collections.ADMINISTRATOR])
+            #update role_bucket to add admin permission to the user for this newly created collection
+            services.get_or_update_role_bucket(request, collection.id, Users_Collections.role_map[Users_Collections.ADMINISTRATOR])
             return redirect(collection)
     else:
         rel_templates = CardTemplate.objects.filter(Q(owner__isnull=True) | Q(owner=request.user))
@@ -134,7 +134,8 @@ def edit(request, collection_id=None):
     collection = Collection.objects.get(id=collection_id)
 
     role_bucket = services.get_or_update_role_bucket(request)
-    collection_list = queries.getCollectionList(role_bucket)
+    canvas_course_collections = LTIService(request).getCourseCollections()
+    collection_list = queries.getCollectionList(role_bucket, collection_ids=canvas_course_collections)
 
     if request.method == 'POST':
         collection_form = CollectionForm(request.POST, instance=collection)
@@ -145,11 +146,18 @@ def edit(request, collection_id=None):
             return response
     else:
         collection_form = CollectionForm(instance=collection)
+
+    collection_decks = []
+    for c in collection_list:
+        if c['id'] == collection.id:
+            collection_decks = c['decks']
+            break
         
     context = {
         "collection_form": collection_form, 
         "nav_collections": collection_list,
-        "collection": collection
+        "collection": collection,
+        "collection_decks": collection_decks,
     }
 
     return render(request, 'collections/edit.html', context)
@@ -162,7 +170,8 @@ def share_collection(request, collection_id=None):
     users list
     """
     role_bucket = services.get_or_update_role_bucket(request)
-    collection_list = queries.getCollectionList(role_bucket)
+    canvas_course_collections = LTIService(request).getCourseCollections()
+    collection_list = queries.getCollectionList(role_bucket, collection_ids=canvas_course_collections)
 
     collection = Collection.objects.get(id=collection_id)
     collection_share_form = CollectionShareForm()
@@ -239,8 +248,9 @@ def add_user_to_shared_collection(request, secret_share_key=''):
         return HttpResponseBadRequest('Invalid share URL [CC]')
 
     collection = Collection.objects.get(id=int(collection_id))
-    uc_kwargs = {'user':request.user,'collection':collection,'role':role}
-    if not Users_Collections.objects.filter(**uc_kwargs):
+    uc_kwargs = {'user':request.user,'collection':collection,'role':Users_Collections.OBSERVER}
+    if not Users_Collections.objects.exclude(**uc_kwargs):
+        uc_kwargs['role'] = role
         uc_kwargs['date_joined'] = datetime.date.today()
         Users_Collections(**uc_kwargs).save()
 

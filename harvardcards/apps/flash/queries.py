@@ -4,6 +4,7 @@ observable state of the system (are free of side effects).
 """
 
 from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Decks_Cards
+from harvardcards.settings.common import FEATURE_TOGGLE
 
 import logging
 log = logging.getLogger(__name__)
@@ -34,17 +35,24 @@ def getCollectionRoleList():
         Users_Collections.LEARNER]
     return role_list
 
-def getCollectionList(role_bucket):
+def getCollectionList(role_bucket, collection_ids=False):
     """gets the list of collections that the user has permission to access"""
     log.debug("getCollectionList()")
-    log.debug("role_bucket = %s" % role_bucket)
+    log.debug("role_bucket = %s collection_ids = %s" % (role_bucket, collection_ids))
 
-    all_collections = Collection.objects.all()
-    decks_by_collection = getDecksByCollection()
+    collections = Collection.objects.all()
+    if FEATURE_TOGGLE['CANVAS_COURSE_FILTER']:
+        if collection_ids:
+            collections = collections.filter(id__in=collection_ids)
+    if FEATURE_TOGGLE['CANVAS_COURSE_FILTER']:
+        decks_by_collection = getDecksByCollection(collection_ids=collection_ids)
+    else:
+        decks_by_collection = getDecksByCollection()
+
     collection_roles = getCollectionRoleList()
 
     collection_list = []
-    for collection in all_collections:
+    for collection in collections:
         has_access = True
         has_access = has_access and not collection.private
         has_access = has_access or has_role_in_bucket(role_bucket, collection_roles, collection.id)
@@ -73,10 +81,12 @@ def getCollectionList(role_bucket):
 
     return collection_list
 
-def getDecksByCollection():
+def getDecksByCollection(collection_ids=False):
     """gets the decks associated with a collection"""
     from django.db.models import Count
     decks = Deck.objects.all().select_related('collection').annotate(Count('cards'))
+    if collection_ids:
+        decks = decks.filter(collection__id__in=collection_ids)
     decks_by_collection = {}
     for deck in decks:
         if deck.collection.id not in decks_by_collection:
