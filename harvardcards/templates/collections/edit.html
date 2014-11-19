@@ -39,7 +39,7 @@
                 {% if collection_decks|length > 0 %}
                     <ul id="sortable-decks">
                         {% for deck in collection_decks %}
-                            <li data-deck-id="{{deck.id}}">{{ deck.title|truncatechars:40}}</li>
+                            <li data-deck-id="{{deck.id}}"><i class="fa fa-bars" style="margin-right: 10px"></i> {{ deck.title|truncatechars:40}}</li>
                         {% endfor %}
                     </ul>
                 {% endif %}
