@@ -18,18 +18,10 @@ from harvardcards.apps.flash.queries import is_superuser_or_staff
 from harvardcards.apps.flash.lti_service import LTIService
 from harvardcards.apps.flash.views import card_template
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> f5079453507e10971006ef2554f87367e1724e33
+
 import logging
 log = logging.getLogger(__name__)
 
-<<<<<<< HEAD
-=======
->>>>>>> 8538e7e99305b295354360d15a336dfbbffe9ea0
-=======
->>>>>>> f5079453507e10971006ef2554f87367e1724e33
 def index(request, collection_id=None):
     """Displays a set of collections to the user depending on whether 
     or not the collections are private or public and whether or not the 
