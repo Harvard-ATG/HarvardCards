@@ -16,7 +16,6 @@ class CardAdmin(admin.ModelAdmin):
     search_fields=('collection__title', )
     inlines=(DecksInLine, CardsInLine,)
 
-
 class CardsInLine(admin.StackedInline):
     extra=0
     verbose_name = 'Card'
@@ -25,6 +24,7 @@ class CardsInLine(admin.StackedInline):
 class DeckAdmin(admin.ModelAdmin):
     list_display = ('title', 'collection', 'sort_order')
     inlines=(CardsInLine,)
+    ordering = ('collection','sort_order', 'title')
 
 class UsersInLine(admin.StackedInline):
     extra = 0
@@ -34,7 +34,6 @@ class UsersInLine(admin.StackedInline):
 class CollectionAdmin(admin.ModelAdmin):
     list_display = ('title', 'description', 'card_template')
     inlines = (UsersInLine,)
-
 
 admin.site.register(Collection, CollectionAdmin)
 admin.site.register(Field)

@@ -10,6 +10,7 @@ from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, 
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm, DeckImportForm
 from harvardcards.apps.flash import services, queries, utils
 from harvardcards.apps.flash.services import check_role
+from harvardcards.apps.flash.lti_service import LTIService
 
 from PIL import Image
 import urllib
@@ -27,7 +28,8 @@ def index(request, deck_id=None):
     current_collection = deck.collection 
 
     role_bucket = services.get_or_update_role_bucket(request)
-    collection_list = queries.getCollectionList(role_bucket)
+    canvas_course_collections = LTIService(request).getCourseCollections()
+    collection_list = queries.getCollectionList(role_bucket, collection_ids=canvas_course_collections)
 
     is_quiz_mode = request.GET.get('mode') == 'quiz'
     is_deck_admin = current_collection.id in role_bucket['ADMINISTRATOR']
@@ -91,7 +93,8 @@ def upload_deck(request, deck_id=None):
     current_collection = deck.collection
 
     role_bucket = services.get_or_update_role_bucket(request)
-    collection_list = queries.getCollectionList(role_bucket)
+    canvas_course_collections = LTIService(request).getCourseCollections()
+    collection_list = queries.getCollectionList(role_bucket, collection_ids=canvas_course_collections)
 
     if request.method == 'POST':
         d = {'user': request.user}
@@ -151,7 +154,8 @@ def create_edit_card(request, deck_id=None):
     image_upload_select = widgets.Select(attrs= {'onchange' :'switch_upload_image_type(this)'}, choices=IMAGE_UPLOAD_TYPE)
 
     role_bucket = services.get_or_update_role_bucket(request)
-    collection_list = queries.getCollectionList(role_bucket)
+    canvas_course_collections = LTIService(request).getCourseCollections()
+    collection_list = queries.getCollectionList(role_bucket, collection_ids=canvas_course_collections)
 
     # Only has card_id if we are editing a card
     card_id = request.GET.get('card_id', '')
