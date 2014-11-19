@@ -19,12 +19,17 @@ from harvardcards.apps.flash.lti_service import LTIService
 from harvardcards.apps.flash.views import card_template
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> f5079453507e10971006ef2554f87367e1724e33
 import logging
-
 log = logging.getLogger(__name__)
 
+<<<<<<< HEAD
 =======
 >>>>>>> 8538e7e99305b295354360d15a336dfbbffe9ea0
+=======
+>>>>>>> f5079453507e10971006ef2554f87367e1724e33
 def index(request, collection_id=None):
     """Displays a set of collections to the user depending on whether 
     or not the collections are private or public and whether or not the 
@@ -112,9 +117,9 @@ def create(request):
             collection = collection_form.save()
             LTIService(request).associateCanvasCourse(collection.id)
             services.add_user_to_collection(user=request.user, collection=collection, role=Users_Collections.ADMINISTRATOR)
-            log.info('Collection %s created.' %collection.id, extra={'user': request.user})
             #update role_bucket to add admin permission to the user for this newly created collection
             services.get_or_update_role_bucket(request, collection.id, Users_Collections.role_map[Users_Collections.ADMINISTRATOR])
+            log.info('Collection %s created.' %collection.id, extra={'user': request.user})
             return redirect(collection)
     else:
         rel_templates = CardTemplate.objects.filter(Q(owner__isnull=True) | Q(owner=request.user))
