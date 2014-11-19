@@ -120,16 +120,24 @@ def valid_uploaded_file(uploaded_file, file_type):
             return False
         return True
 
-def handle_media_folders(collection, deck, file_name):
+def get_media_folder_name(deck):
+    return str(deck.collection.id) + '_' + str(deck.id)
+def get_media_path(deck):
     # create the MEDIA_ROOT folder if it doesn't exist
     if not os.path.exists(MEDIA_ROOT):
         os.mkdir(MEDIA_ROOT)
 
     # folder where media files will be uploaded for the given deck
-    dir_name = str(collection) +'_' + str(deck)
+    dir_name = get_media_folder_name(Deck.objects.get(id=deck))
     path = os.path.abspath(os.path.join(MEDIA_ROOT, dir_name))
     if not os.path.exists(path):
         os.mkdir(path)
+    path_images = os.path.abspath(os.path.join(MEDIA_ROOT,'originals', dir_name))
+    return [dir_name, path, path_images]
+
+def handle_media_folders(deck, file_name):
+
+    [dir_name, path, path_images] = get_media_path(deck)
     # allow files with same names to be uploaded to the same deck
     original_filename = file_name
     full_path = os.path.join(path, file_name)
@@ -144,7 +152,7 @@ def handle_uploaded_img_file(file, deck, collection):
     """Handles an uploaded image file and returns the path to the saved image."""
 
     file_name = file.name
-    [full_path, path, dir_name, file_name] = handle_media_folders(collection, deck, file_name)
+    [full_path, path, dir_name, file_name] = handle_media_folders(deck, file_name)
     dest = open(full_path, 'wb+')
     if file.multiple_chunks:
         for c in file.chunks():
@@ -159,7 +167,7 @@ def handle_uploaded_img_file(file, deck, collection):
 
 def upload_img_from_path(path_original, deck, collection):
     head, file_name = os.path.split(path_original)
-    [full_path, path, dir_name, file_name] = handle_media_folders(collection.id, deck.id, file_name)
+    [full_path, path, dir_name, file_name] = handle_media_folders(deck.id, file_name)
     try:
         webpage = urllib2.urlopen(path_original)
         img = open(full_path,"wb")
@@ -173,20 +181,25 @@ def upload_img_from_path(path_original, deck, collection):
 
 
 def create_zip_deck_file(deck):
-    folder_name = str(deck.collection.id) + '_' + str(deck.id)
-    path = os.path.abspath(os.path.join(MEDIA_ROOT, 'originals', folder_name))
+    [folder_name, path, path_images] = get_media_path(deck.id)
     s = StringIO()
 
     zfile = zipfile.ZipFile(s, "w")
 
     file_output = utils.create_deck_file(deck.id)
-    file_output.save(os.path.join(path, 'deck_file.xls'))
+    deck_file = os.path.join(path, 'deck_file.xls')
+    file_output.save(deck_file)
 
     for file in os.listdir(path):
         if file.endswith('.db') or file.startswith('.'):
             continue
-        zfile.write(os.path.join(path, file), arcname=file)
+        if file in os.listdir(path_images):
+            file_path = path_images
+        else:
+            file_path = path
+        zfile.write(os.path.join(file_path, file), arcname=file)
     zfile.close()
+    os.remove(deck_file)
     return s.getvalue()
 
 def extract_from_zip(uploaded_file):
@@ -230,7 +243,7 @@ def get_mappings_from_zip(deck, file_contents, file_names, zfile):
         raise Exception, "File(s) not found in the zipped folder: %s" %str(files_not_found)[1:-1]
 
     for file in files:
-        [full_path, path, dir_name, file_name] = handle_media_folders(deck.collection.id, deck.id, file)
+        [full_path, path, dir_name, file_name] = handle_media_folders(deck.id, file)
         zfile.extract(file, os.path.join(path, 'temp_dir'))
         file_path = os.path.join(path, 'temp_dir', file)
 
