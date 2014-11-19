@@ -122,6 +122,7 @@ def valid_uploaded_file(uploaded_file, file_type):
 
 def get_media_folder_name(deck):
     return str(deck.collection.id) + '_' + str(deck.id)
+
 def get_media_path(deck):
     # create the MEDIA_ROOT folder if it doesn't exist
     if not os.path.exists(MEDIA_ROOT):
@@ -140,6 +141,7 @@ def handle_media_folders(deck, file_name):
     [dir_name, path, path_images] = get_media_path(deck)
     # allow files with same names to be uploaded to the same deck
     original_filename = file_name
+    file_name = os.path.split(file_name)[1]
     full_path = os.path.join(path, file_name)
     counter = 1
     while os.path.exists(full_path):
@@ -190,10 +192,14 @@ def create_zip_deck_file(deck):
     deck_file = os.path.join(path, 'deck_file.xls')
     file_output.save(deck_file)
 
+    images = []
+    if os.path.exists(path_images):
+        images = os.listdir(path_images)
+
     for file in os.listdir(path):
         if file.endswith('.db') or file.startswith('.'):
             continue
-        if file in os.listdir(path_images):
+        if file in images:
             file_path = path_images
         else:
             file_path = path
@@ -221,10 +227,11 @@ def extract_from_zip(uploaded_file):
         raise Exception, "No flashcard template excel file found in the zipped folder."
 
     file_contents = zfile.read(excel_files[0])
+    path_to_excel = os.path.split(excel_files[0])[0]
 
-    return [file_contents, zfile, file_names]
+    return [file_contents, zfile, file_names, path_to_excel]
 
-def get_mappings_from_zip(deck, file_contents, file_names, zfile):
+def get_mappings_from_zip(deck, file_contents, file_names, zfile, path_to_excel, custom=False):
     """
     Checks if all the files in the excel file are in the zipped folder.
     Saves the files and returns the mappings between the file names and their paths
@@ -234,29 +241,37 @@ def get_mappings_from_zip(deck, file_contents, file_names, zfile):
     if not utils.template_matches_file(deck.collection.card_template, file_contents):
         raise Exception, "The fields in the spreadsheet don't match those in the template."
 
-    files_to_upload = utils.get_file_names(deck.collection.card_template, file_contents, custom=True)
-    files = list(Set(files_to_upload).intersection(file_names))
-
-    files_not_found = map(lambda f: str(f), filter(lambda f: f not in file_names, files_to_upload))
+    files = []
+    files_not_found = []
+    files_to_upload = utils.get_file_names(deck.collection.card_template, file_contents, custom=custom)
+    for f in files_to_upload:
+        file_map = {
+            "absolute": os.path.join(path_to_excel, f), 
+            "relative": f
+        }
+        if file_map['absolute'] in file_names:
+            files.append(file_map)
+        else:
+            files_not_found.append(file_map['relative'])
 
     if len(files_not_found):
         raise Exception, "File(s) not found in the zipped folder: %s" %str(files_not_found)[1:-1]
 
     for file in files:
-        [full_path, path, dir_name, file_name] = handle_media_folders(deck.id, file)
-        zfile.extract(file, os.path.join(path, 'temp_dir'))
-        file_path = os.path.join(path, 'temp_dir', file)
+        [full_path, path, dir_name, file_name] = handle_media_folders(deck.id, file['relative'])
+        zfile.extract(file['absolute'], os.path.join(path, 'temp_dir'))
+        file_path = os.path.join(path, 'temp_dir', file['absolute'])
 
         if valid_uploaded_file(file_path, 'I'):
             os.rename(file_path, os.path.join(path, 'temp_dir', file_name))
             shutil.move(os.path.join(path, 'temp_dir', file_name), os.path.join(path, file_name))
             resize_uploaded_img(path, file_name, dir_name)
-            mappings['Image'][file] = os.path.join(dir_name, file_name)
+            mappings['Image'][file['relative']] = os.path.join(dir_name, file_name)
 
         elif valid_uploaded_file(file_path, 'A'):
             os.rename(file_path, os.path.join(path, 'temp_dir', file_name))
             shutil.move(os.path.join(path, 'temp_dir', file_name), os.path.join(path, file_name))
-            mappings['Audio'][file] = os.path.join(dir_name, file_name)
+            mappings['Audio'][file['relative']] = os.path.join(dir_name, file_name)
 
     if len(files):
         shutil.rmtree(os.path.join(path, 'temp_dir'))
@@ -264,8 +279,8 @@ def get_mappings_from_zip(deck, file_contents, file_names, zfile):
 
 def handle_zipped_deck_file(deck, uploaded_file):
     """Handles uploaded zipped deck file (not customized)"""
-    [file_contents, zfile, file_names] = extract_from_zip(uploaded_file)
-    [file_contents, mappings] = get_mappings_from_zip(deck, file_contents, file_names, zfile)
+    [file_contents, zfile, file_names, path_to_excel] = extract_from_zip(uploaded_file)
+    [file_contents, mappings] = get_mappings_from_zip(deck, file_contents, file_names, zfile, path_to_excel)
     return [file_contents, mappings]
 
 def handle_uploaded_deck_file(deck, uploaded_file):
@@ -277,10 +292,12 @@ def handle_uploaded_deck_file(deck, uploaded_file):
         [file_contents, mappings] = handle_zipped_deck_file(deck, uploaded_file)
     except zipfile.BadZipfile:
         file_contents = cached_file_contents
+
     try:
         parsed_cards = utils.parse_deck_template_file(deck.collection.card_template, file_contents, mappings)
     except:
         raise Exception, "Uploaded file type not supported."
+
     add_cards_to_deck(deck, parsed_cards)
 
 def handle_custom_file(uploaded_file, course_name, user):
@@ -288,7 +305,7 @@ def handle_custom_file(uploaded_file, course_name, user):
     cached_file_contents = uploaded_file.read()
     mappings = None
     try:
-        [file_contents, zfile, file_names] = extract_from_zip(uploaded_file)
+        [file_contents, zfile, file_names, path_to_excel] = extract_from_zip(uploaded_file)
         is_zip = True
     except zipfile.BadZipfile:
         file_contents = cached_file_contents
@@ -317,7 +334,7 @@ def handle_custom_file(uploaded_file, course_name, user):
     user_collection.save()
     deck = create_deck(collection_id=collection.id, deck_title='Untitled Deck')
     if is_zip:
-        [file_contents, mappings] = get_mappings_from_zip(deck, file_contents, file_names, zfile)
+        [file_contents, mappings] = get_mappings_from_zip(deck, file_contents, file_names, zfile, path_to_excel, custom=True)
 
     try:
         parsed_cards = utils.parse_deck_template_file(deck.collection.card_template, file_contents, mappings, custom=True)
