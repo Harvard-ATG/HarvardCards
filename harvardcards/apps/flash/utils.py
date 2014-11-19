@@ -93,7 +93,8 @@ def get_card_template(file_contents):
         field = {
                 "label": sheet.cell(0, col_index).value,
                 "side": sheet.cell(1, col_index).value,
-                "type": sheet.cell(2, col_index).value
+                "type": sheet.cell(2, col_index).value,
+                "sort_order": col_index
                 }
         fields.append(field)
     return fields

@@ -318,12 +318,13 @@ def handle_custom_file(uploaded_file, course_name, user):
     for template_field in card_template_fields:
         label = template_field['label']
         side = template_field['side']
+        sort_order = template_field['sort_order']
         if side == 'Front':
             display = True
         else:
             display = False
         type = template_field['type'][0]
-        field = Field(label=label, field_type=type, show_label=True, display=display)
+        field = Field(label=label, field_type=type, show_label=True, display=display, sort_order=sort_order)
         field.save()
         card_template_field = CardTemplates_Fields(card_template=card_template, field=field)
         card_template_field.save()
