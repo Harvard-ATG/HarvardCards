@@ -4,8 +4,10 @@ This module conatins helper functions and utilities.
 
 from harvardcards.apps.flash.models import Collection, Deck
 from harvardcards.apps.flash import queries
+from harvardcards.settings.common import MEDIA_ROOT
 import string
 import random
+import os
 
 # For treating strings like files
 import StringIO
@@ -224,7 +226,9 @@ def get_media_path(deck):
         os.mkdir(MEDIA_ROOT)
 
     # folder where media files will be uploaded for the given deck
-    dir_name = get_media_folder_name(Deck.objects.get(id=deck))
+    if not isinstance(deck, Deck):
+        deck = Deck.objects.get(id=deck)
+    dir_name = get_media_folder_name(deck)
     path = os.path.abspath(os.path.join(MEDIA_ROOT, dir_name))
 
     if not os.path.exists(path):

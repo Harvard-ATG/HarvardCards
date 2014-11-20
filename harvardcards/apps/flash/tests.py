@@ -88,10 +88,15 @@ class ServicesTest(TestCase):
         self.card_template = CardTemplate.objects.create(title='b', description='bbb')
         self.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
 
-    def make_collection(self):
-        card_template = CardTemplate.objects.create(title='b', description='bbb')
-        collection = Collection.objects.create(title='a', description='aaa', card_template=card_template)
+    def make_collection(self, title='my title', description='my description'):
+        card_template = CardTemplate.objects.create(title=title, description=description)
+        collection = Collection.objects.create(title=title, description=description, card_template=card_template)
         return collection
+
+    def make_deck(self):
+        collection = self.make_collection()
+        deck = Deck.objects.create(title='my deck', collection=collection)
+        return deck
 
     def make_uploaded_zip_file(self, filename):
         path = os.path.join(TESTFIXTURES_DIR, filename)
@@ -184,6 +189,42 @@ class ServicesTest(TestCase):
             self.assertTrue(isinstance(result[1], zipfile.ZipFile))
             self.assertEqual(result[2], expected_file_names)
             self.assertEqual(result[3], expected_path_to_excel)
+
+    def test_get_mappings_from_zip_file(self):
+        filename = 'folder_with_xls_and_audio_folder.zip'
+        uploaded_file = self.make_uploaded_zip_file(filename)
+        self.assertTrue(uploaded_file)
+        self.assertEqual(uploaded_file.name, filename)
+        self.assertEqual(uploaded_file.content_type, 'application/zip')
+
+        deck = services.handle_custom_file(uploaded_file, 'test course', self.user)
+        custom = True
+
+        [file_contents, zfile, file_names, path_to_excel] = services.extract_from_zip(uploaded_file)
+        [file_contents, mappings] = services.get_mappings_from_zip(deck, file_contents, file_names, zfile, path_to_excel, custom=custom)
+
+        self.assertTrue(len(file_contents) > 0)
+        self.assertTrue(mappings)
+        self.assertTrue('Image' in mappings)
+        self.assertTrue(len(mappings['Image'].keys()) == 0)
+        self.assertTrue('Audio' in mappings)
+        self.assertTrue(len(mappings['Audio'].keys()) == 6)
+
+        zip_paths = [
+            "audio/aurevoir.mp3",
+            "audio/bonappetit.mp3",
+            "audio/bonjour.mp3",
+            "audio/double.mp3",
+            "audio/horsdoeuvre.mp3",
+            "audio/jenecomprendspas.mp3",
+        ]
+
+        folder_name = utils.get_media_folder_name(deck)
+        for zip_path in zip_paths:
+            zip_file_name = os.path.split(zip_path)[1] 
+            zip_file_name = "1_" + zip_file_name # prefix with 1_ because of handle_media_folders()
+            media_file_path = "%s/%s" % (folder_name, zip_file_name)
+            self.assertEqual(mappings['Audio'][zip_path], media_file_path)
 
 class QueriesTest(TestCase):
     def setUp(self):

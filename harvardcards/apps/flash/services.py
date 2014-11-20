@@ -46,7 +46,7 @@ def delete_deck_files(deck_id):
     Raises an exception if there is a problem deleting the images.
     """
     deck = Deck.objects.get(id=deck_id)
-    folder_name = str(deck.collection.id) + '_' + str(deck.id)
+    folder_name = utils.get_media_folder_name(deck)
     folder_paths = [
         os.path.abspath(os.path.join(MEDIA_ROOT, folder_name)),
         os.path.abspath(os.path.join(MEDIA_ROOT,'thumbnails', folder_name)),
@@ -121,16 +121,24 @@ def valid_uploaded_file(uploaded_file, file_type):
         return True
 
 def handle_media_folders(deck, file_name):
+    """
+    Returns media folder info for a given file in a deck.
+    If the given file name is a duplicate of a file already associated 
+    with the deck, it will automatically be given a new name.
+    """
     [dir_name, path, path_images] = utils.get_media_path(deck)
+
     # allow files with same names to be uploaded to the same deck
-    original_filename = file_name
     file_name = os.path.split(file_name)[1]
+    original_filename = file_name
     full_path = os.path.join(path, file_name)
+
     counter = 1
     while os.path.exists(full_path):
         file_name = str(counter)+ '_' + original_filename
         full_path = os.path.join(path, file_name)
         counter = counter + 1
+
     return [full_path, path, dir_name, file_name]
 
 def handle_uploaded_img_file(file, deck, collection):
