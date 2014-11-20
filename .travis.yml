@@ -11,7 +11,8 @@ install: "pip install -r requirements.txt --use-mirrors"
 
 # command to run tests
 before_script: 
-    - mkdir logs
+    - mkdir -p logs 
+    - touch logs/app.log
 
 script: 
     - python manage.py syncdb --noinput
