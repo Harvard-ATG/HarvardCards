@@ -113,12 +113,12 @@ def download_deck(request, deck_id=None):
     Downloads an excel spreadsheet of a deck of cards.
     '''
 
-    response = HttpResponse(content_type='application/vnd.ms-excel')
-    response['Content-Disposition'] = 'attachment; filename=flashcards.xls'
 
-    file_output = utils.create_deck_file(deck_id) 
-    response.write(file_output)
+    deck =  Deck.objects.get(id=deck_id)
 
+    zfile_output = services.create_zip_deck_file(deck)
+    response = HttpResponse(zfile_output, content_type='application/x-zip-compressed')
+    response['Content-Disposition'] = 'attachment; filename=deck.zip'
     return response
 
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')  

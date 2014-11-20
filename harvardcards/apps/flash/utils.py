@@ -4,8 +4,10 @@ This module conatins helper functions and utilities.
 
 from harvardcards.apps.flash.models import Collection, Deck
 from harvardcards.apps.flash import queries
+from harvardcards.settings.common import MEDIA_ROOT
 import string
 import random
+import os
 
 # For treating strings like files
 import StringIO
@@ -93,7 +95,8 @@ def get_card_template(file_contents):
         field = {
                 "label": sheet.cell(0, col_index).value,
                 "side": sheet.cell(1, col_index).value,
-                "type": sheet.cell(2, col_index).value
+                "type": sheet.cell(2, col_index).value,
+                "sort_order": col_index
                 }
         fields.append(field)
     return fields
@@ -164,13 +167,20 @@ def create_deck_file(deck_id):
                 worksheet.write(row, idx, label=field['label'])
         row = row + 1
         for idx, field in enumerate(card['fields']):
-            worksheet.write(row, idx, label=field['value'])
+            field_value = field['value']
+            field_type = field['type']
+            if field_type == 'T' or field_type == 'A':
+                field_value = os.path.split(field_value)[1] # strips the media folder path
+            worksheet.write(row, idx, label=field_value)
 
     workbook.save(output)
-    file_output = output.getvalue()
+    file_output = workbook
+    #file_output = output.getvalue()
     output.close()
 
     return file_output
+
+
 
 def generate_random_id(size=10, chars=string.ascii_uppercase + string.digits):
 	"""
@@ -202,3 +212,32 @@ def create_custom_template_file():
     output.close()
 
     return file_output
+
+def get_media_folder_name(deck):
+    '''
+    Returns the name of the media folder for media files 
+    associated with the deck.
+    '''
+    return str(deck.collection.id) + '_' + str(deck.id)
+
+def get_media_path(deck):
+    '''
+    Returns a tuple of path info for all media files associated
+    with the given deck.
+    '''
+    # create the MEDIA_ROOT folder if it doesn't exist
+    if not os.path.exists(MEDIA_ROOT):
+        os.mkdir(MEDIA_ROOT)
+
+    # folder where media files will be uploaded for the given deck
+    if not isinstance(deck, Deck):
+        deck = Deck.objects.get(id=deck)
+    dir_name = get_media_folder_name(deck)
+    path = os.path.abspath(os.path.join(MEDIA_ROOT, dir_name))
+
+    if not os.path.exists(path):
+        os.mkdir(path)
+
+    path_images = os.path.abspath(os.path.join(MEDIA_ROOT,'originals', dir_name))
+
+    return [dir_name, path, path_images]
