@@ -167,7 +167,11 @@ def create_deck_file(deck_id):
                 worksheet.write(row, idx, label=field['label'])
         row = row + 1
         for idx, field in enumerate(card['fields']):
-            worksheet.write(row, idx, label=field['value'])
+            field_value = field['value']
+            field_type = field['type']
+            if field_type == 'T' or field_type == 'A':
+                field_value = os.path.split(field_value)[1] # strips the media folder path
+            worksheet.write(row, idx, label=field_value)
 
     workbook.save(output)
     file_output = workbook
