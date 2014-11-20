@@ -120,25 +120,8 @@ def valid_uploaded_file(uploaded_file, file_type):
             return False
         return True
 
-def get_media_folder_name(deck):
-    return str(deck.collection.id) + '_' + str(deck.id)
-
-def get_media_path(deck):
-    # create the MEDIA_ROOT folder if it doesn't exist
-    if not os.path.exists(MEDIA_ROOT):
-        os.mkdir(MEDIA_ROOT)
-
-    # folder where media files will be uploaded for the given deck
-    dir_name = get_media_folder_name(Deck.objects.get(id=deck))
-    path = os.path.abspath(os.path.join(MEDIA_ROOT, dir_name))
-    if not os.path.exists(path):
-        os.mkdir(path)
-    path_images = os.path.abspath(os.path.join(MEDIA_ROOT,'originals', dir_name))
-    return [dir_name, path, path_images]
-
 def handle_media_folders(deck, file_name):
-
-    [dir_name, path, path_images] = get_media_path(deck)
+    [dir_name, path, path_images] = utils.get_media_path(deck)
     # allow files with same names to be uploaded to the same deck
     original_filename = file_name
     file_name = os.path.split(file_name)[1]
@@ -166,7 +149,6 @@ def handle_uploaded_img_file(file, deck, collection):
 
     return os.path.join(dir_name, file_name)
 
-
 def upload_img_from_path(path_original, deck, collection):
     head, file_name = os.path.split(path_original)
     [full_path, path, dir_name, file_name] = handle_media_folders(deck.id, file_name)
@@ -181,9 +163,8 @@ def upload_img_from_path(path_original, deck, collection):
     resize_uploaded_img(path, file_name, dir_name)
     return os.path.join(dir_name, file_name)
 
-
 def create_zip_deck_file(deck):
-    [folder_name, path, path_images] = get_media_path(deck.id)
+    [folder_name, path, path_images] = utils.get_media_path(deck.id)
     s = StringIO()
 
     zfile = zipfile.ZipFile(s, "w")
@@ -219,6 +200,9 @@ def extract_from_zip(uploaded_file):
     # This filters the __MACOSX/ folder entries from the zip file, which
     # should be ignored for the upload (only relevant for MAC-created zip files).
     file_names = [file_name for file_name in file_names if "__MACOSX" not in file_name]
+
+    # Make sure file names always returned in sorted order
+    file_names.sort()
 
     excel_files = filter(lambda f: os.path.splitext(f)[1][1:].strip().lower() in ['xls', 'xlsx'], file_names)
     if len(excel_files) > 1:

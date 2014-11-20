@@ -9,6 +9,7 @@ from django.forms.formsets import formset_factory
 from django.test.client import RequestFactory, Client
 from django.contrib.auth.models import User
 from django.http.request import HttpRequest
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from django_auth_lti import const
 
@@ -23,6 +24,9 @@ import os
 import unittest
 import mock
 import json
+import zipfile
+
+TESTFIXTURES_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'tests', 'testfixtures')
 
 class CollectionTest(TestCase):
     admin_user = None
@@ -111,6 +115,97 @@ class ServicesTest(TestCase):
         success = services.add_user_to_collection(user=user, collection=collection, role=role)
         self.assertTrue(success)
         self.assertTrue(Users_Collections.objects.filter(user=user, collection=collection, role=role))
+
+    def make_uploaded_zip_file(self, filename):
+        path = os.path.join(TESTFIXTURES_DIR, filename)
+        content_type = 'application/zip'
+        content = ''
+        with open(path) as f:
+            content = f.read()
+
+        return SimpleUploadedFile.from_dict({
+            'filename': filename,
+            'content': content,
+            'content-type': content_type,
+        })
+
+    def test_extract_zip_xls_and_images(self):
+        filename = 'xls_and_images.zip'
+        uploaded_file = self.make_uploaded_zip_file(filename)
+        self.assertTrue(uploaded_file)
+        self.assertEqual(uploaded_file.name, filename)
+        self.assertEqual(uploaded_file.content_type, 'application/zip')
+
+        # expect all files to be compressed directly (i.e. no containing folder)
+        expected_path_to_excel = '' 
+
+        # expect these files to be extracted from zip file
+        expected_file_names = [
+            'BartSimpson4.gif',
+            'MaggieSimpson1.gif',
+            'flashcards_template.xls'
+        ]
+
+        result = services.extract_from_zip(uploaded_file)
+        self.assertTrue(len(result[0]) > 0)
+        self.assertTrue(isinstance(result[1], zipfile.ZipFile))
+        self.assertEqual(result[2], expected_file_names)
+        self.assertEqual(result[3], expected_path_to_excel)
+
+    def test_extract_zip_folder_with_xls_and_images(self):
+        filename = 'folder_with_xls_and_images.zip'
+        uploaded_file = self.make_uploaded_zip_file(filename)
+        self.assertTrue(uploaded_file)
+        self.assertEqual(uploaded_file.name, filename)
+        self.assertEqual(uploaded_file.content_type, 'application/zip')
+
+        # expect all files to be compressed directly (i.e. no containing folder)
+        expected_path_to_excel = 'folder_with_xls_and_images' 
+
+        # expect these files to be extracted from zip file
+        expected_file_names = [
+            'folder_with_xls_and_images/',
+            'folder_with_xls_and_images/.DS_Store',
+            'folder_with_xls_and_images/BartSimpson4.gif',
+            'folder_with_xls_and_images/MaggieSimpson1.gif',
+            'folder_with_xls_and_images/flashcards_template.xls'
+        ]
+
+        result = services.extract_from_zip(uploaded_file)
+        self.assertTrue(len(result[0]) > 0)
+        self.assertTrue(isinstance(result[1], zipfile.ZipFile))
+        self.assertEqual(result[2], expected_file_names)
+        self.assertEqual(result[3], expected_path_to_excel)
+
+    def test_extract_zip_folder_with_xls_and_audio(self):
+        filename = 'folder_with_xls_and_audio_folder.zip'
+        uploaded_file = self.make_uploaded_zip_file(filename)
+        self.assertTrue(uploaded_file)
+        self.assertEqual(uploaded_file.name, filename)
+        self.assertEqual(uploaded_file.content_type, 'application/zip')
+
+        # expect all files to be compressed directly (i.e. no containing folder)
+        expected_path_to_excel = 'folder_with_xls_and_audio_folder' 
+
+        # expect these files to be extracted from zip file
+        expected_file_names = [
+            'folder_with_xls_and_audio_folder/',
+            'folder_with_xls_and_audio_folder/.DS_Store',
+            'folder_with_xls_and_audio_folder/audio/',
+            'folder_with_xls_and_audio_folder/audio/aurevoir.mp3',
+            'folder_with_xls_and_audio_folder/audio/bonappetit.mp3',
+            'folder_with_xls_and_audio_folder/audio/bonjour.mp3',
+            'folder_with_xls_and_audio_folder/audio/double.mp3',
+            'folder_with_xls_and_audio_folder/audio/horsdoeuvre.mp3',
+            'folder_with_xls_and_audio_folder/audio/jenecomprendspas.mp3',
+            'folder_with_xls_and_audio_folder/deck.xls'
+        ]
+
+        result = services.extract_from_zip(uploaded_file)
+        self.assertTrue(len(result[0]) > 0)
+        self.assertTrue(isinstance(result[1], zipfile.ZipFile))
+        self.assertEqual(result[2], expected_file_names)
+        self.assertEqual(result[3], expected_path_to_excel)
 
 class QueriesTest(TestCase):
     def setUp(self):

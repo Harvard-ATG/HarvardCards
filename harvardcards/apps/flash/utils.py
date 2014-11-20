@@ -206,3 +206,30 @@ def create_custom_template_file():
     output.close()
 
     return file_output
+
+def get_media_folder_name(deck):
+    '''
+    Returns the name of the media folder for media files 
+    associated with the deck.
+    '''
+    return str(deck.collection.id) + '_' + str(deck.id)
+
+def get_media_path(deck):
+    '''
+    Returns a tuple of path info for all media files associated
+    with the given deck.
+    '''
+    # create the MEDIA_ROOT folder if it doesn't exist
+    if not os.path.exists(MEDIA_ROOT):
+        os.mkdir(MEDIA_ROOT)
+
+    # folder where media files will be uploaded for the given deck
+    dir_name = get_media_folder_name(Deck.objects.get(id=deck))
+    path = os.path.abspath(os.path.join(MEDIA_ROOT, dir_name))
+
+    if not os.path.exists(path):
+        os.mkdir(path)
+
+    path_images = os.path.abspath(os.path.join(MEDIA_ROOT,'originals', dir_name))
+
+    return [dir_name, path, path_images]
