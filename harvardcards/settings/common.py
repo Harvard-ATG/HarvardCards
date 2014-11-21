@@ -158,20 +158,33 @@ AUTHENTICATION_BACKENDS = (
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False, # don't override default django logging config
+    'formatters': {
+        'verbose': {
+            'format' : "[%(asctime)s] %(levelname)s %(user)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt' : "%d/%b/%Y %H:%M:%S"
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
     'handlers': {
         'file': {
+            'level': 'INFO',
             'class': 'logging.FileHandler',
             'filename': path.join(ROOT_DIR, 'logs', 'app.log'),
+            'formatter': 'verbose'
         },
         'console': {
+            'level' : 'INFO',
             'class': 'logging.StreamHandler',
             'stream': sys.stdout,
+            'formatter': 'simple'
         },
     },
     'loggers': {
         'django.request': {
             'handlers': ['file'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': True,
         },
         'harvardcards': {
@@ -201,7 +214,7 @@ FEATURE_TOGGLE = {
 
 if DEBUG:
     LOGGING['loggers']['harvardcards']['level'] = 'DEBUG'
-    #LOGGING['loggers']['harvardcards']['handlers'] += ['console']
+    LOGGING['loggers']['harvardcards']['handlers'] += ['console']
 
 OPENID_CREATE_USERS = True
 OPENID_UPDATE_DETAILS_FROM_SREG = True

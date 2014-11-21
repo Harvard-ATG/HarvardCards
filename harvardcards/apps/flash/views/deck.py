@@ -15,6 +15,10 @@ from harvardcards.apps.flash.lti_service import LTIService
 from PIL import Image
 import urllib
 import json
+import logging
+
+log = logging.getLogger(__name__)
+
 
 def index(request, deck_id=None):
     """Displays the deck of cards for review/quiz."""
@@ -66,9 +70,15 @@ def index(request, deck_id=None):
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')
 def delete(request, deck_id=None):
     """Deletes a deck."""
+    d = {'user': request.user}
 
     collection_id = queries.getDeckCollectionId(deck_id)
-    services.delete_deck(deck_id)
+    success = services.delete_deck(deck_id)
+    if success:
+        log.info('Deck %(d)s deleted from collection %(c)s' %{'d':deck_id, 'c':collection_id}, extra=d)
+    else:
+        log.info('Deck %(d)s could not be deleted from collection %(c)s' %{'d':deck_id, 'c':collection_id}, extra=d)
+
     response =  redirect('collectionIndex', collection_id)
     response['Location'] += '?instructor=edit'
     return response
@@ -87,14 +97,24 @@ def upload_deck(request, deck_id=None):
     collection_list = queries.getCollectionList(role_bucket, collection_ids=canvas_course_collections)
 
     if request.method == 'POST':
+        d = {'user': request.user}
+        log.info('The user is uploading a new deck.', extra=d)
         deck_form = DeckImportForm(request.POST, request.FILES)
         if deck_form.is_valid():
             if 'file' in request.FILES:
                 try:
                     services.handle_uploaded_deck_file(deck, request.FILES['file'])
+                    log.info('New deck successfully added to the collection %(c)s.' %{'c': str(deck.collection.id)},
+                             extra=d)
                     return redirect(deck)
                 except Exception, e:
                     upload_error = str(e)
+                    msg = 'The following error occurred when the user tried uploading a deck: '
+                    log.error(msg + upload_error, extra=d)
+            else:
+                log.info('No file selected.', extra=d)
+        else:
+            log.error('Deck Form is not valid.', extra=d)
 
     else:
         deck_form = DeckImportForm()
@@ -110,15 +130,18 @@ def upload_deck(request, deck_id=None):
 
 def download_deck(request, deck_id=None):
     '''
-    Downloads an excel spreadsheet of a deck of cards.
+    Downloads a ZIP containing the excel spreadsheet of the deck of cards
+    along with any associated media files like images or audio.
     '''
 
-
     deck =  Deck.objects.get(id=deck_id)
-
     zfile_output = services.create_zip_deck_file(deck)
+    log.info('Deck %(d)s from the collection %(c)s downloaded by the user.'
+            %{'d': str(deck.id), 'c': str(deck.collection.id)}, extra={'user': request.user})
+
     response = HttpResponse(zfile_output, content_type='application/x-zip-compressed')
     response['Content-Disposition'] = 'attachment; filename=deck.zip'
+
     return response
 
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')  
@@ -183,8 +206,14 @@ def create_edit_card(request, deck_id=None):
 def delete_card(request, deck_id=None):
     """Deletes a card."""
 
+    d = {'user': request.user}
     deck = Deck.objects.get(id=deck_id)
     card_id = request.GET.get('card_id', None)
     if queries.isCardInDeck(card_id, deck_id):
         success = services.delete_card(card_id)
+
+    if success:
+        log.info('Card deleted from the deck %s' %str(deck.id), extra=d)
+    else:
+        log.error('Card could not be deleted from the deck %s' %str(deck.id), extra=d)
     return redirect(deck)

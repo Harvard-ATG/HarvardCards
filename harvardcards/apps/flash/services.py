@@ -24,6 +24,7 @@ from mutagen.mp3 import MP3
 from sets import Set
 from datetime import date
 
+
 def delete_collection(collection_id):
     """Deletes a collection and returns true on success, false otherwise."""
     Collection.objects.get(id=collection_id).delete()
@@ -284,6 +285,8 @@ def handle_uploaded_deck_file(deck, uploaded_file):
         [file_contents, mappings] = handle_zipped_deck_file(deck, uploaded_file)
     except zipfile.BadZipfile:
         file_contents = cached_file_contents
+        if not utils.template_matches_file(deck.collection.card_template, file_contents):
+            raise Exception, "The fields in the spreadsheet don't match those in the template."
 
     try:
         parsed_cards = utils.parse_deck_template_file(deck.collection.card_template, file_contents, mappings)
