@@ -2,10 +2,10 @@ from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse
 from django.shortcuts import redirect
 
-from harvardcards.apps.flash.models import Collection, Deck, Card, Cards_Fields, Field, Users_Collections
-from harvardcards.apps.flash import forms, queries, utils
-from harvardcards.apps.flash.services import check_role
-from django.db import models
+from harvardcards.apps.flash.models import Collection, Deck, Users_Collections
+from harvardcards.apps.flash.forms import DeckForm
+from harvardcards.apps.flash.decorators import check_role
+from harvardcards.apps.flash import queries 
 
 import json
 
@@ -40,7 +40,7 @@ def rename(request):
         result['error'] = "Deck not found"
     else:
         deck = Deck.objects.get(id=deck_id)
-        deck_form = forms.DeckForm(request.POST, instance=deck)
+        deck_form = DeckForm(request.POST, instance=deck)
         result['success'] = deck_form.is_valid()
         if deck_form.is_valid():
             deck = deck_form.save()
