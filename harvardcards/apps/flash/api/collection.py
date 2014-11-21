@@ -1,14 +1,11 @@
+from django.core.context_processors import csrf
 from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
-from django.core.context_processors import csrf
-from django.core.exceptions import ViewDoesNotExist
+from django.shortcuts import redirect
 
-from django.forms.formsets import formset_factory
-from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field
-from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
+from harvardcards.apps.flash.models import Collection, Users_Collections
 from harvardcards.apps.flash import queries
-from harvardcards.apps.flash.services import check_role
+from harvardcards.apps.flash.decorators import check_role
 
 import json
 

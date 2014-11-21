@@ -2,21 +2,15 @@ from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
-from django.core.exceptions import ViewDoesNotExist
-
-from django.forms.formsets import formset_factory
 from django.forms import widgets
+
 from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Users_Collections
-from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm, DeckImportForm
-from harvardcards.apps.flash import services, queries, utils
-from harvardcards.apps.flash.services import check_role
+from harvardcards.apps.flash.forms import DeckImportForm
+from harvardcards.apps.flash.decorators import check_role
 from harvardcards.apps.flash.lti_service import LTIService
+from harvardcards.apps.flash import services, queries
 
-from PIL import Image
-import urllib
-import json
 import logging
-
 log = logging.getLogger(__name__)
 
 

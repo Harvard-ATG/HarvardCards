@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from harvardcards.apps.flash.models import Collection, Deck, Card, Cards_Fields, Field, Users_Collections
 from harvardcards.apps.flash.forms import CardEditForm
 from harvardcards.apps.flash import services, queries, utils
-from harvardcards.apps.flash.services import check_role
+from harvardcards.apps.flash.decorators import check_role
 from django.db import models
 
 import json
