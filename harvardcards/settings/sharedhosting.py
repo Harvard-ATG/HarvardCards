@@ -21,6 +21,10 @@ elif os.environ.get('SERVER_NAME') == 'sites.dev.fas.harvard.edu':
     MEDIA_URL = '/~harvardcards/media/'
     DEBUG = True
 
+# Make sure to filter out "console" from handlers because it logs to STDOUT$                             
+# which won't work since the app runs in CGI mode on shared hosting and this$                            
+# will result in an HTTP 500 Internal Server Error.$                                                     
+LOGGING['loggers']['harvardcards']['handlers'] = [h for h in LOGGING['loggers']['harvardcards']['handlers'] if h != 'console']
 
 # Configuration common to both PROD/DEV 
 CONFIG_DIR = os.path.join(ROOT_DIR, 'config')
