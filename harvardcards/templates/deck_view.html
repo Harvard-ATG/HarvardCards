@@ -26,6 +26,8 @@
                 <h3>{{deck.title}}</h3>
             {% endif %}
             <ul class="adminMenu adminMenuRight">
+                <li><a class="adminMenuBtn hidden-mobile" href="{% url 'deckDownload' deck.id %}?deck_id={{deck.id}}" ><i class="fa fa-download"></i> Download Deck</a></li>
+
                 {% if is_deck_admin %}
                 <li><a class="adminMenuBtn hidden-mobile" href="{% url 'deckDelete' deck.id %}?deck_id={{deck.id}}" data-confirm="Are you sure you want to delete: {{deck.title|escape}}"><i class="fa fa-times-circle"></i> Delete Deck</a></li>
                 {% endif %}

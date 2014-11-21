@@ -9,6 +9,7 @@ from django.forms.formsets import formset_factory
 from django.test.client import RequestFactory, Client
 from django.contrib.auth.models import User
 from django.http.request import HttpRequest
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from django_auth_lti import const
 
@@ -23,6 +24,9 @@ import os
 import unittest
 import mock
 import json
+import zipfile
+
+TESTFIXTURES_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'tests', 'testfixtures')
 
 class CollectionTest(TestCase):
     admin_user = None
@@ -84,33 +88,143 @@ class ServicesTest(TestCase):
         self.card_template = CardTemplate.objects.create(title='b', description='bbb')
         self.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
 
-    def makeCollection(self):
-        card_template = CardTemplate.objects.create(title='b', description='bbb')
-        collection = Collection.objects.create(title='a', description='aaa', card_template=card_template)
+    def make_collection(self, title='my title', description='my description'):
+        card_template = CardTemplate.objects.create(title=title, description=description)
+        collection = Collection.objects.create(title=title, description=description, card_template=card_template)
         return collection
 
+    def make_deck(self):
+        collection = self.make_collection()
+        deck = Deck.objects.create(title='my deck', collection=collection)
+        return deck
+
+    def make_uploaded_zip_file(self, filename):
+        path = os.path.join(TESTFIXTURES_DIR, filename)
+        content_type = 'application/zip'
+        content = ''
+        with open(path) as f:
+            content = f.read()
+
+        return SimpleUploadedFile.from_dict({
+            'filename': filename,
+            'content': content,
+            'content-type': content_type,
+        })
+
     def test_deleteCollection(self):
-        collection = self.makeCollection()
+        collection = self.make_collection()
         self.assertEqual(services.delete_collection(collection.id), True)
 
     def test_deleteDeck(self):
-        collection = self.makeCollection()
+        collection = self.make_collection()
         deck = Deck.objects.create(title='a', collection=collection)
         self.assertEqual(services.delete_deck(deck.id), True)
 
     def test_deleteCard(self):
-        collection = self.makeCollection()
+        collection = self.make_collection()
         card = Card.objects.create(collection=collection, sort_order=1)
         self.assertEqual(services.delete_card(card.id), True)
 
     def test_addUserToCollection(self):
-        collection = self.makeCollection()
+        collection = self.make_collection()
         user = self.user
         role = Users_Collections.LEARNER
 
         success = services.add_user_to_collection(user=user, collection=collection, role=role)
         self.assertTrue(success)
         self.assertTrue(Users_Collections.objects.filter(user=user, collection=collection, role=role))
+
+    def test_extract_zip_files(self):
+        tests = [
+            {
+                'filename': 'xls_and_images.zip',
+                'expected_file_names': [
+                    'BartSimpson4.gif',
+                    'MaggieSimpson1.gif',
+                    'flashcards_template.xls'
+                ],
+                'expected_path_to_excel': ''
+            },
+            {
+                'filename': 'folder_with_xls_and_images.zip',
+                'expected_file_names': [
+                    'folder_with_xls_and_images/',
+                    'folder_with_xls_and_images/.DS_Store',
+                    'folder_with_xls_and_images/BartSimpson4.gif',
+                    'folder_with_xls_and_images/MaggieSimpson1.gif',
+                    'folder_with_xls_and_images/flashcards_template.xls'
+                ],
+                'expected_path_to_excel': 'folder_with_xls_and_images'
+            },
+            {
+                'filename': 'folder_with_xls_and_audio_folder.zip',
+                'expected_file_names': [
+                    'folder_with_xls_and_audio_folder/',
+                    'folder_with_xls_and_audio_folder/.DS_Store',
+                    'folder_with_xls_and_audio_folder/audio/',
+                    'folder_with_xls_and_audio_folder/audio/aurevoir.mp3',
+                    'folder_with_xls_and_audio_folder/audio/bonappetit.mp3',
+                    'folder_with_xls_and_audio_folder/audio/bonjour.mp3',
+                    'folder_with_xls_and_audio_folder/audio/double.mp3',
+                    'folder_with_xls_and_audio_folder/audio/horsdoeuvre.mp3',
+                    'folder_with_xls_and_audio_folder/audio/jenecomprendspas.mp3',
+                    'folder_with_xls_and_audio_folder/deck.xls'
+                ],
+                'expected_path_to_excel': 'folder_with_xls_and_audio_folder'
+            }
+        ]
+
+        for test in tests:
+            filename = test['filename']
+            expected_path_to_excel = test['expected_path_to_excel']
+            expected_file_names = test['expected_file_names']
+
+            uploaded_file = self.make_uploaded_zip_file(filename)
+            self.assertTrue(uploaded_file)
+            self.assertEqual(uploaded_file.name, filename)
+            self.assertEqual(uploaded_file.content_type, 'application/zip')
+
+            result = services.extract_from_zip(uploaded_file)
+            self.assertTrue(len(result[0]) > 0)
+            self.assertTrue(isinstance(result[1], zipfile.ZipFile))
+            self.assertEqual(result[2], expected_file_names)
+            self.assertEqual(result[3], expected_path_to_excel)
+
+    def test_get_mappings_from_zip_file(self):
+        filename = 'folder_with_xls_and_audio_folder.zip'
+        uploaded_file = self.make_uploaded_zip_file(filename)
+        self.assertTrue(uploaded_file)
+        self.assertEqual(uploaded_file.name, filename)
+        self.assertEqual(uploaded_file.content_type, 'application/zip')
+
+        deck = services.handle_custom_file(uploaded_file, 'test course', self.user)
+        custom = True
+
+        [file_contents, zfile, file_names, path_to_excel] = services.extract_from_zip(uploaded_file)
+        [file_contents, mappings] = services.get_mappings_from_zip(deck, file_contents, file_names, zfile, path_to_excel, custom=custom)
+
+        self.assertTrue(len(file_contents) > 0)
+        self.assertTrue(mappings)
+        self.assertTrue('Image' in mappings)
+        self.assertTrue(len(mappings['Image'].keys()) == 0)
+        self.assertTrue('Audio' in mappings)
+        self.assertTrue(len(mappings['Audio'].keys()) == 6)
+
+        zip_paths = [
+            "audio/aurevoir.mp3",
+            "audio/bonappetit.mp3",
+            "audio/bonjour.mp3",
+            "audio/double.mp3",
+            "audio/horsdoeuvre.mp3",
+            "audio/jenecomprendspas.mp3",
+        ]
+
+        folder_name = utils.get_media_folder_name(deck)
+        for zip_path in zip_paths:
+            zip_file_name = os.path.split(zip_path)[1] 
+            zip_file_name = "1_" + zip_file_name # prefix with 1_ because of handle_media_folders()
+            media_file_path = "%s/%s" % (folder_name, zip_file_name)
+            self.assertEqual(mappings['Audio'][zip_path], media_file_path)
 
 class QueriesTest(TestCase):
     def setUp(self):

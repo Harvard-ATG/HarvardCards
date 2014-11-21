@@ -9,8 +9,12 @@ env:
 # command to install dependencies
 install: "pip install -r requirements.txt --use-mirrors"
 
-# command to run tests
-
+# command(s) to run before main script
+before_script: 
+    - mkdir -p logs 
+    - touch logs/app.log
+    
+# command(s) to run tests
 script: 
     - python manage.py syncdb --noinput
     - python manage.py migrate --noinput

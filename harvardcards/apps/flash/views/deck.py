@@ -130,16 +130,18 @@ def upload_deck(request, deck_id=None):
 
 def download_deck(request, deck_id=None):
     '''
-    Downloads an excel spreadsheet of a deck of cards.
+    Downloads a ZIP containing the excel spreadsheet of the deck of cards
+    along with any associated media files like images or audio.
     '''
 
-    response = HttpResponse(content_type='application/vnd.ms-excel')
-    response['Content-Disposition'] = 'attachment; filename=flashcards.xls'
-    deck = Deck.objects.get(id=deck_id)
-    file_output = utils.create_deck_file(deck_id) 
-    response.write(file_output)
+    deck =  Deck.objects.get(id=deck_id)
+    zfile_output = services.create_zip_deck_file(deck)
     log.info('Deck %(d)s from the collection %(c)s downloaded by the user.'
             %{'d': str(deck.id), 'c': str(deck.collection.id)}, extra={'user': request.user})
+
+    response = HttpResponse(zfile_output, content_type='application/x-zip-compressed')
+    response['Content-Disposition'] = 'attachment; filename=deck.zip'
+
     return response
 
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')  
