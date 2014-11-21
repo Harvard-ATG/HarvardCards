@@ -16,7 +16,7 @@ class LTILaunchView(CsrfExemptMixin, LoginRequiredMixin, View):
     """
     LTI consumers will POST to this view.
     """
-    url = '/'
+    url = 'index'
     def post(self, request, *args, **kwargs):
         '''
         Handles the LTI launch request and redirects to the main page.
