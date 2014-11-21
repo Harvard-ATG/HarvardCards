@@ -6,7 +6,6 @@ import urllib2
 import os
 import shutil
 import datetime
-from functools import wraps
 from  PIL import Image
 
 from django.db import transaction
@@ -412,35 +411,6 @@ def create_deck(collection_id, deck_title):
         sort_order = sort_order + 1
     deck = Deck.objects.create(title=deck_title, collection=collection, sort_order=sort_order)
     return deck
-
-def check_role(roles, entity_type):
-    """
-    A decortor that checks to see if a user has the required role in a collection. Allows the user to enter the function
-    if the user has the role. Raises a PermissionDenied exception if the user doesn't have the role.
-
-    Input: a list of roles allowed for this function
-    Output: the function if user has role, else a PermissionDenied
-    """
-    def decorator(func):
-        def inner_decorator(request, *args, **kwargs):
-            entity_id = None
-            if request.GET:
-                entity_id = request.GET.get('deck_id','') if entity_type == 'deck' else request.GET.get('collection_id','')
-            elif not entity_id and request.POST:
-                entity_id = request.POST.get('deck_id','') if entity_type == 'deck' else request.POST.get('collection_id','')
-            else:
-                raise PermissionDenied
-            
-            entity_id = int(entity_id)
-            if entity_type == 'deck':
-                deck = Deck.objects.get(id=entity_id)
-                entity_id = deck.collection.id
-            
-            if has_role_with_request(request, roles, entity_id):
-                return func(request, *args, **kwargs)
-            raise PermissionDenied
-        return wraps(func)(inner_decorator)
-    return decorator
 
 def has_role_with_request(request, roles, collection_id):
     """
