@@ -6,8 +6,10 @@ from harvardcards.apps.flash.services import has_role_with_request
 
 def check_role(roles, entity_type):
     """
-    A decortor that checks to see if a user has the required role in a collection. Allows the user to enter the function
-    if the user has the role. Raises a PermissionDenied exception if the user doesn't have the role.
+    A decorator that checks to see if a user has the required role in a collection. 
+    Allows the user to enter the function if the user has the role. 
+    
+    Raises a PermissionDenied exception if the user doesn't have the role.
 
     Input: a list of roles allowed for this function
     Output: the function if user has role, else a PermissionDenied
