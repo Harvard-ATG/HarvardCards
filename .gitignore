@@ -6,7 +6,8 @@ django-server.log
 .vagrant
 /harvardcards/modules/flashcard-exporter/cache/*
 /harvardcards/apps/flash/uploads/*
-/logs/*.log
+/logs/*
+/logs/!empty
 /config/my.cnf
 /config/django_secret.txt
 /config/lti_oauth_credentials.txt
