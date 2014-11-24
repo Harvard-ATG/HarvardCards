@@ -43,8 +43,8 @@ function initModule() {
 	deck_slider.bind("slide", function(slider, data) {
 		var slideOpts = {direction: deck_slider._slideDirection}, animDuration = 500;
 		$cardDetail.find(".controls[data-card-id="+data.card_id+"]").addClass('card-active').show();
-		$cardDetail.find(".card[data-card-id="+data.card_id+"]").addClass('card-active').show('slide', slideOpts, animDuration);
 		MODULE.loadCardMedia(data.card_id);
+		$cardDetail.find(".card[data-card-id="+data.card_id+"]").addClass('card-active').show('slide', slideOpts, animDuration);
 	});
 
 	deck_slider.bind("slide", card_counter.update);
@@ -237,10 +237,10 @@ function initModule() {
 				var html = '';
 				switch(type) {
 					case 'A': 
-						html = '<audio alt="'+label+'" controls="controls" preload="auto"><source src="'+src+'" />Your browser does not support the <code>audio</code> element.</audio>';
+						html = '<audio alt="'+label+'" controls="controls" class="cardFieldAudio" preload="auto"><source src="'+src+'" />Your browser does not support the <code>audio</code> element.</audio>';
 						break;
 					case 'V':
-						html = '<video alt="'+label+'" src="'+src+'" controls>Your browser does not support the <code>video</code> element.</video>';
+						html = '<video alt="'+label+'" src="'+src+'" class="cardFieldVideo" controls>Your browser does not support the <code>video</code> element.</video>';
 						break;
 					case 'I':
 					default: 
