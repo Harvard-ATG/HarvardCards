@@ -141,7 +141,7 @@ function initModule() {
 		initModule:initModule,
 		// This function initializes flip mode
 		setupFlipMode: function() {
-			var flipMode = new FlipMode();
+			var flipMode = new FlipMode({btnEl: "#flip_mode"});
 			return flipMode;
 		},
 		// This function adds the ability to inline edit elements with data-editable=yes.

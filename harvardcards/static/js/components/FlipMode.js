@@ -1,49 +1,61 @@
 define(['jquery'], function($) {
 
 	/**
-	 * 
+	 * FlipMode object supports flip mode on flashcard decks.
 	 */
-	var FlipMode = function() {
+	var FlipMode = function(config) {
+		this.config = config || {};
+		this.onClick = $.proxy(this.onClick, this);
+		this.localStorage = localStorage;
+		this.storeKey = 'flip_mode';
+		this.flipped = false;
 		this.init();
 	};
 
 	FlipMode.prototype.init = function() {
-		var that = this;
-		if(localStorage.flip_mode){
-			that.flipButton(true);
+		this.flipButton(this.isFlipModeOn());
+		$(this.config.btnEl).click(this.onClick); 
+	};
+
+	FlipMode.prototype.onClick = function(e) {
+		this.flipButton(!this.isFlipModeOn());
+	};
+
+	FlipMode.prototype.setFlipMode = function(flipped) {
+		if(flipped) {
+			this.localStorage[this.storeKey] = true;
+		} else {
+			this.localStorage.removeItem(this.storeKey);
 		}
-		$('#flip_mode').click(function(){
-			if(localStorage.flip_mode){
-				that.flipButton(false);
-			} else {
-				that.flipButton(true);
-			}
-		});
+	};
+
+	FlipMode.prototype.isFlipModeOn = function() {
+		return this.localStorage[this.storeKey] || false;
 	};
 	
-	FlipMode.prototype.flipButton = function(flipBool){
-		var that = this;
-		if(flipBool){
-			$('#flip_mode').addClass('down');
-			$('#flip_mode').attr('aria-pressed', 'true');
-			localStorage['flip_mode'] = true;
-			that.flipContent();
+	FlipMode.prototype.flipButton = function(pressed){
+		var btnEl = this.config.btnEl;
+		if(pressed){
+			$(btnEl).addClass('down').attr('aria-pressed', 'true');
 		} else {
-			$('#flip_mode').removeClass('down');
-			$('#flip_mode').attr('aria-pressed', 'false');
-			localStorage.removeItem('flip_mode');
-			that.flipContent();
+			$(btnEl).removeClass('down').attr('aria-pressed', 'false');
 		}
-	}
+		this.setFlipMode(pressed);
+		this.flipContent(pressed);
+	};
 	
-	FlipMode.prototype.flipContent = function(){
-		$('#allCards > li').each(function(item){
+	FlipMode.prototype.flipContent = function(flip){
+		if(flip == this.flipped) {
+			return;
+		}
+		$('#allCards .card[data-card-id]').each(function(idx, item){
 			var showed = $(this).find('.show_content').html();
 			var revealed = $(this).find('.reveal_content').html();
 			$(this).find('.show_content').html(revealed);
 			$(this).find('.reveal_content').html(showed);
 		});
-	}
+		this.flipped = !this.flipped;
+	};
 
 	return FlipMode;
 });
