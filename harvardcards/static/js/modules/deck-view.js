@@ -32,7 +32,8 @@ function initModule() {
 	card_counter.update = $.proxy(card_counter.update, card_counter);
 
 	deck_slider.bind("beforeslide", function(slider, data){
-		$cardDetail.find("[data-card-id]").removeClass('card-active').hide(); 
+		$cardDetail.find(".controls[data-card-id="+data.card_id+"]").removeClass("card-active").hide();
+		$cardDetail.find(".card[data-card-id]").removeClass('card-active').hide(); 
 		if(data.toIndex >= data.fromIndex) {
 			deck_slider._slideDirection = "right";
 		} else {
@@ -41,7 +42,9 @@ function initModule() {
 	});
 	deck_slider.bind("slide", function(slider, data) {
 		var slideOpts = {direction: deck_slider._slideDirection}, animDuration = 500;
-		$cardDetail.find("[data-card-id="+data.card_id+"]").addClass('card-active').show('slide', slideOpts, animDuration);
+		$cardDetail.find(".controls[data-card-id="+data.card_id+"]").addClass('card-active').show();
+		$cardDetail.find(".card[data-card-id="+data.card_id+"]").addClass('card-active').show('slide', slideOpts, animDuration);
+		MODULE.loadCardMedia(data.card_id);
 	});
 
 	deck_slider.bind("slide", card_counter.update);
@@ -74,18 +77,10 @@ function initModule() {
 	        return false;
 	});
 
-
-
-	// fixes the reorganization of slider
-	$("#initDeck").css("display","none");
-	$("#holder").css("display","block");
-
-
 	$('.reveal').click(function() {
 		MODULE.revealCard($(this), $(this).parent().next());
 		return false;
 	});
-
 
 	$('#full_screen').click(function() {
 	    var txt1 = 'Full Screen';
@@ -114,7 +109,6 @@ function initModule() {
 	    return false;
 	});
 
-
 	$('#play_cards').click(function(){
 	    var playText = 'Play';
 	    var pauseText = 'Pause';
@@ -132,11 +126,15 @@ function initModule() {
 	    }
 	    return false;
 	});
-	
+
 	utils.setupConfirm();
 	this.setupFlipMode();
 	this.setupEditableDeckTitle();
 	this.setupKeyboardShortcuts();
+
+	// fixes the reorganization of slider
+	$("#initDeck").css("display","none");
+	$("#holder").css("display","block");
 };
 
 	var MODULE = {
@@ -227,6 +225,30 @@ function initModule() {
 			$button_el.text(button_text[0]);
 
 			return state;
+		},
+		loadCardMedia: function(cardId) {
+			$('.card[data-card-id="'+cardId+'"] .cardFieldMedia').each(function(idx, el) {
+				if($(el).hasClass("cardFieldMediaLoaded")) {
+					return;
+				}
+				var type = $(el).data("type");
+				var src = $(el).data("src");
+				var label = $(el).data("label");
+				var html = '';
+				switch(type) {
+					case 'A': 
+						html = '<audio alt="'+label+'" controls="controls" preload="auto"><source src="'+src+'" />Your browser does not support the <code>audio</code> element.</audio>';
+						break;
+					case 'V':
+						html = '<video alt="'+label+'" src="'+src+'" controls>Your browser does not support the <code>video</code> element.</video>';
+						break;
+					case 'I':
+					default: 
+						html = '<img src="'+src+'" alt="'+label+'" class="cardFieldImage" />';
+						break;
+				}
+				$(el).addClass("cardFieldMediaLoaded").append(html);
+			});
 		}
 	};
 

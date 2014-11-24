@@ -7,7 +7,7 @@
 		{% if field.type == 'T' %}
 			<span class="cardFieldValue">{{ field.value}}</span>
 		{% elif field.type == 'I' %}
-			<img src="{{MEDIA_URL}}{{field.value}}" alt="{{field.label}}" class="cardFieldImage" />
+			<div class="cardFieldMedia cardFieldImage" data-src="{{MEDIA_URL}}{{field.value}}" data-alt="{{field.label}}" data-type="{{field.type}}" ></div>
 			<div class="controls">
 				<div>
 					<a href="{{MEDIA_URL}}originals/{{field.value}}" target="_blank">
@@ -17,18 +17,17 @@
 				</div>
 			</div>
 		{% elif field.type == 'V' %}
-			<video src="{{field.value}}" alt="{{field.label}}" controls>
-				Your browser does not support the <code>video</code> element.
-			</video>
+			{% if  field.value|slice:":4" == "http" or STATIC_URL in field.value %}
+			<div class="cardFieldMedia cardFieldVideo" data-src="{{field.value}}" data-label="{{field.label}}" data-type="{{field.type}}"></div>
+			{% else %}
+				<div class="cardFieldMedia cardFieldVideo" data-src="{{MEDIA_URL}}{{field.value}}" data-label="{{field.label}}" data-type="{{field.type}}"></div>
+			{% endif %}
 		{% elif field.type == 'A' %}
-			<audio alt="{{field.label}}" controls="controls" preload="auto">
-				{% if  field.value|slice:":4" == "http" or STATIC_URL in field.value %}
-					<source src="{{field.value}}" />
-				{% else %}
-					<source src="{{MEDIA_URL}}{{field.value}}" />
-				{% endif %}
-				Your browser does not support the <code>audio</code> element.
-			</audio>
+			{% if  field.value|slice:":4" == "http" or STATIC_URL in field.value %}
+				<div class="cardFieldMedia cardFieldAudio" data-src="{{field.value}}" data-label="{{field.label}}" data-type="{{field.type}}"></div>
+			{% else %}
+				<div class="cardFieldMedia cardFieldAudio" data-src="{{MEDIA_URL}}{{field.value}}" data-label="{{field.label}}" data-type="{{field.type}}"></div>
+			{% endif %}
 		{% else %}
 			<b>ERROR FIELD TYPE NOT SUPPORTED: {{field.type}}</b>
 		{% endif %}
