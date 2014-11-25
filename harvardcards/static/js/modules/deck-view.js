@@ -39,15 +39,50 @@ function initModule() {
 		} else {
 			deck_slider._slideDirection = "left";
 		}
+		deck_slider._slideCurrent = (data.toIndex == data.fromIndex);
 	});
 	deck_slider.bind("slide", function(slider, data) {
-		var slideOpts = {direction: deck_slider._slideDirection}, animDuration = 500;
-		$cardDetail.find(".controls[data-card-id="+data.card_id+"]").addClass('card-active').show();
-		MODULE.loadCardMedia(data.card_id);
-		$cardDetail.find(".card[data-card-id="+data.card_id+"]").addClass('card-active').show('slide', slideOpts, animDuration);
+		// find the card elements
+		var $controls = $cardDetail.find(".controls[data-card-id="+data.card_id+"]");
+		var $card = $cardDetail.find(".card[data-card-id="+data.card_id+"]");
+
+		// this function handles automatically playing the first audio file in the card
+		var playMedia = function() {
+			var $audio = $card.find("audio").first();
+			if($audio.length == 1) {
+				if($audio[0].readyState >= 3) {
+					$audio.trigger("play");
+				} else {
+					$audio.bind("canplay canplaythrough", function() {
+						this.play();
+					});
+				}
+			}
+		};
+		var slideOpts = {
+			direction: deck_slider._slideDirection,
+			complete: playMedia
+		}; 
+
+		// show the card controls 
+		$controls.addClass('card-active');
+		$controls.show();
+
+		// show the card 
+		$card.addClass('card-active');
+		if(deck_slider._slideCurrent) {
+			$card.show();
+			playMedia();
+		} else {
+			$card.show('slide', slideOpts, 500);
+		}
+	});
+	deck_slider.bind("load", function(slider, card_ids) {
+		MODULE.loadCardMedia(card_ids);
 	});
 
 	deck_slider.bind("slide", card_counter.update);
+	deck_slider.triggerLoad(0);
 	deck_slider.goToCurrent();
 	card_counter.update();
 
@@ -226,28 +261,34 @@ function initModule() {
 
 			return state;
 		},
-		loadCardMedia: function(cardId) {
-			$('.card[data-card-id="'+cardId+'"] .cardFieldMedia').each(function(idx, el) {
-				if($(el).hasClass("cardFieldMediaLoaded")) {
-					return;
+		loadCardMedia: function(card_ids) {
+			var loadedCls = 'cardFieldMediaLoaded';
+			var loadMedia = {
+				'A': function(data) {
+					var html = '<audio alt="'+data.label+'" controls="controls" class="cardFieldAudio" preload="auto"><source src="'+data.src+'" />Your browser does not support the <code>audio</code> element.</audio>';
+					return html;
+				},
+				'V': function(data) {
+					var html = '<video alt="'+data.label+'" src="'+data.src+'" class="cardFieldVideo" controls>Your browser does not support the <code>video</code> element.</video>';
+					return html;
+				},
+				'I': function(data) {
+					var html = '<img src="'+data.src+'" alt="'+data.label+'" class="cardFieldImage" />';
+					return html;
 				}
-				var type = $(el).data("type");
-				var src = $(el).data("src");
-				var label = $(el).data("label");
-				var html = '';
-				switch(type) {
-					case 'A': 
-						html = '<audio alt="'+label+'" controls="controls" class="cardFieldAudio" preload="auto"><source src="'+src+'" />Your browser does not support the <code>audio</code> element.</audio>';
-						break;
-					case 'V':
-						html = '<video alt="'+label+'" src="'+src+'" class="cardFieldVideo" controls>Your browser does not support the <code>video</code> element.</video>';
-						break;
-					case 'I':
-					default: 
-						html = '<img src="'+src+'" alt="'+label+'" class="cardFieldImage" />';
-						break;
-				}
-				$(el).addClass("cardFieldMediaLoaded").append(html);
+			};
+			$.each(card_ids, function(idx, card_id) {
+				$('.card[data-card-id="'+card_id+'"] .cardFieldMedia').filter(function() {
+					return !$(this).hasClass(loadedCls);
+				}).each(function(idx, el) {
+					var type = $(el).data("type");
+					var params = {
+						"src": $(el).data("src"),
+						"label": $(el).data("label")
+					};
+					var result = loadMedia[type](params);
+					$(el).addClass(loadedCls).append(result);
+				});
 			});
 		}
 	};
