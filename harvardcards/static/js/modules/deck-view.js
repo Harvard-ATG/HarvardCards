@@ -32,19 +32,42 @@ function initModule() {
 	card_counter.update = $.proxy(card_counter.update, card_counter);
 
 	deck_slider.bind("beforeslide", function(slider, data){
-		$cardDetail.find("[data-card-id]").removeClass('card-active').hide(); 
-		if(data.toIndex >= data.fromIndex) {
-			deck_slider._slideDirection = "right";
-		} else {
-			deck_slider._slideDirection = "left";
-		}
+		var $controls = $cardDetail.find(".controls[data-card-id]");
+		var $card = $cardDetail.find(".card[data-card-id]");
+
+		$controls.removeClass("card-active").hide();
+		$card.removeClass('card-active').hide(); 
+
+		deck_slider._slideDirection = (data.toIndex >= data.fromIndex ? "right" : "left");
+		deck_slider._slideCurrent = (data.toIndex == data.fromIndex);
 	});
 	deck_slider.bind("slide", function(slider, data) {
-		var slideOpts = {direction: deck_slider._slideDirection}, animDuration = 500;
-		$cardDetail.find("[data-card-id="+data.card_id+"]").addClass('card-active').show('slide', slideOpts, animDuration);
+		// find the card elements
+		var $controls = $cardDetail.find(".controls[data-card-id="+data.card_id+"]");
+		var $card = $cardDetail.find(".card[data-card-id="+data.card_id+"]");
+
+		var slideOpts = {
+			direction: deck_slider._slideDirection
+		}; 
+
+		// show the card controls 
+		$controls.addClass('card-active');
+		$controls.show();
+
+		// show the card 
+		$card.addClass('card-active');
+		if(deck_slider._slideCurrent) {
+			$card.show();
+		} else {
+			$card.show('slide', slideOpts, 500);
+		}
+	});
+	deck_slider.bind("load", function(slider, card_ids) {
+		MODULE.loadCardMedia(card_ids);
 	});
 
 	deck_slider.bind("slide", card_counter.update);
+	deck_slider.triggerLoad(0);
 	deck_slider.goToCurrent();
 	card_counter.update();
 
@@ -74,18 +97,10 @@ function initModule() {
 	        return false;
 	});
 
-
-
-	// fixes the reorganization of slider
-	$("#initDeck").css("display","none");
-	$("#holder").css("display","block");
-
-
 	$('.reveal').click(function() {
 		MODULE.revealCard($(this), $(this).parent().next());
 		return false;
 	});
-
 
 	$('#full_screen').click(function() {
 	    var txt1 = 'Full Screen';
@@ -114,7 +129,6 @@ function initModule() {
 	    return false;
 	});
 
-
 	$('#play_cards').click(function(){
 	    var playText = 'Play';
 	    var pauseText = 'Pause';
@@ -132,18 +146,22 @@ function initModule() {
 	    }
 	    return false;
 	});
-	
+
 	utils.setupConfirm();
 	this.setupFlipMode();
 	this.setupEditableDeckTitle();
 	this.setupKeyboardShortcuts();
+
+	// fixes the reorganization of slider
+	$("#initDeck").css("display","none");
+	$("#holder").css("display","block");
 };
 
 	var MODULE = {
 		initModule:initModule,
 		// This function initializes flip mode
 		setupFlipMode: function() {
-			var flipMode = new FlipMode();
+			var flipMode = new FlipMode({btnEl: "#flip_mode"});
 			return flipMode;
 		},
 		// This function adds the ability to inline edit elements with data-editable=yes.
@@ -227,6 +245,36 @@ function initModule() {
 			$button_el.text(button_text[0]);
 
 			return state;
+		},
+		loadCardMedia: function(card_ids) {
+			var loadedCls = 'cardFieldMediaLoaded';
+			var loadMedia = {
+				'A': function(data) {
+					var html = '<audio alt="'+data.label+'" controls="controls" class="cardFieldAudio" preload="auto"><source src="'+data.src+'" />Your browser does not support the <code>audio</code> element.</audio>';
+					return html;
+				},
+				'V': function(data) {
+					var html = '<video alt="'+data.label+'" src="'+data.src+'" class="cardFieldVideo" controls>Your browser does not support the <code>video</code> element.</video>';
+					return html;
+				},
+				'I': function(data) {
+					var html = '<img src="'+data.src+'" alt="'+data.label+'" class="cardFieldImage" />';
+					return html;
+				}
+			};
+			$.each(card_ids, function(idx, card_id) {
+				$('.card[data-card-id="'+card_id+'"] .cardFieldMedia').filter(function() {
+					return !$(this).hasClass(loadedCls);
+				}).each(function(idx, el) {
+					var type = $(el).data("type");
+					var params = {
+						"src": $(el).data("src"),
+						"label": $(el).data("label")
+					};
+					var result = loadMedia[type](params);
+					$(el).addClass(loadedCls).append(result);
+				});
+			});
 		}
 	};
 

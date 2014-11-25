@@ -44,6 +44,8 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 	// Initializes the slider.
 	DeckSlider.prototype.init = function() {
 		this.card_ids = this.findCardIds();
+		this.loaded = {};
+		this.loadSize = 4;
 
 		if(this.currentCardId) {
 			this.setCurrentCard(this.currentCardId);
@@ -115,6 +117,19 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 		this.el.on("click", ".card", this.onClickCard);
 	};
 
+	// Triggers load for batch of cards.
+	DeckSlider.prototype.triggerLoad = function(index) {
+		if(this.loaded[index] && (index % this.loadSize !== this.loadSize - 1)) {
+			return;
+		}
+		var card_ids = [];
+		for(var i = 0, len = this.loadSize; i < len; i++) {
+			card_ids.push(this.card_ids[index+i]);
+			this.loaded[index+i] = true;
+		}
+		this.trigger("load", this, card_ids);
+	};
+
 	// Handles slider event triggered before the slide.
 	DeckSlider.prototype.onBeforeSlide = function(slider, fromIndex, toIndex) {
 		var card_id = this.card_ids[fromIndex];
@@ -126,6 +141,7 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 		var card_id = this.card_ids[index];
 		this.selectCard(card_id);
 		this.trigger("slide", this, {index:index, card_id:card_id});
+		this.triggerLoad(index);
 	};
 
 	// Handles a click on a card element.
@@ -235,6 +251,8 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 			this.card_ids.push(this.card_ids.splice(random_index, 1)[0]);
 			cards.append(child.splice(random_index, 1));
 		}
+		this.loaded = {};
+		this.trigger("shuffle");
 	};
 
 	// Plays the slider (i.e. auto-advance to the next card).
