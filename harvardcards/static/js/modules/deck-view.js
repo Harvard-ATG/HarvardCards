@@ -32,13 +32,14 @@ function initModule() {
 	card_counter.update = $.proxy(card_counter.update, card_counter);
 
 	deck_slider.bind("beforeslide", function(slider, data){
-		$controls = $cardDetail.find(".controls[data-card-id]").removeClass("card-active").hide();
-		$card = $cardDetail.find(".card[data-card-id]").removeClass('card-active').hide(); 
-		if(data.toIndex >= data.fromIndex) {
-			deck_slider._slideDirection = "right";
-		} else {
-			deck_slider._slideDirection = "left";
-		}
+		var $controls = $cardDetail.find(".controls[data-card-id]");
+		var $card = $cardDetail.find(".card[data-card-id]");
+
+		$controls.removeClass("card-active").hide();
+		$card.removeClass('card-active').hide(); 
+		$card.find("audio").trigger("pause");
+
+		deck_slider._slideDirection = (data.toIndex >= data.fromIndex ? "right" : "left");
 		deck_slider._slideCurrent = (data.toIndex == data.fromIndex);
 	});
 	deck_slider.bind("slide", function(slider, data) {
