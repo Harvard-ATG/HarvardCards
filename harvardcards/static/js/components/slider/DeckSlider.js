@@ -44,7 +44,7 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 	// Initializes the slider.
 	DeckSlider.prototype.init = function() {
 		this.card_ids = this.findCardIds();
-		this.loaded = 0;
+		this.loaded = {};
 		this.loadSize = 4;
 
 		if(this.currentCardId) {
@@ -119,12 +119,15 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 
 	// Triggers load for batch of cards.
 	DeckSlider.prototype.triggerLoad = function(index) {
-		if(index < this.loaded) {
+		if(this.loaded[index]) {
 			return;
 		}
-		var card_ids = this.card_ids.slice(this.loaded, this.loaded + this.loadSize);
+		var card_ids = [];
+		for(var i = 0, len = this.loadSize; i < len; i++) {
+			card_ids.push(this.card_ids[index+i]);
+			this.loaded[index+i] = true;
+		}
 		this.trigger("load", this, card_ids);
-		this.loaded += card_ids.length;
 	};
 
 	// Handles slider event triggered before the slide.
@@ -248,6 +251,8 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 			this.card_ids.push(this.card_ids.splice(random_index, 1)[0]);
 			cards.append(child.splice(random_index, 1));
 		}
+		this.loaded = {};
+		this.trigger("shuffle");
 	};
 
 	// Plays the slider (i.e. auto-advance to the next card).

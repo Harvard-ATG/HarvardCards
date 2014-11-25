@@ -32,8 +32,8 @@ function initModule() {
 	card_counter.update = $.proxy(card_counter.update, card_counter);
 
 	deck_slider.bind("beforeslide", function(slider, data){
-		$cardDetail.find(".controls[data-card-id="+data.card_id+"]").removeClass("card-active").hide();
-		$cardDetail.find(".card[data-card-id]").removeClass('card-active').hide(); 
+		$controls = $cardDetail.find(".controls[data-card-id]").removeClass("card-active").hide();
+		$card = $cardDetail.find(".card[data-card-id]").removeClass('card-active').hide(); 
 		if(data.toIndex >= data.fromIndex) {
 			deck_slider._slideDirection = "right";
 		} else {
