@@ -37,7 +37,6 @@ function initModule() {
 
 		$controls.removeClass("card-active").hide();
 		$card.removeClass('card-active').hide(); 
-		$card.find("audio").trigger("pause");
 
 		deck_slider._slideDirection = (data.toIndex >= data.fromIndex ? "right" : "left");
 		deck_slider._slideCurrent = (data.toIndex == data.fromIndex);
@@ -47,22 +46,8 @@ function initModule() {
 		var $controls = $cardDetail.find(".controls[data-card-id="+data.card_id+"]");
 		var $card = $cardDetail.find(".card[data-card-id="+data.card_id+"]");
 
-		// this function handles automatically playing the first audio file in the card
-		var playMedia = function() {
-			var $audio = $card.find("audio").first();
-			if($audio.length == 1) {
-				if($audio[0].readyState >= 3) {
-					$audio.trigger("play");
-				} else {
-					$audio.bind("canplay canplaythrough", function() {
-						this.play();
-					});
-				}
-			}
-		};
 		var slideOpts = {
-			direction: deck_slider._slideDirection,
-			complete: playMedia
+			direction: deck_slider._slideDirection
 		}; 
 
 		// show the card controls 
@@ -73,7 +58,6 @@ function initModule() {
 		$card.addClass('card-active');
 		if(deck_slider._slideCurrent) {
 			$card.show();
-			playMedia();
 		} else {
 			$card.show('slide', slideOpts, 500);
 		}
