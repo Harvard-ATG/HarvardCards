@@ -45,9 +45,11 @@ function initModule() {
 		// find the card elements
 		var $controls = $cardDetail.find(".controls[data-card-id="+data.card_id+"]");
 		var $card = $cardDetail.find(".card[data-card-id="+data.card_id+"]");
+		var playAudio = MODULE.makeAudioPlayer($card);
 
 		var slideOpts = {
-			direction: deck_slider._slideDirection
+			direction: deck_slider._slideDirection,
+			complete: playAudio
 		}; 
 
 		// show the card controls 
@@ -58,6 +60,7 @@ function initModule() {
 		$card.addClass('card-active');
 		if(deck_slider._slideCurrent) {
 			$card.show();
+			playAudio();
 		} else {
 			$card.show('slide', slideOpts, 500);
 		}
@@ -275,6 +278,26 @@ function initModule() {
 					$(el).addClass(loadedCls).append(result);
 				});
 			});
+		},
+		// Pauses all audio on the page.
+		pauseAllAudio: function($allAudio) {
+			$allAudio.each(function(idx, el) {
+				this.pause();
+			});
+		},
+		// Returns a function that will play the first audio file on the flashcard.
+		makeAudioPlayer: function($card) {
+			var $audio = $card.find("audio").first(); 
+			var audio = ($audio.length == 1 ? $audio[0] : false);
+			return function() {
+				MODULE.pauseAllAudio($('audio'));
+				if(audio) {
+					if(window.chrome) {
+						audio.load(); // have to re-load audio each time for chrome browser
+					}
+					audio.play();
+				}
+			};
 		}
 	};
 
