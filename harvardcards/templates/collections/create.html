@@ -7,15 +7,12 @@
 {% block main_content %}
 <div id="content" data-module="collections-create">
     <div class="courseWrapper">
-        <!--div class="courseHeader">
-            <h2>Add course</h2>
-        </div-->
         <form action="{% url 'collectionCreate' %}" method="post">
             {% csrf_token %}
             <div class="courseHeader">
                 {{ collection_form.title.errors }}
                 <label for="id_title" style="visibility:hidden;text-indent:-300px;position:absolute;">Title:</label>
-                <input id="{{ collection_form.title.id_for_label }}" name="{{ collection_form.title.html_name }}" type="text" autofocus placeholder="Enter course name here">
+                <input id="{{ collection_form.title.id_for_label }}" name="{{ collection_form.title.html_name }}" type="text" autofocus placeholder="Enter collection name here">
                 <!-- this outputs the text form filed with the django templates {{ collection_form.title }} -->
             </div>
 

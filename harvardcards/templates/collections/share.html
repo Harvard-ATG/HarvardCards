@@ -21,7 +21,7 @@
                 <label for="id_link">Share this link:</label>
                 <input class="sharelink" style="padding: 5px" value="{% if request.is_secure %}https{% else %}http{% endif %}://{{request.get_host}}{% url 'collectionShareValidate' secret_share_key=secret_share_key %}" readonly="readonly" size="100" onclick="this.select()" />
             </p> 
-            <a href="{% url 'collectionShare' collection.id %}?collection_id={{collection.id}}" class="adminMenuBtn">Back to Share Course</a>
+            <a href="{% url 'collectionShare' collection.id %}?collection_id={{collection.id}}" class="adminMenuBtn">Back to Share</a>
             <a href="{% url 'collectionIndex' collection.id %}" class="adminMenuBtn cancelBtn">Cancel</a>
             {% else %}
             <p>
