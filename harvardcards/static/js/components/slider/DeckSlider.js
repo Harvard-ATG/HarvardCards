@@ -119,14 +119,19 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 
 	// Triggers load for batch of cards.
 	DeckSlider.prototype.triggerLoad = function(index) {
-		if(this.loaded[index] && (index % this.loadSize !== this.loadSize - 1)) {
+		var card_ids = []; 
+		var buffer = 2;
+		if(this.loaded[index] && (index % this.loadSize !== this.loadSize - buffer)) {
 			return;
 		}
-		var card_ids = [];
-		for(var i = 0, len = this.loadSize; i < len; i++) {
+		if(index == 0) {
+			buffer = 0;
+		}
+		for(var i = buffer, len = this.loadSize + buffer; i < len; i++) {
 			card_ids.push(this.card_ids[index+i]);
 			this.loaded[index+i] = true;
 		}
+		console.log("trigger load", index, card_ids);
 		this.trigger("load", this, card_ids);
 	};
 
