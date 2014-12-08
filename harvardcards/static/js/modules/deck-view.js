@@ -45,7 +45,6 @@ function initModule() {
 		// find the card elements
 		var $controls = $cardDetail.find(".controls[data-card-id="+data.card_id+"]");
 		var $card = $cardDetail.find(".card[data-card-id="+data.card_id+"]");
-		console.log("slide", data.card_id);
 		var playAudio = MODULE.makeAudioPlayer($card);
 
 		var slideOpts = {
@@ -291,7 +290,7 @@ function initModule() {
 			var $audio = $card.find("audio").first(); 
 			var audio = ($audio.length == 1 ? $audio[0] : false);
 			return function() {
-				console.log("play audio", $card.data('card-id'));
+				//console.log("play audio", $card.data('card-id'));
 				MODULE.pauseAllAudio($('audio'));
 				if(audio) {
 					if(window.chrome) {

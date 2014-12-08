@@ -131,7 +131,6 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 			card_ids.push(this.card_ids[index+i]);
 			this.loaded[index+i] = true;
 		}
-		console.log("trigger load", index, card_ids);
 		this.trigger("load", this, card_ids);
 	};
 
