@@ -292,9 +292,7 @@ function initModule() {
 			return function() {
 				MODULE.pauseAllAudio($('audio'));
 				if(audio) {
-					if(window.chrome) {
-						audio.load(); // have to re-load audio each time for chrome browser
-					}
+					audio.load(); // have to re-load audio each time for safari/chrome 
 					audio.play();
 				}
 			};
