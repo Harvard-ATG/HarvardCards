@@ -290,6 +290,7 @@ function initModule() {
 			var $audio = $card.find("audio").first(); 
 			var audio = ($audio.length == 1 ? $audio[0] : false);
 			return function() {
+				//console.log("play audio", $card.data('card-id'));
 				MODULE.pauseAllAudio($('audio'));
 				if(audio) {
 					if(window.chrome) {
