@@ -70,7 +70,6 @@ function initModule() {
 	});
 
 	deck_slider.bind("slide", card_counter.update);
-	deck_slider.triggerLoad(0);
 	deck_slider.goToCurrent();
 	card_counter.update();
 
