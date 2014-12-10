@@ -70,7 +70,6 @@ function initModule() {
 	});
 
 	deck_slider.bind("slide", card_counter.update);
-	deck_slider.triggerLoad(0);
 	deck_slider.goToCurrent();
 	card_counter.update();
 
@@ -290,11 +289,10 @@ function initModule() {
 			var $audio = $card.find("audio").first(); 
 			var audio = ($audio.length == 1 ? $audio[0] : false);
 			return function() {
+				//console.log("play audio", $card.data('card-id'));
 				MODULE.pauseAllAudio($('audio'));
 				if(audio) {
-					if(window.chrome) {
-						audio.load(); // have to re-load audio each time for chrome browser
-					}
+					audio.load(); // have to re-load audio each time for safari/chrome 
 					audio.play();
 				}
 			};
