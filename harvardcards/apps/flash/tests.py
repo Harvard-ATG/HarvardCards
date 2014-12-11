@@ -13,10 +13,10 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 
 from django_auth_lti import const
 
-from harvardcards.apps.flash.models import Collection, Deck, Field, CardTemplate, CardTemplates_Fields, Card, Canvas_Course_Map, Users_Collections
+from harvardcards.apps.flash.models import Collection, Deck, Field, CardTemplate, CardTemplates_Fields, Card, Canvas_Course_Map, Users_Collections, Analytics
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
 from harvardcards.apps.flash.views.collection import *
-from harvardcards.apps.flash import services, queries
+from harvardcards.apps.flash import services, queries, analytics
 from harvardcards.apps.flash.lti_service import LTIService
 from harvardcards.settings.common import MEDIA_ROOT
 
@@ -373,3 +373,45 @@ class LTIServiceTest(TestCase):
         expected_collections = [c.id for c in (collection, collection3)]
         self.assertEqual(len(canvas_collections), len(expected_collections))
         self.assertEqual(canvas_collections, expected_collections)
+
+
+class AnalyticsTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+
+    def test_create_statement(self):
+        stmt_args = {
+            "actor": self.user, 
+            "verb": "did", 
+            "object": "that",
+            "context": {"foo": 1, "bar": 2}
+        }
+        stmt = analytics.Statement(**stmt_args)
+        self.assertEqual(len(stmt.id), 36, "should be a uuid") 
+        self.assertTrue(stmt.timestamp, "should have a timestamp")
+        self.assertEqual(stmt.actor, stmt_args['actor'])
+        self.assertEqual(stmt.verb, stmt_args['verb'])
+        self.assertEqual(stmt.object, stmt_args['object'])
+        self.assertEqual(stmt.context, stmt_args['context'])
+
+    def test_save_statement(self):
+        stmt_args = {
+            "actor": self.user, 
+            "verb": "did", 
+            "object": "that",
+            "context": {"foo": 1, "bar": 2}
+        }
+        stmt = analytics.Statement(**stmt_args)
+        stmt.save()
+
+        result = Analytics.objects.filter(stmt_id=stmt.id)
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0].stmt_verb, stmt_args['verb'])
+        self.assertEqual(result[0].stmt_object, stmt_args['object'])
+        self.assertEqual(result[0].stmt_context, json.dumps(stmt_args['context']))
+        self.assertTrue(result[0].stmt_json)
+
+        stmt_json = json.loads(result[0].stmt_json)
+        for key in ['id', 'actor', 'verb', 'object', 'context', 'timestamp']:
+            self.assertIn(key, stmt_json)
+        self.assertTrue(stmt_json['id'], stmt.id)
