@@ -13,7 +13,7 @@ log = logging.getLogger(__name__)
 # verbs by attribute: 
 #
 #   VERBS.reviewed => "reviewed"
-#   VERBS.quizszed => "quizzed"
+#   VERBS.quizzed => "quizzed"
 # 
 _VERBS = {
     "accessed": "accessed",
