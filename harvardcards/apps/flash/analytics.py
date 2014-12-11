@@ -8,6 +8,13 @@ from .models import Analytics
 
 log = logging.getLogger(__name__)
 
+# Public list of verbs for use in analytics statements.
+# Uses a namedtuple instead of a dict so that we can reference
+# verbs by attribute: 
+#
+#   VERBS.reviewed => "reviewed"
+#   VERBS.quizszed => "quizzed"
+# 
 _VERBS = {
     "accessed": "accessed",
     "quizzed": "quizzed",
@@ -15,7 +22,6 @@ _VERBS = {
     "launched": "launched",
     "downloaded": "downloaded"
 }
-
 VERBS = collections.namedtuple("VERBS", _VERBS.keys())(**_VERBS)
 
 def save_statement(**kwargs):
@@ -25,9 +31,9 @@ def save_statement(**kwargs):
 
     analytics.save_statement(
         actor="John", 
-        verb="reviewed", 
-        object="latin flashcards",
-        context={"mobile": False}
+        verb=VERBS.reviewed, 
+        object="deck",
+        context={"deck_id": 10, "mobile": True}
     )
     """
     log.debug("save statement: %s" % str(kwargs))
