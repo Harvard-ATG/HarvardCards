@@ -245,3 +245,5 @@ class Analytics(models.Model):
         verbose_name_plural = 'Analytics'
         ordering = ['stmt_stored', 'stmt_actor', 'stmt_verb', 'stmt_object']
 
+    def __unicode__(self):
+        return "ID: %s STMT: %s %s %s" % (self.id, self.stmt_actor, self.stmt_verb, self.stmt_object)

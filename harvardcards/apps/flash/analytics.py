@@ -2,10 +2,21 @@ import datetime
 import json
 import uuid
 import logging
+import collections
 
 from .models import Analytics
 
 log = logging.getLogger(__name__)
+
+_VERBS = {
+    "accessed": "accessed",
+    "quizzed": "quizzed",
+    "reviewed": "reviewed",
+    "launched": "launched",
+    "downloaded": "downloaded"
+}
+
+VERBS = collections.namedtuple("VERBS", _VERBS.keys())(**_VERBS)
 
 def save_statement(**kwargs):
     """

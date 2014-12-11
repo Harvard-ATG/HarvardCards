@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from ims_lti_py.tool_config import ToolConfig
 from braces.views import CsrfExemptMixin, LoginRequiredMixin
 
+from harvardcards.apps.flash import analytics
 from harvardcards.apps.flash.lti_service import LTIService
 import json
 import logging
@@ -24,6 +25,12 @@ class LTILaunchView(CsrfExemptMixin, LoginRequiredMixin, View):
         lti_launch_json = json.dumps(request.session['LTI_LAUNCH'], sort_keys=True, indent=4, separators=(',',': '))
         log.debug("LTI launch parameters: %s" % lti_launch_json)
         LTIService(request).subscribeToCourseCollections()
+        analytics.save_statement(
+            actor=request.user, 
+            verb=analytics.VERBS.launched, 
+            object="application",
+            context={"lti_launch": request.session['LTI_LAUNCH']}
+        )
         return redirect(self.url)
 
     def get(self, request, *args, **kwargs):

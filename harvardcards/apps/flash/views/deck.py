@@ -8,7 +8,7 @@ from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, 
 from harvardcards.apps.flash.forms import DeckImportForm
 from harvardcards.apps.flash.decorators import check_role
 from harvardcards.apps.flash.lti_service import LTIService
-from harvardcards.apps.flash import services, queries
+from harvardcards.apps.flash import services, queries, analytics
 
 import logging
 log = logging.getLogger(__name__)
@@ -58,6 +58,20 @@ def index(request, deck_id=None):
         "is_deck_admin": is_deck_admin,
         "card_id": card_id,
     }
+
+    analytics_stmt = {
+        "actor": request.user,
+        "verb": analytics.VERBS.accessed,
+        "object": "deck",
+        "context": {"deck_id": deck_id},
+    }
+    analytics.save_statement(**analytics_stmt)
+
+    if is_quiz_mode:
+        analytics_stmt['verb'] = analytics.VERBS.quizzed
+    else:
+        analytics_stmt['verb'] = analytics.VERBS.reviewed
+    analytics.save_statement(**analytics_stmt)
 
     return render(request, "deck_view.html", context)
 
@@ -127,6 +141,13 @@ def download_deck(request, deck_id=None):
     Downloads a ZIP containing the excel spreadsheet of the deck of cards
     along with any associated media files like images or audio.
     '''
+
+    analytics.save_statement(
+        actor=request.user, 
+        verb=analytics.VERBS.downloaded, 
+        object="deck",
+        context={"deck_id": deck_id}
+    )
 
     deck =  Deck.objects.get(id=deck_id)
     zfile_output = services.create_zip_deck_file(deck)

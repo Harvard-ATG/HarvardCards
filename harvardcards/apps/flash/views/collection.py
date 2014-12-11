@@ -15,7 +15,7 @@ from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm, C
 from harvardcards.apps.flash.decorators import check_role
 from harvardcards.apps.flash.lti_service import LTIService
 from harvardcards.apps.flash.views import card_template
-from harvardcards.apps.flash import services, queries, utils
+from harvardcards.apps.flash import services, queries, utils, analytics
 
 import logging
 log = logging.getLogger(__name__)
@@ -48,6 +48,13 @@ def index(request, collection_id=None):
         "active_collection": active_collection,
         "user_collection_role": role_bucket,
     }
+
+    analytics.save_statement(
+        actor=request.user, 
+        verb=analytics.VERBS.accessed, 
+        object="collection",
+        context={"collection_id": collection_id}
+    )
 
     return render(request, 'collections/index.html', context)
 
