@@ -6,7 +6,7 @@ HarvardCards is a web-based flashcard application for students who want to memor
 
 # Quickstart
 
-To quickly install the application locally you can:
+To  install the application locally you can:
 - 1. Manually install the application and and run the django server.
 - 2. Use our [Vagrant](http://www.vagrantup.com/) and [VirtualBox](https://www.virtualbox.org/) configuration to setup a VM that will host and run the application, so you don't have to worry about installing dependencies.
 
