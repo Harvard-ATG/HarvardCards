@@ -59,19 +59,12 @@ def index(request, deck_id=None):
         "card_id": card_id,
     }
 
-    analytics_stmt = {
-        "actor": request.user,
-        "verb": analytics.VERBS.accessed,
-        "object": "deck",
-        "context": {"deck_id": deck_id},
-    }
-    analytics.save_statement(**analytics_stmt)
-
-    if is_quiz_mode:
-        analytics_stmt['verb'] = analytics.VERBS.quizzed
-    else:
-        analytics_stmt['verb'] = analytics.VERBS.reviewed
-    analytics.save_statement(**analytics_stmt)
+    analytics.track(
+        actor=request.user,
+        verb=analytics.VERBS.quizzed if is_quiz_mode else analytics.VERBS.reviewed,
+        object=analytics.OBJECTS.deck,
+        context={"deck_id": deck_id},
+    )
 
     return render(request, "deck_view.html", context)
 
@@ -142,10 +135,10 @@ def download_deck(request, deck_id=None):
     along with any associated media files like images or audio.
     '''
 
-    analytics.save_statement(
+    analytics.track(
         actor=request.user, 
         verb=analytics.VERBS.downloaded, 
-        object="deck",
+        object=analytics.OBJECTS.deck,
         context={"deck_id": deck_id}
     )
 

@@ -49,10 +49,10 @@ def index(request, collection_id=None):
         "user_collection_role": role_bucket,
     }
 
-    analytics.save_statement(
+    analytics.track(
         actor=request.user, 
-        verb=analytics.VERBS.accessed, 
-        object="collection",
+        verb=analytics.VERBS.viewed, 
+        object=analytics.OBJECTS.collection,
         context={"collection_id": collection_id}
     )
 

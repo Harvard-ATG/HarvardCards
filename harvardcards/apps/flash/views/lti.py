@@ -25,10 +25,10 @@ class LTILaunchView(CsrfExemptMixin, LoginRequiredMixin, View):
         lti_launch_json = json.dumps(request.session['LTI_LAUNCH'], sort_keys=True, indent=4, separators=(',',': '))
         log.debug("LTI launch parameters: %s" % lti_launch_json)
         LTIService(request).subscribeToCourseCollections()
-        analytics.save_statement(
+        analytics.track(
             actor=request.user, 
             verb=analytics.VERBS.launched, 
-            object="application",
+            object=analytics.OBJECTS.application,
             context={"lti_launch": request.session['LTI_LAUNCH']}
         )
         return redirect(self.url)

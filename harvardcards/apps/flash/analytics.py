@@ -9,31 +9,41 @@ from .models import Analytics
 
 log = logging.getLogger(__name__)
 
-# Public list of verbs for use in analytics statements.
-# Uses a namedtuple instead of a dict so that we can reference
-# verbs by attribute: 
+# Vocabulary of "verbs" for use in analytics statements.
+# Note: uses a namedtuple instead of a dict so verbs
+# can be referenced using attributes:
 #
 #   VERBS.reviewed => "reviewed"
 #   VERBS.quizzed => "quizzed"
 # 
 _VERBS = {
-    "accessed": "accessed",
+    "viewed": "viewed",
     "quizzed": "quizzed",
     "reviewed": "reviewed",
     "launched": "launched",
-    "downloaded": "downloaded"
+    "downloaded": "downloaded",
+    "created": "created",
+    "modified": "modified"
 }
 VERBS = collections.namedtuple("VERBS", _VERBS.keys())(**_VERBS)
 
-def save_statement(**kwargs):
+# Vocabulary of "objects" for use in analytics statements.
+_OBJECTS = {
+    "application": "application",
+    "collection": "collection",
+    "deck": "deck",
+}
+OBJECTS = collections.namedtuple("OBJECTS", _OBJECTS.keys())(**_OBJECTS)
+
+def track(**kwargs):
     """
     Shortcut method to record a statement about a learning activity.
     Example usage:
 
-    analytics.save_statement(
-        actor="John", 
-        verb=VERBS.reviewed, 
-        object="deck",
+    analytics.track(
+        actor="john",
+        verb=analytics.VERBS.reviewed, 
+        object=analytics.OBJECTS.deck,
         context={"deck_id": 10, "mobile": True}
     )
     """
