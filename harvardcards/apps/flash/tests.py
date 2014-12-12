@@ -378,41 +378,50 @@ class LTIServiceTest(TestCase):
 class AnalyticsTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+        self.test_stmt_args = {
+            "actor": self.user, 
+            "verb": "did", 
+            "object": "that",
+            "context": {"foo": 1, "bar": 2}
+        }
 
     def test_create_statement(self):
-        stmt_args = {
-            "actor": self.user, 
-            "verb": "did", 
-            "object": "that",
-            "context": {"foo": 1, "bar": 2}
-        }
-        stmt = analytics.Statement(**stmt_args)
+        stmt = analytics.Statement(**self.test_stmt_args)
         self.assertEqual(len(stmt.id), 36, "should be a uuid") 
         self.assertTrue(stmt.timestamp, "should have a timestamp")
-        self.assertEqual(stmt.actor_user, stmt_args['actor'])
+        self.assertEqual(stmt.actor_user, self.test_stmt_args['actor'])
         self.assertEqual(stmt.actor_desc, 'authenticated user')
-        self.assertEqual(stmt.verb, stmt_args['verb'])
-        self.assertEqual(stmt.object, stmt_args['object'])
-        self.assertEqual(stmt.context, stmt_args['context'])
+        self.assertEqual(stmt.verb, self.test_stmt_args['verb'])
+        self.assertEqual(stmt.object, self.test_stmt_args['object'])
+        self.assertEqual(stmt.context, self.test_stmt_args['context'])
 
     def test_save_statement(self):
-        stmt_args = {
-            "actor": self.user, 
-            "verb": "did", 
-            "object": "that",
-            "context": {"foo": 1, "bar": 2}
-        }
-        stmt = analytics.Statement(**stmt_args)
+        stmt = analytics.Statement(**self.test_stmt_args)
         stmt.save()
 
         result = Analytics.objects.filter(stmt_id=stmt.id)
         self.assertEqual(len(result), 1)
-        self.assertEqual(result[0].stmt_verb, stmt_args['verb'])
-        self.assertEqual(result[0].stmt_object, stmt_args['object'])
-        self.assertEqual(result[0].stmt_context, json.dumps(stmt_args['context']))
+        self.assertEqual(result[0].stmt_verb, self.test_stmt_args['verb'])
+        self.assertEqual(result[0].stmt_object, self.test_stmt_args['object'])
+        self.assertEqual(result[0].stmt_context, json.dumps(self.test_stmt_args['context']))
         self.assertTrue(result[0].stmt_json)
 
         stmt_json = json.loads(result[0].stmt_json)
         for key in ['id', 'actor_user', 'actor_desc', 'verb', 'object', 'context', 'timestamp']:
             self.assertIn(key, stmt_json)
         self.assertTrue(stmt_json['id'], stmt.id)
+
+    def test_track_user(self):
+        statement = analytics.track(**self.test_stmt_args)
+        exists = Analytics.objects.filter(pk=statement.model.pk).exists()
+        self.assertTrue(exists)
+
+    def test_track_anonymous_user(self):
+        stmt_args = {
+            "actor": "anonymous",
+            "verb": "did",
+            "object": "that"
+        }
+        statement = analytics.track(**stmt_args)
+        self.assertTrue(statement.model.stmt_actor_user is None)
+        self.assertEqual(statement.model.stmt_actor_desc, stmt_args['actor'])

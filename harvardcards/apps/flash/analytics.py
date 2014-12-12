@@ -47,9 +47,8 @@ def track(**kwargs):
         context={"deck_id": 10, "mobile": True}
     )
     """
-    log.debug("save statement: %s" % str(kwargs))
-    model = Statement(**kwargs).save()
-    return
+    log.debug("analytics track: %s" % str(kwargs))
+    return Statement(**kwargs).save()
 
 class Statement:
     def __init__(self, *args, **kwargs):
@@ -80,7 +79,7 @@ class Statement:
             self.actor_user = None
             self.actor_desc = str(actor)
 
-        self.analytics_model = None
+        self.model = None
 
     def as_dict(self):
         """Returns the object as a dictionary."""
@@ -112,8 +111,8 @@ class Statement:
         x.stmt_json = self.as_json()
         x.save()
 
-        self.analytics_model = x
-        log.debug("saved analytics model id: %s" % x.id)
+        self.model = x
+        log.debug("saved model id: %s" % self.model.id)
 
         return self
 
