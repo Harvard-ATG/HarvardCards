@@ -77,12 +77,22 @@ class djangoapp {
 		logoutput => true,
 	}
 
+	# django sync database
+	exec { "django-migrate":
+		environment => $DJANGO_ENV,
+		command => "python manage.py migrate --noinput",
+		onlyif => "test ! -e $PROJ_DIR/NO_SYNC_DB.flag",
+		cwd => "$PROJ_DIR",
+		require => Exec["django-syncdb"],
+		logoutput => true,
+	}
+
 	# setup super user
 	exec { "django-setup-superuser":
 		environment => $DJANGO_ENV,
 		command => 'echo "from django.contrib.auth.models import User; User.objects.create_superuser(\'admin\', \'admin@example.com\', \'admin\')" | ./manage.py shell',
 		cwd => "$PROJ_DIR",
-		require => Exec['django-syncdb']
+		require => Exec['django-migrate']
 	}
 
 	# start server?
