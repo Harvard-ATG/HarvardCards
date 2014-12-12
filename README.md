@@ -25,7 +25,7 @@ $ ./manage.py runserver 0.0.0.0:8080
 
 You should now be able to access the application at: ```http://localhost:8080```
 
-Tip: If you're familiar with python's [virtualenv](https://pypi.python.org/pypi/virtualenv), it's recommended to setup a virtualenv for the application, however that requires some extra steps. See the [documentation](http://virtualenv.readthedocs.org/en/latest/virtualenv.html#installation) for how to install and activate it.
+Tip: If you're familiar with python's [virtualenv](https://pypi.python.org/pypi/virtualenv), it's recommended to setup a virtualenv for the application first. See the [documentation](http://virtualenv.readthedocs.org/en/latest/virtualenv.html#installation) for how to install and activate it.
 
 ### Vagrant Quickstart
 
