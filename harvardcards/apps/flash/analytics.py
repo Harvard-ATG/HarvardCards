@@ -1,9 +1,9 @@
-import datetime
 import json
 import uuid
 import logging
 import collections
 
+from django.utils import timezone
 from django.contrib.auth.models import User
 from .models import Analytics
 
@@ -53,7 +53,7 @@ class Statement:
                 raise Exception("missing required parameter: %s" % required_param)
         
         self.id = str(uuid.uuid4())
-        self.timestamp = kwargs.get('timestamp', datetime.datetime.now())
+        self.timestamp = kwargs.get('timestamp', timezone.now())
         self.verb = kwargs.get('verb', '')
         self.object = kwargs.get('object', '')
         self.context = kwargs.get('context', None)
