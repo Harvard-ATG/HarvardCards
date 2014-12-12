@@ -389,7 +389,8 @@ class AnalyticsTest(TestCase):
         stmt = analytics.Statement(**stmt_args)
         self.assertEqual(len(stmt.id), 36, "should be a uuid") 
         self.assertTrue(stmt.timestamp, "should have a timestamp")
-        self.assertEqual(stmt.actor, stmt_args['actor'])
+        self.assertEqual(stmt.actor_user, stmt_args['actor'])
+        self.assertEqual(stmt.actor_desc, 'authenticated user')
         self.assertEqual(stmt.verb, stmt_args['verb'])
         self.assertEqual(stmt.object, stmt_args['object'])
         self.assertEqual(stmt.context, stmt_args['context'])
@@ -412,6 +413,6 @@ class AnalyticsTest(TestCase):
         self.assertTrue(result[0].stmt_json)
 
         stmt_json = json.loads(result[0].stmt_json)
-        for key in ['id', 'actor', 'verb', 'object', 'context', 'timestamp']:
+        for key in ['id', 'actor_user', 'actor_desc', 'verb', 'object', 'context', 'timestamp']:
             self.assertIn(key, stmt_json)
         self.assertTrue(stmt_json['id'], stmt.id)

@@ -12,7 +12,8 @@ class Migration(SchemaMigration):
         db.create_table(u'flash_analytics', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('stmt_id', self.gf('django.db.models.fields.CharField')(max_length=36)),
-            ('stmt_actor', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('stmt_actor_user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True)),
+            ('stmt_actor_desc', self.gf('django.db.models.fields.CharField')(max_length=4000)),
             ('stmt_verb', self.gf('django.db.models.fields.CharField')(max_length=4000)),
             ('stmt_object', self.gf('django.db.models.fields.CharField')(max_length=4000)),
             ('stmt_context', self.gf('django.db.models.fields.TextField')(blank=True)),
@@ -66,9 +67,10 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         u'flash.analytics': {
-            'Meta': {'ordering': "['stmt_stored', 'stmt_actor', 'stmt_verb', 'stmt_object']", 'object_name': 'Analytics'},
+            'Meta': {'ordering': "['stmt_stored', 'stmt_actor_user', 'stmt_actor_desc', 'stmt_verb', 'stmt_object']", 'object_name': 'Analytics'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'stmt_actor': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
+            'stmt_actor_desc': ('django.db.models.fields.CharField', [], {'max_length': '4000'}),
+            'stmt_actor_user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'null': 'True'}),
             'stmt_context': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'stmt_id': ('django.db.models.fields.CharField', [], {'max_length': '36'}),
             'stmt_json': ('django.db.models.fields.TextField', [], {'blank': 'True'}),

@@ -232,7 +232,8 @@ class Canvas_Course_Map(models.Model):
 
 class Analytics(models.Model):
     stmt_id = models.CharField(max_length=36, blank=False)
-    stmt_actor = models.ForeignKey(User)
+    stmt_actor_user = models.ForeignKey(User, null=True)
+    stmt_actor_desc = models.CharField(max_length=4000, blank=False)
     stmt_verb = models.CharField(max_length=4000, blank=False)
     stmt_object = models.CharField(max_length=4000, blank=False)
     stmt_context = models.TextField(blank=True)
@@ -243,7 +244,7 @@ class Analytics(models.Model):
     class Meta:
         verbose_name = 'Analytics'
         verbose_name_plural = 'Analytics'
-        ordering = ['stmt_stored', 'stmt_actor', 'stmt_verb', 'stmt_object']
+        ordering = ['stmt_stored', 'stmt_actor_user', 'stmt_actor_desc', 'stmt_verb', 'stmt_object']
 
     def __unicode__(self):
-        return "ID: %s STMT: %s %s %s" % (self.id, self.stmt_actor, self.stmt_verb, self.stmt_object)
+        return "ID: %s STMT: %s-%s-%s-%s" % (self.id, self.stmt_actor_user, self.stmt_actor_desc, self.stmt_verb, self.stmt_object)
