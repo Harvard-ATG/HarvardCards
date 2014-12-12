@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import datetime
 
 class Field(models.Model):
     label = models.CharField(max_length=200, blank=True)
@@ -228,3 +229,22 @@ class Canvas_Course_Map(models.Model):
 
     def __unicode__(self):
         return "Canvas course id: " + str(self.canvas_course_id) + " Collection id: " + str(self.collection.id)
+
+class Analytics(models.Model):
+    stmt_id = models.CharField(max_length=36, blank=False)
+    stmt_actor_user = models.ForeignKey(User, null=True)
+    stmt_actor_desc = models.CharField(max_length=4000, blank=False)
+    stmt_verb = models.CharField(max_length=4000, blank=False)
+    stmt_object = models.CharField(max_length=4000, blank=False)
+    stmt_context = models.TextField(blank=True)
+    stmt_timestamp = models.DateTimeField(default=datetime.datetime.now)
+    stmt_stored = models.DateTimeField(auto_now_add=True)
+    stmt_json = models.TextField(blank=True)
+
+    class Meta:
+        verbose_name = 'Analytics'
+        verbose_name_plural = 'Analytics'
+        ordering = ['-stmt_stored', 'stmt_actor_user', 'stmt_actor_desc', 'stmt_verb', 'stmt_object']
+
+    def __unicode__(self):
+        return "ID: %s STMT: %s-%s-%s-%s" % (self.id, self.stmt_actor_user, self.stmt_actor_desc, self.stmt_verb, self.stmt_object)

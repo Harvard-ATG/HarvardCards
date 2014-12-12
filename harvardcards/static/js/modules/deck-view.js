@@ -3,6 +3,7 @@ define([
 	'components/slider/DeckSlider', 
 	'components/InlineEditor', 
 	'components/FlipMode',
+	'models/API', 
 	'models/Deck', 
 	'views/CardForm', 
 	'utils/utils'
@@ -11,6 +12,7 @@ define([
 	DeckSlider, 
 	InlineEditor, 
 	FlipMode,
+	API,
 	Deck, 
 	CardForm, 
 	utils
@@ -43,14 +45,19 @@ function initModule() {
 	});
 	deck_slider.bind("slide", function(slider, data) {
 		// find the card elements
-		var $controls = $cardDetail.find(".controls[data-card-id="+data.card_id+"]");
-		var $card = $cardDetail.find(".card[data-card-id="+data.card_id+"]");
+		var card_id = data.card_id;
+		var $controls = $cardDetail.find(".controls[data-card-id="+card_id+"]");
+		var $card = $cardDetail.find(".card[data-card-id="+card_id+"]");
 		var playAudio = MODULE.makeAudioPlayer($card);
+		var mode = $card.data("mode")
 
 		var slideOpts = {
 			direction: deck_slider._slideDirection,
 			complete: playAudio
 		}; 
+
+		// send tracking
+		track_card(card_id, mode);
 
 		// show the card controls 
 		$controls.addClass('card-active');
@@ -298,6 +305,30 @@ function initModule() {
 			};
 		}
 	};
+
+	function track_card(card_id, mode) {
+		var now = new Date();
+		if(now.toISOString) {
+			now = now.toISOString();
+		}  else {
+			now = ''
+		}
+
+		var ajax_data = {
+			method: 'POST',
+			data: {
+				verb:"viewed", 
+				object:"card",
+				timestamp: now,
+				context: JSON.stringify({
+					card_id: card_id,
+					mode: mode
+				})
+			}
+		};
+
+		API.ajax('analytics/track', ajax_data);
+	}
 
 	return MODULE;
 });
