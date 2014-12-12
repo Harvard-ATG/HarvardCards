@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 from harvardcards.apps.flash.models import Collection, Deck, Card, Cards_Fields, Field, Users_Collections
 from harvardcards.apps.flash.forms import CardEditForm
-from harvardcards.apps.flash import services, queries, utils
+from harvardcards.apps.flash import services, queries, utils, analytics
 from harvardcards.apps.flash.decorators import check_role
 from django.db import models
 
@@ -72,6 +72,13 @@ def edit(request):
     else:
         card_edit_form.get_card().delete()
         result['errors'] = card_edit_form.errors
+
+    analytics.track(
+        actor=request.user,
+        verb=analytics.VERBS.modified,
+        object=analytics.OBJECTS.card,
+        context={"deck_id": deck_id, "card_id": card_id},
+    )
 
     return HttpResponse(json.dumps(result), mimetype="application/json")
 

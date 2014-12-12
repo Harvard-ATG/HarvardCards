@@ -22,8 +22,11 @@ _VERBS = {
     "reviewed": "reviewed",
     "launched": "launched",
     "downloaded": "downloaded",
+    "uploaded": "uploaded",
     "created": "created",
-    "modified": "modified"
+    "modified": "modified",
+    "deleted": "deleted",
+    "shared": "shared",
 }
 VERBS = collections.namedtuple("VERBS", _VERBS.keys())(**_VERBS)
 
@@ -32,6 +35,8 @@ _OBJECTS = {
     "application": "application",
     "collection": "collection",
     "deck": "deck",
+    "card": "card",
+    "template": "template",
 }
 OBJECTS = collections.namedtuple("OBJECTS", _OBJECTS.keys())(**_OBJECTS)
 

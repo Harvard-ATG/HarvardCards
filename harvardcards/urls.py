@@ -58,6 +58,7 @@ urlpatterns = patterns('',
     url(r'^api/deck/delete$', 'harvardcards.apps.flash.api.deck.delete', name='apiDeckDelete'),
     url(r'^api/collection/fields$', 'harvardcards.apps.flash.api.collection.fields', name='apiCollectionFields'),
     url(r'^api/collection/delete$', 'harvardcards.apps.flash.api.collection.delete', name='apiCollectionDelete'),
+    url(r'^api/analytics/track$', 'harvardcards.apps.flash.api.analytics.track', name='apiAnalyticsTrack'),
     
 	# url(r'^$', 'HarvardCards.views.home', name='home'),
     # url(r'^HarvardCards/', include('harvardcards.foo.urls')),

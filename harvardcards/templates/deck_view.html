@@ -99,7 +99,7 @@
             {% endif %}
             <ul id="allCards">
                 {% for card in cards %}
-                <li class="card {% if card.color %}card-color-{{card.color}}{% endif %} hide" role="tabpanel"  data-card-id="{{ card.card_id }}">
+                <li class="card {% if card.color %}card-color-{{card.color}}{% endif %} hide" role="tabpanel"  data-card-id="{{ card.card_id }}" data-mode="{% if is_quiz_mode %}quiz{% else %}review{% endif %}">
                     <div class="show_content">
                     {% for field in card.fields.show %}
                         {% include "_deck_card_fields.html" with field=field hide=False %}

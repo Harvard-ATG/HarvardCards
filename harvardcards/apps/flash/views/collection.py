@@ -96,6 +96,14 @@ def custom_create(request):
         "active_collection": None,
         'upload_error': upload_error
     }
+
+    analytics.track(
+        actor=request.user, 
+        verb=analytics.VERBS.created, 
+        object=analytics.OBJECTS.collection,
+        context={"custom": True}
+    )
+
     return render(request, 'collections/custom.html', context)
 
 #should only check on collections? allow any registered user to create their own?
@@ -117,6 +125,12 @@ def create(request):
             #update role_bucket to add admin permission to the user for this newly created collection
             services.get_or_update_role_bucket(request, collection.id, Users_Collections.role_map[Users_Collections.ADMINISTRATOR])
             log.info('Collection %s created.' %collection.id, extra={'user': request.user})
+            analytics.track(
+                actor=request.user, 
+                verb=analytics.VERBS.created, 
+                object=analytics.OBJECTS.collection,
+                context={"custom": False}
+            )
             return redirect(collection)
     else:
         rel_templates = CardTemplate.objects.filter(Q(owner__isnull=True) | Q(owner=request.user))
@@ -158,6 +172,12 @@ def edit(request, collection_id=None):
             collection = collection_form.save()
             response = redirect(collection)
             response['Location'] += '?instructor=edit'
+            analytics.track(
+                actor=request.user, 
+                verb=analytics.VERBS.modified, 
+                object=analytics.OBJECTS.collection,
+                context={"collection_id": collection_id}
+            )
             return response
     else:
         collection_form = CollectionForm(instance=collection)
@@ -226,6 +246,12 @@ def share_collection(request, collection_id=None):
             context['share_form'] = collection_share_form
             context['secret_share_key'] = secret_share_key
             log.info('URL generated to share collection %s.' %collection_id, extra={'user': request.user})
+            analytics.track(
+                actor=request.user, 
+                verb=analytics.VERBS.shared, 
+                object=analytics.OBJECTS.collection,
+                context={"collection_id": collection_id}
+            )
         else:
             context['share_form'] = collection_share_form
 
@@ -277,6 +303,12 @@ def add_deck(request, collection_id=None):
     """Adds a deck."""
     deck = services.create_deck(collection_id=collection_id, deck_title='Untitled Deck')
     log.info('Deck %(d)s added to the collection %(c)s.' %{'d': deck.id, 'c': str(collection_id)}, extra={'user': request.user})
+    analytics.track(
+        actor=request.user, 
+        verb=analytics.VERBS.created, 
+        object=analytics.OBJECTS.deck,
+        context={"collection_id": collection_id, "deck_id": deck.id}
+    )
     return redirect(deck)
 
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR], 'collection') 
@@ -287,6 +319,12 @@ def delete(request, collection_id=None):
     response = redirect('collectionIndex')
     response['Location'] += '?instructor=edit'
     log.info('Collection %(c)s deleted.' %{'c': str(collection_id)}, extra={'user': request.user})
+    analytics.track(
+        actor=request.user, 
+        verb=analytics.VERBS.deleted, 
+        object=analytics.OBJECTS.collection,
+        context={"collection_id": collection_id}
+    )
     return response
 
 def download_template(request, collection_id=None):
@@ -304,6 +342,13 @@ def download_template(request, collection_id=None):
     log.info('Template for the collection %(c)s downloaded by the user.'
             %{'c': str(collection_id)}, extra={'user': request.user})
 
+    analytics.track(
+        actor=request.user, 
+        verb=analytics.VERBS.downloaded, 
+        object=analytics.OBJECTS.template,
+        context={"collection_id": collection_id, "custom": False}
+    )
+
     return response
 
 def download_custom_template(request, collection_id=None):
@@ -318,5 +363,12 @@ def download_custom_template(request, collection_id=None):
     file_output = utils.create_custom_template_file()
     response.write(file_output)
     log.info('Custom template downloaded.', extra={'user': request.user})
+
+    analytics.track(
+        actor=request.user, 
+        verb=analytics.VERBS.downloaded, 
+        object=analytics.OBJECTS.template,
+        context={"collection_id": collection_id, "custom": True}
+    )
 
     return response

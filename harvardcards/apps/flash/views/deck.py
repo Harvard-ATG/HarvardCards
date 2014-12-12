@@ -61,7 +61,7 @@ def index(request, deck_id=None):
 
     analytics.track(
         actor=request.user,
-        verb=analytics.VERBS.quizzed if is_quiz_mode else analytics.VERBS.reviewed,
+        verb=analytics.VERBS.viewed,
         object=analytics.OBJECTS.deck,
         context={"deck_id": deck_id},
     )
@@ -82,6 +82,14 @@ def delete(request, deck_id=None):
 
     response =  redirect('collectionIndex', collection_id)
     response['Location'] += '?instructor=edit'
+
+    analytics.track(
+        actor=request.user,
+        verb=analytics.VERBS.deleted,
+        object=analytics.OBJECTS.deck,
+        context={"deck_id": deck_id},
+    )
+
     return response
 
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')  
@@ -105,8 +113,13 @@ def upload_deck(request, deck_id=None):
             if 'file' in request.FILES:
                 try:
                     services.handle_uploaded_deck_file(deck, request.FILES['file'])
-                    log.info('New deck successfully added to the collection %(c)s.' %{'c': str(deck.collection.id)},
-                             extra=d)
+                    log.info('New deck successfully added to the collection %(c)s.' %{'c': str(deck.collection.id)}, extra=d)
+                    analytics.track(
+                        actor=request.user,
+                        verb=analytics.VERBS.uploaded,
+                        object=analytics.OBJECTS.deck,
+                        context={"deck_id": deck_id},
+                    )
                     return redirect(deck)
                 except Exception, e:
                     upload_error = str(e)
@@ -135,13 +148,6 @@ def download_deck(request, deck_id=None):
     along with any associated media files like images or audio.
     '''
 
-    analytics.track(
-        actor=request.user, 
-        verb=analytics.VERBS.downloaded, 
-        object=analytics.OBJECTS.deck,
-        context={"deck_id": deck_id}
-    )
-
     deck =  Deck.objects.get(id=deck_id)
     zfile_output = services.create_zip_deck_file(deck)
     log.info('Deck %(d)s from the collection %(c)s downloaded by the user.'
@@ -149,6 +155,13 @@ def download_deck(request, deck_id=None):
 
     response = HttpResponse(zfile_output, content_type='application/x-zip-compressed')
     response['Content-Disposition'] = 'attachment; filename=deck.zip'
+
+    analytics.track(
+        actor=request.user, 
+        verb=analytics.VERBS.downloaded, 
+        object=analytics.OBJECTS.deck,
+        context={"deck_id": deck_id}
+    )
 
     return response
 
@@ -224,4 +237,12 @@ def delete_card(request, deck_id=None):
         log.info('Card deleted from the deck %s' %str(deck.id), extra=d)
     else:
         log.error('Card could not be deleted from the deck %s' %str(deck.id), extra=d)
+
+    analytics.track(
+        actor=request.user, 
+        verb=analytics.VERBS.deleted, 
+        object=analytics.OBJECTS.card,
+        context={"deck_id": deck_id, "card_id": card_id}
+    )
+
     return redirect(deck)
