@@ -38,3 +38,5 @@ $ vagrant up
 ```
 
 You should now be able to access the application at: ```http://localhost:8080```
+
+You should be able to login as "admin" (which is also the password) at: ```http://localhost:8080/admin```
