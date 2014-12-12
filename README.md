@@ -12,7 +12,7 @@ To  install the application locally you can:
 
 ### Manual Quickstart
 
-- Requires [python 2.7.x](http://python.org/download/releases/) and [pip](http://www.pip-installer.org/) to install.
+Requires [python 2.7.x](http://python.org/download/releases/) and [pip](http://www.pip-installer.org/) to install.
 
 ```sh
 $ git clone git@github.com:Harvard-ATG/HarvardCards.git HarvardCards
