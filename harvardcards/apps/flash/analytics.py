@@ -4,7 +4,7 @@ import logging
 import collections
 
 from django.utils import timezone
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AnonymousUser
 from .models import Analytics
 
 log = logging.getLogger(__name__)
@@ -67,10 +67,15 @@ class Statement:
                 raise Exception("missing required parameter: %s" % required_param)
         
         self.id = str(uuid.uuid4())
-        self.timestamp = kwargs.get('timestamp', timezone.now())
+
         self.verb = kwargs.get('verb', '')
         self.object = kwargs.get('object', '')
         self.context = kwargs.get('context', None)
+
+        timestamp = kwargs.get('timestamp', timezone.now())
+        if not timestamp:
+            timestamp = timezone.now()
+        self.timestamp = timestamp
 
         actor = kwargs.get('actor', None)
         if isinstance(actor, User):
@@ -80,6 +85,9 @@ class Statement:
             else:
                 self.actor_user = None
                 self.actor_desc = 'unauthenticated user'
+        elif isinstance(actor, AnonymousUser):
+            self.actor_user = None
+            self.actor_desc = 'anonymous user'
         else:
             self.actor_user = None
             self.actor_desc = str(actor)

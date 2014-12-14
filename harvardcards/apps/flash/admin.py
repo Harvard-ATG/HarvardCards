@@ -36,7 +36,8 @@ class CollectionAdmin(admin.ModelAdmin):
     inlines = (UsersInLine,)
 
 class AnalyticsAdmin(admin.ModelAdmin):
-    list_display = ('id', 'stmt_actor_user', 'stmt_actor_desc', 'stmt_verb', 'stmt_object', 'stmt_context', 'stmt_stored')
+    list_display = ('id', 'stmt_stored', 'stmt_actor_user', 'stmt_actor_desc', 'stmt_verb', 'stmt_object', 'stmt_context')
+    search_fields=('stmt_actor_user__username', 'stmt_verb', 'stmt_object')
 
 admin.site.register(Collection, CollectionAdmin)
 admin.site.register(Field)

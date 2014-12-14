@@ -307,23 +307,25 @@ function initModule() {
 	};
 
 	function track_card(card_id, mode) {
+		var context = {
+			"card_id": card_id,
+			"mode": mode,
+			"userAgent": window.navigator.userAgent,
+			"screenWidth": window.screen.width
+		};
 		var now = new Date();
+		var iso_timestamp = "";
 		if(now.toISOString) {
-			now = now.toISOString();
-		}  else {
-			now = ''
+			 iso_timestamp = now.toISOString();
 		}
 
 		var ajax_data = {
-			method: 'POST',
+			method: "POST",
 			data: {
-				verb:"viewed", 
-				object:"card",
-				timestamp: now,
-				context: JSON.stringify({
-					card_id: card_id,
-					mode: mode
-				})
+				"verb": "viewed", 
+				"object": "card",
+				"context": JSON.stringify(context),
+				"timestamp": iso_timestamp
 			}
 		};
 
