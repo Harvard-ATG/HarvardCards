@@ -1,4 +1,4 @@
-define(['jquery', 'jquery.mousewheel'], function($) {
+define(['jquery'], function($) {
 
 	/**
 	 * KeyboardSliderPlugin responsible for adding ability to advance
@@ -26,10 +26,19 @@ define(['jquery', 'jquery.mousewheel'], function($) {
 	// Initializes listeners.
 	KeyboardSliderPlugin.prototype.initListeners = function() {
 		$(document).on('keydown', this.handleKeyPress);
-		$(document).mousewheel(this.handleMouseWheel);
+
+		//------------------------------------------------------------
+		// **NOTE** 
+		// Disabled mousewheel handler that advanced the slider next/prev
+		// because it interfered with two-finger scrolling behavior on 
+		// trackpads. Two-finger scrolling should be preserved.
+		//     -abarrett 12/14/14
+		//------------------------------------------------------------
+		//$(document).mousewheel(this.handleMouseWheel);
 	};
 
 	// Handles the mousewheel event.
+	// NOTE: This function is not used anymore. See initListiners().
 	KeyboardSliderPlugin.prototype.handleMouseWheel = function(e) {
 		//console.log("mousewheel", e);
 		if(e.deltaX > 0) {
