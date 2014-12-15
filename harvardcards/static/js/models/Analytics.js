@@ -1,8 +1,9 @@
 define(['lodash', 'models/API'], function(_, API) {
-	var DEBUG = true;
+
+	var DEBUG = false; // Set this to true to enable debug console statements
 
 	/**
-	 * Analytics class for gathering and savings tracking data.
+	 * Analytics class for gathering and saving tracking data.
 	 *
 	 * Tracking data is internally buffered and sent in batches 
 	 * to smooth out bursts of activity, however client code
