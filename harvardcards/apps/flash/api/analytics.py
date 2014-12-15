@@ -12,30 +12,34 @@ log = logging.getLogger(__name__)
 @require_http_methods(["POST"])
 def track(request):
     actor = request.user
-    verb = request.POST.get('verb', '')
-    object = request.POST.get('object', '')
-    context = request.POST.get('context', '')
+    statements_json = request.POST.get('statements', '')
+    statements = json.loads(statements_json)
+    num_statements = len(statements)
+    results = []
 
-    if context == '':
-        context = None
-    else:
-        context = json.loads(context)
+    for s in statements:
+        verb = s.get('verb', '')
+        object = s.get('object', '')
+        context = s.get('context', '')
+        if context == '':
+            context = None
+        timestamp = s.get('timestamp', '')
+        if timestamp == '':
+            timestamp = None
 
-    timestamp = request.POST.get('timestamp', '')
-    if timestamp == '':
-        timestamp = None
+        result = {"success": False, "data": s}
 
-    result = {"success": False, "data": {}}
+        if verb != '' and object != '':
+            statement = analytics.track(
+                actor=actor,
+                verb=verb,
+                object=object,
+                timestamp=timestamp,
+                context=context,
+            )
+            result['success'] = True
+            result['data'] = statement.as_dict()
 
-    if verb != '' and object != '':
-        statement = analytics.track(
-            actor=actor,
-            verb=verb,
-            object=object,
-            timestamp=timestamp,
-            context=context,
-        )
-        result['success'] = True
-        result['data'] = statement.as_dict()
+        results.append(result)
 
-    return HttpResponse(json.dumps(result), mimetype="application/json")
+    return HttpResponse(json.dumps({"statements": results}), mimetype="application/json")
