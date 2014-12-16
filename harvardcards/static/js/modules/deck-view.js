@@ -4,6 +4,7 @@ define([
 	'components/InlineEditor', 
 	'components/FlipMode',
 	'models/API', 
+	'models/Analytics', 
 	'models/Deck', 
 	'views/CardForm', 
 	'utils/utils'
@@ -13,12 +14,15 @@ define([
 	InlineEditor, 
 	FlipMode,
 	API,
+	Analytics,
 	Deck, 
 	CardForm, 
 	utils
 ) {
 
 function initModule() {
+	Analytics.run();
+
 	var deck_slider = new DeckSlider($(".slider").first());
 	var card_counter = {
 		el: $("#counter"),
@@ -57,7 +61,7 @@ function initModule() {
 		}; 
 
 		// send tracking
-		track_card(card_id, mode);
+		Analytics.trackCard(card_id, mode); 
 
 		// show the card controls 
 		$controls.addClass('card-active');
@@ -305,32 +309,6 @@ function initModule() {
 			};
 		}
 	};
-
-	function track_card(card_id, mode) {
-		var context = {
-			"card_id": card_id,
-			"mode": mode,
-			"userAgent": window.navigator.userAgent,
-			"screenWidth": window.screen.width
-		};
-		var now = new Date();
-		var iso_timestamp = "";
-		if(now.toISOString) {
-			 iso_timestamp = now.toISOString();
-		}
-
-		var ajax_data = {
-			method: "POST",
-			data: {
-				"verb": "viewed", 
-				"object": "card",
-				"context": JSON.stringify(context),
-				"timestamp": iso_timestamp
-			}
-		};
-
-		API.ajax('analytics/track', ajax_data);
-	}
 
 	return MODULE;
 });
