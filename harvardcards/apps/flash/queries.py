@@ -4,7 +4,6 @@ observable state of the system (are free of side effects).
 """
 
 from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Decks_Cards
-from harvardcards.settings.common import FEATURE_TOGGLE
 
 import logging
 log = logging.getLogger(__name__)
@@ -41,13 +40,10 @@ def getCollectionList(role_bucket, collection_ids=False):
     log.debug("role_bucket = %s collection_ids = %s" % (role_bucket, collection_ids))
 
     collections = Collection.objects.all()
-    if FEATURE_TOGGLE['CANVAS_COURSE_FILTER']:
-        if collection_ids:
-            collections = collections.filter(id__in=collection_ids)
-    if FEATURE_TOGGLE['CANVAS_COURSE_FILTER']:
-        decks_by_collection = getDecksByCollection(collection_ids=collection_ids)
-    else:
-        decks_by_collection = getDecksByCollection()
+    if collection_ids:
+        collections = collections.filter(id__in=collection_ids)
+
+    decks_by_collection = getDecksByCollection(collection_ids=collection_ids)
 
     collection_roles = getCollectionRoleList()
 
