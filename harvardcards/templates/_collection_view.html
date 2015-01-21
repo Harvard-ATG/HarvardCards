@@ -1,3 +1,33 @@
+<div class="courseHeader">
+    {% spaceless %}
+        <h2 class="courseTitle">{{ collection.title }}</h2>
+        <h3>{% if collection.decks|length == 1 %}1 Deck{% else %}{{collection.decks|length}} Decks{% endif %}</h3>
+    {% endspaceless %}
+    {% if collection.id in user_collection_role.ADMINISTRATOR %}
+        <ul class="adminMenu adminMenuRight">
+            <li><a class="adminMenuBtn hidden-mobile" href="{% url 'collectionEdit' collection.id %}?collection_id={{collection.id}}"><i class="fa fa-pencil"></i> Edit</a></li>
+            <li><a class="adminMenuBtn hidden-mobile" href="{% url 'collectionDelete' collection.id %}?collection_id={{collection.id}}" data-confirm="Are you sure you want to delete: {{collection.title|escape}}?"><i class="fa fa-times-circle"></i> Delete</a></li>
+            <li><a class="adminMenuBtn hidden-mobile" href="{% url 'help' %}"><i class="fa fa-question-circle"></i> Help</a></li>
+            <li><a class="adminMenuBtn hidden-mobile" href="{% url 'collectionShare' collection.id %}?collection_id={{collection.id}}"><i class="fa fa-share"></i> Share</a></li>
+        </ul>
+    {% endif %}
+</div>
+<div class="courseBody">
+    <ul>
+    {% for deck in collection.decks %}
+        <li class="deck">
+            <h2>{{ deck.title }}</h2>
+            <p><h3>{{ deck.num_cards }}</h3> {% if deck.num_cards == 1 %}Card {% else %}Cards{% endif %}</p>
+            <ul class="deckMenu">
+                <li><a class="viewReview" href="{% url 'deckIndex' deck.id %}">Review</a></li>
+                <li><a class="viewReview" href="{% url 'deckIndex' deck.id %}?mode=quiz">Quiz</a></li>
+            </ul>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+<!--
+
 <div class="courseWrapper">
     <div class="courseHeader">
         <a href="{% url 'collectionIndex' collection.id %}" title="{{collection.title}}">
@@ -15,7 +45,9 @@
             </ul>
         {% endif %}
     </div>
+-->
 
+    <!--
     <div class="slider">
         <ul class="courseDecks">
             {% if collection.id in user_collection_role.ADMINISTRATOR %}
@@ -42,4 +74,6 @@
             </ul>
         </div>
     </div>
+
 </div>
+    -->

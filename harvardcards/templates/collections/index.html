@@ -6,8 +6,12 @@
 
 {% block main_content %}
 <div id="content" data-module="collections-index">
+    <ul class="accordion">
     {% for collection in display_collections %}
+        <li>
         {% include "_collection_view.html" with collection=collection user_collection_role=user_collection_role %}
+        </li>
     {% endfor %}
+    </ul>
 </div>
 {% endblock %}

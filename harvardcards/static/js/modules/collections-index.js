@@ -1,11 +1,19 @@
-define(['jquery', 'components/slider/CollectionSlider', 'utils/utils'], function($, CollectionSlider, utils) {
+define(['jquery', 'components/slider/CollectionSlider', 'utils/utils', 'jqueryui'], function($, CollectionSlider, utils) {
 	return {
 		initModule: function(){
+            $('.courseHeader').click(function() {
+                $(this).next().toggle('slow');
+                return false;
+            }).next().hide();
+
+
+/*
 			$('.slider').each(function(index, el) {
 				var slider = new CollectionSlider(el);
 			});
 
 			utils.setupConfirm();
+*/
 		}
 	};
 });
