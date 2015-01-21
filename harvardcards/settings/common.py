@@ -195,22 +195,15 @@ LOGGING = {
     }
 }
 
-# This defines feature toggles for deploying new features.
+# This dictionary defines application-level feature toggles. 
+# Usage:
+#       from django.conf import settings
+#       if settings.FEATURE_TOGGLE['X_ENABLED']:
+#           do_something()
+#       
 FEATURE_TOGGLE = {
-    # DESCRIPTION:
-    #   When enabled, will filter out any collections that 
-    #   are not directly associated with the canvas course.
-    #   
-    #   Feature toggle created to "dark launch" this functionality
-    #   because we want to merge the code, but don't want to change
-    #   the existing behavior until the end of the semester. 
-    # SEE ALSO: 
-    #   See github pull request #106 and Jira FLASH-200.
-    # TODO: 
-    #   Remove feature toggle here and in queries.py when activated.
-    "CANVAS_COURSE_FILTER": False 
+        # "X_ENABLED" => True|False
 }
-
 
 if DEBUG:
     LOGGING['loggers']['harvardcards']['level'] = 'DEBUG'
