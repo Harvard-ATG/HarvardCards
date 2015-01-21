@@ -195,9 +195,7 @@ LOGGING = {
     }
 }
 
-# This defines feature toggles for deploying new features without
-# enabling them.
-#
+# This dictionary defines application-level feature toggles. 
 # Usage:
 #       from django.conf import settings
 #       if settings.FEATURE_TOGGLE['X_ENABLED']:
@@ -209,7 +207,7 @@ FEATURE_TOGGLE = {
 
 if DEBUG:
     LOGGING['loggers']['harvardcards']['level'] = 'DEBUG'
-    #LOGGING['loggers']['harvardcards']['handlers'] += ['console']
+    LOGGING['loggers']['harvardcards']['handlers'] += ['console']
 
 OPENID_CREATE_USERS = True
 OPENID_UPDATE_DETAILS_FROM_SREG = True
