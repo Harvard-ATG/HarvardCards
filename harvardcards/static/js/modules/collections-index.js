@@ -6,14 +6,6 @@ define(['jquery', 'components/slider/CollectionSlider', 'utils/utils', 'jqueryui
                 return false;
             }).next().hide();
 
-
-/*
-			$('.slider').each(function(index, el) {
-				var slider = new CollectionSlider(el);
-			});
-
-			utils.setupConfirm();
-*/
 		}
 	};
 });

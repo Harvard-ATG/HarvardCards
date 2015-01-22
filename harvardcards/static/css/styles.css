@@ -340,12 +340,12 @@ a#addAcourse
 		border: solid 1px #e1dfdf;
 		position: relative;
 	}
-    ul.courseDecks li.deck.add {
+    .deck.add {
         border: 2px dashed #838383;
-        line-height: 167px;
-        padding: 0;
+        line-height: 67px;
+        margin: 10px;
     }
-    ul.courseDecks li.deck.add a {
+    .deck.add a {
         display: block;
         padding: 0;
         margin: 0;
