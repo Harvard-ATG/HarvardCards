@@ -6,6 +6,12 @@
 
 {% block main_content %}
 <div id="content" data-module="collections-index">
+    {% if not active_collection %}
+        {% if user.is_authenticated %}
+            <a href="{% url 'collectionCreate' %}" id="addAcourse">Add Collection</a>
+        {% endif %}
+    {% endif %}
+
     <ul class="accordion">
     {% for collection in display_collections %}
         <li>
