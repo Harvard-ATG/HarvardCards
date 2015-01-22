@@ -6,8 +6,8 @@ define(['jquery', 'components/slider/CollectionSlider', 'utils/utils', 'jqueryui
             $('.courseHeader').click(function() {
                 var el = this;
                 $(this).next().toggle('slow', function(){
+                    var collection_id = $(el).data('collection-id');
                     if($(el).next().is(":visible")){
-                        var collection_id = $(el).data('collection-id');
                         localStorage.setItem('show-collection-id'+collection_id, true);
                     } else {
                         localStorage.removeItem('show-collection-id'+collection_id);

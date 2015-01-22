@@ -18,6 +18,7 @@
 
         <!-- SECTION: Header -->
         <div class="courseHeader">
+            <h2 class="courseTitle"><a href="{% url 'collectionIndex' %}">Home</a></h2>
             <h2 class="courseTitle"><a href="{% url 'collectionIndex' collection.id %}">{{collection.title}}</a></h2>
             {% if is_deck_admin %}
                 <h3 data-editable="yes" data-editable-id="{{deck.id}}" title="Click to edit title...">{{deck.title}}</h3>
