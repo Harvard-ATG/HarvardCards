@@ -1,4 +1,5 @@
 <div class="courseHeader">
+    <i class="plusminus fa fa-plus-circle fa-lg"></i>
     {% spaceless %}
         <h2 class="courseTitle">{{ collection.title }}</h2>
         <h3>{% if collection.decks|length == 1 %}1 Deck{% else %}{{collection.decks|length}} Decks{% endif %}</h3>
@@ -14,17 +15,17 @@
 </div>
 <div class="courseBody">
     <div class="deck add hidden-mobile">
-        <a href="/collection/17/add-deck?collection_id=17">Add a Deck</a>
+        <a href="/collection/17/add-deck?collection_id={{ collection.id }}">Add a Deck</a>
     </div>
     <ul>
     {% for deck in collection.decks %}
         <li class="deck">
-            <h2>{{ deck.title }}</h2>
-            <p><h3>{{ deck.num_cards }}</h3> {% if deck.num_cards == 1 %}Card {% else %}Cards{% endif %}</p>
-            <ul class="deckMenu">
-                <li><a class="viewReview" href="{% url 'deckIndex' deck.id %}">Review</a></li>
-                <li><a class="viewReview" href="{% url 'deckIndex' deck.id %}?mode=quiz">Quiz</a></li>
-            </ul>
+            <dl>
+                <dt>{{ deck.title }}</dt>
+                <dd>{{ deck.num_cards }} {% if deck.num_cards == 1 %}Card {% else %}Cards{% endif %}</dd>
+                <dd><a href="{% url 'deckIndex' deck.id %}">Review</a></dd>
+                <dd><a href="{% url 'deckIndex' deck.id %}?mode=quiz">Quiz</a></dd>
+            </dl>
         </li>
     {% endfor %}
     </ul>

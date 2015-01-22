@@ -359,7 +359,7 @@ a#addAcourse
         font-family: 'League Gothic', Arial, sans-serif;
         color: #4c4c4c;
     }
-    ul.courseDecks li.deck.add a:hover {
+    deck.add a:hover {
         color: #a51c30;
     }
 	/* template deck (start) */
@@ -379,7 +379,22 @@ a#addAcourse
 				color: #A51C30;
 			}
 	/* template deck (end) */
-		li.deck { height: 167px; }
+	/*	li.deck { height: 167px; } */
+    .deck dl {
+        width: 100%;
+    }
+    .deck dl dt {
+        font-weight: bold;
+        float:left;
+        width:40%;
+    }
+    .deck dl dd {
+        float:left;
+        width:20%;
+        text-align: right;
+    }
+
+
 
 		ul.courseDecks h2
 		, ul.templateDecks h2 { padding: 0.25em 0; }
