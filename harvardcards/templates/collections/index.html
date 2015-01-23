@@ -11,7 +11,14 @@
             <div style="width:100%"><a href="{% url 'collectionCreate' %}" id="addAcourse">Add Collection</a></div>
         {% endif %}
     {% endif %}
-    <div style="width:100%"><div style="float:right;"><button type="button" class="adminMenuBtn" id="expandCollapseAllBtn">Expand / Collapse All</button></div></div>
+    <ul class="adminMenu adminMenuRight">
+        <li>
+            <button type="button" class="adminMenuBtn" id="expandCollapseAllBtn">Expand / Collapse All</button>
+        </li>
+        <li>
+            <a class="adminMenuBtn hidden-mobile" href="{% url 'help' %}"><i class="fa fa-question-circle"></i> Help</a>
+        </li>
+    </ul>
 
     <ul class="accordion">
     {% for collection in display_collections %}
