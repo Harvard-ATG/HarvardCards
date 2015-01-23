@@ -21,7 +21,7 @@
     {% for deck in collection.decks %}
         <li class="deck">
             <dl>
-                <dt>{{ deck.title }}</dt>
+                <dt><a class="unstyled" href="{% url 'deckIndex' deck.id %}">{{ deck.title }}</a></dt>
                 <dd>{{ deck.num_cards }} {% if deck.num_cards == 1 %}Card {% else %}Cards{% endif %}</dd>
                 <dd><a class="adminMenuBtn" href="{% url 'deckIndex' deck.id %}">Review</a></dd>
                 <dd><a class="adminMenuBtn" href="{% url 'deckIndex' deck.id %}?mode=quiz">Quiz</a></dd>

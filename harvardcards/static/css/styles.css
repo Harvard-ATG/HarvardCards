@@ -279,8 +279,9 @@ a#addAcourse
 	margin: 0 auto 0.25em;
 	padding: 0.25em 10%;
 }
-button#expandCollapseAll {
-    float: right;
+a.unstyled {
+    color: #4c4c4c;
+    text-decoration: none;
 }
 
 /*a#addCard{
