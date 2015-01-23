@@ -1,4 +1,5 @@
 define(['jquery', 'utils/utils'], function($, utils) {
+    //localStorage.clear();
 	var courseAccordion = function(courseHeader){
         var courseBody = $(courseHeader).next();
         $(courseBody).toggle('slow', function(){
@@ -6,7 +7,7 @@ define(['jquery', 'utils/utils'], function($, utils) {
             if($(courseBody).is(":visible")){
                 localStorage.setItem('show-collection-id'+collection_id, true);
             } else {
-                localStorage.removeItem('show-collection-id'+collection_id);
+                localStorage.setItem('show-collection-id'+collection_id, false);
             }
         });
         $(courseHeader).find('.plusminus').toggleClass("fa-plus-circle fa-minus-circle");
@@ -21,6 +22,8 @@ define(['jquery', 'utils/utils'], function($, utils) {
                 var el = this;
                 var collection_id = $(el).data('collection-id');
                 if(localStorage.getItem('show-collection-id'+collection_id) == 'true'){
+                    courseAccordion(el);
+                } else if(localStorage.getItem('show-collection-id'+collection_id) == undefined){
                     courseAccordion(el);
                 }
             });
