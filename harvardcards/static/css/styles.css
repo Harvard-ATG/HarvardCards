@@ -271,13 +271,17 @@ a#addAcourse
 	text-align: center;
 	text-decoration: none;
 	display: block;
-	width: 60%;
+	width: 30%;
 	font-size: 1.875em;
 	color: #4c4c4c;
 	border: 2px dashed #838383;
 	text-transform:uppercase;
 	margin: 0 auto 0.25em;
 	padding: 0.25em 10%;
+}
+a.unstyled {
+    color: #4c4c4c;
+    text-decoration: none;
 }
 
 /*a#addCard{
@@ -324,6 +328,11 @@ a#addAcourse
 	display: inline-block;
 	margin-bottom: 1em;
 }
+.courseHeaderClickable {
+    padding: .5em 1em;
+    cursor: pointer;
+    background-color: lightgrey;
+}
 .addCourseWrapper{
 	display: none;
 }
@@ -340,12 +349,12 @@ a#addAcourse
 		border: solid 1px #e1dfdf;
 		position: relative;
 	}
-    ul.courseDecks li.deck.add {
+    .deck.add {
         border: 2px dashed #838383;
-        line-height: 167px;
-        padding: 0;
+        line-height: 67px;
+        margin: 10px;
     }
-    ul.courseDecks li.deck.add a {
+    .deck.add a {
         display: block;
         padding: 0;
         margin: 0;
@@ -359,7 +368,7 @@ a#addAcourse
         font-family: 'League Gothic', Arial, sans-serif;
         color: #4c4c4c;
     }
-    ul.courseDecks li.deck.add a:hover {
+    deck.add a:hover {
         color: #a51c30;
     }
 	/* template deck (start) */
@@ -379,7 +388,32 @@ a#addAcourse
 				color: #A51C30;
 			}
 	/* template deck (end) */
-		li.deck { height: 167px; }
+	/*	li.deck { height: 167px; } */
+    li.deck {
+        padding: 15px;
+    }
+    .deck dl {
+        width: 100%;
+    }
+    .deck dl dt {
+        font-weight: bold;
+        float:left;
+        width:40%;
+    }
+    .deck dl dd {
+        float:left;
+        width:20%;
+        text-align: right;
+    }
+
+    i.plusminus {
+        vertical-align: 0%;
+    }
+
+    .courseBody {
+        margin-bottom: 30px;
+    }
+
 
 		ul.courseDecks h2
 		, ul.templateDecks h2 { padding: 0.25em 0; }

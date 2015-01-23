@@ -1,45 +1,31 @@
-<div class="courseWrapper">
-    <div class="courseHeader">
-        <a href="{% url 'collectionIndex' collection.id %}" title="{{collection.title}}">
-        {% spaceless %}
-            <h2 class="courseTitle">{{ collection.title }}</h2>
-            <h3>{% if collection.decks|length == 1 %}1 Deck{% else %}{{collection.decks|length}} Decks{% endif %}</h3>
-            {% endspaceless %}
-        </a>
-        {% if collection.id in user_collection_role.ADMINISTRATOR %}
-            <ul class="adminMenu adminMenuRight">
-                <li><a class="adminMenuBtn hidden-mobile" href="{% url 'collectionEdit' collection.id %}?collection_id={{collection.id}}"><i class="fa fa-pencil"></i> Edit</a></li>
-                <li><a class="adminMenuBtn hidden-mobile" href="{% url 'collectionDelete' collection.id %}?collection_id={{collection.id}}" data-confirm="Are you sure you want to delete: {{collection.title|escape}}?"><i class="fa fa-times-circle"></i> Delete</a></li>
-				<li><a class="adminMenuBtn hidden-mobile" href="{% url 'help' %}"><i class="fa fa-question-circle"></i> Help</a></li>
-                <li><a class="adminMenuBtn hidden-mobile" href="{% url 'collectionShare' collection.id %}?collection_id={{collection.id}}"><i class="fa fa-share"></i> Share</a></li>
-            </ul>
-        {% endif %}
-    </div>
-
-    <div class="slider">
-        <ul class="courseDecks">
-            {% if collection.id in user_collection_role.ADMINISTRATOR %}
-                <li class="deck add hidden-mobile">
-                <a href="{% url 'collectionAddDeck' collection.id %}?collection_id={{collection.id}}">Add a Deck</a>
-                </li>
-            {% endif %}
-
-            {% for deck in collection.decks %}
-            <li class="deck">
-                <h2>{{ deck.title }}</h2>
-                <p><h3>{{ deck.num_cards }}</h3> {% if deck.num_cards == 1 %}Card {% else %}Cards{% endif %}</p>
-                <ul class="deckMenu">
-                    <li><a class="viewReview" href="{% url 'deckIndex' deck.id %}">Review</a></li>
-                    <li><a class="viewReview" href="{% url 'deckIndex' deck.id %}?mode=quiz">Quiz</a></li>
-                </ul>
-            </li>
-            {% endfor %}
+<div class="courseHeader courseHeaderClickable" data-collection-id="{{ collection.id }}">
+    <i class="plusminus fa fa-plus-circle fa-lg"></i>
+    {% spaceless %}
+        <h2 class="courseTitle">{{ collection.title }}</h2>
+        <h3>{% if collection.decks|length == 1 %}1 Deck{% else %}{{collection.decks|length}} Decks{% endif %}</h3>
+    {% endspaceless %}
+    {% if collection.id in user_collection_role.ADMINISTRATOR %}
+        <ul class="adminMenu adminMenuRight">
+            <li><a class="adminMenuBtn hidden-mobile" href="{% url 'collectionEdit' collection.id %}?collection_id={{collection.id}}"><i class="fa fa-pencil"></i> Edit</a></li>
+            <li><a class="adminMenuBtn hidden-mobile" href="{% url 'collectionDelete' collection.id %}?collection_id={{collection.id}}" data-confirm="Are you sure you want to delete: {{collection.title|escape}}?"><i class="fa fa-times-circle"></i> Delete</a></li>
+            <!-- <li><a class="adminMenuBtn hidden-mobile" href="{% url 'collectionShare' collection.id %}?collection_id={{collection.id}}"><i class="fa fa-share"></i> Share</a></li> -->
         </ul>
-        <div class="sliderNav">
-            <ul class="sliderNavNextPrev">
-                <li class="sliderPrev"><a class="adminMenuBtn" href="javascript:void(0)">&laquo; Prev</a></li>
-                <li class="sliderNext"><a class="adminMenuBtn" href="javascript:void(0)">Next &raquo;</a></li>
-            </ul>
-        </div>
+    {% endif %}
+</div>
+<div class="courseBody hide">
+    <div class="deck add hidden-mobile">
+        <a href="/collection/{{ collection.id }}/add-deck?collection_id={{ collection.id }}">Add a Deck</a>
     </div>
+    <ul>
+    {% for deck in collection.decks %}
+        <li class="deck">
+            <dl>
+                <dt><a class="unstyled" href="{% url 'deckIndex' deck.id %}">{{ deck.title }}</a></dt>
+                <dd>{{ deck.num_cards }} {% if deck.num_cards == 1 %}Card {% else %}Cards{% endif %}</dd>
+                <dd><a class="adminMenuBtn" href="{% url 'deckIndex' deck.id %}">Review</a></dd>
+                <dd><a class="adminMenuBtn" href="{% url 'deckIndex' deck.id %}?mode=quiz">Quiz</a></dd>
+            </dl>
+        </li>
+    {% endfor %}
+    </ul>
 </div>

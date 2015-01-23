@@ -6,8 +6,26 @@
 
 {% block main_content %}
 <div id="content" data-module="collections-index">
+    {% if not active_collection %}
+        {% if user.is_authenticated %}
+            <div style="width:100%"><a href="{% url 'collectionCreate' %}" id="addAcourse">Add Collection</a></div>
+        {% endif %}
+    {% endif %}
+    <ul class="adminMenu adminMenuRight">
+        <li>
+            <button type="button" class="adminMenuBtn" id="expandCollapseAllBtn">Expand / Collapse All</button>
+        </li>
+        <li>
+            <a class="adminMenuBtn hidden-mobile" href="{% url 'help' %}"><i class="fa fa-question-circle"></i> Help</a>
+        </li>
+    </ul>
+
+    <ul class="accordion">
     {% for collection in display_collections %}
+        <li>
         {% include "_collection_view.html" with collection=collection user_collection_role=user_collection_role %}
+        </li>
     {% endfor %}
+    </ul>
 </div>
 {% endblock %}
