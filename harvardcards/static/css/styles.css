@@ -268,7 +268,6 @@ h1, h2, h3, h4
 
 a#addAcourse
 /*, a#addCard*/{
-    float: right;
 	text-align: center;
 	text-decoration: none;
 	display: block;
@@ -279,6 +278,9 @@ a#addAcourse
 	text-transform:uppercase;
 	margin: 0 auto 0.25em;
 	padding: 0.25em 10%;
+}
+button#expandCollapseAll {
+    float: right;
 }
 
 /*a#addCard{

@@ -1,6 +1,5 @@
 define(['jquery', 'utils/utils'], function($, utils) {
-    //localStorage.clear();
-	var courseAccordion = function(courseHeader){
+    var courseAccordion = function(courseHeader){
         var courseBody = $(courseHeader).next();
         $(courseBody).toggle('slow', function(){
             var collection_id = $(courseHeader).data('collection-id');
@@ -14,9 +13,33 @@ define(['jquery', 'utils/utils'], function($, utils) {
         return true;
     }
 
+    var currently = 'all open';
+    var expandCollapseAll = function(){
+        $('.courseHeader').each(function(index){
+            var el = this;
+            var body = $(el).next();
+            var collection_id = $(el).data('collection-id');
+            if(currently == 'all open'){
+                $(body).show('slow');
+                localStorage.setItem('show-collection-id'+collection_id, true);
+            } else {
+                $(body).hide('slow');
+                localStorage.setItem('show-collection-id'+collection_id, false);
+            }
+        });
+        if(currently == 'all open'){
+            currently = 'all closed';
+        } else {
+            currently = 'all open';
+        }
+
+    }
+
+
     return {
 		initModule: function(){
             $('.courseHeader').click(function(){ return courseAccordion(this); });
+            $('#expandCollapseAllBtn').click(expandCollapseAll);
 
             $('.courseHeader').each(function(index){
                 var el = this;
