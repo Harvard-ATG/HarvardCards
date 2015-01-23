@@ -21,7 +21,7 @@ define(['jquery', 'utils/utils'], function($, utils) {
                 var el = this;
                 var collection_id = $(el).data('collection-id');
                 if(localStorage.getItem('show-collection-id'+collection_id) == 'true'){
-                    $(el).click();
+                    courseAccordion(el);
                 }
             });
 
