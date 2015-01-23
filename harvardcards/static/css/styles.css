@@ -327,6 +327,9 @@ a.unstyled {
 	border-bottom: solid 2px #4c4c4c;
 	display: inline-block;
 	margin-bottom: 1em;
+}
+.courseHeaderClickable {
+    padding: .5em 1em;
     cursor: pointer;
     background-color: lightgrey;
 }
