@@ -1,7 +1,7 @@
 define(['jquery', 'utils/utils'], function($, utils) {
     var courseAccordion = function(courseHeader){
         var courseBody = $(courseHeader).next();
-        $(courseBody).toggle('slow', function(){
+        $(courseBody).slideToggle('slow', function(){
             var collection_id = $(courseHeader).data('collection-id');
             if($(courseBody).is(":visible")){
                 localStorage.setItem('show-collection-id'+collection_id, true);
@@ -20,10 +20,10 @@ define(['jquery', 'utils/utils'], function($, utils) {
             var body = $(el).next();
             var collection_id = $(el).data('collection-id');
             if(currently == 'all open'){
-                $(body).show('slow');
+                $(body).slideDown('slow');
                 localStorage.setItem('show-collection-id'+collection_id, true);
             } else {
-                $(body).hide('slow');
+                $(body).slideUp('slow');
                 localStorage.setItem('show-collection-id'+collection_id, false);
             }
         });
