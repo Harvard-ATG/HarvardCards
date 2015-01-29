@@ -8,24 +8,44 @@
 <div id="content" data-module="collections-index">
     {% if not active_collection %}
         {% if user.is_authenticated %}
-            <div style="width:100%"><a href="{% url 'collectionCreate' %}" id="addAcourse">Add Collection</a></div>
+            <div class="hidden-mobile">
+                <a href="{% url 'collectionCreate' %}" id="addAcourse">Add Collection</a>
+            </div>
         {% endif %}
     {% endif %}
-    <ul class="adminMenu adminMenuRight">
+
+    {% if display_collections|length > 0 %}
+        <ul class="adminMenu adminMenuRight">
+            <li>
+                <button type="button" class="adminMenuBtn" id="expandCollapseAllBtn"><i class="plusminus fa fa-plus-circle"></i> <span>Expand All</span></button>
+            </li>
+            <li>
+                <a class="adminMenuBtn hidden-mobile" href="{% url 'help' %}"><i class="fa fa-question-circle"></i> Help</a>
+            </li>
+        </ul>
+        <div class="clear"></div>
+        <ul class="accordion" style="margin-top: .5em">
+        {% for collection in display_collections %}
+            <li>
+            {% include "_collection_view.html" with collection=collection user_collection_role=user_collection_role %}
+            </li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+
+<div id="addAcourseDialog" style="display:none" title="Add Collection">
+    <ul class="addACourseContent">
         <li>
-            <button type="button" class="adminMenuBtn" id="expandCollapseAllBtn">Expand / Collapse All</button>
+            <h2>Add a New Collection</h2>
         </li>
         <li>
-            <a class="adminMenuBtn hidden-mobile" href="{% url 'help' %}"><i class="fa fa-question-circle"></i> Help</a>
+            <h2>Custom Import</h2>
+        </li>
+        <li>
+            <h2>Duplicate From Existing Collection</h2>
         </li>
     </ul>
 
-    <ul class="accordion">
-    {% for collection in display_collections %}
-        <li>
-        {% include "_collection_view.html" with collection=collection user_collection_role=user_collection_role %}
-        </li>
-    {% endfor %}
-    </ul>
 </div>
 {% endblock %}
