@@ -4,7 +4,6 @@ define(['jquery'], function($) {
         this.options = options;
         this.headerSelector = this.options.headerSelector;
         this.btnSelector = this.options.btnSelector;
-        console.log(this);
     };
 
     $.extend(CollectionListView.prototype, {
