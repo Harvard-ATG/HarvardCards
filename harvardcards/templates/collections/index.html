@@ -38,14 +38,26 @@
     <ul class="addACourseContent">
         <li>
             <h2>Add a New Collection</h2>
+            <div><a href="{% url 'collectionCreate' %}" class="adminMenuBtn">Add a New Collection</a></div>
         </li>
         <li>
             <h2>Custom Import</h2>
+            <div><a href="{% url 'collectionCustom' %}" class="adminMenuBtn">Import Collection</a></div>
         </li>
+        <!--
         <li>
             <h2>Duplicate From Existing Collection</h2>
+            <div>My collections:</div>
+            <div>
+                <select>
+                    <option>Test</option>
+                </select>
+            </div>
+            <div>
+                <a href="#" class="adminMenuBtn">Add to Course</a>
+            </div>
         </li>
+        -->
     </ul>
-
 </div>
 {% endblock %}

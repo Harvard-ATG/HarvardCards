@@ -279,10 +279,23 @@ a#addAcourse
 	margin: 0;
 	padding: 0.25em 10%;
 }
-a.unstyled {
-    color: #4c4c4c;
-    text-decoration: none;
+
+ul.addACourseContent > li {
+    display: block;
+    height: 150px;
+    width: 38%;
+    margin-left: 10%;
+    float: left;
+    border-right: 1px solid #aaa;
 }
+ul.addACourseContent > li:last-child {
+    border-right: none;
+}
+ul.addACourseContent h2,
+ul.addACourseContent div {
+    margin: 0 0 10px 0;
+}
+
 
 /*a#addCard{
 	margin: 0;

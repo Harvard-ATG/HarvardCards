@@ -1,59 +1,12 @@
-define(['jquery', 'utils/utils', 'jqueryui'], function($, utils) {
-
-    var CollectionListView = {
-        init: function() {
-            var self = this;
-
-            this.allCollapsed = true;
-
-            this.getHeaderEls().click(function() {
-                self.toggleCollapse(this);
-            });
-
-            this.getExpandCollapseAllBtn().click(function() {
-                var el = this;
-                self.toggleCollapse(self.getHeaderEls(), self.allCollapsed);
-                self.allCollapsed = !self.allCollapsed;
-                $(el).find('span').html(self.allCollapsed?'Expand All':'Collapse All');
-                self.togglePlusMinusCls(el);
-            });
-
-            this.getHeaderEls().each(function(index, el) {
-                var collection_id = $(el).data('collection-id');
-                var collection_state = localStorage.getItem('show-collection-id'+collection_id);
-
-                if(collection_state == 'true'){
-                    self.toggleCollapse(el, true);
-                } else if(collection_state == undefined){
-                    self.toggleCollapse(el, false);
-                }
-            });
-        },
-        getHeaderEls: function() {
-            return $('.courseHeader');
-        },
-        getExpandCollapseAllBtn: function() {
-            return $('#expandCollapseAllBtn');
-        },
-        toggleCollapse: function(headerEls, state) {
-            var self = this;
-            $(headerEls).each(function(index, el) {
-                var courseBody = $(el).next();
-                var visible = $(courseBody).is(":visible");
-                if(typeof state === 'undefined' || state != visible) {
-                    $(courseBody).slideToggle('slow', function(){
-                        var collection_id = $(el).data('collection-id');
-                        var visible = $(courseBody).is(":visible");
-                        localStorage.setItem('show-collection-id'+collection_id, visible);
-                    });
-                    self.togglePlusMinusCls(el);
-                }
-            });
-        },
-        togglePlusMinusCls: function(el) {
-            $(el).find('.plusminus').toggleClass('fa-plus-circle fa-minus-circle');
-        }
-    };
+define([
+'jquery',
+'jqueryui',
+'views/CollectionListView'
+],
+function(
+$,
+$ui,
+CollectionListView) {
 
     var CollectionCreateModal = {
         init: function() {
@@ -65,7 +18,9 @@ define(['jquery', 'utils/utils', 'jqueryui'], function($, utils) {
             console.log("click", this, arguments);
             $("#addAcourseDialog").dialog({
                 modal: true,
-                width: '95%',
+                width: '60%',
+                position: { my: "top", at: "top+20px", of: window },
+                closeOnEscape: true,
                 buttons: {
                     Cancel: function() {
                         $(this).dialog("close");
@@ -81,7 +36,12 @@ define(['jquery', 'utils/utils', 'jqueryui'], function($, utils) {
 
     return {
 		initModule: function(){
-		    CollectionListView.init();
+		    var collection_list_view = new CollectionListView({
+		        headerSelector: ".courseHeader",
+		        btnSelector: "#expandCollapseAllBtn"
+		    });
+
+			collection_list_view.init();
 		    CollectionCreateModal.init();
 		}
 	};
