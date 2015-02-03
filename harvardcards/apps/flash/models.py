@@ -248,3 +248,37 @@ class Analytics(models.Model):
 
     def __unicode__(self):
         return "ID: %s STMT: %s-%s-%s-%s" % (self.id, self.stmt_actor_user, self.stmt_actor_desc, self.stmt_verb, self.stmt_object)
+
+class Clone(models.Model):
+    CLONE_STATUS = (
+        ('Q', 'QUEUED'),
+        ('P', 'PROCESSING'),
+        ('D', 'DONE')
+    )
+    clone_date = models.DateTimeField(auto_now_add=True)
+    cloned_by = models.ForeignKey(User)
+    model = models.CharField(max_length=48, null=False)
+    model_id = models.CharField(max_length=24, null=False)
+    status = models.CharField(max_length=1, choices=CLONE_STATUS)
+
+    class Meta:
+        verbose_name = 'Clone'
+        verbose_name_plural = 'Clones'
+        ordering = ['-clone_date', 'model', 'model_id', 'cloned_by']
+
+    def __unicode__(self):
+        return "Clone: " + str(self.model) + " " + str(self.model_id) + " [" + str(self.status) + "]"
+
+class Cloned(models.Model):
+    clone = models.ForeignKey(Clone)
+    model = models.CharField(max_length=48, null=False)
+    old_model_id = models.CharField(max_length=24, null=False)
+    new_model_id = models.CharField(max_length=24, null=False)
+
+    class Meta:
+        verbose_name = 'Cloned'
+        verbose_name_plural = 'Cloned'
+        ordering = ['-clone', 'model', 'old_model_id', 'new_model_id']
+
+    def __unicode__(self):
+        return "Cloned: " + str(self.model) + " OLD: " + str(self.old_model_id) + " NEW: " + str(self.new_model_id)

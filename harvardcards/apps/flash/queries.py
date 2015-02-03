@@ -142,3 +142,12 @@ def isCardInDeck(card_id, deck_id):
     if Decks_Cards.objects.filter(card=card_id, deck=deck_id):
         return True
     return False
+
+def can_copy_collection(user, collection_id):
+    if is_superuser_or_staff(user):
+        return True
+
+    is_member = Users_Collections.objects.filter(user=user, collection=collection_id).exists()
+    if is_member:
+        return True
+    return False

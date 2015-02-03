@@ -197,6 +197,23 @@ def edit(request, collection_id=None):
 
     return render(request, 'collections/edit.html', context)
 
+@login_required
+def copy_collection(request):
+    collection_id = request.GET.get('collection_id', '')
+    if collection_id == '':
+        raise Http404
+
+    has_perm_to_copy = queries.can_copy_collection(request.user, collection_id)
+    if not has_perm_to_copy:
+         raise PermissionDenied()
+
+    new_collection = services.copy_collection(request.user, collection_id)
+
+    services.add_user_to_collection(user=request.user, collection=new_collection, role=Users_Collections.ADMINISTRATOR)
+    LTIService(request).associateCanvasCourse(new_collection.id)
+
+    return redirect(new_collection)
+
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR], 'collection')
 def share_collection(request, collection_id=None):
     """

@@ -13,7 +13,7 @@ from django.db.models import Avg, Max, Min
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError, PermissionDenied
 
-from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Cards_Fields, Field, Users_Collections, CardTemplate, CardTemplates_Fields
+from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Cards_Fields, Field, Users_Collections, CardTemplate, CardTemplates_Fields, Clone, Cloned
 from harvardcards.apps.flash import utils
 from harvardcards.apps.flash import queries
 from harvardcards.settings.common import MEDIA_ROOT, APPS_ROOT
@@ -453,3 +453,75 @@ def add_user_to_collection(user=None, collection=None, role=None):
         return True
     return False
 
+def copy_collection(user, collection_id):
+    """
+    Deep copy of a collection.
+    Returns the new collection object.
+    """
+
+
+    clone = Clone.objects.create(model='Collection', model_id=collection_id, cloned_by=user, status='Q')
+    clone.status = 'P'
+    clone.save()
+
+    ## Clone: COLLECTION
+    collection = Collection.objects.get(pk=collection_id)
+    old_collection_id = collection.id
+    collection.id = None
+    collection.title = "Copy of " + collection.title
+    collection.save()
+    new_collection = collection
+    print "new_collection = " + str(new_collection) + " id: " + str(new_collection.id)
+    Cloned.objects.create(clone=clone, model='Collection', old_model_id=old_collection_id, new_model_id=new_collection.id)
+
+    ## Clone: DECK
+    decks = Deck.objects.filter(collection=old_collection_id)
+    deck_map = {}
+    for deck in decks:
+        old_deck_id = deck.id
+        deck.id = None
+        deck.collection = new_collection
+        deck.save()
+        new_deck = deck
+        deck_map[old_deck_id] = new_deck
+        Cloned.objects.create(clone=clone, model='Deck', old_model_id=old_deck_id, new_model_id=new_deck.id)
+
+    ## Clone: DECKS_CARDS and CARD
+    card_map = {}
+    if deck_map.keys():
+        decks_cards = Decks_Cards.objects.filter(deck__in=deck_map.keys()).select_related('deck','card')
+        for decks_cards_item in decks_cards:
+            card = decks_cards_item.card
+            old_card_id = card.id
+            card.id = None
+            card.collection = new_collection
+            card.save()
+            new_card = card
+            card_map[old_card_id] = new_card
+            Cloned.objects.create(clone=clone, model='Card', old_model_id=old_card_id, new_model_id=new_card.id)
+
+            old_decks_cards_id = decks_cards_item.id
+            old_deck_id = decks_cards_item.deck.id
+            decks_cards_item.deck = deck_map[old_deck_id]
+            decks_cards_item.card = new_card
+            decks_cards_item.id = None
+            decks_cards_item.save()
+            new_decks_cards_item = decks_cards_item
+            Cloned.objects.create(clone=clone, model='Decks_Cards', old_model_id=old_decks_cards_id, new_model_id=new_decks_cards_item.id)
+
+    ## Clone: CARDS_FIELDS
+    if card_map.keys():
+        cards_fields = Cards_Fields.objects.filter(card__in=card_map.keys()).select_related('card')
+        for cards_fields_item in cards_fields:
+            old_cards_fields_id = cards_fields_item.id
+            old_card_id = cards_fields_item.card.id
+            cards_fields_item.card = card_map[old_card_id]
+            cards_fields_item.id = None
+            cards_fields_item.save()
+            new_cards_fields = cards_fields_item
+            Cloned.objects.create(clone=clone, model='Cards_Fields', old_model_id=old_cards_fields_id, new_model_id=new_cards_fields.id)
+
+    clone.status = 'D'
+    clone.save()
+
+    return new_collection
