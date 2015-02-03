@@ -459,7 +459,6 @@ def copy_collection(user, collection_id):
     Returns the new collection object.
     """
 
-
     clone = Clone.objects.create(model='Collection', model_id=collection_id, cloned_by=user, status='Q')
     clone.status = 'P'
     clone.save()
@@ -471,7 +470,6 @@ def copy_collection(user, collection_id):
     collection.title = "Copy of " + collection.title
     collection.save()
     new_collection = collection
-    print "new_collection = " + str(new_collection) + " id: " + str(new_collection.id)
     Cloned.objects.create(clone=clone, model='Collection', old_model_id=old_collection_id, new_model_id=new_collection.id)
 
     ## Clone: DECK
