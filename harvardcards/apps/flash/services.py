@@ -6,22 +6,25 @@ import urllib2
 import os
 import shutil
 import datetime
-from  PIL import Image
+import zipfile
+import hashlib
+from PIL import Image, ImageFile
+
+from cStringIO import StringIO
+from mutagen.mp3 import MP3
+from datetime import date
 
 from django.db import transaction
 from django.db.models import Avg, Max, Min
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError, PermissionDenied
+from django.core.files.uploadedfile import UploadedFile
+from django.core.files import File
 
-from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Cards_Fields, Field, Users_Collections, CardTemplate, CardTemplates_Fields, Clone, Cloned
+from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Cards_Fields, Field, Users_Collections, CardTemplate, CardTemplates_Fields, Clone, Cloned, MediaStore
 from harvardcards.apps.flash import utils
 from harvardcards.apps.flash import queries
 from harvardcards.settings.common import MEDIA_ROOT, APPS_ROOT
-import zipfile
-from StringIO import StringIO
-from mutagen.mp3 import MP3
-from sets import Set
-from datetime import date
 
 
 def delete_collection(collection_id):
@@ -141,21 +144,84 @@ def handle_media_folders(deck, file_name):
 
     return [full_path, path, dir_name, file_name]
 
+def add_file_to_media_store(file):
+    """Adds the file to the media store."""
+
+    # get a hash of the file contents
+    m = hashlib.md5()
+    if file.multiple_chunks:
+        for chunk in file.chunks():
+            m.update(chunk)
+    else:
+        m.update(file.read())
+    file_md5hash = m.hexdigest()
+
+    file_paths = [
+        MEDIA_ROOT,
+        os.path.join(MEDIA_ROOT, 'store'),
+        os.path.join(MEDIA_ROOT, 'store', file_md5hash),
+    ]
+    for p in file_paths:
+        path = os.path.abspath(os.path.join(MEDIA_ROOT, p))
+        if not os.path.exists(path):
+            os.mkdir(path)
+
+    store_file_path = os.path.join(MEDIA_ROOT, 'store', file_md5hash, file_md5hash)
+
+    stored_file_exists = MediaStore.objects.filter(file_md5hash=file_md5hash).exists()
+    if stored_file_exists:
+        store = MediaStore.objects.filter(file_md5hash=file_md5hash)[0]
+    else:
+        store = MediaStore.objects.create(file_name=file_md5hash, file_size=file.size, file_type=file.content_type, file_md5hash=file_md5hash)
+
+        with open(store_file_path, 'wb+') as dest:
+            if file.multiple_chunks:
+                for c in file.chunks():
+                    dest.write(c)
+            else:
+                dest.write(file.read())
+
+    return [store, store_file_path]
+
 def handle_uploaded_img_file(file, deck, collection):
     """Handles an uploaded image file and returns the path to the saved image."""
 
     file_name = file.name
     [full_path, path, dir_name, file_name] = handle_media_folders(deck, file_name)
-    dest = open(full_path, 'wb+')
-    if file.multiple_chunks:
-        for c in file.chunks():
-            dest.write(c)
-    else:
-        dest.write(file.read())
-    dest.close()
-    resize_uploaded_img(path, file_name, dir_name)
+
+    [store, store_file_path] = add_file_to_media_store(file)
+    os.symlink(store_file_path, full_path)
+
+    #resize_uploaded_img(path, file_name, dir_name)
 
     return os.path.join(dir_name, file_name)
+
+def fetch_image_from_url(file_url):
+    inStream = urllib2.urlopen(file_url)
+
+    parser = ImageFile.Parser()
+    file_size = 0
+    read_size = 1024
+    while True:
+        s = inStream.read(read_size)
+        file_size += len(s)
+        if not s:
+            break
+        parser.feed(s)
+
+    inImage = parser.close()
+    # convert to RGB to avoid error with png and tiffs
+    #if inImage.mode != "RGB":
+    #    inImage = inImage.convert("RGB")
+
+    img_temp = StringIO()
+    inImage.save(img_temp, 'PNG')
+    img_temp.seek(0)
+
+    file_object = File(img_temp, 'img_temp.png')
+    uploaded_file = UploadedFile(file=file_object, name=file_object.name, content_type='image/png', size=file_size, charset=None)
+
+    return uploaded_file
 
 def upload_img_from_path(path_original, deck, collection):
     head, file_name = os.path.split(path_original)

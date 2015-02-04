@@ -22,10 +22,13 @@
         {% endif %}
         <fieldset>
             <label>File Type</label>
-            {{upload_type_select}}
+            <select name="field_{{field.id}}_source" data-switch="yes" data-switch-url="field_{{field.id}}_image_url" data-switch-file="field_{{field.id}}">
+                <option value="F">File</option>
+                <option value="U">URL</option>
+            </select>
         </fieldset>
-        <input id="url_upload_type" name="image_url"  type="text" placeholder="Enter {{field.label}} URL" style="display:none" />
-        <input id="file_upload_type" name="field_{{field.id}}"  type="file" placeholder="Enter {{field.label}}" style="display:block"/>
+        <input name="field_{{field.id}}_image_url"  type="text" placeholder="Enter {{field.label}} URL" style="display:none" />
+        <input name="field_{{field.id}}"  type="file" placeholder="Enter {{field.label}}" style="display:block"/>
     {% elif field.type == 'T' %} 
         <label for="{{field.label}}">{{field.label}}</label>
         <input name="field_{{field.id}}" class="formEle form" type="text" placeholder="Enter {{field.label|lower}}" value="{{field.value}}" />

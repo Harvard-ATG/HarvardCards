@@ -282,3 +282,20 @@ class Cloned(models.Model):
 
     def __unicode__(self):
         return "Cloned: " + str(self.model) + " OLD: " + str(self.old_model_id) + " NEW: " + str(self.new_model_id)
+
+class MediaStore(models.Model):
+    file_name = models.CharField(max_length=1024, null=False)
+    file_size = models.PositiveIntegerField(null=False)
+    file_type = models.CharField(max_length=127, null=False)
+    file_md5hash = models.CharField(max_length=32, null=False)
+    store_created = models.DateTimeField(auto_now_add=True)
+    store_updated = models.DateTimeField(auto_now=True)
+    reference_count = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        verbose_name = 'Media Store'
+        verbose_name_plural = 'Media Stores'
+        ordering = ['file_name']
+
+    def __unicode__(self):
+        return "MediaStore: " + str(self.file_name) + " HASH: " + str(self.file_md5hash)
