@@ -73,7 +73,7 @@ h1, h2, h3, h4
 , .addCards{
 	font-family: 'League Gothic', Arial, sans-serif;
 }
-	h1{ font-size: 3em; }
+	h1{ font-size: 2.1em; }
 	h1#appTitle { padding: 0.25em 0; }
 
 	h2{ font-size: 1.875em; }
@@ -94,10 +94,17 @@ h1, h2, h3, h4
     h2.courseTitle > a { text-decoration: none }
 
 	.courseHeader h3 {
-		display:inline-block;
+        display:inline-block;
 		font-size: 1.5625em;
 		color: #a51c30;
 	}
+
+    .breadcrumbs span {
+		color: #a51c30;
+    }
+    .breadcrumbs .fa-pencil {
+        font-size: .5em;
+    }
 
 
 	/* fonts for deck view/review course headers only (end) */
