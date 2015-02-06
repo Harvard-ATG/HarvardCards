@@ -88,11 +88,9 @@ def handle_uploaded_img_file(file, deck, collection):
     """Handles an uploaded image file and returns the path to the saved image."""
 
     store_service = MediaStoreService(file=file, deck=deck)
-    store_service.save()
-    store_service.process(type="image")
-    link = store_service.link(type="image")
+    store_service.save(type='image')
 
-    return link
+    return store_service.storeFileName()
 
 def fetch_image_from_url(file_url):
     """Returns an UploadedFile object after retrieving the file at the given URL."""
@@ -477,6 +475,8 @@ def copy_collection(user, collection_id):
 
 
 class MediaStoreService:
+    """Class to manage reading and writings files to the local media store."""
+
     def __init__(self, *args, **kwargs):
         self.file = kwargs.get('file', None)
         self.deck = kwargs.get('deck', None)
@@ -487,17 +487,17 @@ class MediaStoreService:
 
         self._createBaseDirs()
 
-    def save(self):
+    def save(self, type=None):
         """Saves the media store."""
 
         if self.fileRecordExists():
             store = self.lookupFileRecord()
         else:
             self.writeFile()
+            self.process(type)
+            self.link(type)
             store = self.createFileRecord()
             store.save()
-
-        print store
 
         return store
 
@@ -506,35 +506,28 @@ class MediaStoreService:
             self._processResizeImage()
 
     def link(self, type=None):
-        link_name = self.generateLinkName()
-        link_path = os.path.join(self.fieldDir(), link_name)
+        file_name = self.storeFileName()
+
+        # link to original
+        original_source_path = os.path.join('..', '..', self.storeFilePath('original'))
+        original_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeDir(), 'original', file_name))
+        os.symlink(original_source_path, original_link_path)
 
         if type == 'image':
             # link to large thumb
-            large_source_path = os.path.join('..', self.storeFileName('thumb-large'))
-            large_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, link_path))
+            large_source_path = os.path.join('..', '..', self.storeFilePath('thumb-large'))
+            large_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeDir(), 'thumb-large', file_name))
             os.symlink(large_source_path, large_link_path)
 
             # link to small thumb
-            small_source_path = os.path.join('..', '..', self.storeFileName('thumb-small'))
-            small_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, 'thumbnails', link_path))
+            small_source_path = os.path.join('..', '..', self.storeFilePath('thumb-small'))
+            small_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeDir(), 'thumb-small', file_name))
             os.symlink(small_source_path, small_link_path)
 
-            # link to original
-            original_source_path = os.path.join('..', '..', self.storeFileName('original'))
-            original_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, 'originals', link_path))
-            os.symlink(original_source_path, original_link_path)
-
-        else:
-            link_path = os.path.abspath(os.path.join(MEDIA_ROOT, link_path))
-            source_path = os.path.join('..', self.storeFileName())
-            os.symlink(source_path, link_path)
-
-        return os.path.join(self.fieldDir(), link_name)
 
     def writeFile(self):
         file = self.file
-        file_name = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeFileName()))
+        file_name = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeFilePath('original')))
         with open(file_name, 'wb+') as dest:
             if file.multiple_chunks:
                 for c in file.chunks():
@@ -571,7 +564,6 @@ class MediaStoreService:
     def lookupFileRecord(self):
         return MediaStore.objects.filter(file_md5hash=self.fileHash())[0]
 
-
     def fieldDir(self):
         return str(self.deck.collection.id) + '_' + str(self.deck.id)
 
@@ -581,41 +573,24 @@ class MediaStoreService:
     def storeFileDir(self):
         return os.path.join(self.storeDir(), self.fileHash())
 
-    def storeFileName(self, *args):
-        if len(args) == 0:
-            which = 'original'
-        else:
-            which = args[0]
+    def storeFileName(self):
         file_extension = os.path.splitext(self.file.name)[1]
-        file_name = which + '-' + self.fileHash() + file_extension.lower()
-        return os.path.join(self.storeFileDir(), file_name)
+        return self.fileHash() + file_extension.lower()
 
-    def generateLinkName(self):
-        file_name = self.file.name
-        original_file_name = file_name
-        dir_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.fieldDir()))
-        file_path = os.path.join(dir_path, original_file_name)
-
-        # NOTE: using "lexists()" not "exists()" because exists() returns FALSE
-        # if the symbolic link is broken.
-        counter = 1
-        while os.path.lexists(file_path):
-            file_name = str(counter) + '_' + original_file_name
-            file_path = os.path.join(dir_path, file_name)
-            counter = counter + 1
-
-        return file_name
+    def storeFilePath(self, path):
+        return os.path.join(self.storeFileDir(), path, self.storeFileName())
 
     def _createBaseDirs(self):
         file_paths = [
             MEDIA_ROOT,
             os.path.join(MEDIA_ROOT, self.storeDir()),
+            os.path.join(MEDIA_ROOT, self.storeDir(), 'original'),
+            os.path.join(MEDIA_ROOT, self.storeDir(), 'thumb-large'),
+            os.path.join(MEDIA_ROOT, self.storeDir(), 'thumb-small'),
             os.path.join(MEDIA_ROOT, self.storeFileDir()),
-            os.path.join(MEDIA_ROOT, self.fieldDir()),
-            os.path.join(MEDIA_ROOT, 'originals'),
-            os.path.join(MEDIA_ROOT, 'originals', self.fieldDir()),
-            os.path.join(MEDIA_ROOT, 'thumbnails'),
-            os.path.join(MEDIA_ROOT, 'thumbnails', self.fieldDir()),
+            os.path.join(MEDIA_ROOT, self.storeFileDir(), 'original'),
+            os.path.join(MEDIA_ROOT, self.storeFileDir(), 'thumb-large'),
+            os.path.join(MEDIA_ROOT, self.storeFileDir(), 'thumb-small'),
         ]
         for p in file_paths:
             if not os.path.exists(p):
@@ -626,9 +601,9 @@ class MediaStoreService:
         Resizes an uploaded image. Saves both the original, thumbnail, and resized versions.
         """
 
-        original_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeFileName('original')))
-        thumb_large_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeFileName('thumb-large')))
-        thumb_small_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeFileName('thumb-small')))
+        original_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeFilePath('original')))
+        thumb_large_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeFilePath('thumb-large')))
+        thumb_small_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeFilePath('thumb-small')))
 
         img = Image.open(original_path)
 
