@@ -66,45 +66,6 @@ def delete_card(card_id):
         return True
     return False
 
-def resize_uploaded_img(path, file_name, dir_name):
-    """
-    Resizes an uploaded image. Saves both the original, thumbnail, and
-    resized versions.
-    """
-    full_path = os.path.join(path, file_name)
-
-    img = Image.open(full_path)
-
-    # original
-    path1 = os.path.abspath(os.path.join(MEDIA_ROOT, 'originals', dir_name))
-    if not os.path.exists(path1):
-        os.makedirs(path1)
-    img.save(os.path.join(path1, file_name))
-
-    # resized
-    width, height = img.size
-    new_height = 600;
-    max_width = 1000;
-    if height > new_height:
-        new_width = width*new_height/float(height);
-        img_anti = img.resize((int(new_width), int(new_height)), Image.ANTIALIAS)
-        img_anti.save(full_path)
-    else:
-        if width > max_width:
-            new_height = height*max_width/float(width)
-            img_anti = img.resize((int(new_width), int(new_height)), Image.ANTIALIAS)
-            img_anti.save(full_path)
-
-    # thumbnail
-    path1 = os.path.abspath(os.path.join(MEDIA_ROOT, 'thumbnails', dir_name))
-    if not os.path.exists(path1):
-        os.makedirs(path1)
-
-    t_height = 150
-    t_width = width*t_height/float(height)
-    img_thumb = img.resize((int(t_width), int(t_height)), Image.ANTIALIAS)
-    img_thumb.save(os.path.join(path1, file_name))
-
 def valid_uploaded_file(uploaded_file, file_type):
     if file_type == 'I':
         try:
@@ -123,80 +84,18 @@ def valid_uploaded_file(uploaded_file, file_type):
             return False
         return True
 
-def handle_media_folders(deck, file_name):
-    """
-    Returns media folder info for a given file in a deck.
-    If the given file name is a duplicate of a file already associated 
-    with the deck, it will automatically be given a new name.
-    """
-    [dir_name, path, path_images] = utils.get_media_path(deck)
-
-    # allow files with same names to be uploaded to the same deck
-    file_name = os.path.split(file_name)[1]
-    original_filename = file_name
-    full_path = os.path.join(path, file_name)
-
-    counter = 1
-    while os.path.exists(full_path):
-        file_name = str(counter)+ '_' + original_filename
-        full_path = os.path.join(path, file_name)
-        counter = counter + 1
-
-    return [full_path, path, dir_name, file_name]
-
-def add_file_to_media_store(file):
-    """Adds the file to the media store."""
-
-    # get a hash of the file contents
-    m = hashlib.md5()
-    if file.multiple_chunks:
-        for chunk in file.chunks():
-            m.update(chunk)
-    else:
-        m.update(file.read())
-    file_md5hash = m.hexdigest()
-
-    file_paths = [
-        MEDIA_ROOT,
-        os.path.join(MEDIA_ROOT, 'store'),
-        os.path.join(MEDIA_ROOT, 'store', file_md5hash),
-    ]
-    for p in file_paths:
-        path = os.path.abspath(os.path.join(MEDIA_ROOT, p))
-        if not os.path.exists(path):
-            os.mkdir(path)
-
-    store_file_path = os.path.join(MEDIA_ROOT, 'store', file_md5hash, file_md5hash)
-
-    stored_file_exists = MediaStore.objects.filter(file_md5hash=file_md5hash).exists()
-    if stored_file_exists:
-        store = MediaStore.objects.filter(file_md5hash=file_md5hash)[0]
-    else:
-        store = MediaStore.objects.create(file_name=file_md5hash, file_size=file.size, file_type=file.content_type, file_md5hash=file_md5hash)
-
-        with open(store_file_path, 'wb+') as dest:
-            if file.multiple_chunks:
-                for c in file.chunks():
-                    dest.write(c)
-            else:
-                dest.write(file.read())
-
-    return [store, store_file_path]
-
 def handle_uploaded_img_file(file, deck, collection):
     """Handles an uploaded image file and returns the path to the saved image."""
 
-    file_name = file.name
-    [full_path, path, dir_name, file_name] = handle_media_folders(deck, file_name)
+    store_service = MediaStoreService(file=file, deck=deck)
+    store_service.save()
+    store_service.process(type="image")
+    link = store_service.link(type="image")
 
-    [store, store_file_path] = add_file_to_media_store(file)
-    os.symlink(store_file_path, full_path)
-
-    #resize_uploaded_img(path, file_name, dir_name)
-
-    return os.path.join(dir_name, file_name)
+    return link
 
 def fetch_image_from_url(file_url):
+    """Returns an UploadedFile object after retrieving the file at the given URL."""
     inStream = urllib2.urlopen(file_url)
 
     parser = ImageFile.Parser()
@@ -222,20 +121,6 @@ def fetch_image_from_url(file_url):
     uploaded_file = UploadedFile(file=file_object, name=file_object.name, content_type='image/png', size=file_size, charset=None)
 
     return uploaded_file
-
-def upload_img_from_path(path_original, deck, collection):
-    head, file_name = os.path.split(path_original)
-    [full_path, path, dir_name, file_name] = handle_media_folders(deck.id, file_name)
-    try:
-        webpage = urllib2.urlopen(path_original)
-        img = open(full_path,"wb")
-        img.write(webpage.read())
-        img.close()
-    except:
-        img = Image.open(path_original)
-        img.save(full_path)
-    resize_uploaded_img(path, file_name, dir_name)
-    return os.path.join(dir_name, file_name)
 
 def create_zip_deck_file(deck):
     [folder_name, path, path_images] = utils.get_media_path(deck.id)
@@ -589,3 +474,182 @@ def copy_collection(user, collection_id):
     clone.save()
 
     return new_collection
+
+
+class MediaStoreService:
+    def __init__(self, *args, **kwargs):
+        self.file = kwargs.get('file', None)
+        self.deck = kwargs.get('deck', None)
+        self._file_md5hash = None
+
+        if not isinstance(self.deck, Deck):
+            self.deck = Deck.objects.get(id=self.deck)
+
+        self._createBaseDirs()
+
+    def save(self):
+        """Saves the media store."""
+
+        if self.fileRecordExists():
+            store = self.lookupFileRecord()
+        else:
+            self.writeFile()
+            store = self.createFileRecord()
+            store.save()
+
+        print store
+
+        return store
+
+    def process(self, type=None):
+        if type == 'image':
+            self._processResizeImage()
+
+    def link(self, type=None):
+        link_name = self.generateLinkName()
+        link_path = os.path.join(self.fieldDir(), link_name)
+
+        if type == 'image':
+            # link to large thumb
+            large_source_path = os.path.join('..', self.storeFileName('thumb-large'))
+            large_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, link_path))
+            os.symlink(large_source_path, large_link_path)
+
+            # link to small thumb
+            small_source_path = os.path.join('..', '..', self.storeFileName('thumb-small'))
+            small_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, 'thumbnails', link_path))
+            os.symlink(small_source_path, small_link_path)
+
+            # link to original
+            original_source_path = os.path.join('..', '..', self.storeFileName('original'))
+            original_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, 'originals', link_path))
+            os.symlink(original_source_path, original_link_path)
+
+        else:
+            link_path = os.path.abspath(os.path.join(MEDIA_ROOT, link_path))
+            source_path = os.path.join('..', self.storeFileName())
+            os.symlink(source_path, link_path)
+
+        return os.path.join(self.fieldDir(), link_name)
+
+    def writeFile(self):
+        file = self.file
+        file_name = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeFileName()))
+        with open(file_name, 'wb+') as dest:
+            if file.multiple_chunks:
+                for c in file.chunks():
+                    dest.write(c)
+            else:
+                dest.write(file.read())
+
+    def fileHash(self):
+        if self._file_md5hash:
+            return self._file_md5hash
+
+        m = hashlib.md5()
+        if self.file.multiple_chunks:
+            for chunk in self.file.chunks():
+                m.update(chunk)
+        else:
+            m.update(self.file.read())
+
+        self._file_md5hash = m.hexdigest()
+
+        return self._file_md5hash
+
+    def createFileRecord(self):
+        return MediaStore(
+            file_name=self.storeFileName(),
+            file_size=self.file.size,
+            file_type=self.file.content_type,
+            file_md5hash=self.fileHash()
+        )
+
+    def fileRecordExists(self):
+        return MediaStore.objects.filter(file_md5hash=self.fileHash()).exists()
+
+    def lookupFileRecord(self):
+        return MediaStore.objects.filter(file_md5hash=self.fileHash())[0]
+
+
+    def fieldDir(self):
+        return str(self.deck.collection.id) + '_' + str(self.deck.id)
+
+    def storeDir(self):
+        return 'store'
+
+    def storeFileDir(self):
+        return os.path.join(self.storeDir(), self.fileHash())
+
+    def storeFileName(self, *args):
+        if len(args) == 0:
+            which = 'original'
+        else:
+            which = args[0]
+        file_extension = os.path.splitext(self.file.name)[1]
+        file_name = which + '-' + self.fileHash() + file_extension.lower()
+        return os.path.join(self.storeFileDir(), file_name)
+
+    def generateLinkName(self):
+        file_name = self.file.name
+        original_file_name = file_name
+        dir_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.fieldDir()))
+        file_path = os.path.join(dir_path, original_file_name)
+
+        # NOTE: using "lexists()" not "exists()" because exists() returns FALSE
+        # if the symbolic link is broken.
+        counter = 1
+        while os.path.lexists(file_path):
+            file_name = str(counter) + '_' + original_file_name
+            file_path = os.path.join(dir_path, file_name)
+            counter = counter + 1
+
+        return file_name
+
+    def _createBaseDirs(self):
+        file_paths = [
+            MEDIA_ROOT,
+            os.path.join(MEDIA_ROOT, self.storeDir()),
+            os.path.join(MEDIA_ROOT, self.storeFileDir()),
+            os.path.join(MEDIA_ROOT, self.fieldDir()),
+            os.path.join(MEDIA_ROOT, 'originals'),
+            os.path.join(MEDIA_ROOT, 'originals', self.fieldDir()),
+            os.path.join(MEDIA_ROOT, 'thumbnails'),
+            os.path.join(MEDIA_ROOT, 'thumbnails', self.fieldDir()),
+        ]
+        for p in file_paths:
+            if not os.path.exists(p):
+                os.mkdir(p)
+
+    def _processResizeImage(self):
+        """
+        Resizes an uploaded image. Saves both the original, thumbnail, and resized versions.
+        """
+
+        original_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeFileName('original')))
+        thumb_large_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeFileName('thumb-large')))
+        thumb_small_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeFileName('thumb-small')))
+
+        img = Image.open(original_path)
+
+        # create large thumbnail
+        width, height = img.size
+        new_height = 600;
+        max_width = 1000;
+        if height > new_height:
+            new_width = width*new_height/float(height);
+            img_anti = img.resize((int(new_width), int(new_height)), Image.ANTIALIAS)
+            img_anti.save(thumb_large_path)
+        else:
+            if width > max_width:
+                new_height = height*max_width/float(width)
+                img_anti = img.resize((int(new_width), int(new_height)), Image.ANTIALIAS)
+                img_anti.save(thumb_large_path)
+
+        # create small thumbnail
+        t_height = 150
+        t_width = width*t_height/float(height)
+        img_thumb = img.resize((int(t_width), int(t_height)), Image.ANTIALIAS)
+        img_thumb.save(thumb_small_path)
+
+
