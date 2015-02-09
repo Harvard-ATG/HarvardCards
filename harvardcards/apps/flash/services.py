@@ -9,6 +9,7 @@ import datetime
 import zipfile
 import hashlib
 import tempfile
+import mimetypes
 from PIL import Image, ImageFile
 
 from cStringIO import StringIO
@@ -50,30 +51,29 @@ def delete_card(card_id):
         return True
     return False
 
-def valid_uploaded_file(uploaded_file, file_type):
-    if file_type == 'I':
-        try:
-            img = Image.open(uploaded_file)
-            img_type = (img.format).lower()
-            if img_type not in ['rgb', 'gif', 'png', 'bmp', 'gif', 'jpeg']:
-                return False
-        except:
+def valid_image_file_type(file_path):
+    """Returns true if the given file is a valid image type."""
+    try:
+        img = Image.open(file_path)
+        img_type = (img.format).lower()
+        if img_type not in ['rgb', 'gif', 'png', 'bmp', 'gif', 'jpeg']:
             return False
-        return True
+    except:
+        return False
+    return True
 
-    if file_type == 'A':
-        try:
-            audio = MP3(uploaded_file)
-        except:
-            return False
-        return True
+def valid_audio_file_type(file_path):
+    """Returns true if the given file is a valid audio type."""
+    try:
+        audio = MP3(file_path)
+    except:
+        return False
+    return True
 
-def handle_uploaded_img_file(file, deck, collection):
-    """Handles an uploaded image file and returns the path to the saved image."""
-
+def handle_uploaded_media_file(file, deck, type=None):
+    """Handles an uploaded file and returns the path to the file object."""
     store_service = MediaStoreService(file=file, deck=deck)
-    store_service.save(type='image')
-
+    store_service.save(type)
     return store_service.storeFileName()
 
 def fetch_image_from_url(file_url):
@@ -192,24 +192,23 @@ def get_mappings_from_zip(deck, file_contents, file_names, zfile, path_to_excel,
     if len(files_not_found):
         raise Exception, "File(s) not found in the zipped folder: %s" %str(files_not_found)[1:-1]
 
+    temp_dir_path = tempfile.mkdtemp()
     for file in files:
-        [full_path, path, dir_name, file_name] = handle_media_folders(deck.id, file['relative'])
-        zfile.extract(file['absolute'], os.path.join(path, 'temp_dir'))
-        file_path = os.path.join(path, 'temp_dir', file['absolute'])
+        zfile.extract(file['absolute'], temp_dir_path)
+        temp_file_path = os.path.join(temp_dir_path, file['absolute'])
 
-        if valid_uploaded_file(file_path, 'I'):
-            os.rename(file_path, os.path.join(path, 'temp_dir', file_name))
-            shutil.move(os.path.join(path, 'temp_dir', file_name), os.path.join(path, file_name))
-            resize_uploaded_img(path, file_name, dir_name)
-            mappings['Image'][file['relative']] = os.path.join(dir_name, file_name)
+        if valid_image_file_type(temp_file_path):
+            store_file_name = handle_uploaded_media_file(temp_file_path, deck, 'I')
+            mappings['Image'][file['relative']] = store_file_name
 
-        elif valid_uploaded_file(file_path, 'A'):
-            os.rename(file_path, os.path.join(path, 'temp_dir', file_name))
-            shutil.move(os.path.join(path, 'temp_dir', file_name), os.path.join(path, file_name))
-            mappings['Audio'][file['relative']] = os.path.join(dir_name, file_name)
+        elif valid_audio_file_type(temp_file_path):
+            handle_uploaded_media_file(temp_file_path, deck, 'A')
+            mappings['Audio'][file['relative']] = store_file_name
+
 
     if len(files):
-        shutil.rmtree(os.path.join(path, 'temp_dir'))
+        shutil.rmtree(temp_dir_path)
+
     return [file_contents, mappings]
 
 def handle_zipped_deck_file(deck, uploaded_file):
@@ -472,13 +471,29 @@ class MediaStoreService:
     """Class to manage reading and writings files to the local media store."""
 
     def __init__(self, *args, **kwargs):
-        self.file = kwargs.get('file', None)
-        self.deck = kwargs.get('deck', None)
+        file = kwargs.get('file', None)
+        deck = kwargs.get('deck', None)
+
+        if isinstance(file, basestring):
+            if os.path.exists(file):
+                file_object = open(file, 'r')
+                file_name = os.path.split(file)[1]
+                file_type = mimetypes.guess_type(file_name)
+                file_size = os.path.getsize(file)
+                file = UploadedFile(
+                    file=file_object, 
+                    name=file_name, 
+                    content_type=file_type, 
+                    size=file_size, 
+                    charset=None
+                )
+
+        if not isinstance(deck, Deck):
+            deck = Deck.objects.get(id=deck)
+
         self._file_md5hash = None
-
-        if not isinstance(self.deck, Deck):
-            self.deck = Deck.objects.get(id=self.deck)
-
+        self.file = file
+        self.deck = deck
         self._createBaseDirs()
 
     def save(self, type=None):
@@ -496,7 +511,7 @@ class MediaStoreService:
         return store
 
     def process(self, type=None):
-        if type == 'image':
+        if type == 'I':
             self._processResizeImage()
 
     def link(self, type=None):
@@ -507,7 +522,7 @@ class MediaStoreService:
         original_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeDir(), 'original', file_name))
         os.symlink(original_source_path, original_link_path)
 
-        if type == 'image':
+        if type == 'I':
             # link to the large thumbnail file
             large_source_path = os.path.join('..', '..', self.storeFilePath('thumb-large'))
             large_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeDir(), 'thumb-large', file_name))
