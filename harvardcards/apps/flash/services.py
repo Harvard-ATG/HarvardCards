@@ -8,6 +8,7 @@ import shutil
 import datetime
 import zipfile
 import hashlib
+import tempfile
 from PIL import Image, ImageFile
 
 from cStringIO import StringIO
@@ -37,27 +38,10 @@ def delete_collection(collection_id):
 def delete_deck(deck_id):
     """Deletes a deck and returns true on success, false otherwise."""
     deck = Deck.objects.get(id=deck_id)
-    delete_deck_files(deck_id)
     deck.delete()
     if not Deck.objects.filter(id=deck_id):
         return True
     return False
-
-def delete_deck_files(deck_id):
-    """
-    Deletes all the files (images, audio) associated with the deck. 
-    Raises an exception if there is a problem deleting the images.
-    """
-    deck = Deck.objects.get(id=deck_id)
-    folder_name = utils.get_media_folder_name(deck)
-    folder_paths = [
-        os.path.abspath(os.path.join(MEDIA_ROOT, folder_name)),
-        os.path.abspath(os.path.join(MEDIA_ROOT,'thumbnails', folder_name)),
-        os.path.abspath(os.path.join(MEDIA_ROOT,'originals', folder_name)),
-    ]
-    for folder_path in folder_paths:
-        if os.path.exists(folder_path):
-            shutil.rmtree(folder_path)
 
 def delete_card(card_id):
     """Deletes a card and returns true on success, false otherwise."""
@@ -121,29 +105,39 @@ def fetch_image_from_url(file_url):
     return uploaded_file
 
 def create_zip_deck_file(deck):
-    [folder_name, path, path_images] = utils.get_media_path(deck.id)
+    """Creates a zipped file containing the contents of the deck (XLS and media objects."""
+
+    # create the string buffer to hold the contents of the zip file
     s = StringIO()
 
+    # create the zipfile object 
     zfile = zipfile.ZipFile(s, "w")
 
-    file_output = utils.create_deck_file(deck.id)
-    deck_file = os.path.join(path, 'deck_file.xls')
-    file_output.save(deck_file)
+    # write the deck XLS file to the zip
+    deck_file_output = utils.create_deck_file(deck.id)
+    temp_dirpath = tempfile.mkdtemp()
+    temp_filepath = os.path.join(temp_dirpath, "deck.xls")
+    deck_file_output.save(temp_filepath)
+    zfile.write(temp_filepath, arcname=os.path.split(temp_filepath)[1])
+    shutil.rmtree(temp_dirpath) # must delete temp dir when we're done
 
-    images = []
-    if os.path.exists(path_images):
-        images = os.listdir(path_images)
+    # lookup the unique field values in the deck of cards,
+    # where the field values are the media object names 
+    card_list = queries.getDeckCardsList(deck.id)
+    field_set = set()
+    for c in card_list:
+        for f in c['fields']:
+            if f['type'] != 'T':
+                field_set.add(f['value'])
 
-    for file in os.listdir(path):
-        if file.endswith('.db') or file.startswith('.'):
-            continue
-        if file in images:
-            file_path = path_images
-        else:
-            file_path = path
-        zfile.write(os.path.join(file_path, file), arcname=file)
+    # add each media object ot the zip file 
+    for file_name in field_set:
+        file_path = MediaStoreService.getAbsPathToOriginal(file_name)
+        if os.path.exists(file_path):
+            zfile.write(file_path, arcname=file_name)
+
     zfile.close()
-    os.remove(deck_file)
+
     return s.getvalue()
 
 def extract_from_zip(uploaded_file):
@@ -508,18 +502,18 @@ class MediaStoreService:
     def link(self, type=None):
         file_name = self.storeFileName()
 
-        # link to original
+        # link to the original media file
         original_source_path = os.path.join('..', '..', self.storeFilePath('original'))
         original_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeDir(), 'original', file_name))
         os.symlink(original_source_path, original_link_path)
 
         if type == 'image':
-            # link to large thumb
+            # link to the large thumbnail file
             large_source_path = os.path.join('..', '..', self.storeFilePath('thumb-large'))
             large_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeDir(), 'thumb-large', file_name))
             os.symlink(large_source_path, large_link_path)
 
-            # link to small thumb
+            # link to the small thumbnail file
             small_source_path = os.path.join('..', '..', self.storeFilePath('thumb-small'))
             small_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeDir(), 'thumb-small', file_name))
             os.symlink(small_source_path, small_link_path)
@@ -563,9 +557,6 @@ class MediaStoreService:
 
     def lookupFileRecord(self):
         return MediaStore.objects.filter(file_md5hash=self.fileHash())[0]
-
-    def fieldDir(self):
-        return str(self.deck.collection.id) + '_' + str(self.deck.id)
 
     def storeDir(self):
         return 'store'
@@ -626,5 +617,14 @@ class MediaStoreService:
         t_width = width*t_height/float(height)
         img_thumb = img.resize((int(t_width), int(t_height)), Image.ANTIALIAS)
         img_thumb.save(thumb_small_path)
+
+    @classmethod
+    def getAbsPathToStore(cls):
+        return os.path.abspath(os.path.join(MEDIA_ROOT, 'store'))
+
+    @classmethod
+    def getAbsPathToOriginal(cls, file_name):
+        return os.path.abspath(os.path.join(MEDIA_ROOT, 'store', 'original', file_name))
+
 
 
