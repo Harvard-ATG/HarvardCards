@@ -167,7 +167,7 @@ class CardEditForm(forms.Form):
             if not field_id.isdigit():
                 continue
             if self.files[field_name].size > 0:
-                path = services.handle_uploaded_media_file(self.files[field_name], self.deck.id, 'I')
+                path = services.handle_uploaded_media_file(self.files[field_name], 'I')
                 field_list.append({"field_id":int(field_id), "value": path})
 
         if len(field_list) > 0:

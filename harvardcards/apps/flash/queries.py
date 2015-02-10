@@ -40,7 +40,7 @@ def getCollectionList(role_bucket, collection_ids=False):
     log.debug("role_bucket = %s collection_ids = %s" % (role_bucket, collection_ids))
 
     collections = Collection.objects.all()
-    if collection_ids is not False:
+    if bool(collection_ids) is not False:
         collections = collections.filter(id__in=collection_ids)
 
     decks_by_collection = getDecksByCollection(collection_ids=collection_ids)
@@ -81,7 +81,7 @@ def getDecksByCollection(collection_ids=False):
     """gets the decks associated with a collection"""
     from django.db.models import Count
     decks = Deck.objects.all().select_related('collection').annotate(Count('cards'))
-    if collection_ids:
+    if bool(collection_ids) is not False:
         decks = decks.filter(collection__id__in=collection_ids)
     decks_by_collection = {}
     for deck in decks:

@@ -70,9 +70,9 @@ def valid_audio_file_type(file_path):
         return False
     return True
 
-def handle_uploaded_media_file(file, deck, type=None):
+def handle_uploaded_media_file(file, type=None):
     """Handles an uploaded file and returns the path to the file object."""
-    store_service = MediaStoreService(file=file, deck=deck)
+    store_service = MediaStoreService(file=file)
     store_service.save(type)
     return store_service.storeFileName()
 
@@ -198,11 +198,11 @@ def get_mappings_from_zip(deck, file_contents, file_names, zfile, path_to_excel,
         temp_file_path = os.path.join(temp_dir_path, file['absolute'])
 
         if valid_image_file_type(temp_file_path):
-            store_file_name = handle_uploaded_media_file(temp_file_path, deck, 'I')
+            store_file_name = handle_uploaded_media_file(temp_file_path, 'I')
             mappings['Image'][file['relative']] = store_file_name
 
         elif valid_audio_file_type(temp_file_path):
-            store_file_name = handle_uploaded_media_file(temp_file_path, deck, 'A')
+            store_file_name = handle_uploaded_media_file(temp_file_path, 'A')
             mappings['Audio'][file['relative']] = store_file_name
 
 
@@ -472,7 +472,6 @@ class MediaStoreService:
 
     def __init__(self, *args, **kwargs):
         file = kwargs.get('file', None)
-        deck = kwargs.get('deck', None)
 
         if isinstance(file, basestring):
             if os.path.exists(file):
@@ -488,12 +487,11 @@ class MediaStoreService:
                     charset=None
                 )
 
-        if not isinstance(deck, Deck):
-            deck = Deck.objects.get(id=deck)
+        if not isinstance(file, UploadedFile):
+            raise Exception("Error handling file: MediaStoreService expects UploadedFile")
 
         self._file_md5hash = None
         self.file = file
-        self.deck = deck
         self._createBaseDirs()
 
     def save(self, type=None):
