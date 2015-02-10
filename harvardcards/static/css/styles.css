@@ -271,18 +271,31 @@ a#addAcourse
 	text-align: center;
 	text-decoration: none;
 	display: block;
-	width: 30%;
+	width: 20%;
 	font-size: 1.875em;
 	color: #4c4c4c;
 	border: 2px dashed #838383;
 	text-transform:uppercase;
-	margin: 0 auto 0.25em;
+	margin: 0;
 	padding: 0.25em 10%;
 }
-a.unstyled {
-    color: #4c4c4c;
-    text-decoration: none;
+
+ul.addACourseContent > li {
+    display: block;
+    height: 150px;
+    width: 38%;
+    margin-left: 10%;
+    float: left;
+    border-right: 1px solid #aaa;
 }
+ul.addACourseContent > li:last-child {
+    border-right: none;
+}
+ul.addACourseContent h2,
+ul.addACourseContent div {
+    margin: 0 0 10px 0;
+}
+
 
 /*a#addCard{
 	margin: 0;
@@ -329,9 +342,14 @@ a.unstyled {
 	margin-bottom: 1em;
 }
 .courseHeaderClickable {
-    padding: .5em 1em;
+    padding: .5em 0;
     cursor: pointer;
     background-color: lightgrey;
+}
+.courseHeaderClickable > .plusminus,
+.courseHeaderClickable > .adminMenuRight {
+    margin-left: .5em;
+    margin-right: .5em;
 }
 .addCourseWrapper{
 	display: none;
@@ -396,7 +414,7 @@ a.unstyled {
         width: 100%;
     }
     .deck dl dt {
-        font-weight: bold;
+        font-weight: normal;
         float:left;
         width:40%;
     }

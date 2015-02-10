@@ -64,7 +64,7 @@ def custom_create(request):
     Creates a collection with custom template.
     """
     upload_error = ''
-
+    course_name = ''
     role_bucket = services.get_or_update_role_bucket(request)
     canvas_course_collections = LTIService(request).getCourseCollections()
     collection_list = queries.getCollectionList(role_bucket, collection_ids=canvas_course_collections)
@@ -94,7 +94,8 @@ def custom_create(request):
     context = {
         "nav_collections": collection_list,
         "active_collection": None,
-        'upload_error': upload_error
+        'upload_error': upload_error,
+        "course_name": course_name or ''
     }
 
     analytics.track(
