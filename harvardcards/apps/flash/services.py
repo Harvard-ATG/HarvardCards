@@ -477,7 +477,7 @@ class MediaStoreService:
             if os.path.exists(file):
                 file_object = open(file, 'r')
                 file_name = os.path.split(file)[1]
-                file_type = mimetypes.guess_type(file_name)
+                file_type = mimetypes.guess_type(file_name)[0]
                 file_size = os.path.getsize(file)
                 file = UploadedFile(
                     file=file_object, 
@@ -627,6 +627,8 @@ class MediaStoreService:
                 new_height = height*max_width/float(width)
                 img_anti = img.resize((int(new_width), int(new_height)), Image.ANTIALIAS)
                 img_anti.save(thumb_large_path)
+            else:
+                img.save(thumb_large_path)
 
         # create small thumbnail
         t_height = 150
