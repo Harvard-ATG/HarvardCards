@@ -520,18 +520,21 @@ class MediaStoreService:
         # link to the original media file
         original_source_path = os.path.join('..', '..', self.storeFilePath('original'))
         original_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeDir(), 'original', file_name))
-        os.symlink(original_source_path, original_link_path)
+        if not os.path.lexists(original_link_path):
+            os.symlink(original_source_path, original_link_path)
 
         if type == 'I':
             # link to the large thumbnail file
             large_source_path = os.path.join('..', '..', self.storeFilePath('thumb-large'))
             large_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeDir(), 'thumb-large', file_name))
-            os.symlink(large_source_path, large_link_path)
+            if not os.path.lexists(large_link_path):
+                os.symlink(large_source_path, large_link_path)
 
             # link to the small thumbnail file
             small_source_path = os.path.join('..', '..', self.storeFilePath('thumb-small'))
             small_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeDir(), 'thumb-small', file_name))
-            os.symlink(small_source_path, small_link_path)
+            if not os.path.lexists(small_link_path):
+                os.symlink(small_source_path, small_link_path)
 
 
     def writeFile(self):
