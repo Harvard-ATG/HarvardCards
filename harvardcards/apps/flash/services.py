@@ -202,7 +202,7 @@ def get_mappings_from_zip(deck, file_contents, file_names, zfile, path_to_excel,
             mappings['Image'][file['relative']] = store_file_name
 
         elif valid_audio_file_type(temp_file_path):
-            handle_uploaded_media_file(temp_file_path, deck, 'A')
+            store_file_name = handle_uploaded_media_file(temp_file_path, deck, 'A')
             mappings['Audio'][file['relative']] = store_file_name
 
 
