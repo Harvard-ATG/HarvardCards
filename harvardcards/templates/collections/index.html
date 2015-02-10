@@ -44,20 +44,24 @@
             <h2>Custom Import</h2>
             <div><a href="{% url 'collectionCustom' %}" class="adminMenuBtn">Import Collection</a></div>
         </li>
-        <!-- TODO
         <li>
             <h2>Duplicate From Existing Collection</h2>
-            <div>My collections:</div>
             <div>
-                <select>
-                    <option>Test</option>
-                </select>
-            </div>
-            <div>
-                <a href="#" class="adminMenuBtn">Add to Course</a>
+                {% if copy_collections|length > 0 %}
+                <form action="{% url 'collectionCopy' %}" method="post">{% csrf_token %}
+                    <label for="select_collection_to_copy">All my collections:</label>
+                    <select id="select_collection_to_copy" name="collection_id">
+                    {% for collection in copy_collections %}
+                        <option value="{{ collection.id }}">{{ collection.title }}</option>
+                    {% endfor %}
+                    </select>
+                    <input style="margin-top: .5em" class="adminMenuBtn" type="submit" value="Add to Course"/>
+                </form>
+                {% else %}
+                No collections available to duplicate.
+                {%endif %}
             </div>
         </li>
-        -->
     </ul>
 </div>
 {% endblock %}

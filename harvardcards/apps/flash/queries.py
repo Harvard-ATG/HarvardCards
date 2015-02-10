@@ -40,7 +40,7 @@ def getCollectionList(role_bucket, collection_ids=False):
     log.debug("role_bucket = %s collection_ids = %s" % (role_bucket, collection_ids))
 
     collections = Collection.objects.all()
-    if collection_ids:
+    if collection_ids is not False:
         collections = collections.filter(id__in=collection_ids)
 
     decks_by_collection = getDecksByCollection(collection_ids=collection_ids)
@@ -151,3 +151,12 @@ def can_copy_collection(user, collection_id):
     if is_member:
         return True
     return False
+
+def getCopyCollectionList(user):
+    collections = []
+    if is_superuser_or_staff(user):
+        collections = Collection.objects.all() 
+    else:
+        users_collections = Users_Collections.objects.filter(user__id=user.id).select_related('collection')
+        collections = [uc.collection for uc in users_collections]
+    return collections

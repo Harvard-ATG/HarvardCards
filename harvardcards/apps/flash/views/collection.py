@@ -7,6 +7,7 @@ from django.core.context_processors import csrf
 from django.core.exceptions import ViewDoesNotExist, PermissionDenied
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods
 from django.db.models import Q
 from django.forms.formsets import formset_factory
 
@@ -28,6 +29,7 @@ def index(request, collection_id=None):
     role_bucket = services.get_or_update_role_bucket(request)
     canvas_course_collections = LTIService(request).getCourseCollections()
     collection_list = queries.getCollectionList(role_bucket, collection_ids=canvas_course_collections)
+    copy_collections = queries.getCopyCollectionList(request.user)
     active_collection = None
     display_collections = collection_list
     
@@ -45,6 +47,7 @@ def index(request, collection_id=None):
     context = {
         "nav_collections": collection_list,
         "display_collections": display_collections,
+        "copy_collections": copy_collections,
         "active_collection": active_collection,
         "user_collection_role": role_bucket,
     }
@@ -199,8 +202,9 @@ def edit(request, collection_id=None):
     return render(request, 'collections/edit.html', context)
 
 @login_required
+@require_http_methods(["POST"])
 def copy_collection(request):
-    collection_id = request.GET.get('collection_id', '')
+    collection_id = request.POST.get('collection_id', '')
     if collection_id == '':
         raise Http404
 
