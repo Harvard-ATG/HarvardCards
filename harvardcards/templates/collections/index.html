@@ -49,13 +49,12 @@
             <div>
                 {% if copy_collections|length > 0 %}
                 <form action="{% url 'collectionCopy' %}" method="post">{% csrf_token %}
-                    <label for="select_collection_to_copy">All my collections:</label>
-                    <select id="select_collection_to_copy" name="collection_id">
+                    <select name="collection_id" style="width: 100%">
                     {% for collection in copy_collections %}
                         <option value="{{ collection.id }}">{{ collection.title }}</option>
                     {% endfor %}
                     </select>
-                    <input style="margin-top: .5em" class="adminMenuBtn" type="submit" value="Add to Course"/>
+                    <input style="margin-top: .5em" class="adminMenuBtn" type="submit" value="Add Collection"/>
                 </form>
                 {% else %}
                 No collections available to duplicate.

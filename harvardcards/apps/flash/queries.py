@@ -155,8 +155,8 @@ def can_copy_collection(user, collection_id):
 def getCopyCollectionList(user):
     collections = []
     if is_superuser_or_staff(user):
-        collections = Collection.objects.all() 
+        collections = Collection.objects.all().order_by('title', 'id')
     else:
-        users_collections = Users_Collections.objects.filter(user__id=user.id).select_related('collection')
+        users_collections = Users_Collections.objects.filter(user__id=user.id).select_related('collection').order_by('collection__title', 'collection__id')
         collections = [uc.collection for uc in users_collections]
     return collections
