@@ -2,11 +2,7 @@
 
 {% block breadcrumbs %}
 <li><i class="fa fa-angle-right"></i><a href="{% url 'collectionIndex' collection.id %}">{{ collection.title }}</a><i class="fa fa-angle-right"></i></li>
-{% if is_deck_admin %}
-	<li><span class="editable" data-editable="yes" data-editable-id="{{deck.id}}" title="Click to edit title...">{{deck.title}}</span><i class="fa fa-pencil"></i></li>
-{% else %}
-	<li><a href="{% url 'deckIndex' deck.id %}">{{deck.title}}</a></li>
-{% endif %}
+<li><a data-deck-id="{{deck.id}}" href="{% url 'deckIndex' deck.id %}">{{deck.title}}</a></li>
 {% endblock %}
 
 {% block sidebar_content %}
@@ -23,9 +19,13 @@
 {% block main_content %}
 <div id="content" data-module="deck-view">
     <div class="courseWrapper" id = "wrapper">
-
         <!-- SECTION: Header -->
         <div class="courseHeader">
+            {% if is_deck_admin %}
+                <h3 data-editable="yes" data-editable-id="{{deck.id}}" title="Click to edit...">{{deck.title}}</h3><i style="margin-left: 5px" class="fa fa-pencil"></i>
+            {% else %}
+                {{deck.title}}
+            {% endif %}
             <ul class="adminMenu adminMenuRight">
                 <li><a class="adminMenuBtn hidden-mobile" href="{% url 'deckDownload' deck.id %}?deck_id={{deck.id}}" ><i class="fa fa-download"></i> Download Deck</a></li>
 
