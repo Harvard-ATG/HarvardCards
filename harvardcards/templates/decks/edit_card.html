@@ -5,7 +5,8 @@
 {% endblock %}
 
 {% block breadcrumbs %}
-<i class="fa fa-angle-right"></i> {{ collection.title }} <i class="fa fa-angle-right"></i> {{deck.title}}
+<li><i class="fa fa-angle-right"></i><a href="{% url 'collectionIndex' collection.id %}">{{ collection.title }}</a></li>
+<li><i class="fa fa-angle-right"></i><span><a href="{% url 'deckIndex' deck.id %}">{{deck.title}}</a></li>
 {% endblock %}
 
 
