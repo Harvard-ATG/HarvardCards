@@ -1,11 +1,11 @@
 {% extends "__layout_left_sidebar.html" %}
 
 {% block breadcrumbs %}
-<i class="fa fa-angle-right"></i> {{ collection.title }} <i class="fa fa-angle-right"></i>
+<li><i class="fa fa-angle-right"></i><a href="{% url 'collectionIndex' collection.id %}">{{ collection.title }}</a><i class="fa fa-angle-right"></i></li>
 {% if is_deck_admin %}
-    <span class="editable" data-editable="yes" data-editable-id="{{deck.id}}" title="Click to edit title...">{{deck.title}}</span><i class="fa fa-pencil"></i>
+	<li><span class="editable" data-editable="yes" data-editable-id="{{deck.id}}" title="Click to edit title...">{{deck.title}}</span><i class="fa fa-pencil"></i></li>
 {% else %}
-    {{deck.title}}
+	<li><a href="{% url 'deckIndex' deck.id %}">{{deck.title}}</a></li>
 {% endif %}
 {% endblock %}
 
