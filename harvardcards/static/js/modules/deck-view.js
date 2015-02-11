@@ -203,7 +203,7 @@ function initModule() {
 						var value = editor.value;
 						if(success === true) {
 							this.highlight({color: 'yellow'});
-							$("#navigation").find("[data-deck-id='"+deck_id+"']").text(value);
+							$("#navigation, .breadcrumbs").find("[data-deck-id='"+deck_id+"']").text(value);
 						} else if(success === false) {
 							this.highlight({color: 'false'});
 						}
