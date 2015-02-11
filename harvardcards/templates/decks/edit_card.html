@@ -4,6 +4,11 @@
     {% include "_deck_nav.html" with nav_collections=nav_collections active_collection=collection active_deck=deck %}
 {% endblock %}
 
+{% block breadcrumbs %}
+<i class="fa fa-angle-right"></i> {{ collection.title }} <i class="fa fa-angle-right"></i> {{deck.title}}
+{% endblock %}
+
+
 {% block main_content %}
 <div id="content" data-module="edit-card">
     <div class="courseWrapper">

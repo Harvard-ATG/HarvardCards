@@ -1,5 +1,13 @@
 {% extends "__layout_left_sidebar.html" %}
 
+{% block breadcrumbs %}
+<i class="fa fa-angle-right"></i> {{ collection.title }} <i class="fa fa-angle-right"></i>
+{% if is_deck_admin %}
+    <span class="editable" data-editable="yes" data-editable-id="{{deck.id}}" title="Click to edit title...">{{deck.title}}</span><i class="fa fa-pencil"></i>
+{% else %}
+    {{deck.title}}
+{% endif %}
+{% endblock %}
 
 {% block sidebar_content %}
     {% include "_deck_nav.html" with nav_collections=nav_collections active_collection=collection active_deck=deck is_quiz_mode=is_quiz_mode %}
@@ -18,14 +26,6 @@
 
         <!-- SECTION: Header -->
         <div class="courseHeader">
-            <h2 class="courseTitle"><a href="{% url 'collectionIndex' %}">Home</a></h2>
-            <h2 class="courseTitle"><a href="{% url 'collectionIndex' collection.id %}">{{collection.title}}</a></h2>
-            {% if is_deck_admin %}
-                <h3 data-editable="yes" data-editable-id="{{deck.id}}" title="Click to edit title...">{{deck.title}}</h3>
-                <i class="fa fa-pencil"></i>
-            {% else %}
-                <h3>{{deck.title}}</h3>
-            {% endif %}
             <ul class="adminMenu adminMenuRight">
                 <li><a class="adminMenuBtn hidden-mobile" href="{% url 'deckDownload' deck.id %}?deck_id={{deck.id}}" ><i class="fa fa-download"></i> Download Deck</a></li>
 
