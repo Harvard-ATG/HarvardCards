@@ -91,20 +91,42 @@ h1, h2, h3, h4
 		margin-right: 0.25em;
 	}
 
-    h2.courseTitle > a { text-decoration: none }
+	h2.courseTitle > a { text-decoration: none }
 
 	.courseHeader h3 {
-        display:inline-block;
+		display:inline-block;
 		font-size: 1.5625em;
 		color: #a51c30;
 	}
 
-    .breadcrumbs span {
-		color: #a51c30;
-    }
-    .breadcrumbs .fa-pencil {
-        font-size: .5em;
-    }
+	.breadcrumbs {
+		display: block;
+		font-family: 'League Gothic', Arial, sans-serif;
+		margin-bottom: 1em;
+		font-size: 2.1em;
+		padding: .25em 0;
+	}
+	.breadcrumbs li {
+		float: left;
+		margin: 0;
+		list-style-type: none;
+	}
+	.breadcrumbs li .fa-angle-right {
+		margin: 0 .25em;
+	}
+	.breadcrumbs li .fa-pencil {
+		font-size: .5em;
+	}
+	.breadcrumbs li a,
+	.breadcrumbs li a:visited,
+	.breadcrumbs li a:hover {
+		text-decoration: none;
+		color: inherit;
+	}
+	.breadcrumbs li:last-of-type:not(:first-of-type) a,
+	.breadcrumbs li:last-of-type:not(:first-of-type) span {
+		color: #a51c30 !important;
+	}
 
 
 	/* fonts for deck view/review course headers only (end) */

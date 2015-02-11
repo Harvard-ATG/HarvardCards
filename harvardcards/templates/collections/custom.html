@@ -1,5 +1,9 @@
 {% extends "__layout_left_sidebar.html" %}
 
+{% block breadcrumbs %}
+<li><i class="fa fa-angle-right"></i><a href="{% url 'collectionCustom' %}">Import Collection</a></li>
+{% endblock %}
+
 {% block sidebar_content %}
     {% include "_collection_nav.html" with nav_collections=nav_collections active_collection=active_collection %}
 {% endblock %}

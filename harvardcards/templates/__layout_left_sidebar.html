@@ -4,10 +4,8 @@
 <div class="sectionWrapper"><!-- sectionWrapper (start) -->
 	<div class="section"><!-- section (start) -->
 		<div class="contentWrapper"><!-- contentWrapper (start) -->
-            <div class="hidden-mobile">
-    			<a id="mobileMenu" href="javascript:void(0)"><i class="fa fa-bars fa-2x"></i></a> <h1 id="appTitle" class="breadcrumbs">Flashcards{% block breadcrumbs %}{% endblock %}</h1>
-	    		<div class="clear"></div>
-			</div>
+			<ul class="breadcrumbs"><li><a href="{% url 'index' %}">Flashcards</a></li>{% block breadcrumbs %}{% endblock %}</ul>
+			<div class="clear"></div>
             <!--div class="skipNav"><a href="#contentHere" title="Skip to content">Skip to content</a></div-->
 			{% block sidebar_content %}{% endblock %}
 			{% block main_content %}{% endblock %}
