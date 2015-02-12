@@ -86,6 +86,7 @@ def custom_create(request):
         else:
             try:
                 deck = services.handle_custom_file(request.FILES['file'], course_name, request.user)
+                LTIService(request).associateCanvasCourse(deck.collection.id)
                 log.info('Custom deck %(d)s successfully added to the new collection %(c)s.'
                          %{'c': str(deck.collection.id), 'd':str(deck.id)}, extra=d)
                 return redirect(deck)
