@@ -13,19 +13,27 @@
     {% endif %}
 </div>
 <div class="courseBody hide">
+    {% if collection.id in user_collection_role.ADMINISTRATOR %}
     <div class="deck add hidden-mobile">
-        <a href="/collection/{{ collection.id }}/add-deck?collection_id={{ collection.id }}">Add a Deck</a>
+        <a href="{% url 'collectionAddDeck' collection.id %}?collection_id={{collection.id}}">Add a Deck</a>
     </div>
+    {% endif %}
     <ul>
-    {% for deck in collection.decks %}
-        <li class="deck">
-            <dl>
-                <dt><a href="{% url 'deckIndex' deck.id %}">{{ deck.title }}</a></dt>
-                <dd>{{ deck.num_cards }} {% if deck.num_cards == 1 %}Card {% else %}Cards{% endif %}</dd>
-                <dd><a class="adminMenuBtn" href="{% url 'deckIndex' deck.id %}">Review</a></dd>
-                <dd><a class="adminMenuBtn" href="{% url 'deckIndex' deck.id %}?mode=quiz">Quiz</a></dd>
-            </dl>
-        </li>
-    {% endfor %}
+    {% if collection.decks|length == 0 %}
+        {% if not collection.id in user_collection_role.ADMINISTRATOR %}
+            No decks have been added to this collection yet.
+        {% endif %}
+    {% else %} 
+        {% for deck in collection.decks %}
+            <li class="deck">
+                <dl>
+                    <dt><a href="{% url 'deckIndex' deck.id %}">{{ deck.title }}</a></dt>
+                    <dd>{{ deck.num_cards }} {% if deck.num_cards == 1 %}Card {% else %}Cards{% endif %}</dd>
+                    <dd><a class="adminMenuBtn" href="{% url 'deckIndex' deck.id %}">Review</a></dd>
+                    <dd><a class="adminMenuBtn" href="{% url 'deckIndex' deck.id %}?mode=quiz">Quiz</a></dd>
+                </dl>
+            </li>
+        {% endfor %}
+    {% endif %}
     </ul>
 </div>
