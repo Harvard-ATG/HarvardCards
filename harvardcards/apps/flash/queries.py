@@ -34,16 +34,20 @@ def getCollectionRoleList():
         Users_Collections.LEARNER]
     return role_list
 
-def getCollectionList(role_bucket, collection_ids=False):
+def getCollectionList(role_bucket, **kwargs):
     """gets the list of collections that the user has permission to access"""
     log.debug("getCollectionList()")
-    log.debug("role_bucket = %s collection_ids = %s" % (role_bucket, collection_ids))
 
+    can_filter = kwargs.get('can_filter', True)
+    collection_ids = kwargs.get('collection_ids', [])
+
+    log.debug("role_bucket = %s collection_ids = %s can_filter= %s " % (role_bucket, collection_ids, can_filter))
+    
     collections = Collection.objects.all()
-    if collection_ids:
+    if can_filter:
         collections = collections.filter(id__in=collection_ids)
 
-    decks_by_collection = getDecksByCollection(collection_ids=collection_ids)
+    decks_by_collection = getDecksByCollection(**kwargs)
 
     collection_roles = getCollectionRoleList()
 
@@ -77,11 +81,14 @@ def getCollectionList(role_bucket, collection_ids=False):
 
     return collection_list
 
-def getDecksByCollection(collection_ids=False):
+def getDecksByCollection(*args, **kwargs):
     """gets the decks associated with a collection"""
     from django.db.models import Count
+    can_filter = kwargs.get('can_filter', True)
+    collection_ids = kwargs.get('collection_ids', [])
+
     decks = Deck.objects.all().select_related('collection').annotate(Count('cards'))
-    if collection_ids:
+    if can_filter:
         decks = decks.filter(collection__id__in=collection_ids)
     decks_by_collection = {}
     for deck in decks:

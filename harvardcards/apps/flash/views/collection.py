@@ -27,7 +27,8 @@ def index(request, collection_id=None):
 
     role_bucket = services.get_or_update_role_bucket(request)
     canvas_course_collections = LTIService(request).getCourseCollections()
-    collection_list = queries.getCollectionList(role_bucket, collection_ids=canvas_course_collections)
+    collection_filters = dict(collection_ids=canvas_course_collections, can_filter=not queries.is_superuser_or_staff(request.user))
+    collection_list = queries.getCollectionList(role_bucket, **collection_filters)
     active_collection = None
     display_collections = collection_list
     
