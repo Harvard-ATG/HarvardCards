@@ -32,6 +32,16 @@ class LTIService:
         '''Returns true if the user that initiated the LTI launch has a given role, false otherwise.'''
         return role in self.getLTILaunchParam('roles', [])
 
+    def hasTeachingStaffRole(self):
+        '''
+        Returns true if the user has at least one of these roles: 
+            Administrator, Instructor, or Teaching Assistant in the course.
+        '''
+        role_set = set(self.getLTILaunchParam('roles', []))
+        teaching_staff = set([const.ADMINISTRATOR, const.TEACHING_ASSISTANT, const.INSTRUCTOR])
+        role_set.intersection(teaching_staff)
+        return len(role_set) > 0
+
     def isCanvasCourseAssociated(self, canvas_course_id, collection_id):
         '''Returns true if the given canvas course ID is associated with the given collection ID, false otherwise.'''
         found = Canvas_Course_Map.objects.filter(collection__id=collection_id, canvas_course_id=canvas_course_id)
@@ -66,7 +76,7 @@ class LTIService:
             return True
 
         collection = Collection.objects.get(id=collection_id)
-        subscribe = self.hasRole(const.INSTRUCTOR)
+        subscribe = self.hasTeachingStaffRole()
         canvas_course_map = Canvas_Course_Map(canvas_course_id=canvas_course_id, collection=collection, subscribe=subscribe)
         canvas_course_map.save()
         log.debug("setupCanvasCourseMap(): created mapping [%s]" % canvas_course_map.id)
@@ -110,6 +120,8 @@ class LTIService:
         log.debug("Subscribing user %s to all canvas course collections: %s => %s" % (self.request.user.id, canvas_course_id, unsubscribed_collection_ids))
         for collection_id in unsubscribed_collection_ids:
             collection = Collection.objects.get(id=collection_id)
-            Users_Collections.objects.create(user=self.request.user, collection=collection, role=Users_Collections.LEARNER, date_joined=datetime.date.today())
+            uc_values = dict(user=self.request.user, collection=collection, role=Users_Collections.LEARNER, date_joined=datetime.date.today())
+            Users_Collections.objects.get_or_create(**uc_values)
+
         return True
 
