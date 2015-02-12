@@ -50,9 +50,11 @@ class LTIService:
         return Canvas_Course.objects.filter(canvas_course_id=canvas_course_id).exists()
 
     def createCanvasCourse(self):
-        '''Creates an instance of the canvas course.'''
+        '''Creates and returns an instance of the canvas course. Returns False if the canvas course ID is invalid.'''
         canvas_course_id = self.getCanvasCourseId()
         log.debug("createCanvasCourse(): %s" % canvas_course_id)
+        if canvas_course_id is None:
+            return False
         canvas_course = Canvas_Course(
             canvas_course_id=canvas_course_id, 
             course_name_short=self.getLTILaunchParam('context_label', ''),
