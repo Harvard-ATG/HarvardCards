@@ -240,7 +240,7 @@ class QueriesTest(TestCase):
         collection = Collection.objects.create(title='a', description='aaa', card_template=self.card_template)
         deck1 = Deck.objects.create(title='d1', collection=collection)
         deck2 = Deck.objects.create(title='d2', collection=collection)
-        decksByCollection = queries.getDecksByCollection()
+        decksByCollection = queries.getDecksByCollection(can_filter=False)
         self.assertEqual(2, len(decksByCollection[collection.id]))
         
     def test_getFieldList(self):
