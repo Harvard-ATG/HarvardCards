@@ -57,7 +57,7 @@
                 <form action="{% url 'collectionCopy' %}" method="post">{% csrf_token %}
                     <select name="collection_id" style="width: 100%">
                     {% for collection in copy_collections %}
-                        <option value="{{ collection.id }}">{{ collection.title }}</option>
+                        <option value="{{ collection.id }}">{% if collection.course_name_short %}{{collection.course_name_short}}: {% endif %}{{ collection.title }}</option>
                     {% endfor %}
                     </select>
                     <input style="margin-top: .5em" class="adminMenuBtn" type="submit" value="Add Collection"/>
