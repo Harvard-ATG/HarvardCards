@@ -4,6 +4,7 @@ define(['jquery'], function($) {
         this.options = options;
         this.headerSelector = this.options.headerSelector;
         this.btnSelector = this.options.btnSelector;
+        this.initialized = false;
     };
 
     $.extend(CollectionListView.prototype, {
@@ -34,6 +35,8 @@ define(['jquery'], function($) {
                     self.toggleCollapse(el, false);
                 }
             });
+
+            self.initialized = true;
         },
         getHeaderEls: function() {
             return $(this.headerSelector);
@@ -46,12 +49,17 @@ define(['jquery'], function($) {
             $(headerEls).each(function(index, el) {
                 var courseBody = $(el).next();
                 var visible = $(courseBody).is(":visible");
-                if(typeof state === 'undefined' || state != visible) {
-                    $(courseBody).slideToggle('slow', function(){
+                var slideOpts = {
+                    'easing': (self.initialized?'swing':'linear'),
+                    'duration': (self.initialized?'slow':0),
+                    'complete': function() {
                         var collection_id = $(el).data('collection-id');
                         var visible = $(courseBody).is(":visible");
                         localStorage.setItem('show-collection-id'+collection_id, visible);
-                    });
+                    }
+                };
+                if(typeof state === 'undefined' || state != visible) {
+                    $(courseBody).slideToggle(slideOpts);
                     self.togglePlusMinusCls(el);
                 }
             });

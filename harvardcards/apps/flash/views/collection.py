@@ -7,6 +7,7 @@ from django.core.context_processors import csrf
 from django.core.exceptions import ViewDoesNotExist, PermissionDenied
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods
 from django.db.models import Q
 from django.forms.formsets import formset_factory
 
@@ -27,6 +28,7 @@ def index(request, collection_id=None):
 
     role_bucket = services.get_or_update_role_bucket(request)
     canvas_course_collections = LTIService(request).getCourseCollections()
+    copy_collections = queries.getCopyCollectionList(request.user)
     collection_filters = dict(collection_ids=canvas_course_collections, can_filter=not queries.is_superuser_or_staff(request.user))
     collection_list = queries.getCollectionList(role_bucket, **collection_filters)
     active_collection = None
@@ -46,6 +48,7 @@ def index(request, collection_id=None):
     context = {
         "nav_collections": collection_list,
         "display_collections": display_collections,
+        "copy_collections": copy_collections,
         "active_collection": active_collection,
         "user_collection_role": role_bucket,
     }
@@ -84,6 +87,7 @@ def custom_create(request):
         else:
             try:
                 deck = services.handle_custom_file(request.FILES['file'], course_name, request.user)
+                LTIService(request).associateCanvasCourse(deck.collection.id)
                 log.info('Custom deck %(d)s successfully added to the new collection %(c)s.'
                          %{'c': str(deck.collection.id), 'd':str(deck.id)}, extra=d)
                 return redirect(deck)
@@ -198,6 +202,24 @@ def edit(request, collection_id=None):
     }
 
     return render(request, 'collections/edit.html', context)
+
+@login_required
+@require_http_methods(["POST"])
+def copy_collection(request):
+    collection_id = request.POST.get('collection_id', '')
+    if collection_id == '':
+        raise Http404
+
+    has_perm_to_copy = queries.can_copy_collection(request.user, collection_id)
+    if not has_perm_to_copy:
+         raise PermissionDenied()
+
+    new_collection = services.copy_collection(request.user, collection_id)
+
+    services.add_user_to_collection(user=request.user, collection=new_collection, role=Users_Collections.ADMINISTRATOR)
+    LTIService(request).associateCanvasCourse(new_collection.id)
+
+    return redirect(new_collection)
 
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR], 'collection')
 def share_collection(request, collection_id=None):

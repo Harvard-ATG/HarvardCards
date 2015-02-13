@@ -167,7 +167,7 @@ class CardEditForm(forms.Form):
             if not field_id.isdigit():
                 continue
             if self.files[field_name].size > 0:
-                path = services.handle_uploaded_img_file(self.files[field_name], self.deck.id, self.deck.collection.id)
+                path = services.handle_uploaded_media_file(self.files[field_name], 'I')
                 field_list.append({"field_id":int(field_id), "value": path})
 
         if len(field_list) > 0:
@@ -175,6 +175,6 @@ class CardEditForm(forms.Form):
 
     def _check_file_errors(self):
         for f in self.files:
-            is_valid_type = services.valid_uploaded_file(self.files[f], 'I')
+            is_valid_type = services.valid_image_file_type(self.files[f])
             if not is_valid_type:
                 self.errors[f] = "File image type is not supported. Must be: .jpg, .png, or .gif"
