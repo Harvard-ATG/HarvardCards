@@ -65,7 +65,6 @@ def index(request, deck_id=None):
         object=analytics.OBJECTS.deck,
         context={"deck_id": deck_id},
     )
-    print context
     return render(request, "deck_view.html", context)
 
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')
