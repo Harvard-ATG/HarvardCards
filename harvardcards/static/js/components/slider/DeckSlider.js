@@ -197,7 +197,10 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
         var card = this.findByCardId(this.getCurrentCardId());
 		return card.data('card-num');
 	};
-
+	DeckSlider.prototype.getCurrentCardIndex = function() {
+        var card = this.getIndexOfCard(this.getCurrentCardId());
+		return card+1;
+	};
 
 	// Returns true if the element is a card, false otherwise.
 	DeckSlider.prototype.isCard = function(el) {

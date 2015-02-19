@@ -28,7 +28,7 @@ function initModule() {
 		el: $("#counter"),
 		slider: deck_slider,
 		update: function() {
-			var current = this.slider.getCurrentCardNum();
+			var current = this.slider.getCurrentCardIndex();
 			var total = this.slider.getNumItems();
 			this.el.html(current + " / " + total);
 		}
