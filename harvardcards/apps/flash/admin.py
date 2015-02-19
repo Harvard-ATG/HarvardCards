@@ -1,5 +1,5 @@
 from django.contrib import admin
-from harvardcards.apps.flash.models import Analytics, Collection, Field, Card, Users_Collections, Deck, Decks_Cards, Cards_Fields, CardTemplate, CardTemplates_Fields, Canvas_Course_Map
+from harvardcards.apps.flash.models import *
 from django.contrib.auth.models import User
 
 class CardsInLine(admin.StackedInline):
@@ -39,6 +39,18 @@ class AnalyticsAdmin(admin.ModelAdmin):
     list_display = ('id', 'stmt_stored', 'stmt_actor_user', 'stmt_actor_desc', 'stmt_verb', 'stmt_object', 'stmt_context')
     search_fields=('stmt_actor_user__username', 'stmt_verb', 'stmt_object')
 
+class CloneAdmin(admin.ModelAdmin):
+    list_display = ('id', 'model', 'model_id', 'status', 'clone_date', 'cloned_by')
+    search_fields=('cloned_by__username', 'model_id', 'status')
+    ordering = ('-clone_date', 'model', 'model_id', 'cloned_by', 'status')
+
+class ClonedAdmin(admin.ModelAdmin):
+    list_display = ('id', 'model', 'old_model_id', 'new_model_id')
+    ordering = ('model', 'old_model_id', 'new_model_id')
+
+class MediaStoreAdmin(admin.ModelAdmin):
+    list_display = ('id', 'file_name', 'file_md5hash', 'file_type', 'file_size', 'store_created', 'store_updated', 'reference_count')
+
 admin.site.register(Collection, CollectionAdmin)
 admin.site.register(Field)
 admin.site.register(Card, CardAdmin)
@@ -49,4 +61,8 @@ admin.site.register(Cards_Fields)
 admin.site.register(CardTemplate)
 admin.site.register(CardTemplates_Fields)
 admin.site.register(Canvas_Course_Map)
+admin.site.register(Canvas_Course)
 admin.site.register(Analytics, AnalyticsAdmin)
+admin.site.register(Clone, CloneAdmin)
+admin.site.register(Cloned, ClonedAdmin)
+admin.site.register(MediaStore, MediaStoreAdmin)

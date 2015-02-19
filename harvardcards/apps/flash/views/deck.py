@@ -168,12 +168,9 @@ def download_deck(request, deck_id=None):
 def create_edit_card(request, deck_id=None):
     """Create a new card or edit an existing one from the collection card template."""
 
-    IMAGE_UPLOAD_TYPE = (('F', 'File'),('U', 'URL'))
-
     deck = Deck.objects.get(id=deck_id)
     current_collection = deck.collection
     card_color_select = widgets.Select(attrs=None, choices=Card.COLOR_CHOICES)
-    image_upload_select = widgets.Select(attrs= {'onchange' :'switch_upload_image_type(this)'}, choices=IMAGE_UPLOAD_TYPE)
 
     role_bucket = services.get_or_update_role_bucket(request)
     canvas_course_collections = LTIService(request).getCourseCollections()
@@ -216,8 +213,7 @@ def create_edit_card(request, deck_id=None):
         "collection": current_collection,
         "nav_collections": collection_list,
         "card_fields": card_fields,
-        "card_color_select":  card_color_select.render("card_color", card_color),
-        "upload_type_select": image_upload_select.render("image_upload", 'F')
+        "card_color_select":  card_color_select.render("card_color", card_color)
     }
     
     return render(request, 'decks/edit_card.html', context)

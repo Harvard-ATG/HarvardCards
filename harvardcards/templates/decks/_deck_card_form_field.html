@@ -12,9 +12,9 @@
         {% if field.value == '' %}
             <label for="{{field.label}}">{{field.label}}</label>
         {% else %}
-            <img src="{{MEDIA_URL}}thumbnails/{{field.value}}" alt="{{field.label}}" class="cardFieldImage"/>
+            <img src="{{MEDIA_URL}}store/thumb-large/{{field.value}}" alt="{{field.label}}" class="cardFieldImage"/>
             <div>
-                <a href="{{MEDIA_URL}}originals/{{field.value}}" target="_blank">
+                <a href="{{MEDIA_URL}}store/original/{{field.value}}" target="_blank">
                     <i class="fa fa-external-link"></i>
                     <span class="control-text">View Full Size Image</span>
                 </a>
@@ -22,10 +22,13 @@
         {% endif %}
         <fieldset>
             <label>File Type</label>
-            {{upload_type_select}}
+            <select name="field_{{field.id}}_source" data-switch="yes" data-switch-url="field_{{field.id}}_image_url" data-switch-file="field_{{field.id}}">
+                <option value="F">File</option>
+                <option value="U">URL</option>
+            </select>
         </fieldset>
-        <input id="url_upload_type" name="image_url"  type="text" placeholder="Enter {{field.label}} URL" style="display:none" />
-        <input id="file_upload_type" name="field_{{field.id}}"  type="file" placeholder="Enter {{field.label}}" style="display:block"/>
+        <input name="field_{{field.id}}_image_url"  type="text" placeholder="Enter {{field.label}} URL" style="display:none" />
+        <input name="field_{{field.id}}"  type="file" placeholder="Enter {{field.label}}" style="display:block"/>
     {% elif field.type == 'T' %} 
         <label for="{{field.label}}">{{field.label}}</label>
         <input name="field_{{field.id}}" class="formEle form" type="text" placeholder="Enter {{field.label|lower}}" value="{{field.value}}" />

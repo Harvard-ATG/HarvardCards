@@ -212,6 +212,23 @@ class Users_Collections(models.Model):
             return True
         return bool(self.objects.filter(user=user.id, role=role, collection=collection.id))
 
+class Canvas_Course(models.Model):
+    """
+    Course information. 
+    """
+    canvas_course_id = models.CharField(max_length=255, unique=True, blank=False)
+    course_name_short = models.CharField(max_length=1024)
+    course_name = models.CharField(max_length=2048)
+
+    class Meta:
+        verbose_name = 'Canvas Course'
+        verbose_name_plural = 'Canvas Courses '
+        ordering = ['canvas_course_id','course_name_short','course_name']
+
+    def __unicode__(self):
+        return "Canvas Course %s - %s" % (self.canvas_course_id, self.course_name_short)
+
+
 class Canvas_Course_Map(models.Model):
     """
     The purpose of this model is to setup a many-to-many mapping between 
@@ -248,3 +265,54 @@ class Analytics(models.Model):
 
     def __unicode__(self):
         return "ID: %s STMT: %s-%s-%s-%s" % (self.id, self.stmt_actor_user, self.stmt_actor_desc, self.stmt_verb, self.stmt_object)
+
+class Clone(models.Model):
+    CLONE_STATUS = (
+        ('Q', 'QUEUED'),
+        ('P', 'PROCESSING'),
+        ('D', 'DONE')
+    )
+    clone_date = models.DateTimeField(auto_now_add=True)
+    cloned_by = models.ForeignKey(User)
+    model = models.CharField(max_length=48, null=False)
+    model_id = models.CharField(max_length=24, null=False)
+    status = models.CharField(max_length=1, choices=CLONE_STATUS)
+
+    class Meta:
+        verbose_name = 'Clone'
+        verbose_name_plural = 'Clones'
+        ordering = ['-clone_date', 'model', 'model_id', 'cloned_by']
+
+    def __unicode__(self):
+        return "Clone: " + str(self.model) + " " + str(self.model_id) + " [" + str(self.status) + "]"
+
+class Cloned(models.Model):
+    clone = models.ForeignKey(Clone)
+    model = models.CharField(max_length=48, null=False)
+    old_model_id = models.CharField(max_length=24, null=False)
+    new_model_id = models.CharField(max_length=24, null=False)
+
+    class Meta:
+        verbose_name = 'Cloned'
+        verbose_name_plural = 'Cloned'
+        ordering = ['-clone', 'model', 'old_model_id', 'new_model_id']
+
+    def __unicode__(self):
+        return "Cloned: " + str(self.model) + " OLD: " + str(self.old_model_id) + " NEW: " + str(self.new_model_id)
+
+class MediaStore(models.Model):
+    file_name = models.CharField(max_length=1024, null=False)
+    file_size = models.PositiveIntegerField(null=False)
+    file_type = models.CharField(max_length=127, null=False)
+    file_md5hash = models.CharField(max_length=32, null=False)
+    store_created = models.DateTimeField(auto_now_add=True)
+    store_updated = models.DateTimeField(auto_now=True)
+    reference_count = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        verbose_name = 'Media Store'
+        verbose_name_plural = 'Media Stores'
+        ordering = ['file_name']
+
+    def __unicode__(self):
+        return "MediaStore: " + str(self.file_name) + " HASH: " + str(self.file_md5hash)

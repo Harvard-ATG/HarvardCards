@@ -1,27 +1,26 @@
 define(['jquery', 'views/CardForm'], function($, CardForm) {
+
+    function setup_file_url_switch() {
+        $('select[data-switch]').each(function(idx, el) {
+            var url_selector = $(el).data("switch-url");
+            var file_selector = $(el).data("switch-file");
+            $(el).on("change", function() {
+                var source_type = $(el).val();
+                $('input[name='+file_selector+']')[source_type=='U'?'hide':'show']();
+                $('input[name='+url_selector+']')[source_type=='U'?'show':'hide']();
+            });
+        });
+    }
+
     return {
         initModule: function(el) {
-                        var cardform = new CardForm({
-                            "formEl": "#cardForm",
-                            "formMessageEl": "#cardForm .formMessage"
-                        });
-                        cardform.init();
-                    }
+            var cardform = new CardForm({
+                "formEl": "#cardForm",
+                "formMessageEl": "#cardForm .formMessage"
+            });
+            cardform.init();
+
+            setup_file_url_switch();
+        }
     };
 });
-
-function switch_upload_image_type(sel)
-{
-    var file_input = document.getElementById("file_upload_type");
-    var url_input = document.getElementById("url_upload_type");
-    if (sel.value == "U")
-    {
-        file_input.style.display = "none";
-        url_input.style.display = "block";
-    }
-    else
-    {
-        file_input.style.display = "block";
-        url_input.style.display = "none";
-    }
-}

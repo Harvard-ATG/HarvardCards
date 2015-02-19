@@ -3,7 +3,7 @@ This module contains common queries that return a result and DO NOT change the
 observable state of the system (are free of side effects).
 """
 
-from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Decks_Cards
+from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Decks_Cards, Canvas_Course, Canvas_Course_Map
 
 import logging
 log = logging.getLogger(__name__)
@@ -149,3 +149,48 @@ def isCardInDeck(card_id, deck_id):
     if Decks_Cards.objects.filter(card=card_id, deck=deck_id):
         return True
     return False
+
+def can_copy_collection(user, collection_id):
+    if is_superuser_or_staff(user):
+        return True
+
+    is_member = Users_Collections.objects.filter(user=user, collection=collection_id).exists()
+    if is_member:
+        return True
+    return False
+
+def getCourseNameCollectionMap():
+    '''Returns a dictionary that maps collection IDs to canvas course short names.'''
+    canvas_to_course_name = dict([
+        (c.canvas_course_id, c.course_name_short) 
+        for c in Canvas_Course.objects.all()
+    ])
+    collection_to_course_name = dict([
+        (cm.collection_id, canvas_to_course_name.get(cm.canvas_course_id, '')) 
+        for cm in Canvas_Course_Map.objects.all()
+    ])
+    return collection_to_course_name
+
+def getCopyCollectionList(user):
+    '''Returns a list of collections that the given user may copy.'''
+    collections = []
+    if is_superuser_or_staff(user):
+        collections = Collection.objects.all().order_by('title', 'id')
+    else:
+        users_collections = Users_Collections.objects.filter(user__id=user.id).select_related('collection').order_by('collection__title', 'collection__id')
+        collections = [uc.collection for uc in users_collections]
+
+    collection_to_course_name = getCourseNameCollectionMap()
+
+    copy_collections = []
+    for c in collections:
+        course_name_short = collection_to_course_name.get(c.id, '')
+        copy_collections.append({
+            'id': c.id,
+            'title': c.title,
+            'course_name_short': course_name_short,
+        })
+
+    sorted_copy_collections = sorted(copy_collections, key=lambda c: (c['course_name_short'].lower(), c['title'].lower()))
+
+    return sorted_copy_collections

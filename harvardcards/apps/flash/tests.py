@@ -219,12 +219,10 @@ class ServicesTest(TestCase):
             "audio/jenecomprendspas.mp3",
         ]
 
-        folder_name = utils.get_media_folder_name(deck)
         for zip_path in zip_paths:
             zip_file_name = os.path.split(zip_path)[1] 
-            zip_file_name = "1_" + zip_file_name # prefix with 1_ because of handle_media_folders()
-            media_file_path = "%s/%s" % (folder_name, zip_file_name)
-            self.assertEqual(mappings['Audio'][zip_path], media_file_path)
+            self.assertNotEqual(mappings['Audio'][zip_path], zip_file_name)
+            self.assertRegexpMatches(mappings['Audio'][zip_path], '[0-9a-fA-F]{16}\.\w+')
 
 class QueriesTest(TestCase):
     def setUp(self):
@@ -242,7 +240,7 @@ class QueriesTest(TestCase):
         collection = Collection.objects.create(title='a', description='aaa', card_template=self.card_template)
         deck1 = Deck.objects.create(title='d1', collection=collection)
         deck2 = Deck.objects.create(title='d2', collection=collection)
-        decksByCollection = queries.getDecksByCollection()
+        decksByCollection = queries.getDecksByCollection(can_filter=False)
         self.assertEqual(2, len(decksByCollection[collection.id]))
         
     def test_getFieldList(self):

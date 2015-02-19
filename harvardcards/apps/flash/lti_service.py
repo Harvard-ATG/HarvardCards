@@ -1,4 +1,4 @@
-from harvardcards.apps.flash.models import Collection, Users_Collections, Canvas_Course_Map
+from harvardcards.apps.flash.models import Collection, Users_Collections, Canvas_Course_Map, Canvas_Course
 
 from django_auth_lti import const
 
@@ -14,6 +14,8 @@ class LTIService:
     '''
     def __init__(self, request):
         self.request = request
+        if self.isLTILaunch() and not self.canvasCourseExists():
+            self.createCanvasCourse()
 
     def isLTILaunch(self):
         '''Returns true if an LTI launch is detected, false otherwise.'''
@@ -31,6 +33,35 @@ class LTIService:
     def hasRole(self, role):
         '''Returns true if the user that initiated the LTI launch has a given role, false otherwise.'''
         return role in self.getLTILaunchParam('roles', [])
+
+    def hasTeachingStaffRole(self):
+        '''
+        Returns true if the user has at least one of these roles: 
+            Administrator, Instructor, or Teaching Assistant in the course.
+        '''
+        role_set = set(self.getLTILaunchParam('roles', []))
+        teaching_staff = set([const.ADMINISTRATOR, const.TEACHING_ASSISTANT, const.INSTRUCTOR])
+        role_set.intersection(teaching_staff)
+        return len(role_set) > 0
+
+    def canvasCourseExists(self):
+        '''Returns True if the canvas course exists, otherwise False.'''
+        canvas_course_id = self.getCanvasCourseId()
+        return Canvas_Course.objects.filter(canvas_course_id=canvas_course_id).exists()
+
+    def createCanvasCourse(self):
+        '''Creates and returns an instance of the canvas course. Returns False if the canvas course ID is invalid.'''
+        canvas_course_id = self.getCanvasCourseId()
+        log.debug("createCanvasCourse(): %s" % canvas_course_id)
+        if canvas_course_id is None:
+            return False
+        canvas_course = Canvas_Course(
+            canvas_course_id=canvas_course_id, 
+            course_name_short=self.getLTILaunchParam('context_label', ''),
+            course_name=self.getLTILaunchParam('context_title', ''),
+        )
+        canvas_course.save()
+        return canvas_course
 
     def isCanvasCourseAssociated(self, canvas_course_id, collection_id):
         '''Returns true if the given canvas course ID is associated with the given collection ID, false otherwise.'''
@@ -66,7 +97,7 @@ class LTIService:
             return True
 
         collection = Collection.objects.get(id=collection_id)
-        subscribe = self.hasRole(const.INSTRUCTOR)
+        subscribe = self.hasTeachingStaffRole()
         canvas_course_map = Canvas_Course_Map(canvas_course_id=canvas_course_id, collection=collection, subscribe=subscribe)
         canvas_course_map.save()
         log.debug("setupCanvasCourseMap(): created mapping [%s]" % canvas_course_map.id)
@@ -110,6 +141,8 @@ class LTIService:
         log.debug("Subscribing user %s to all canvas course collections: %s => %s" % (self.request.user.id, canvas_course_id, unsubscribed_collection_ids))
         for collection_id in unsubscribed_collection_ids:
             collection = Collection.objects.get(id=collection_id)
-            Users_Collections.objects.create(user=self.request.user, collection=collection, role=Users_Collections.LEARNER, date_joined=datetime.date.today())
+            uc_values = dict(user=self.request.user, collection=collection, role=Users_Collections.LEARNER, date_joined=datetime.date.today())
+            Users_Collections.objects.get_or_create(**uc_values)
+
         return True
 

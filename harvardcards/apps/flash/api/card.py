@@ -5,15 +5,10 @@ from harvardcards.apps.flash.models import Collection, Deck, Card, Cards_Fields,
 from harvardcards.apps.flash.forms import CardEditForm
 from harvardcards.apps.flash import services, queries, utils, analytics
 from harvardcards.apps.flash.decorators import check_role
-from django.db import models
 
 import json
 import urllib2
-from django.utils.datastructures import MultiValueDict
-from django.core.files import File
-from cStringIO import StringIO
-from PIL import Image, ImageFile    
-import imghdr
+
 
 @require_http_methods(["POST"])
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')
@@ -30,36 +25,14 @@ def edit(request):
     else:
         card = Card.objects.get(id=card_id)
         card_fields = [cfield.field for cfield in card.cards_fields_set.all()]
-    
+
+    for k, v in request.POST.iteritems():
+        if k.endswith('_image_url') and v:
+            field_name = k.replace('_image_url', '')
+            request.FILES[field_name] = services.fetch_image_from_url(v)
+
     # attempted to validate and save the form data
-    file_url = dict(request.POST).get('image_url', '')
-    file_url = file_url[0] if file_url else None
-
-    if file_url:
-        inStream = urllib2.urlopen(file_url)
-
-        parser = ImageFile.Parser()
-        while True:
-            s = inStream.read(1024)
-            if not s:
-                break
-            parser.feed(s)
-
-        inImage = parser.close()
-        # convert to RGB to avoid error with png and tiffs
-        #if inImage.mode != "RGB":
-        #    inImage = inImage.convert("RGB")
-
-        img_temp = StringIO()
-        inImage.save(img_temp, 'PNG')
-        img_temp.seek(0)
-        file_object = File(img_temp, 'img_temp.png')
-        uploaded_file = MultiValueDict({'field_3': [file_object]})
-    else:
-        uploaded_file = request.FILES
-    
-    card_edit_form = CardEditForm(request.POST, uploaded_file, card_fields=card_fields)
-
+    card_edit_form = CardEditForm(request.POST, request.FILES, card_fields=card_fields)
     if card_edit_form.is_valid():
         card_edit_form.save()
         card = card_edit_form.get_card()
