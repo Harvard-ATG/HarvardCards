@@ -228,6 +228,7 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 	// Advances the slider to the card with the given card ID.
 	DeckSlider.prototype.goToCard = function(card_id) {
 		var card_index = this.card_ids.indexOf(card_id);
+
 		if(card_index !== -1) {
 			this.slider.goTo(card_index);
 		}
@@ -258,10 +259,10 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 	DeckSlider.prototype.shuffle = function() {
 		var cards  = $(this.el).find("ul#cards");
 		var child = cards.children();
-		var random_index;
+		var random_index = -1;
 
 		while (child.length) {
-			random_index = Math.floor(Math.random() *  child.length);
+            random_index = Math.floor(Math.random() *  child.length);
 			this.card_ids.push(this.card_ids.splice(random_index, 1)[0]);
 			cards.append(child.splice(random_index, 1));
 		}
@@ -269,6 +270,17 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 		this.trigger("shuffle");
 	};
 
+    DeckSlider.prototype.reset = function(){
+		var $cards  = $(this.el).find("ul#cards");
+
+        $cards.find('.card').sort(function (a, b) {
+            return +a.getAttribute('data-card-num') - +b.getAttribute('data-card-num');
+        })
+        .appendTo( $cards );
+        this.card_ids = this.card_ids.sort(function(a, b){return a-b});
+		this.loaded = {};
+		this.trigger("shuffle");
+    }
 	// Plays the slider (i.e. auto-advance to the next card).
 	DeckSlider.prototype.play = function(doneCallback) {
 		this._playIntervalId = window.setInterval(this._play(doneCallback), this.playbackDelay);
