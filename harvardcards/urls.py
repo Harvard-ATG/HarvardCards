@@ -9,6 +9,8 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
+    url(r'stats_graphs/$', 'harvardcards.apps.flash.views.stats_graph.graph_collections', name='stats_graphs'),
+
     #url(r'^$', 'harvardcards.apps.flash.views.site.splash', name='splash'),
     url(r'^$', 'harvardcards.apps.flash.views.collection.index', name='index'),
 
