@@ -1,0 +1,12 @@
+{% extends "__layout_left_sidebar.html" %}
+
+{% block main_content %}
+<div id="content" data-module="">
+    <div class="courseHeader">
+        <h3>Monitoring User Experience</h3>
+    </div>
+    <div id="graphHolder">
+        <img src='{% url "graph_collections" %}'/>
+    </div>
+</div>
+{% endblock %}
