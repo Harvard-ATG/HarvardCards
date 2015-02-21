@@ -32,7 +32,7 @@ def graph_collections(request):
     ylim((0, max(n)+4))
     xlabel('Number of Collections')
     ylabel('Number of Users')
-    title('Histogram of Number of Collections Associated with Users')
+    title('Histogram of Number of Collections Viewed by Users')
     tick_params(axis="both", which="both", bottom="on", top="off",pad=5,
                     labelbottom="on", left="on", right="off", labelleft="on", direction='out')
 
