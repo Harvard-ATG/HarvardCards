@@ -21,14 +21,22 @@ import numpy as np
 
 @user_passes_test(lambda u: u.is_superuser or u.is_staff)
 def graph_collections(request):
-    objects =  Users_Collections.objects.all().values()
+    objects = Users_Collections.objects.all().values()
     objects = map(lambda o: o['user_id'], objects)
     users = map(lambda u: u['id'], User.objects.all().values('id'))
     x = map(lambda u: objects.count(u), users)
-    hist(x)
+    figure(facecolor='#f3f3f1')
+    ax = gca()
+    ax.patch.set_facecolor('#f5f5f5')
+    n, bins, patches = hist(x, facecolor='#A51C30', alpha=0.75)
+    print bins
+    ylim((0, max(n)+4))
     xlabel('Number of Collections')
     ylabel('Number of Users')
     title('Histogram of Number of Collections Associated with Users')
+    tick_params(axis="both", which="both", bottom="on", top="off",pad=5,
+                    labelbottom="on", left="on", right="off", labelleft="on", direction='out')
+
     buffer = StringIO.StringIO()
     canvas = pylab.get_current_fig_manager().canvas
     canvas.draw()
@@ -36,3 +44,8 @@ def graph_collections(request):
     graphIMG.save(buffer, 'PNG')
     pylab.close()
     return HttpResponse(buffer.getvalue(), mimetype='img/png')
+
+
+@user_passes_test(lambda u: u.is_superuser or u.is_staff)
+def graphs(request):
+    return render(request, 'stats_graphs.html')
