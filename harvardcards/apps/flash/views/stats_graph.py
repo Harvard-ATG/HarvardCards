@@ -29,7 +29,6 @@ def graph_collections(request):
     ax = gca()
     ax.patch.set_facecolor('#f5f5f5')
     n, bins, patches = hist(x, facecolor='#A51C30', alpha=0.75)
-    print bins
     ylim((0, max(n)+4))
     xlabel('Number of Collections')
     ylabel('Number of Users')
@@ -40,7 +39,7 @@ def graph_collections(request):
     buffer = StringIO.StringIO()
     canvas = pylab.get_current_fig_manager().canvas
     canvas.draw()
-    graphIMG = PIL.Image.fromstring('RGB', canvas.get_width_height(), canvas.tostring_rgb())
+    graphIMG = PIL.Image.frombytes('RGB', canvas.get_width_height(), canvas.tostring_rgb())
     graphIMG.save(buffer, 'PNG')
     pylab.close()
     return HttpResponse(buffer.getvalue(), mimetype='img/png')
