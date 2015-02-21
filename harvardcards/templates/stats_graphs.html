@@ -2,11 +2,21 @@
 
 {% block main_content %}
 <div id="content" data-module="">
-    <div class="courseHeader">
-        <h3>Monitoring User Experience</h3>
+    <div class="graph">
+        <div class="courseHeader">
+            <h3>User Experience</h3>
+        </div>
+        <div id="graphHolder">
+            <img src='{% url "graph_collections" %}'/>
+        </div>
     </div>
-    <div id="graphHolder">
-        <img src='{% url "graph_collections" %}'/>
+    <div class="graph">
+        <div class="courseHeader">
+            <h3>Registrations</h3>
+        </div>
+        <div id="graphHolder">
+            <img src='{% url "graph_users" %}'/>
+        </div>
     </div>
 </div>
 {% endblock %}

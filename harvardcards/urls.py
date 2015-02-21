@@ -10,6 +10,8 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'graph_collections/$', 'harvardcards.apps.flash.views.stats_graph.graph_collections', name='graph_collections'),
+    url(r'graph_users/$', 'harvardcards.apps.flash.views.stats_graph.graph_users', name='graph_users'),
+
     url(r'stats_graphs$', 'harvardcards.apps.flash.views.stats_graph.graphs', name='stats_graphs'),
 
     #url(r'^$', 'harvardcards.apps.flash.views.site.splash', name='splash'),

@@ -754,7 +754,9 @@ div.deckNav{
 	margin-right:auto;
 	display:block;
 }
-
+.graph {
+	padding: .5% .5% .5% .5%;
+}
 /*full card (start) */
 #singleCardHolder, #cardForm{
 	width: 94.5%;

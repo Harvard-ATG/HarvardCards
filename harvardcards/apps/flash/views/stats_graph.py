@@ -17,7 +17,17 @@ import PIL.Image
 import StringIO
 from matplotlib import pylab
 from pylab import *
-import numpy as np
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
+
+def initialize_graph():
+    close('all')
+    fig=Figure(facecolor='#f3f3f1')
+    ax=fig.add_subplot(111)
+    ax.tick_params(axis="both", which="both", bottom="on", top="off",pad=5,
+                    labelbottom="on", left="on", right="off", labelleft="on", direction='out')
+    return [fig, ax]
+
 
 @user_passes_test(lambda u: u.is_superuser or u.is_staff)
 def graph_collections(request):
@@ -25,25 +35,41 @@ def graph_collections(request):
     objects = map(lambda o: o['user_id'], objects)
     users = map(lambda u: u['id'], User.objects.all().values('id'))
     x = map(lambda u: objects.count(u), users)
-    figure(facecolor='#f3f3f1')
-    ax = gca()
+
+
+    [fig, ax] = initialize_graph()
     ax.patch.set_facecolor('#f5f5f5')
-    n, bins, patches = hist(x, facecolor='#A51C30', alpha=0.75)
-    ylim((0, max(n)+4))
-    xlabel('Number of Collections')
-    ylabel('Number of Users')
-    title('Histogram of Number of Collections Viewed by Users')
-    tick_params(axis="both", which="both", bottom="on", top="off",pad=5,
-                    labelbottom="on", left="on", right="off", labelleft="on", direction='out')
+    n, bins, patches = ax.hist(x, facecolor='#A51C30', alpha=0.75)
+    ax.set_ylim((0, max(n)+4))
+    ax.set_xlabel('Number of Collections')
+    ax.set_ylabel('Number of Users')
+    ax.set_title('Histogram of Number of Viewable Collections Per User')
 
-    buffer = StringIO.StringIO()
-    canvas = pylab.get_current_fig_manager().canvas
-    canvas.draw()
-    graphIMG = PIL.Image.frombytes('RGB', canvas.get_width_height(), canvas.tostring_rgb())
-    graphIMG.save(buffer, 'PNG')
-    pylab.close()
-    return HttpResponse(buffer.getvalue(), mimetype='img/png')
+    canvas=FigureCanvas(fig)
+    response=HttpResponse(content_type='image/png')
+    canvas.print_png(response)
+    return response
 
+@user_passes_test(lambda u: u.is_superuser or u.is_staff)
+def graph_users(request):
+    regs =  map(lambda u: u['date_joined'], User.objects.all().values('date_joined'))
+    min_date, max_date = min(regs).date(), max(regs).date()
+    num_days = (max_date - min_date).days + 1
+    date_list = [min_date + datetime.timedelta(days=x) for x in range(0, num_days)]
+    x = map(lambda d: len(filter(lambda r: r.date() <= d, regs)), date_list)
+
+    [fig, ax] = initialize_graph()
+    ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter('%m/%d/%Y'))
+    ax.xaxis.set_major_locator(matplotlib.dates.DayLocator(interval=len(x)/5))
+    ax.patch.set_facecolor('#f5f5f5')
+    ax.plot(date_list, x, color='#A51C30', linewidth=2)
+    ax.set_ylabel('Number of Users')
+    ax.set_title('Number of Registered Users Over Time')
+
+    canvas=FigureCanvas(fig)
+    response=HttpResponse(content_type='image/png')
+    canvas.print_png(response)
+    return response
 
 @user_passes_test(lambda u: u.is_superuser or u.is_staff)
 def graphs(request):
