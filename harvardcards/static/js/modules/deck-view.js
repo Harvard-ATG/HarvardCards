@@ -140,20 +140,19 @@ function initModule() {
 	    var shuffleText = 'Shuffle';
 	    var resetText = 'Reset';
 
-	    if ($("#shuffle_cards .control-text").text() == shuffleText){
-            deck_slider.shuffle();
-            deck_slider.goToFirst();
-	        $("#shuffle_cards .control-text").text(resetText);
+		if ($("#shuffle_cards .control-text").text() == shuffleText){
+			deck_slider.shuffle();
+			deck_slider.goToFirst();
+			$("#shuffle_cards .control-text").text(resetText);
 			$("#shuffle").removeClass('fa-random').addClass('fa-refresh');
 
-	    }
-        else {
-            deck_slider.reset();
-            deck_slider.goToFirst();
-	        $("#shuffle_cards .control-text").text(shuffleText);
+		} else {
+			deck_slider.reset();
+			deck_slider.goToFirst();
+			$("#shuffle_cards .control-text").text(shuffleText);
 			$("#shuffle").removeClass('fa-refresh').addClass('fa-random');
-        }
-	    return false;
+		}
+		return false;
 	});
 
 	$('#play_cards').click(function(){

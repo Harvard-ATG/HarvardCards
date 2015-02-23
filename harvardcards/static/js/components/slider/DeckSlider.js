@@ -197,8 +197,9 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
         var card = this.findByCardId(this.getCurrentCardId());
 		return card.data('card-num');
 	};
+
 	DeckSlider.prototype.getCurrentCardIndex = function() {
-        var card = this.getIndexOfCard(this.getCurrentCardId());
+		var card = this.getIndexOfCard(this.getCurrentCardId());
 		return card+1;
 	};
 
@@ -265,7 +266,7 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 		var random_index = -1;
 
 		while (child.length) {
-            random_index = Math.floor(Math.random() *  child.length);
+			random_index = Math.floor(Math.random() *  child.length);
 			this.card_ids.push(this.card_ids.splice(random_index, 1)[0]);
 			cards.append(child.splice(random_index, 1));
 		}
@@ -273,17 +274,18 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 		this.trigger("shuffle");
 	};
 
-    DeckSlider.prototype.reset = function(){
+	DeckSlider.prototype.reset = function(){
 		var $cards  = $(this.el).find("ul#cards");
 
-        $cards.find('.card').sort(function (a, b) {
-            return +a.getAttribute('data-card-num') - +b.getAttribute('data-card-num');
-        })
-        .appendTo( $cards );
-        this.card_ids = this.card_ids.sort(function(a, b){return a-b});
+		$cards.find('.card').sort(function (a, b) {
+			return +a.getAttribute('data-card-num') - +b.getAttribute('data-card-num');
+		})
+		.appendTo( $cards );
+		this.card_ids = this.card_ids.sort(function(a, b){return a-b});
 		this.loaded = {};
 		this.trigger("shuffle");
     }
+
 	// Plays the slider (i.e. auto-advance to the next card).
 	DeckSlider.prototype.play = function(doneCallback) {
 		this._playIntervalId = window.setInterval(this._play(doneCallback), this.playbackDelay);
