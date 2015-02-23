@@ -28,7 +28,7 @@ function initModule() {
 		el: $("#counter"),
 		slider: deck_slider,
 		update: function() {
-			var current = this.slider.getCurrentCardNum();
+			var current = this.slider.getCurrentCardIndex();
 			var total = this.slider.getNumItems();
 			this.el.html(current + " / " + total);
 		}
@@ -137,9 +137,22 @@ function initModule() {
 
 	// http://standardofnorms.wordpress.com/2012/04/08/shuffling-all-the-children-of-a-parent-element-in-javascript/
 	$('#shuffle_cards').click(function() {
-		deck_slider.shuffle();
-		deck_slider.goToFirst();
-	    return false;
+	    var shuffleText = 'Shuffle';
+	    var resetText = 'Reset';
+
+		if ($("#shuffle_cards .control-text").text() == shuffleText){
+			deck_slider.shuffle();
+			deck_slider.goToFirst();
+			$("#shuffle_cards .control-text").text(resetText);
+			$("#shuffle").removeClass('fa-random').addClass('fa-refresh');
+
+		} else {
+			deck_slider.reset();
+			deck_slider.goToFirst();
+			$("#shuffle_cards .control-text").text(shuffleText);
+			$("#shuffle").removeClass('fa-refresh').addClass('fa-random');
+		}
+		return false;
 	});
 
 	$('#play_cards').click(function(){
