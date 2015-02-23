@@ -265,7 +265,7 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 		var random_index = -1;
 
 		while (child.length) {
-            random_index = Math.floor(Math.random() *  child.length);
+			random_index = Math.floor(Math.random() *  child.length);
 			this.card_ids.push(this.card_ids.splice(random_index, 1)[0]);
 			cards.append(child.splice(random_index, 1));
 		}
