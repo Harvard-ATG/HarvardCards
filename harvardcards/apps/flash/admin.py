@@ -1,6 +1,19 @@
 from django.contrib import admin
 from harvardcards.apps.flash.models import *
 from django.contrib.auth.models import User
+from django.contrib.auth.admin import UserAdmin
+
+class UserAdminCustom(UserAdmin):
+    list_display = ( UserAdmin.list_display[0], 'num_collections', UserAdmin.list_display[-1])
+    def num_collections(self, obj):
+        return Users_Collections.objects.filter(user=obj).count()
+
+    def queryset(self, request):
+        return User.objects.extra(
+            select={'num_collections': "select count(*) from flash_users_collections where flash_users_collections.user_id = auth_user.id"},
+            )
+    num_collections.admin_order_field = 'num_collections'
+    num_collections.short_description = 'Number of Collections'
 
 class CardsInLine(admin.StackedInline):
     verbose_name = "Card's fields"
@@ -51,6 +64,8 @@ class ClonedAdmin(admin.ModelAdmin):
 class MediaStoreAdmin(admin.ModelAdmin):
     list_display = ('id', 'file_name', 'file_md5hash', 'file_type', 'file_size', 'store_created', 'store_updated', 'reference_count')
 
+admin.site.unregister(User)
+admin.site.register(User, UserAdminCustom)
 admin.site.register(Collection, CollectionAdmin)
 admin.site.register(Field)
 admin.site.register(Card, CardAdmin)
