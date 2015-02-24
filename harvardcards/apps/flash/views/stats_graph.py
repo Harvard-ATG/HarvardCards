@@ -1,20 +1,9 @@
 from django.http import HttpResponse
-from django.template import RequestContext, loader
-from django.views.decorators.http import require_http_methods
-from django.shortcuts import render, redirect
-from django.core.context_processors import csrf
-from django.forms import widgets
-
-from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Users_Collections, User
-from harvardcards.apps.flash.forms import DeckImportForm
-from harvardcards.apps.flash.decorators import check_role
-from harvardcards.apps.flash.lti_service import LTIService
-from harvardcards.apps.flash import services, queries, analytics
+from django.shortcuts import render
 from django.contrib.auth.decorators import user_passes_test
 
-import PIL
-import PIL.Image
-import StringIO
+from harvardcards.apps.flash.models import Collection, Users_Collections, User
+
 from matplotlib import pylab
 from pylab import *
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
