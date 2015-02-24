@@ -33,7 +33,7 @@ def initialize_graph():
 def graph_collections(request):
     objects = Users_Collections.objects.all().values()
     objects = map(lambda o: o['user_id'], objects)
-    users = map(lambda u: u['id'], User.objects.all().values('id'))
+    users = User.objects.all().values_list('id', flat=True)
     x = map(lambda u: objects.count(u), users)
 
 
@@ -52,7 +52,7 @@ def graph_collections(request):
 
 @user_passes_test(lambda u: u.is_superuser or u.is_staff)
 def graph_users(request):
-    regs =  map(lambda u: u['date_joined'], User.objects.all().values('date_joined'))
+    regs =  User.objects.all().values_list('date_joined', flat=True)
     min_date, max_date = min(regs).date(), max(regs).date()
     num_days = (max_date - min_date).days + 1
     date_list = [min_date + datetime.timedelta(days=x) for x in range(0, num_days)]
