@@ -1,0 +1,21 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% block title %}{{ title }} | {% trans 'Flashcards' %}{% endblock %}
+
+{% block branding %}
+    <h1 id="site-name">{% trans 'Flashcards' %}</h1>
+{% endblock %}
+
+{% block nav-global %}
+    <style type="text/css">
+      .btn
+      {
+        font-size:120%;
+        padding-right:14px;
+      }
+    </style>
+    <div style="padding:4px 14px 4px 10px;">
+        <a class="btn" href="../stats_graphs">Analytics Graphs</a>
+    </div>
+{% endblock %}
