@@ -9,13 +9,37 @@
 
 {% block nav-global %}
     <style type="text/css">
-      .btn
-      {
-        font-size:120%;
-        padding-right:14px;
-      }
+        #quicklinks {
+            border-top: 1px solid #fff;
+            color: #ffc;
+            padding: 10px 0;
+            margin: 0 8px 8px 8px;
+            font-size: 120%;
+        }
+        ul.quicklinks {
+            padding: 4px 10px;
+            margin: 0;
+        }
+        ul.quicklinks li {
+            float: left;
+            margin: 0 10px;
+            list-style-type: none;
+        }
+        .btn {
+            padding:5px;
+            color: #fff;
+            font-size: 110%;
+        }
+        .btn:hover {
+            color: #000;
+        }
     </style>
-    <div style="padding:4px 14px 4px 10px;">
-        <a class="btn" href="../stats_graphs">Analytics Graphs</a>
+
+    <div id="quicklinks">
+    Quick Links: 
+    <ul class="quicklinks">
+        <li><a class="btn" href="{% url 'stats_graphs' %}">Analytics Graphs</a></li>
+        <li><a class="btn" href="{% url 'lti-tool-config' %}">LTI Config</a></li>
+    </ul>
     </div>
 {% endblock %}
