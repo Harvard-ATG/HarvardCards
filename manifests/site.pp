@@ -20,7 +20,7 @@ class init {
 
 	# install some system dependencies
 	package {
-		["python", "python-dev", "python-pip", "python-setuptools", "python-mysqldb", "mysql-server", "mysql-client", "libxml2-dev", "libxslt1-dev"]:
+		["python", "python-dev", "python-pip", "python-setuptools", "python-mysqldb", "mysql-server", "mysql-client", "libxml2-dev", "libxslt1-dev", "libpng-dev", "g++"/]:
 		ensure => installed,
 		require => Exec['update-apt']
 	}
