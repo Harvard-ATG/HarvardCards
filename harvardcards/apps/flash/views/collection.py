@@ -25,12 +25,19 @@ def index(request, collection_id=None):
     """Displays a set of collections to the user depending on whether 
     or not the collections are private or public and whether or not the 
     user has permission."""
+    def add_all_card_deck(collection):
+        decks = collection['decks']
+        num_cards = sum(map(lambda d: d['num_cards'], decks))
+        collection['decks'] = [{'title': 'All Cards', 'id':-collection['id'], 'num_cards': num_cards}] + collection['decks']
+        return collection
 
     role_bucket = services.get_or_update_role_bucket(request)
     canvas_course_collections = LTIService(request).getCourseCollections()
     copy_collections = queries.getCopyCollectionList(request.user)
     collection_filters = dict(collection_ids=canvas_course_collections, can_filter=not queries.is_superuser_or_staff(request.user))
     collection_list = queries.getCollectionList(role_bucket, **collection_filters)
+    collection_list_1 = map(lambda c: add_all_card_deck(c), collection_list)
+    print collection_list_1
     active_collection = None
     display_collections = collection_list
     

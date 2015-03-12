@@ -13,13 +13,7 @@ from harvardcards.apps.flash import services, queries, analytics
 import logging
 log = logging.getLogger(__name__)
 
-
-def index(request, deck_id=None):
-    """Displays the deck of cards for review/quiz."""
-
-    deck = Deck.objects.get(id=deck_id)
-    deck_cards = Decks_Cards.objects.filter(deck=deck).order_by('sort_order').prefetch_related('card__cards_fields_set__field')
-    current_collection = deck.collection 
+def deck_view_helper(request, current_collection, deck_cards):
 
     role_bucket = services.get_or_update_role_bucket(request)
     canvas_course_collections = LTIService(request).getCourseCollections()
@@ -28,7 +22,6 @@ def index(request, deck_id=None):
     is_quiz_mode = request.GET.get('mode') == 'quiz'
     is_deck_admin = current_collection.id in role_bucket['ADMINISTRATOR']
     card_id = request.GET.get('card_id', '')
-
     cards = []
     for dcard in deck_cards:
         card_fields = {'show':[],'reveal':[]}
@@ -48,6 +41,16 @@ def index(request, deck_id=None):
             'color': dcard.card.color,
             'fields': card_fields
             })
+    return [cards, collection_list, is_quiz_mode, is_deck_admin, card_id]
+
+
+def index(request, deck_id=None):
+    """Displays the deck of cards for review/quiz."""
+
+    deck = Deck.objects.get(id=deck_id)
+    deck_cards = Decks_Cards.objects.filter(deck=deck).order_by('sort_order').prefetch_related('card__cards_fields_set__field')
+    current_collection = deck.collection
+    [cards, collection_list, is_quiz_mode, is_deck_admin, card_id] = deck_view_helper(request, current_collection, deck_cards)
 
     context = {  
         "collection": current_collection,
@@ -65,6 +68,28 @@ def index(request, deck_id=None):
         object=analytics.OBJECTS.deck,
         context={"deck_id": deck_id},
     )
+    return render(request, "deck_view.html", context)
+
+def all_cards(request, collection_id):
+    collection_id = int(collection_id)
+    decks = queries.getDecksByCollection(collection_ids = [collection_id])
+    decks = decks[collection_id]
+    current_collection = Collection.objects.get(id=collection_id)
+
+    deck_cards = []
+    for deck in decks:
+        deck_cards += Decks_Cards.objects.filter(deck=deck).order_by('sort_order').prefetch_related('card__cards_fields_set__field')
+    [cards, collection_list, is_quiz_mode, is_deck_admin, card_id] = deck_view_helper(request, current_collection, deck_cards)
+    context = {
+        "collection": current_collection,
+        "nav_collections": collection_list,
+        "deck": {'id': -collection_id, 'title': 'All Cards'},
+        "cards": cards,
+        "is_quiz_mode": is_quiz_mode,
+        "is_deck_admin": is_deck_admin,
+        "card_id": card_id,
+    }
+
     return render(request, "deck_view.html", context)
 
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')
