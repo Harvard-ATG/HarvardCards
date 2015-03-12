@@ -30,13 +30,33 @@
             </li>
         </ul>
         <div class="clear"></div>
+
+        {% if display_collections|length > 1 %}
+        <div class="courseHeader"><h3>Course Collections</h3></div>
         <ul class="accordion" style="margin-top: .5em">
-        {% for collection in display_collections %}
+        {% for collection in display_collections.Public %}
             <li>
             {% include "_collection_view.html" with collection=collection user_collection_role=user_collection_role %}
             </li>
         {% endfor %}
         </ul>
+        <div class="courseHeader"><h3>Private Collections</h3></div>
+        <ul class="accordion" style="margin-top: .5em">
+        {% for collection in display_collections.Private %}
+            <li>
+            {% include "_collection_view.html" with collection=collection user_collection_role=user_collection_role %}
+            </li>
+        {% endfor %}
+        </ul>
+
+        {% else %}
+        <ul class="accordion" style="margin-top: .5em">
+            <li>
+            {% include "_collection_view.html" with collection=display_collections.0 user_collection_role=user_collection_role %}
+            </li>
+        </ul>
+        {% endif %}
+
     {% endif %}
 </div>
 
