@@ -24,6 +24,7 @@ class init {
 		ensure => installed,
 		require => Exec['update-apt']
 	}
+
 }
 
 class djangoapp {
@@ -43,12 +44,24 @@ class djangoapp {
 		require => Exec['update-apt']
 	}
 
+	# install dependencies needed for matplotlib (python 2d plotting module)
+	# http://matplotlib.org/
+	package {
+		["libpng-dev", "g++"]:
+		ensure => installed,
+		require => Exec['update-apt']
+	}
+  exec { "distribute":
+		command => "sudo easy_install -U distribute",
+    require => Exec['update-apt']
+	}
+
 	# install project dependencies
 	exec { "pip-install-requirements":
 		command => "sudo /usr/bin/pip install -r $PROJ_DIR/requirements.txt",
 		tries => 2,
 		timeout => 600,
-		require => Package['python-pip', 'python-dev'],
+		require => [Package['python-pip', 'python-dev', 'libpng-dev', 'g++'], Exec['distribute']],
 		logoutput => true,
 	}
 
@@ -57,6 +70,7 @@ class djangoapp {
 		command => "mysql -u root -e \"CREATE DATABASE IF NOT EXISTS $DB_NAME CHARACTER SET utf8 COLLATE utf8_general_ci; GRANT ALL ON $DB_NAME.* TO '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS'; FLUSH PRIVILEGES;\"",
 		cwd => "$PROJ_DIR",
 		logoutput => true,
+    require => Package["mysql-server", "mysql-client"]
 	}
 
 	# setup mysql config file
