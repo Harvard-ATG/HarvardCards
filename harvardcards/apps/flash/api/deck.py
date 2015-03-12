@@ -6,7 +6,6 @@ from harvardcards.apps.flash.models import Collection, Deck, Users_Collections
 from harvardcards.apps.flash.forms import DeckForm
 from harvardcards.apps.flash.decorators import check_role
 from harvardcards.apps.flash import queries 
-import os
 import json
 
 @require_http_methods(["POST"])
