@@ -89,7 +89,12 @@ def all_cards(request, collection_id):
         "is_deck_admin": is_deck_admin,
         "card_id": card_id,
     }
-
+    analytics.track(
+        actor=request.user,
+        verb=analytics.VERBS.viewed,
+        object=analytics.OBJECTS.deck,
+        context={"collection_id": collection_id, 'type': 'All Cards Deck'},
+    )
     return render(request, "deck_view.html", context)
 
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')
