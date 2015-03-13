@@ -42,12 +42,14 @@ def getCollectionList(role_bucket, **kwargs):
 
     can_filter = kwargs.get('can_filter', True)
     collection_ids = kwargs.get('collection_ids', [])
-
     log.debug("role_bucket = %s collection_ids = %s can_filter= %s " % (role_bucket, collection_ids, can_filter))
     
     collections = Collection.objects.all()
+
+    course_ids = get_course_collection_ids()
     if can_filter:
-        collections = collections.filter(id__in=collection_ids)
+        other_course_collections = [c for c in course_ids if c not in collection_ids]
+        collections = collections.exclude(id__in=other_course_collections)
 
     decks_by_collection = getDecksByCollection(**kwargs)
 

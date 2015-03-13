@@ -98,6 +98,7 @@ def custom_create(request):
         else:
             try:
                 deck = services.handle_custom_file(request.FILES['file'], course_name, request.user)
+
                 LTIService(request).associateCanvasCourse(deck.collection.id)
                 log.info('Custom deck %(d)s successfully added to the new collection %(c)s.'
                          %{'c': str(deck.collection.id), 'd':str(deck.id)}, extra=d)
@@ -127,7 +128,6 @@ def custom_create(request):
 @login_required
 def create(request):
     """Creates a collection."""
-
     role_bucket = services.get_or_update_role_bucket(request)
     canvas_course_collections = LTIService(request).getCourseCollections()
     collection_list = queries.getCollectionList(role_bucket, collection_ids=canvas_course_collections)
@@ -138,6 +138,7 @@ def create(request):
         if collection_form.is_valid():
             collection = collection_form.save()
             LTIService(request).associateCanvasCourse(collection.id)
+
             services.add_user_to_collection(user=request.user, collection=collection, role=Users_Collections.ADMINISTRATOR)
             #update role_bucket to add admin permission to the user for this newly created collection
             services.get_or_update_role_bucket(request, collection.id, Users_Collections.role_map[Users_Collections.ADMINISTRATOR])
