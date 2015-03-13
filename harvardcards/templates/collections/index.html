@@ -23,6 +23,16 @@
     {% if display_collections|length > 0 %}
         <ul class="adminMenu adminMenuRight">
             <li>
+                <div class="form-input">
+                <select id="collection_type" name="collection_type">
+                <option value="">---------</option>
+                <option value="1" selected="selected">All Collections</option>
+                <option value="2">Course Collections Only</option>
+                <option value="3">My Private Collections Only</option>
+                </select>
+                </div>
+            </li>
+            <li>
                 <button type="button" class="adminMenuBtn" id="expandCollapseAllBtn"><i class="plusminus fa fa-plus-circle"></i> <span>Expand All</span></button>
             </li>
             <li>
@@ -30,13 +40,37 @@
             </li>
         </ul>
         <div class="clear"></div>
+
+        {% if display_collections|length > 1 %}
+        <div id="course_coll">
+            <div class="courseHeader"><h3>Course Collections</h3></div>
+            <ul class="accordion" style="margin-top: .5em">
+            {% for collection in display_collections.Public %}
+                <li>
+                {% include "_collection_view.html" with collection=collection user_collection_role=user_collection_role %}
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+        <div id="private_coll">
+            <div class="courseHeader"><h3>Private Collections</h3></div>
+            <ul class="accordion" style="margin-top: .5em">
+            {% for collection in display_collections.Private %}
+                <li>
+                {% include "_collection_view.html" with collection=collection user_collection_role=user_collection_role %}
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+
+        {% else %}
         <ul class="accordion" style="margin-top: .5em">
-        {% for collection in display_collections %}
             <li>
-            {% include "_collection_view.html" with collection=collection user_collection_role=user_collection_role %}
+            {% include "_collection_view.html" with collection=display_collections.0 user_collection_role=user_collection_role %}
             </li>
-        {% endfor %}
         </ul>
+        {% endif %}
+
     {% endif %}
 </div>
 

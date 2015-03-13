@@ -41,8 +41,8 @@ class LTIService:
         '''
         role_set = set(self.getLTILaunchParam('roles', []))
         teaching_staff = set([const.ADMINISTRATOR, const.TEACHING_ASSISTANT, const.INSTRUCTOR])
-        role_set.intersection(teaching_staff)
-        return len(role_set) > 0
+        is_teacher = len(role_set.intersection(teaching_staff)) > 0
+        return is_teacher
 
     def canvasCourseExists(self):
         '''Returns True if the canvas course exists, otherwise False.'''
@@ -82,8 +82,9 @@ class LTIService:
         collections. This flag is used to automatically subscribe students to collections created by 
         instructors for the course.
         '''
-
         if not self.isLTILaunch():
+            return False
+        if not self.hasTeachingStaffRole():
             return False
 
         canvas_course_id = self.getCanvasCourseId()
