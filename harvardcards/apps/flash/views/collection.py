@@ -11,7 +11,7 @@ from django.views.decorators.http import require_http_methods
 from django.db.models import Q
 from django.forms.formsets import formset_factory
 
-from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field, CardTemplate
+from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field, CardTemplate, Canvas_Course_Map
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm, CollectionShareForm
 from harvardcards.apps.flash.decorators import check_role
 from harvardcards.apps.flash.lti_service import LTIService
@@ -31,9 +31,27 @@ def index(request, collection_id=None):
     copy_collections = queries.getCopyCollectionList(request.user)
     collection_filters = dict(collection_ids=canvas_course_collections, can_filter=not queries.is_superuser_or_staff(request.user))
     collection_list = queries.getCollectionList(role_bucket, **collection_filters)
+
     active_collection = None
     display_collections = collection_list
-    
+
+    display_collections_1 = {'Private': [], 'Public': []}
+    course_ids = queries.get_course_collection_ids()
+    for collection in display_collections:
+        id = collection['id']
+        if id in course_ids:
+            display_collections_1['Public'].append(collection)
+        else:
+            display_collections_1['Private'].append(collection)
+
+    context = {
+        "nav_collections": collection_list,
+        "display_collections": display_collections_1,
+        "copy_collections": copy_collections,
+        "active_collection": active_collection,
+        "user_collection_role": role_bucket,
+    }
+
     if collection_id:
         try:
             cur_collection = Collection.objects.get(id=collection_id)
@@ -44,14 +62,7 @@ def index(request, collection_id=None):
             raise Http404
         else:
             active_collection = display_collections[0]
-
-    context = {
-        "nav_collections": collection_list,
-        "display_collections": display_collections,
-        "copy_collections": copy_collections,
-        "active_collection": active_collection,
-        "user_collection_role": role_bucket,
-    }
+        context['display_collections'] = display_collections
 
     analytics.track(
         actor=request.user, 
@@ -87,6 +98,7 @@ def custom_create(request):
         else:
             try:
                 deck = services.handle_custom_file(request.FILES['file'], course_name, request.user)
+
                 LTIService(request).associateCanvasCourse(deck.collection.id)
                 log.info('Custom deck %(d)s successfully added to the new collection %(c)s.'
                          %{'c': str(deck.collection.id), 'd':str(deck.id)}, extra=d)
@@ -116,7 +128,6 @@ def custom_create(request):
 @login_required
 def create(request):
     """Creates a collection."""
-
     role_bucket = services.get_or_update_role_bucket(request)
     canvas_course_collections = LTIService(request).getCourseCollections()
     collection_list = queries.getCollectionList(role_bucket, collection_ids=canvas_course_collections)
@@ -127,6 +138,7 @@ def create(request):
         if collection_form.is_valid():
             collection = collection_form.save()
             LTIService(request).associateCanvasCourse(collection.id)
+
             services.add_user_to_collection(user=request.user, collection=collection, role=Users_Collections.ADMINISTRATOR)
             #update role_bucket to add admin permission to the user for this newly created collection
             services.get_or_update_role_bucket(request, collection.id, Users_Collections.role_map[Users_Collections.ADMINISTRATOR])
