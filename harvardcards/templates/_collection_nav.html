@@ -17,7 +17,7 @@
                         <ul>
                             {% for d in c.decks %}
                                 {% if d.id < 0 %}
-                                <li><a href="{% url 'allCards' d.id|stringformat:'+d'|slice:'1:' %}{% if is_quiz_mode %}?mode=quiz{% endif %}" class="{% if d.id == active_deck.id %}active{% endif %}" data-deck-id="{{d.id}}">{{ d.title|truncatechars:30}}</a></li>
+                                <li><a href="{% url 'allCards' c.id %}{% if is_quiz_mode %}?mode=quiz{% endif %}" class="{% if d.id == active_deck.id %}active{% endif %}" data-deck-id="{{d.id}}">{{ d.title|truncatechars:30}}</a></li>
                                 {% else %}
                                 <li><a href="{% url 'deckIndex' d.id %}{% if is_quiz_mode %}?mode=quiz{% endif %}" class="{% if d.id == active_deck.id %}active{% endif %}" data-deck-id="{{d.id}}">{{ d.title|truncatechars:30}}</a></li>
                                 {% endif %}

@@ -28,7 +28,8 @@ def index(request, collection_id=None):
     def add_all_card_deck(collection):
         decks = collection['decks']
         num_cards = sum(map(lambda d: d['num_cards'], decks))
-        collection['decks'] = [{'title': 'All Cards', 'id':-collection['id'], 'num_cards': num_cards}] + collection['decks']
+        if num_cards:
+            collection['decks'] = [{'title': 'All Cards', 'id':-collection['id'], 'num_cards': num_cards}] + collection['decks']
         return collection
 
     role_bucket = services.get_or_update_role_bucket(request)
