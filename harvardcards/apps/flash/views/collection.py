@@ -63,8 +63,6 @@ def index(request, collection_id=None):
         else:
             active_collection = display_collections[0]
         context['display_collections'] = display_collections
-        print display_collections
-
 
     analytics.track(
         actor=request.user, 
