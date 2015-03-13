@@ -36,8 +36,7 @@ def index(request, collection_id=None):
     copy_collections = queries.getCopyCollectionList(request.user)
     collection_filters = dict(collection_ids=canvas_course_collections, can_filter=not queries.is_superuser_or_staff(request.user))
     collection_list = queries.getCollectionList(role_bucket, **collection_filters)
-    collection_list_1 = map(lambda c: add_all_card_deck(c), collection_list)
-    print collection_list_1
+    collection_list = map(lambda c: add_all_card_deck(c), collection_list)
     active_collection = None
     display_collections = collection_list
     
