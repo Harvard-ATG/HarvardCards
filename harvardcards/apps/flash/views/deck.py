@@ -236,9 +236,9 @@ def create_edit_card(request, deck_id=None):
     card_fields = {'show':[], 'reveal':[]}
     for field in field_list:
         card_fields[field['bucket']].append(field)
-    all_cards = request.GET.get('all_cards', 0)
+    is_all_cards = request.GET.get('is_all_cards', 0)
     context = {
-        "all_cards": int(all_cards),
+        "is_all_cards": int(is_all_cards),
         "deck": deck,
         "card_id": card_id if card_id else '',
         "collection": current_collection,
@@ -256,7 +256,7 @@ def edit_card_collection(request, collection_id=None):
     card_id = request.GET.get('card_id', '')
     deck_id = queries.getDeckIdCard(card_id, collection_id)
     response = redirect('deckEditCard', deck_id)
-    response['Location'] += '?card_id=%(c)s&deck_id=%(d)s&all_cards=%(a)s' % {'c':card_id, 'd':deck_id, 'a':1}
+    response['Location'] += '?card_id=%(c)s&deck_id=%(d)s&is_all_cards=%(a)s' % {'c':card_id, 'd':deck_id, 'a':1}
     return response
 
 

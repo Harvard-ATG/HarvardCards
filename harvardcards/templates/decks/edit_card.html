@@ -16,7 +16,7 @@
         <div class="courseHeader">
             <h2>Edit card</h2>
         </div>
-        <form id="cardForm" action="{% url 'apiCardEdit' %}?all_cards={{all_cards}}&deck_id={{deck.id}}" method="post" enctype="multipart/form-data">
+        <form id="cardForm" action="{% url 'apiCardEdit' %}?is_all_cards={{is_all_cards}}&deck_id={{deck.id}}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="hidden" name="card_id" value="{{card_id}}" />
             <input type="hidden" name="deck_id" value="{{deck.id}}" />
@@ -26,7 +26,7 @@
             {% include "decks/_deck_card_form.html" with card_fields=card_fields %}
 
             <input class="adminMenuBtn saveBtn" type="submit" value="Submit" />
-            {% if all_cards == 1 %}
+            {% if is_all_cards == 1 %}
             <a href="{% url 'allCards' deck.collection.id %}?card_id={{card_id}}" class="adminMenuBtn cancelBtn">Cancel</a>
             {% else %}
             <a href="{% url 'deckIndex' deck.id %}?card_id={{card_id}}" class="adminMenuBtn cancelBtn">Cancel</a>
