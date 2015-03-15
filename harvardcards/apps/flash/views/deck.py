@@ -248,26 +248,35 @@ def create_edit_card(request, deck_id=None):
     
     return render(request, 'decks/edit_card.html', context)
 
+def log_analytics_delete(success, entity_type, entity_id, card_id, user):
+    d = {'user': user}
+    if success:
+        log.info('Card deleted from the %(t) %(id)s' %{'t': entity_type, 'id': str(entity_id)}, extra=d)
+    else:
+        log.error('Card could not be deleted from the %(t) %(id)s' %{'t': entity_type, 'id': str(entity_id)}, extra=d)
+
+    analytics.track(
+        actor=user,
+        verb=analytics.VERBS.deleted,
+        object=analytics.OBJECTS.card,
+        context={entity_type+"_id": entity_id, "card_id": card_id}
+    )
+
+
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')  
 def delete_card(request, deck_id=None):
     """Deletes a card."""
-
-    d = {'user': request.user}
     deck = Deck.objects.get(id=deck_id)
     card_id = request.GET.get('card_id', None)
-    if queries.isCardInDeck(card_id, deck_id):
-        success = services.delete_card(card_id)
-
-    if success:
-        log.info('Card deleted from the deck %s' %str(deck.id), extra=d)
-    else:
-        log.error('Card could not be deleted from the deck %s' %str(deck.id), extra=d)
-
-    analytics.track(
-        actor=request.user, 
-        verb=analytics.VERBS.deleted, 
-        object=analytics.OBJECTS.card,
-        context={"deck_id": deck_id, "card_id": card_id}
-    )
-
+    success = services.check_delete_card(card_id, [deck_id])
+    log_analytics_delete(success, 'deck', deck_id, card_id, request.user)
     return redirect(deck)
+
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'collection')
+def delete_card_collection(request, collection_id=None):
+    """Deletes a card."""
+    deck_ids = queries.getDeckIds(collection_id)
+    card_id = request.GET.get('card_id', None)
+    success = services.check_delete_card(card_id, deck_ids)
+    log_analytics_delete(success, 'collection', collection_id, card_id, request.user)
+    return redirect('allCards', collection_id=collection_id)

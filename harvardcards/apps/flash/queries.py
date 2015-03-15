@@ -149,6 +149,11 @@ def getDeckCardsList(deck_id):
 
     return card_list
 
+def getDeckIds(collection_id):
+    decks = Deck.objects.filter(collection=collection_id)
+    deck_ids = map(lambda d: d.id, decks) if len(decks) else []
+    return deck_ids
+
 def isCardInDeck(card_id, deck_id):
     if Decks_Cards.objects.filter(card=card_id, deck=deck_id):
         return True
