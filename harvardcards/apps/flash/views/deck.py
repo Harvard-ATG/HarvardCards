@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
@@ -236,8 +236,9 @@ def create_edit_card(request, deck_id=None):
     card_fields = {'show':[], 'reveal':[]}
     for field in field_list:
         card_fields[field['bucket']].append(field)
-
+    all_cards = request.GET.get('all_cards', 0)
     context = {
+        "all_cards": int(all_cards),
         "deck": deck,
         "card_id": card_id if card_id else '',
         "collection": current_collection,
@@ -245,8 +246,19 @@ def create_edit_card(request, deck_id=None):
         "card_fields": card_fields,
         "card_color_select":  card_color_select.render("card_color", card_color)
     }
-    
+
     return render(request, 'decks/edit_card.html', context)
+
+
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'collection')
+def edit_card_collection(request, collection_id=None):
+    collection_id = Collection.objects.get(id=collection_id)
+    card_id = request.GET.get('card_id', '')
+    deck_id = queries.getDeckIdCard(card_id, collection_id)
+    response = redirect('deckEditCard', deck_id)
+    response['Location'] += '?card_id=%(c)s&deck_id=%(d)s&all_cards=%(a)s' % {'c':card_id, 'd':deck_id, 'a':1}
+    return response
+
 
 def log_analytics_delete(success, entity_type, entity_id, card_id, user):
     d = {'user': user}

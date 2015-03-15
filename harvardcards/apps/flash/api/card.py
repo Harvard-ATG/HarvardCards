@@ -38,9 +38,15 @@ def edit(request):
         card = card_edit_form.get_card()
         deck = card_edit_form.get_deck()
         result['success'] = True
+        all_cards = request.GET.get('all_cards', 0)
+        if int(all_cards):
+            base_url = deck.collection.get_all_cards_url()
+        else:
+            base_url = deck.get_absolute_url()
+
         result['data'] = {
             "card_id": card.id,
-            "card_url": "{0}?card_id={1}".format(deck.get_absolute_url(), card.id)
+            "card_url": "{0}?card_id={1}".format(base_url, card.id)
         }
     else:
         card_edit_form.get_card().delete()

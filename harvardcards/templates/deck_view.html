@@ -114,7 +114,7 @@
                 {% else %}
                     <div class="controls hide hidden-mobile" data-card-id="{{card.card_id}}">
                         <a class="pull-right adminMenuBtn" href="{% url "collectionDeleteCard" collection.id %}?card_id={{card.card_id}}&collection_id={{collection.id}}" data-confirm="Are you sure you want to delete this card?"><i class="fa fa-times-circle"></i> Delete Card</a>
-                        <a class="pull-right adminMenuBtn" href="{% url "deckEditCard" collection.id %}?card_id={{card.card_id}}&deck_id={{deck.id}}"><i class="fa fa-pencil"></i> Edit Card</a>
+                        <a class="pull-right adminMenuBtn" href="{% url "collectionEditCard" collection.id %}?card_id={{card.card_id}}&collection_id={{collection.id}}"><i class="fa fa-pencil"></i> Edit Card</a>
                     </div>
                 {% endif %}
                 {% endif %}
