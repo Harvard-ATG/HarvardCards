@@ -26,7 +26,7 @@
         <!-- SECTION: Header -->
         <div class="courseHeader">
             {% if is_deck_admin %}
-                <h3 data-editable="yes" data-editable-id="{{deck.id}}" title="Click to edit...">{{deck.title}}</h3><i style="margin-left: 5px" class="fa fa-pencil"></i>
+                <h3 data-editable="{% if deck.id > -1 %}yes{% else %}no{% endif %}" data-editable-id="{{deck.id}}" title="Click to edit...">{{deck.title}}</h3><i style="margin-left: 5px;{% if deck.id < 0 %}display:none;{% endif %}" class="fa fa-pencil"></i>
             {% else %}
                 {{deck.title}}
             {% endif %}
