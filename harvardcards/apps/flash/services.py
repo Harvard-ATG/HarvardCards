@@ -51,6 +51,16 @@ def delete_card(card_id):
         return True
     return False
 
+def check_delete_card(card_id, deck_ids):
+    """Checks if card is in one of the decks and deletes it"""
+    success = False
+    for deck_id in deck_ids:
+        if success:
+            break
+        if queries.isCardInDeck(card_id, deck_id):
+            success = delete_card(card_id)
+    return success
+
 def valid_image_file_type(file_path):
     """Returns true if the given file is a valid image type."""
     try:

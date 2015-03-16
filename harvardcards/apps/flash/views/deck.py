@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
@@ -13,13 +13,7 @@ from harvardcards.apps.flash import services, queries, analytics
 import logging
 log = logging.getLogger(__name__)
 
-
-def index(request, deck_id=None):
-    """Displays the deck of cards for review/quiz."""
-
-    deck = Deck.objects.get(id=deck_id)
-    deck_cards = Decks_Cards.objects.filter(deck=deck).order_by('sort_order').prefetch_related('card__cards_fields_set__field')
-    current_collection = deck.collection 
+def deck_view_helper(request, current_collection, deck_cards):
 
     role_bucket = services.get_or_update_role_bucket(request)
     canvas_course_collections = LTIService(request).getCourseCollections()
@@ -28,7 +22,6 @@ def index(request, deck_id=None):
     is_quiz_mode = request.GET.get('mode') == 'quiz'
     is_deck_admin = current_collection.id in role_bucket['ADMINISTRATOR']
     card_id = request.GET.get('card_id', '')
-
     cards = []
     for dcard in deck_cards:
         card_fields = {'show':[],'reveal':[]}
@@ -48,6 +41,16 @@ def index(request, deck_id=None):
             'color': dcard.card.color,
             'fields': card_fields
             })
+    return [cards, collection_list, is_quiz_mode, is_deck_admin, card_id]
+
+
+def index(request, deck_id=None):
+    """Displays the deck of cards for review/quiz."""
+
+    deck = Deck.objects.get(id=deck_id)
+    deck_cards = Decks_Cards.objects.filter(deck=deck).order_by('sort_order').prefetch_related('card__cards_fields_set__field')
+    current_collection = deck.collection
+    [cards, collection_list, is_quiz_mode, is_deck_admin, card_id] = deck_view_helper(request, current_collection, deck_cards)
 
     context = {  
         "collection": current_collection,
@@ -64,6 +67,33 @@ def index(request, deck_id=None):
         verb=analytics.VERBS.viewed,
         object=analytics.OBJECTS.deck,
         context={"deck_id": deck_id},
+    )
+    return render(request, "deck_view.html", context)
+
+def all_cards(request, collection_id):
+    collection_id = int(collection_id)
+    decks = queries.getDecksByCollection(collection_ids = [collection_id])
+    decks = decks[collection_id]
+    current_collection = Collection.objects.get(id=collection_id)
+
+    deck_cards = []
+    for deck in decks:
+        deck_cards += Decks_Cards.objects.filter(deck=deck).order_by('sort_order').prefetch_related('card__cards_fields_set__field')
+    [cards, collection_list, is_quiz_mode, is_deck_admin, card_id] = deck_view_helper(request, current_collection, deck_cards)
+    context = {
+        "collection": current_collection,
+        "nav_collections": collection_list,
+        "deck": {'id': -collection_id, 'title': 'All Cards'},
+        "cards": cards,
+        "is_quiz_mode": is_quiz_mode,
+        "is_deck_admin": is_deck_admin,
+        "card_id": card_id,
+    }
+    analytics.track(
+        actor=request.user,
+        verb=analytics.VERBS.viewed,
+        object=analytics.OBJECTS.deck,
+        context={"collection_id": collection_id, 'type': 'All Cards Deck'},
     )
     return render(request, "deck_view.html", context)
 
@@ -206,8 +236,9 @@ def create_edit_card(request, deck_id=None):
     card_fields = {'show':[], 'reveal':[]}
     for field in field_list:
         card_fields[field['bucket']].append(field)
-
+    is_all_cards = request.GET.get('is_all_cards', 0)
     context = {
+        "is_all_cards": int(is_all_cards),
         "deck": deck,
         "card_id": card_id if card_id else '',
         "collection": current_collection,
@@ -215,29 +246,49 @@ def create_edit_card(request, deck_id=None):
         "card_fields": card_fields,
         "card_color_select":  card_color_select.render("card_color", card_color)
     }
-    
+
     return render(request, 'decks/edit_card.html', context)
+
+
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'collection')
+def edit_card_collection(request, collection_id=None):
+    collection_id = Collection.objects.get(id=collection_id)
+    card_id = request.GET.get('card_id', '')
+    deck_id = queries.getDeckIdCard(card_id, collection_id)
+    response = redirect('deckEditCard', deck_id)
+    response['Location'] += '?card_id=%(c)s&deck_id=%(d)s&is_all_cards=%(a)s' % {'c':card_id, 'd':deck_id, 'a':1}
+    return response
+
+
+def log_analytics_delete(success, entity_type, entity_id, card_id, user):
+    d = {'user': user}
+    if success:
+        log.info('Card deleted from the %(t) %(id)s' %{'t': entity_type, 'id': str(entity_id)}, extra=d)
+    else:
+        log.error('Card could not be deleted from the %(t) %(id)s' %{'t': entity_type, 'id': str(entity_id)}, extra=d)
+
+    analytics.track(
+        actor=user,
+        verb=analytics.VERBS.deleted,
+        object=analytics.OBJECTS.card,
+        context={entity_type+"_id": entity_id, "card_id": card_id}
+    )
+
 
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')  
 def delete_card(request, deck_id=None):
     """Deletes a card."""
-
-    d = {'user': request.user}
     deck = Deck.objects.get(id=deck_id)
     card_id = request.GET.get('card_id', None)
-    if queries.isCardInDeck(card_id, deck_id):
-        success = services.delete_card(card_id)
-
-    if success:
-        log.info('Card deleted from the deck %s' %str(deck.id), extra=d)
-    else:
-        log.error('Card could not be deleted from the deck %s' %str(deck.id), extra=d)
-
-    analytics.track(
-        actor=request.user, 
-        verb=analytics.VERBS.deleted, 
-        object=analytics.OBJECTS.card,
-        context={"deck_id": deck_id, "card_id": card_id}
-    )
-
+    success = services.check_delete_card(card_id, [deck_id])
+    log_analytics_delete(success, 'deck', deck_id, card_id, request.user)
     return redirect(deck)
+
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'collection')
+def delete_card_collection(request, collection_id=None):
+    """Deletes a card."""
+    deck_ids = queries.getDeckIds(collection_id)
+    card_id = request.GET.get('card_id', None)
+    success = services.check_delete_card(card_id, deck_ids)
+    log_analytics_delete(success, 'collection', collection_id, card_id, request.user)
+    return redirect('allCards', collection_id=collection_id)

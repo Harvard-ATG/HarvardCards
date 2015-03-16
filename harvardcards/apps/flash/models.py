@@ -58,6 +58,10 @@ class Collection(models.Model):
         from django.core.urlresolvers import reverse
         return reverse('collectionIndex', args=[str(self.id)])
 
+    def get_all_cards_url(self):
+        from django.core.urlresolvers import reverse
+        return reverse('allCards', args=[str(self.id)])
+
 class Card(models.Model):
     DEFAULT_COLOR = "default"
     COLOR_CHOICES = (

@@ -27,10 +27,18 @@
         {% for deck in collection.decks %}
             <li class="deck">
                 <dl>
+                    {% if deck.id < 0 %}
+                    <dt><a href="{% url 'allCards' collection.id  %}">{{ deck.title }}</a></dt>
+                    <dd>{{ deck.num_cards }} {% if deck.num_cards == 1 %}Card {% else %}Cards{% endif %}</dd>
+                    <dd><a class="adminMenuBtn" href="{% url 'allCards' collection.id %}">Review</a></dd>
+                    <dd><a class="adminMenuBtn" href="{% url 'allCards' collection.id %}?mode=quiz">Quiz</a></dd>
+                    {% else %}
                     <dt><a href="{% url 'deckIndex' deck.id %}">{{ deck.title }}</a></dt>
                     <dd>{{ deck.num_cards }} {% if deck.num_cards == 1 %}Card {% else %}Cards{% endif %}</dd>
                     <dd><a class="adminMenuBtn" href="{% url 'deckIndex' deck.id %}">Review</a></dd>
                     <dd><a class="adminMenuBtn" href="{% url 'deckIndex' deck.id %}?mode=quiz">Quiz</a></dd>
+                    {% endif %}
+
                 </dl>
             </li>
         {% endfor %}
