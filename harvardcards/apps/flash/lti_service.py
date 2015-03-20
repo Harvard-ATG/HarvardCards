@@ -18,10 +18,11 @@ class LTIService:
         if self.isLTILaunch() and not self.courseExists():
             self.course = self.createCourse()
 
-    def getCourse(self):
-        if self.course is not None:
-            return self.course
-        course_id = self.getCourseId()
+    def getCourse(self, course_id=None):
+        if course_id is None:
+            if self.course is not None:
+                return self.course
+            course_id = self.getCourseId()
         return Course.objects.get(course_id=course_id)
 
     def getEntityName(self):
@@ -99,7 +100,7 @@ class LTIService:
 
     def isCourseAssociated(self, course_id, collection_id):
         '''Returns true if the given canvas course ID is associated with the given collection ID, false otherwise.'''
-        course = self.getCourse()
+        course = self.getCourse(course_id)
         found = Course_Map.objects.filter(collection__id=collection_id, course=course)
         if found:
             return True
