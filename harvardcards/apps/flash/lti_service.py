@@ -15,7 +15,7 @@ class LTIService:
     def __init__(self, request):
         self.request = request
         if self.isLTILaunch() and not self.courseExists():
-            self.createCourse()
+            self.course = self.createCourse()
 
     def getEntityName(self):
         url = self.getLTILaunchParam('launch_presentation_return_url', None)
@@ -37,11 +37,15 @@ class LTIService:
 
     def getCourseId(self):
         '''Returns the canvas course id associated with the LTI launch.'''
-        context_id = self.getLTILaunchParam('context_id', None)
+        context_id = self.getContextId()
         entity = self.getEntityName()
-        sakai_or_canvas = self.getLTILaunchParam('tool_consumer_info_product_family_code', None)
+        return entity+'_'+context_id
 
-        return [entity+'_'+context_id, context_id, entity]
+    def getContextId(self):
+        return self.getLTILaunchParam('context_id', None)
+
+    def getProductInfo(self):
+        return self.getLTILaunchParam('tool_consumer_info_product_family_code', None)
 
     def hasRole(self, role):
         '''Returns true if the user that initiated the LTI launch has a given role, false otherwise.'''
@@ -59,25 +63,26 @@ class LTIService:
 
     def courseExists(self):
         '''Returns True if the canvas course exists, otherwise False.'''
-        course_id = self.getCourseId()[0]
+        course_id = self.getCourseId()
         return Course.objects.filter(course_id=course_id).exists()
 
     def createCourse(self):
         '''Creates and returns an instance of the canvas course. Returns False if the canvas course ID is invalid.'''
         canvas_course_id = self.getCanvasCourseId()
-        course_id_all = self.getCourseId()
-        course_id = course_id_all[0]
-        entity = course_id_all[2]
-        course_id_only = course_id_all[1]
+        course_id = self.getCourseId()
+        entity = self.getEntityName()
+        context_id = self.getContextId()
+        product_info = self.getProductInfo()
 
         log.debug("createCourse(): %s" % course_id)
         if course_id is None:
             return False
         course = Course(
             canvas_course_id=canvas_course_id,
+            product=product_info,
             course_id=course_id,
             entity=entity,
-            course_id_only=course_id_only,
+            context_id=context_id,
             course_name_short=self.getLTILaunchParam('context_label', ''),
             course_name=self.getLTILaunchParam('context_title', ''),
 
@@ -87,7 +92,8 @@ class LTIService:
 
     def isCourseAssociated(self, course_id, collection_id):
         '''Returns true if the given canvas course ID is associated with the given collection ID, false otherwise.'''
-        found = Course_Map.objects.filter(collection__id=collection_id, course_id=course_id)
+        course = Course.objects.filter(course_id=course_id)[0]
+        found = Course_Map.objects.filter(collection__id=collection_id, course=course)
         if found:
             return True
         return False
@@ -109,7 +115,7 @@ class LTIService:
         if not self.hasTeachingStaffRole():
             return False
 
-        course_id = self.getCourseId()[0]
+        course_id = self.getCourseId()
         if course_id is None:
             log.debug("setupCourseMap(): no course id")
             return False
@@ -121,7 +127,9 @@ class LTIService:
 
         collection = Collection.objects.get(id=collection_id)
         subscribe = self.hasTeachingStaffRole()
-        course_map = Course_Map(course_id=course_id, collection=collection, subscribe=subscribe)
+        course = Course.objects.filter(course_id=course_id)[0]
+
+        course_map = Course_Map(course=course, collection=collection, subscribe=subscribe)
         course_map.save()
         log.debug("setupCourseMap(): created mapping [%s]" % course_map.id)
         return True
@@ -131,8 +139,10 @@ class LTIService:
         if not self.isLTILaunch():
             return []
 
-        course_id = self.getCourseId()[0]
-        course_maps = Course_Map.objects.filter(course_id=course_id)
+        course_id = self.getCourseId()
+        course = Course.objects.filter(course_id=course_id)[0]
+
+        course_maps = Course_Map.objects.filter(course=course)
         collection_ids = [m.collection.id for m in course_maps]
 
         return collection_ids
@@ -145,16 +155,17 @@ class LTIService:
         if not self.isLTILaunch():
             return False
 
-        course_id = self.getCourseId()[0]
+        course_id = self.getCourseId()
         if course_id is None:
             log.debug("No canvas course id. Aborting.")
             return False
+        course = Course.objects.filter(course_id=course_id)[0]
 
-        course_maps = Course_Map.objects.filter(course_id=course_id, subscribe=True)
+        course_maps = Course_Map.objects.filter(course=course, subscribe=True)
         course_collection_ids = [m.collection.id for m in course_maps]
         subscribed = Users_Collections.objects.filter(user=self.request.user, collection__in=course_collection_ids)
         subscribed_collection_ids = [s.collection.id for s in subscribed]
-    
+
         unsubscribed_collection_ids = set(course_collection_ids).difference(set(subscribed_collection_ids))
         log.debug("Course collections: %s Subscribed: %s Unsubscribed: %s" % (course_collection_ids, subscribed_collection_ids, unsubscribed_collection_ids))
         if len(unsubscribed_collection_ids) == 0:

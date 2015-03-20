@@ -221,9 +221,10 @@ class Course(models.Model):
     Course information. 
     """
     canvas_course_id = models.CharField(max_length=255, blank=True, null=True)
+    product = models.CharField(max_length=255, blank=True, null=True)
     course_id = models.CharField(max_length=255, unique=True, blank=False)
     entity =  models.CharField(max_length=255, blank=False)
-    course_id_only = models.CharField(max_length=255, blank=False)
+    context_id = models.CharField(max_length=255, blank=False)
     course_name_short = models.CharField(max_length=1024)
     course_name = models.CharField(max_length=2048)
 
@@ -241,7 +242,7 @@ class Course_Map(models.Model):
     The purpose of this model is to setup a many-to-many mapping between 
     Canvas courses and collections.
     """
-    course_id = models.CharField(max_length=255, blank=False)
+    course = models.ForeignKey(Course)
     collection = models.ForeignKey(Collection)
     subscribe = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
@@ -249,10 +250,10 @@ class Course_Map(models.Model):
     class Meta:
         verbose_name = 'Course Map'
         verbose_name_plural = 'Course Maps'
-        ordering = ['course_id','collection__id','subscribe']
+        ordering = ['course','collection__id','subscribe']
 
     def __unicode__(self):
-        return "course id: " + str(self.course_id) + " Collection id: " + str(self.collection.id)
+        return "course: " + str(self.course) + " Collection id: " + str(self.collection.id)
 
 class Analytics(models.Model):
     stmt_id = models.CharField(max_length=36, blank=False)

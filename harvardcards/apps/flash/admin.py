@@ -64,6 +64,15 @@ class ClonedAdmin(admin.ModelAdmin):
 class MediaStoreAdmin(admin.ModelAdmin):
     list_display = ('id', 'file_name', 'file_md5hash', 'file_type', 'file_size', 'store_created', 'store_updated', 'reference_count')
 
+
+class CollectionsInLine(admin.StackedInline):
+    extra = 0
+    verbose_name = 'Collections'
+    model = Course_Map
+
+class CourseAdmin(admin.ModelAdmin):
+    inlines = (CollectionsInLine,)
+
 admin.site.unregister(User)
 admin.site.register(User, UserAdminCustom)
 admin.site.register(Collection, CollectionAdmin)
@@ -76,7 +85,7 @@ admin.site.register(Cards_Fields)
 admin.site.register(CardTemplate)
 admin.site.register(CardTemplates_Fields)
 admin.site.register(Course_Map)
-admin.site.register(Course)
+admin.site.register(Course, CourseAdmin)
 admin.site.register(Analytics, AnalyticsAdmin)
 admin.site.register(Clone, CloneAdmin)
 admin.site.register(Cloned, ClonedAdmin)

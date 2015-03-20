@@ -17,7 +17,7 @@ class Migration(SchemaMigration):
         # Adding model 'Course_Map'
         db.create_table(u'flash_course_map', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('course_id', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('course', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['flash.Course'])),
             ('collection', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['flash.Collection'])),
             ('subscribe', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
@@ -28,9 +28,10 @@ class Migration(SchemaMigration):
         db.create_table(u'flash_course', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('canvas_course_id', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
+            ('product', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
             ('course_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255)),
             ('entity', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('course_id_only', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('context_id', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('course_name_short', self.gf('django.db.models.fields.CharField')(max_length=1024)),
             ('course_name', self.gf('django.db.models.fields.CharField')(max_length=2048)),
         ))
@@ -172,17 +173,18 @@ class Migration(SchemaMigration):
         u'flash.course': {
             'Meta': {'ordering': "['course_id', 'course_name_short', 'course_name']", 'object_name': 'Course'},
             'canvas_course_id': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'context_id': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'course_id': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'}),
-            'course_id_only': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'course_name': ('django.db.models.fields.CharField', [], {'max_length': '2048'}),
             'course_name_short': ('django.db.models.fields.CharField', [], {'max_length': '1024'}),
             'entity': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'product': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'})
         },
         u'flash.course_map': {
-            'Meta': {'ordering': "['course_id', 'collection__id', 'subscribe']", 'object_name': 'Course_Map'},
+            'Meta': {'ordering': "['course', 'collection__id', 'subscribe']", 'object_name': 'Course_Map'},
             'collection': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['flash.Collection']"}),
-            'course_id': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'course': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['flash.Course']"}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'subscribe': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
