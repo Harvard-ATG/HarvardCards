@@ -27,7 +27,7 @@ class Migration(SchemaMigration):
         # Adding model 'Course'
         db.create_table(u'flash_course', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('canvas_course_id', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
+            ('canvas_course_id', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
             ('course_id', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255)),
             ('entity', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('course_id_only', self.gf('django.db.models.fields.CharField')(max_length=255)),
@@ -171,7 +171,7 @@ class Migration(SchemaMigration):
         },
         u'flash.course': {
             'Meta': {'ordering': "['course_id', 'course_name_short', 'course_name']", 'object_name': 'Course'},
-            'canvas_course_id': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
+            'canvas_course_id': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'course_id': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'}),
             'course_id_only': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'course_name': ('django.db.models.fields.CharField', [], {'max_length': '2048'}),
