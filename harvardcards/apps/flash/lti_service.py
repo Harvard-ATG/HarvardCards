@@ -14,8 +14,15 @@ class LTIService:
     '''
     def __init__(self, request):
         self.request = request
+        self.course = None
         if self.isLTILaunch() and not self.courseExists():
             self.course = self.createCourse()
+
+    def getCourse(self):
+        if self.course is not None:
+            return self.course
+        course_id = self.getCourseId()
+        return Course.objects.get(course_id=course_id)
 
     def getEntityName(self):
         url = self.getLTILaunchParam('launch_presentation_return_url', None)
@@ -92,7 +99,7 @@ class LTIService:
 
     def isCourseAssociated(self, course_id, collection_id):
         '''Returns true if the given canvas course ID is associated with the given collection ID, false otherwise.'''
-        course = Course.objects.filter(course_id=course_id)[0]
+        course = self.getCourse()
         found = Course_Map.objects.filter(collection__id=collection_id, course=course)
         if found:
             return True
@@ -127,7 +134,7 @@ class LTIService:
 
         collection = Collection.objects.get(id=collection_id)
         subscribe = self.hasTeachingStaffRole()
-        course = Course.objects.filter(course_id=course_id)[0]
+        course = self.getCourse()
 
         course_map = Course_Map(course=course, collection=collection, subscribe=subscribe)
         course_map.save()
@@ -140,7 +147,7 @@ class LTIService:
             return []
 
         course_id = self.getCourseId()
-        course = Course.objects.filter(course_id=course_id)[0]
+        course = self.getCourse()
 
         course_maps = Course_Map.objects.filter(course=course)
         collection_ids = [m.collection.id for m in course_maps]
@@ -159,7 +166,7 @@ class LTIService:
         if course_id is None:
             log.debug("No canvas course id. Aborting.")
             return False
-        course = Course.objects.filter(course_id=course_id)[0]
+        course = self.getCourse()
 
         course_maps = Course_Map.objects.filter(course=course, subscribe=True)
         course_collection_ids = [m.collection.id for m in course_maps]
