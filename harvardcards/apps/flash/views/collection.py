@@ -11,7 +11,7 @@ from django.views.decorators.http import require_http_methods
 from django.db.models import Q
 from django.forms.formsets import formset_factory
 
-from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field, CardTemplate, Canvas_Course_Map
+from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field, CardTemplate, Course_Map
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm, CollectionShareForm
 from harvardcards.apps.flash.decorators import check_role
 from harvardcards.apps.flash.lti_service import LTIService
@@ -33,9 +33,9 @@ def index(request, collection_id=None):
         return collection
 
     role_bucket = services.get_or_update_role_bucket(request)
-    canvas_course_collections = LTIService(request).getCourseCollections()
+    course_collections = LTIService(request).getCourseCollections()
     copy_collections = queries.getCopyCollectionList(request.user)
-    collection_filters = dict(collection_ids=canvas_course_collections, can_filter=not queries.is_superuser_or_staff(request.user))
+    collection_filters = dict(collection_ids=course_collections, can_filter=not queries.is_superuser_or_staff(request.user))
     collection_list = queries.getCollectionList(role_bucket, **collection_filters)
     collection_list = map(lambda c: add_all_card_deck(c), collection_list)
 
@@ -88,8 +88,8 @@ def custom_create(request):
     upload_error = ''
     course_name = ''
     role_bucket = services.get_or_update_role_bucket(request)
-    canvas_course_collections = LTIService(request).getCourseCollections()
-    collection_list = queries.getCollectionList(role_bucket, collection_ids=canvas_course_collections)
+    course_collections = LTIService(request).getCourseCollections()
+    collection_list = queries.getCollectionList(role_bucket, collection_ids=course_collections)
     if request.method == 'POST':
         d = {'user': request.user}
         log.info('The user is uploading a custom deck.', extra=d)
@@ -106,7 +106,7 @@ def custom_create(request):
             try:
                 deck = services.handle_custom_file(request.FILES['file'], course_name, request.user)
 
-                LTIService(request).associateCanvasCourse(deck.collection.id)
+                LTIService(request).associateCourse(deck.collection.id)
                 log.info('Custom deck %(d)s successfully added to the new collection %(c)s.'
                          %{'c': str(deck.collection.id), 'd':str(deck.id)}, extra=d)
                 return redirect(deck)
@@ -136,15 +136,15 @@ def custom_create(request):
 def create(request):
     """Creates a collection."""
     role_bucket = services.get_or_update_role_bucket(request)
-    canvas_course_collections = LTIService(request).getCourseCollections()
-    collection_list = queries.getCollectionList(role_bucket, collection_ids=canvas_course_collections)
+    course_collections = LTIService(request).getCourseCollections()
+    collection_list = queries.getCollectionList(role_bucket, collection_ids=course_collections)
 
     if request.method == 'POST':
         collection_form = CollectionForm(request.POST)
         card_template_id = collection_form.data['card_template']
         if collection_form.is_valid():
             collection = collection_form.save()
-            LTIService(request).associateCanvasCourse(collection.id)
+            LTIService(request).associateCourse(collection.id)
 
             services.add_user_to_collection(user=request.user, collection=collection, role=Users_Collections.ADMINISTRATOR)
             #update role_bucket to add admin permission to the user for this newly created collection
@@ -188,8 +188,8 @@ def edit(request, collection_id=None):
     collection = Collection.objects.get(id=collection_id)
 
     role_bucket = services.get_or_update_role_bucket(request)
-    canvas_course_collections = LTIService(request).getCourseCollections()
-    collection_list = queries.getCollectionList(role_bucket, collection_ids=canvas_course_collections)
+    course_collections = LTIService(request).getCourseCollections()
+    collection_list = queries.getCollectionList(role_bucket, collection_ids=course_collections)
 
     if request.method == 'POST':
         collection_form = CollectionForm(request.POST, instance=collection)
@@ -236,7 +236,7 @@ def copy_collection(request):
     new_collection = services.copy_collection(request.user, collection_id)
 
     services.add_user_to_collection(user=request.user, collection=new_collection, role=Users_Collections.ADMINISTRATOR)
-    LTIService(request).associateCanvasCourse(new_collection.id)
+    LTIService(request).associateCourse(new_collection.id)
 
     return redirect(new_collection)
 
@@ -248,8 +248,8 @@ def share_collection(request, collection_id=None):
     users list
     """
     role_bucket = services.get_or_update_role_bucket(request)
-    canvas_course_collections = LTIService(request).getCourseCollections()
-    collection_list = queries.getCollectionList(role_bucket, collection_ids=canvas_course_collections)
+    course_collections = LTIService(request).getCourseCollections()
+    collection_list = queries.getCollectionList(role_bucket, collection_ids=course_collections)
 
     collection = Collection.objects.get(id=collection_id)
     collection_share_form = CollectionShareForm()

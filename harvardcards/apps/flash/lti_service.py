@@ -1,4 +1,4 @@
-from harvardcards.apps.flash.models import Collection, Users_Collections, Canvas_Course_Map, Canvas_Course
+from harvardcards.apps.flash.models import Collection, Users_Collections, Course_Map, Course
 
 from django_auth_lti import const
 
@@ -14,8 +14,8 @@ class LTIService:
     '''
     def __init__(self, request):
         self.request = request
-        if self.isLTILaunch() and not self.canvasCourseExists():
-            self.createCanvasCourse()
+        if self.isLTILaunch() and not self.courseExists():
+            self.createCourse()
 
     def isLTILaunch(self):
         '''Returns true if an LTI launch is detected, false otherwise.'''
@@ -29,6 +29,13 @@ class LTIService:
     def getCanvasCourseId(self):
         '''Returns the canvas course id associated with the LTI launch.'''
         return self.getLTILaunchParam('custom_canvas_course_id', None)
+
+    def getCourseId(self):
+        '''Returns the canvas course id associated with the LTI launch.'''
+        context_id = self.getLTILaunchParam('context_id', None)
+        entity =self.getLTILaunchParam('tool_consumer_info_product_family_code', None)
+
+        return [entity+'_'+context_id, context_id, entity]
 
     def hasRole(self, role):
         '''Returns true if the user that initiated the LTI launch has a given role, false otherwise.'''
@@ -44,33 +51,42 @@ class LTIService:
         is_teacher = len(role_set.intersection(teaching_staff)) > 0
         return is_teacher
 
-    def canvasCourseExists(self):
+    def courseExists(self):
         '''Returns True if the canvas course exists, otherwise False.'''
-        canvas_course_id = self.getCanvasCourseId()
-        return Canvas_Course.objects.filter(canvas_course_id=canvas_course_id).exists()
+        course_id = self.getCourseId()[0]
+        return Course.objects.filter(course_id=course_id).exists()
 
-    def createCanvasCourse(self):
+    def createCourse(self):
         '''Creates and returns an instance of the canvas course. Returns False if the canvas course ID is invalid.'''
         canvas_course_id = self.getCanvasCourseId()
-        log.debug("createCanvasCourse(): %s" % canvas_course_id)
-        if canvas_course_id is None:
+        course_id_all = self.getCourseId()
+        course_id = course_id_all[0]
+        entity = course_id_all[2]
+        course_id_only =course_id_all[1]
+
+        log.debug("createCourse(): %s" % course_id)
+        if course_id is None:
             return False
-        canvas_course = Canvas_Course(
-            canvas_course_id=canvas_course_id, 
+        course = Course(
+            canvas_course_id=canvas_course_id,
+            course_id=course_id,
+            entity=entity,
+            course_id_only=course_id_only,
             course_name_short=self.getLTILaunchParam('context_label', ''),
             course_name=self.getLTILaunchParam('context_title', ''),
-        )
-        canvas_course.save()
-        return canvas_course
 
-    def isCanvasCourseAssociated(self, canvas_course_id, collection_id):
+        )
+        course.save()
+        return course
+
+    def isCourseAssociated(self, course_id, collection_id):
         '''Returns true if the given canvas course ID is associated with the given collection ID, false otherwise.'''
-        found = Canvas_Course_Map.objects.filter(collection__id=collection_id, canvas_course_id=canvas_course_id)
+        found = Course_Map.objects.filter(collection__id=collection_id, course_id=course_id)
         if found:
             return True
         return False
 
-    def associateCanvasCourse(self, collection_id):
+    def associateCourse(self, collection_id):
         '''
         This creates a mapping between a canvas course, the context in which the LTI tool is operating,
         and a given collection. 
@@ -87,21 +103,21 @@ class LTIService:
         if not self.hasTeachingStaffRole():
             return False
 
-        canvas_course_id = self.getCanvasCourseId()
-        if canvas_course_id is None:
-            log.debug("setupCanvasCourseMap(): no canvas course id")
+        course_id = self.getCourseId()[0]
+        if course_id is None:
+            log.debug("setupCourseMap(): no course id")
             return False
 
-        log.debug("setupCanvasCourseMap(): lookup canvas course id [%s] and collection id [%s]" % (canvas_course_id, collection_id))
-        if self.isCanvasCourseAssociated(canvas_course_id, collection_id):
-            log.debug("setupCanvasCourseMap(): mapping found")
+        log.debug("setupCourseMap(): lookup course id [%s] and collection id [%s]" % (course_id, collection_id))
+        if self.isCourseAssociated(course_id, collection_id):
+            log.debug("setupCourseMap(): mapping found")
             return True
 
         collection = Collection.objects.get(id=collection_id)
         subscribe = self.hasTeachingStaffRole()
-        canvas_course_map = Canvas_Course_Map(canvas_course_id=canvas_course_id, collection=collection, subscribe=subscribe)
-        canvas_course_map.save()
-        log.debug("setupCanvasCourseMap(): created mapping [%s]" % canvas_course_map.id)
+        course_map = Course_Map(course_id=course_id, collection=collection, subscribe=subscribe)
+        course_map.save()
+        log.debug("setupCourseMap(): created mapping [%s]" % course_map.id)
         return True
 
     def getCourseCollections(self):
@@ -109,11 +125,11 @@ class LTIService:
         if not self.isLTILaunch():
             return []
 
-        canvas_course_id = self.getCanvasCourseId()
-        canvas_course_maps = Canvas_Course_Map.objects.filter(canvas_course_id=canvas_course_id)
-        canvas_collection_ids = [m.collection.id for m in canvas_course_maps]
+        course_id = self.getCourseId()[0]
+        course_maps = Course_Map.objects.filter(course_id=course_id)
+        collection_ids = [m.collection.id for m in course_maps]
 
-        return canvas_collection_ids
+        return collection_ids
 
     def subscribeToCourseCollections(self):
         '''
@@ -123,23 +139,23 @@ class LTIService:
         if not self.isLTILaunch():
             return False
 
-        canvas_course_id = self.getCanvasCourseId()
-        if canvas_course_id is None:
+        course_id = self.getCourseId()[0]
+        if course_id is None:
             log.debug("No canvas course id. Aborting.")
             return False
 
-        canvas_course_maps = Canvas_Course_Map.objects.filter(canvas_course_id=canvas_course_id, subscribe=True)
-        canvas_course_collection_ids = [m.collection.id for m in canvas_course_maps]
-        subscribed = Users_Collections.objects.filter(user=self.request.user, collection__in=canvas_course_collection_ids)
+        course_maps = Course_Map.objects.filter(course_id=course_id, subscribe=True)
+        course_collection_ids = [m.collection.id for m in course_maps]
+        subscribed = Users_Collections.objects.filter(user=self.request.user, collection__in=course_collection_ids)
         subscribed_collection_ids = [s.collection.id for s in subscribed]
     
-        unsubscribed_collection_ids = set(canvas_course_collection_ids).difference(set(subscribed_collection_ids))
-        log.debug("Canvas course collections: %s Subscribed: %s Unsubscribed: %s" % (canvas_course_collection_ids, subscribed_collection_ids, unsubscribed_collection_ids))
+        unsubscribed_collection_ids = set(course_collection_ids).difference(set(subscribed_collection_ids))
+        log.debug("Course collections: %s Subscribed: %s Unsubscribed: %s" % (course_collection_ids, subscribed_collection_ids, unsubscribed_collection_ids))
         if len(unsubscribed_collection_ids) == 0:
             log.debug("Nothing to subscribe... done")
             return False
 
-        log.debug("Subscribing user %s to all canvas course collections: %s => %s" % (self.request.user.id, canvas_course_id, unsubscribed_collection_ids))
+        log.debug("Subscribing user %s to all course collections: %s => %s" % (self.request.user.id, course_id, unsubscribed_collection_ids))
         for collection_id in unsubscribed_collection_ids:
             collection = Collection.objects.get(id=collection_id)
             uc_values = dict(user=self.request.user, collection=collection, role=Users_Collections.LEARNER, date_joined=datetime.date.today())
