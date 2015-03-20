@@ -3,7 +3,7 @@ from harvardcards.apps.flash.models import Collection, Users_Collections, Course
 from django_auth_lti import const
 
 import datetime
-
+import urlparse
 import logging
 log = logging.getLogger(__name__)
 
@@ -16,6 +16,11 @@ class LTIService:
         self.request = request
         if self.isLTILaunch() and not self.courseExists():
             self.createCourse()
+
+    def getEntityName(self):
+        url = self.getLTILaunchParam('launch_presentation_return_url', None)
+        entity = urlparse.urlsplit(url).netloc.split('.')[-2]
+        return entity
 
     def isLTILaunch(self):
         '''Returns true if an LTI launch is detected, false otherwise.'''
@@ -33,7 +38,8 @@ class LTIService:
     def getCourseId(self):
         '''Returns the canvas course id associated with the LTI launch.'''
         context_id = self.getLTILaunchParam('context_id', None)
-        entity =self.getLTILaunchParam('tool_consumer_info_product_family_code', None)
+        entity = self.getEntityName()
+        sakai_or_canvas = self.getLTILaunchParam('tool_consumer_info_product_family_code', None)
 
         return [entity+'_'+context_id, context_id, entity]
 
@@ -62,7 +68,7 @@ class LTIService:
         course_id_all = self.getCourseId()
         course_id = course_id_all[0]
         entity = course_id_all[2]
-        course_id_only =course_id_all[1]
+        course_id_only = course_id_all[1]
 
         log.debug("createCourse(): %s" % course_id)
         if course_id is None:
