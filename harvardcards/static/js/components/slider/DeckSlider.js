@@ -1,4 +1,4 @@
-define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEvent, Slider) {
+define(['jquery', 'microevent', 'components/slider/Slider', 'swipe'], function($, MicroEvent, Slider) {
 
 	/**
 	 * The DeckSlider is responsible for displaying a list of 
@@ -146,12 +146,14 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 
 	// Handles slider event triggered before the slide.
 	DeckSlider.prototype.onBeforeSlide = function(slider, fromIndex, toIndex) {
+        console.log("onbeforeslide");
 		var card_id = this.card_ids[fromIndex];
 		this.trigger("beforeslide", this, {fromIndex:fromIndex, toIndex:toIndex, card_id:card_id});
 	};
 
 	// Handles slider event triggered after the slide.
 	DeckSlider.prototype.onSlide = function(slider, index) {
+        console.log("onslide");
 		var card_id = this.card_ids[index];
 		this.selectCard(card_id);
 		this.triggerLoad(index);
@@ -160,6 +162,7 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 
 	// Handles a click on a card element.
 	DeckSlider.prototype.onClickCard = function(e) {
+        console.log("onclickcard");
 		var card_id, currentTarget = e.currentTarget;
 		if(this.isCard(currentTarget)) {
 			card_id = this.getCardId(currentTarget);

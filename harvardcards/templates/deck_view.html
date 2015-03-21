@@ -121,7 +121,7 @@
             {% endfor %}
 
             {% endif %}
-            <ul id="allCards">
+            <ul id="allCards cardSwipe" class="swipe">
                 {% for card in cards %}
                 <li class="card {% if card.color %}card-color-{{card.color}}{% endif %} hide" role="tabpanel"  data-card-id="{{ card.card_id }}" data-mode="{% if is_quiz_mode %}quiz{% else %}review{% endif %}">
                     <div class="show_content">
