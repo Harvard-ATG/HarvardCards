@@ -77,6 +77,7 @@ function initModule() {
             direction: 'horizontal',
             nextButton: '.swiper-btn-next',
             prevButton: '.swiper-btn-prev',
+            keyboardControl: true,
             loop: false
         });
 
