@@ -69,7 +69,7 @@
         <div id="{% if is_deck_admin and deck.id > -1 %}cardSlider{% else %}cardSliderNotAdmin{% endif %}" role="scrollbar" tabindex="0" aria-orientation="horizontal" class="slider" data-start-card-id="{{card_id}}">
         {% if cards|length %}
             <div class="sliderBtns deckPrev">
-                <a id="previous_card" href="javascript:void(0)"><i class="fa fa-angle-left"></i><span>Previous</span></a>
+                <a id="previous_card" class="swiper-btn-prev" href="javascript:void(0)"><i class="fa fa-angle-left"></i><span>Previous</span></a>
                 <a id="first_card" href="javascript:void(0)"><i class="fa fa-angle-double-left"></i><span>First</span></a>
             </div>
 
@@ -82,7 +82,7 @@
             </div>
 
             <div class="sliderBtns deckNext">
-                <a id="next_card" href="javascript:void(0)"><i class="fa fa-angle-right"></i><span>Next</span></a>
+                <a id="next_card" class="swiper-btn-next" href="javascript:void(0)"><i class="fa fa-angle-right"></i><span>Next</span></a>
                 <a id="last_card" href="javascript:void(0)"><i class="fa fa-angle-double-right"></i><span>Last</span></a>
             </div>
         {% else %}
@@ -121,9 +121,35 @@
             {% endfor %}
 
             {% endif %}
-            <ul id="allCards cardSwipe" class="swipe">
+            <div class="swiper-container">
+                <div id="allCards" class="swiper-wrapper">
+                 {% for card in cards %}
+
+                 <div class="swiper-slide card {% if card.color %}card-color-{{card.color}}{% endif %}" role="tabpanel"  data-card-id="{{ card.card_id }}" data-mode="{% if is_quiz_mode %}quiz{% else %}review{% endif %}">
+                     <div class="show_content">
+                        {% for field in card.fields.show %}
+                        {% include "_deck_card_fields.html" with field=field hide=False %}
+                        {% endfor %}
+                     </div>
+                     <div class="hideRevealHr">
+                        {% if is_quiz_mode %}
+                        <a href="javascript:void(0)" class="adminMenuBtn reveal">Reveal</a>
+                        {% endif %}
+                     </div>
+                     <div class="reveal_content {% if is_quiz_mode %}hide{% endif %}">
+                     {% for field in card.fields.reveal %}
+                         {% include "_deck_card_fields.html" with field=field %}
+                     {% endfor %}
+                     </div>
+                 </div>
+
+                 {% endfor %}
+            </div>
+
+            <!--
+            <ul id="allCards cardSwipe" class="swiper-wrapper">
                 {% for card in cards %}
-                <li class="card {% if card.color %}card-color-{{card.color}}{% endif %} hide" role="tabpanel"  data-card-id="{{ card.card_id }}" data-mode="{% if is_quiz_mode %}quiz{% else %}review{% endif %}">
+                <li class="swiper-slide card {% if card.color %}card-color-{{card.color}}{% endif %} hide" role="tabpanel"  data-card-id="{{ card.card_id }}" data-mode="{% if is_quiz_mode %}quiz{% else %}review{% endif %}">
                     <div class="show_content">
                     {% for field in card.fields.show %}
                         {% include "_deck_card_fields.html" with field=field hide=False %}
@@ -142,6 +168,9 @@
                 </li>
                 {% endfor %}
             </ul>
+            -->
+                 <!-- If we need navigation buttons -->
+            </div>
         </div>
 
     </div><!-- courseWrapper (end) -->

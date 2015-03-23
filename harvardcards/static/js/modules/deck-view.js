@@ -7,7 +7,8 @@ define([
 	'models/Analytics', 
 	'models/Deck', 
 	'views/CardForm', 
-	'utils/utils'
+	'utils/utils',
+    'swiper'
 ], function(
 	$, 
 	DeckSlider, 
@@ -17,7 +18,8 @@ define([
 	Analytics,
 	Deck, 
 	CardForm, 
-	utils
+	utils,
+    Swiper
 ) {
 
 function initModule() {
@@ -41,12 +43,52 @@ function initModule() {
 		var $controls = $cardDetail.find(".controls[data-card-id]");
 		var $card = $cardDetail.find(".card[data-card-id]");
 
-		$controls.removeClass("card-active").hide();
-		$card.removeClass('card-active').hide(); 
+		//$controls.removeClass("card-active").hide();
+		//$card.removeClass('card-active').hide();
 
 		deck_slider._slideDirection = (data.toIndex >= data.fromIndex ? "right" : "left");
 		deck_slider._slideCurrent = (data.toIndex == data.fromIndex);
 	});
+
+    deck_slider.bind("slide", function(slider, data) {
+		var card_id = data.card_id;
+		var $controls = $cardDetail.find(".controls[data-card-id="+card_id+"]");
+		var $card = $cardDetail.find(".card[data-card-id="+card_id+"]");
+		var playAudio = MODULE.makeAudioPlayer($card);
+		var mode = $card.data("mode");
+
+		var slideOpts = {
+			direction: deck_slider._slideDirection,
+			complete: playAudio
+		};
+
+        // send tracking
+		Analytics.trackCard(card_id, mode);
+
+		// show the card controls
+		$controls.addClass('card-active');
+		$controls.show();
+
+		// show the card
+		$card.addClass('card-active');
+
+		var mySwiper = new Swiper ('.swiper-container', {
+            // Optional parameters
+            direction: 'horizontal',
+            nextButton: '.swiper-btn-next',
+            prevButton: '.swiper-btn-prev',
+            loop: false
+        });
+
+
+        if(deck_slider._slideCurrent) {
+			$card.show();
+			playAudio();
+		}
+
+    });
+
+    /*
 	deck_slider.bind("slide", function(slider, data) {
 		// find the card elements
 		var card_id = data.card_id;
@@ -76,6 +118,7 @@ function initModule() {
 			$card.show('slide', slideOpts, 500);
 		}
 	});
+	*/
 	deck_slider.bind("load", function(slider, card_ids) {
 		MODULE.loadCardMedia(card_ids);
 	});
