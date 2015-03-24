@@ -295,6 +295,8 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 	DeckSlider.prototype._play = function(doneCallback) {
 		return $.proxy(function() {
 			var isNext = this.goToNext();
+            // forcing a click to have something easy to listen for
+            $(this.currentCardEl).click();
 			var pause = !isNext || this.isLastItem();
 			if(pause) {
 				this.pause();

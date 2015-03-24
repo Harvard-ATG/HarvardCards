@@ -113,12 +113,13 @@ function initModule() {
                     mySwiper.appendSlide(slides[j]);
                     break;
                 }
-
             }
         }
-
-
     };
+    deck_slider.onSlide(function(){
+        console.log("onSlide");
+
+    });
     /* End Swiper */
 
 	deck_slider.bind("load", function(slider, card_ids) {
