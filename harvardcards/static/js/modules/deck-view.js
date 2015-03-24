@@ -90,6 +90,8 @@ function initModule() {
         loop: false,
         onSlideChangeStart: function(swiper){
             deck_slider.selectCard($(swiper.slides[swiper.activeIndex]).data('card-id'));
+        	card_counter.update();
+
         }
     });
     $('.card-image').click(function(event){
