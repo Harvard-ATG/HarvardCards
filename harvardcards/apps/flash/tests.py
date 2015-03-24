@@ -13,7 +13,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 
 from django_auth_lti import const
 
-from harvardcards.apps.flash.models import Collection, Deck, Field, CardTemplate, CardTemplates_Fields, Card, Canvas_Course_Map, Users_Collections, Analytics
+from harvardcards.apps.flash.models import Collection, Deck, Field, CardTemplate, CardTemplates_Fields, Card, Course_Map, Course, Users_Collections, Analytics
 from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
 from harvardcards.apps.flash.views.collection import *
 from harvardcards.apps.flash import services, queries, analytics
@@ -335,15 +335,20 @@ class LTIServiceTest(TestCase):
         d_collection = Collection.objects.create(title='Test4', description='Test4', card_template=card_template)
 
         canvas_course_id = 123
-        
+        course = Course.objects.create(
+            canvas_course_id=canvas_course_id,
+            product='sakai',
+            course_id='some_id',
+            context_id='some_context_id',
+            course_name_short='short name',
+            course_name='name')
         user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
         request = self.createMockRequest(canvas_course_id, [const.LEARNER]) 
         request.user = user
 
-        Canvas_Course_Map.objects.create(canvas_course_id=canvas_course_id, collection=a_collection, subscribe=True)
-        Canvas_Course_Map.objects.create(canvas_course_id=canvas_course_id, collection=b_collection, subscribe=True)
-        Canvas_Course_Map.objects.create(canvas_course_id=canvas_course_id, collection=c_collection, subscribe=False)
-        Canvas_Course_Map.objects.create(canvas_course_id=canvas_course_id + 1, collection=d_collection, subscribe=True)
+        Course_Map.objects.create(course=course, collection=a_collection, subscribe=True)
+        Course_Map.objects.create(course=course, collection=b_collection, subscribe=True)
+        Course_Map.objects.create(course=course, collection=c_collection, subscribe=False)
 
         self.assertTrue(LTIService(request).subscribeToCourseCollections())
         subscribed = Users_Collections.objects.filter(user=user)
