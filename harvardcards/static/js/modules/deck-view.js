@@ -192,6 +192,7 @@ function initModule() {
 
 		} else {
 			deck_slider.reset();
+            shuffleSwiper(deck_slider.card_ids);
 			deck_slider.goToFirst();
 			$("#shuffle_cards .control-text").text(shuffleText);
 			$("#shuffle").removeClass('fa-refresh').addClass('fa-random');
