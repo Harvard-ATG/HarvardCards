@@ -79,6 +79,8 @@ function initModule() {
 		}
 
     });
+
+    /* Swiper */
     var mySwiper = new Swiper ('.swiper-container', {
         // Optional parameters
         direction: 'horizontal',
@@ -99,7 +101,23 @@ function initModule() {
     $('#last_card').click(function(event){
         mySwiper.slideTo(mySwiper.slides.length - 1);
     });
+    var shuffleSwiper = function(card_ids){
+        var slides = mySwiper.slides;
+        mySwiper.removeAllSlides();
+        for(var i = 0; i < card_ids.length; i++){
+            for(var j = 0; j < slides.length; j++){
+                card_id = $(slides[j]).data('card-id');
+                if(card_ids[i] == card_id){
+                    mySwiper.appendSlide(slides[j]);
+                    break;
+                }
 
+            }
+        }
+
+
+    };
+    /* End Swiper */
 
 	deck_slider.bind("load", function(slider, card_ids) {
 		MODULE.loadCardMedia(card_ids);
@@ -167,6 +185,7 @@ function initModule() {
 
 		if ($("#shuffle_cards .control-text").text() == shuffleText){
 			deck_slider.shuffle();
+            shuffleSwiper(deck_slider.card_ids);
 			deck_slider.goToFirst();
 			$("#shuffle_cards .control-text").text(resetText);
 			$("#shuffle").removeClass('fa-random').addClass('fa-refresh');
