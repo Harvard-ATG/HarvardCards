@@ -72,23 +72,6 @@ function initModule() {
 		// show the card
 		$card.addClass('card-active');
 
-		var mySwiper = new Swiper ('.swiper-container', {
-            // Optional parameters
-            direction: 'horizontal',
-            nextButton: '.swiper-btn-next',
-            prevButton: '.swiper-btn-prev',
-            keyboardControl: true,
-            loop: false,
-            onSlideChangeStart: function(swiper){
-                console.log(swiper.activeIndex);
-                console.log(deck_slider.getCardId[swiper.slides[swiper.activeIndex]]);
-                console.log($(swiper.slides[swiper.activeIndex]).data('card-id'));
-                deck_slider.selectCard($(swiper.slides[swiper.activeIndex]).data('card-id'));
-
-            }
-
-        });
-
 
         if(deck_slider._slideCurrent) {
 			$card.show();
@@ -96,6 +79,22 @@ function initModule() {
 		}
 
     });
+    var mySwiper = new Swiper ('.swiper-container', {
+        // Optional parameters
+        direction: 'horizontal',
+        nextButton: '.swiper-btn-next',
+        prevButton: '.swiper-btn-prev',
+        keyboardControl: true,
+        loop: false,
+        onSlideChangeStart: function(swiper){
+            deck_slider.selectCard($(swiper.slides[swiper.activeIndex]).data('card-id'));
+        }
+    });
+    $('.card-image').click(function(event){
+        mySwiper.slideTo(deck_slider.getIndexOfCard($(event.currentTarget).data('card-id')));
+    });
+
+
 
     /*
 	deck_slider.bind("slide", function(slider, data) {
