@@ -93,40 +93,14 @@ function initModule() {
     $('.card-image').click(function(event){
         mySwiper.slideTo(deck_slider.getIndexOfCard($(event.currentTarget).data('card-id')));
     });
+    $('#first_card').click(function(event){
+        mySwiper.slideTo(0);
+    });
+    $('#last_card').click(function(event){
+        mySwiper.slideTo(mySwiper.slides.length - 1);
+    });
 
 
-
-    /*
-	deck_slider.bind("slide", function(slider, data) {
-		// find the card elements
-		var card_id = data.card_id;
-		var $controls = $cardDetail.find(".controls[data-card-id="+card_id+"]");
-		var $card = $cardDetail.find(".card[data-card-id="+card_id+"]");
-		var playAudio = MODULE.makeAudioPlayer($card);
-		var mode = $card.data("mode")
-
-		var slideOpts = {
-			direction: deck_slider._slideDirection,
-			complete: playAudio
-		}; 
-
-		// send tracking
-		Analytics.trackCard(card_id, mode); 
-
-		// show the card controls 
-		$controls.addClass('card-active');
-		$controls.show();
-
-		// show the card 
-		$card.addClass('card-active');
-		if(deck_slider._slideCurrent) {
-			$card.show();
-			playAudio();
-		} else {
-			$card.show('slide', slideOpts, 500);
-		}
-	});
-	*/
 	deck_slider.bind("load", function(slider, card_ids) {
 		MODULE.loadCardMedia(card_ids);
 	});
