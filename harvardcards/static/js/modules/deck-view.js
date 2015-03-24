@@ -43,7 +43,7 @@ function initModule() {
 		var $controls = $cardDetail.find(".controls[data-card-id]");
 		var $card = $cardDetail.find(".card[data-card-id]");
 
-		//$controls.removeClass("card-active").hide();
+		$controls.removeClass("card-active").hide();
 		//$card.removeClass('card-active').hide();
 
 		deck_slider._slideDirection = (data.toIndex >= data.fromIndex ? "right" : "left");
@@ -78,7 +78,15 @@ function initModule() {
             nextButton: '.swiper-btn-next',
             prevButton: '.swiper-btn-prev',
             keyboardControl: true,
-            loop: false
+            loop: false,
+            onSlideChangeStart: function(swiper){
+                console.log(swiper.activeIndex);
+                console.log(deck_slider.getCardId[swiper.slides[swiper.activeIndex]]);
+                console.log($(swiper.slides[swiper.activeIndex]).data('card-id'));
+                deck_slider.selectCard($(swiper.slides[swiper.activeIndex]).data('card-id'));
+
+            }
+
         });
 
 
