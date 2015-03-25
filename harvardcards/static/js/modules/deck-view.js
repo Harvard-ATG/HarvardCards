@@ -116,10 +116,6 @@ function initModule() {
             }
         }
     };
-    deck_slider.onSlide(function(){
-        console.log("onSlide");
-
-    });
     /* End Swiper */
 
 	deck_slider.bind("load", function(slider, card_ids) {
