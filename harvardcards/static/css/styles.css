@@ -776,7 +776,7 @@ div.deckNav{
 		text-align: center;
 		font-size: 1em;
 		left: 0;
-		z-index: 1;
+		z-index: 100;
 		font-family: Arial,Helvetica,san-serif;
 		font-size: 1em;
 		color: #fff;
