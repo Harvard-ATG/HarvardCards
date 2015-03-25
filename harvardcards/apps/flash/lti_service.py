@@ -3,8 +3,8 @@ from harvardcards.apps.flash.models import Collection, Users_Collections, Course
 from django_auth_lti import const
 
 import datetime
-import urlparse
 import logging
+import urlparse
 log = logging.getLogger(__name__)
 
 class LTIService:
@@ -26,9 +26,15 @@ class LTIService:
         return Course.objects.get(course_id=course_id)
 
     def getEntityName(self):
+        '''Returns the entity name for the tool consumer.'''
         url = self.getLTILaunchParam('launch_presentation_return_url', None)
-        entity = urlparse.urlsplit(url).netloc.split('.')[-2]
-        return entity
+        if url is None: 
+            entity = 'entity'
+        else:
+            parts = urlparse.urlsplit(url).netloc.split('.'); 
+            if len(parts) >= 2:
+                entity = parts[-2]
+        return entity.lower()
 
     def isLTILaunch(self):
         '''Returns true if an LTI launch is detected, false otherwise.'''
@@ -99,7 +105,7 @@ class LTIService:
         return course
 
     def isCourseAssociated(self, course_id, collection_id):
-        '''Returns true if the given canvas course ID is associated with the given collection ID, false otherwise.'''
+        '''Returns true if the given course ID is associated with the given collection ID, false otherwise.'''
         course = self.getCourse(course_id)
         found = Course_Map.objects.filter(collection__id=collection_id, course=course)
         if found:
