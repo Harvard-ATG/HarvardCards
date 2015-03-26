@@ -7,7 +7,8 @@ define([
 	'models/Analytics', 
 	'models/Deck', 
 	'views/CardForm', 
-	'utils/utils'
+	'utils/utils',
+    'swiper'
 ], function(
 	$, 
 	DeckSlider, 
@@ -17,7 +18,8 @@ define([
 	Analytics,
 	Deck, 
 	CardForm, 
-	utils
+	utils,
+    Swiper
 ) {
 
 function initModule() {
@@ -42,40 +44,80 @@ function initModule() {
 		var $card = $cardDetail.find(".card[data-card-id]");
 
 		$controls.removeClass("card-active").hide();
-		$card.removeClass('card-active').hide(); 
+		//$card.removeClass('card-active').hide();
 
 		deck_slider._slideDirection = (data.toIndex >= data.fromIndex ? "right" : "left");
 		deck_slider._slideCurrent = (data.toIndex == data.fromIndex);
 	});
-	deck_slider.bind("slide", function(slider, data) {
-		// find the card elements
+
+    deck_slider.bind("slide", function(slider, data) {
 		var card_id = data.card_id;
 		var $controls = $cardDetail.find(".controls[data-card-id="+card_id+"]");
 		var $card = $cardDetail.find(".card[data-card-id="+card_id+"]");
 		var playAudio = MODULE.makeAudioPlayer($card);
-		var mode = $card.data("mode")
+		var mode = $card.data("mode");
 
 		var slideOpts = {
 			direction: deck_slider._slideDirection,
 			complete: playAudio
-		}; 
+		};
 
-		// send tracking
-		Analytics.trackCard(card_id, mode); 
+        // send tracking
+		Analytics.trackCard(card_id, mode);
 
-		// show the card controls 
+		// show the card controls
 		$controls.addClass('card-active');
 		$controls.show();
 
-		// show the card 
+		// show the card
 		$card.addClass('card-active');
-		if(deck_slider._slideCurrent) {
+
+
+        if(deck_slider._slideCurrent) {
 			$card.show();
 			playAudio();
-		} else {
-			$card.show('slide', slideOpts, 500);
 		}
-	});
+
+    });
+
+    /* Swiper */
+    var mySwiper = new Swiper ('.swiper-container', {
+        // Optional parameters
+        direction: 'horizontal',
+        nextButton: '.swiper-btn-next',
+        prevButton: '.swiper-btn-prev',
+        keyboardControl: true,
+        loop: false,
+        onSlideChangeStart: function(swiper){
+            deck_slider.selectCard($(swiper.slides[swiper.activeIndex]).data('card-id'));
+        	card_counter.update();
+
+        }
+    });
+    $('.card-image').click(function(event){
+        mySwiper.slideTo(deck_slider.getIndexOfCard($(event.currentTarget).data('card-id')));
+    });
+    $('#first_card').click(function(event){
+        mySwiper.slideTo(0);
+    });
+    $('#last_card').click(function(event){
+        mySwiper.slideTo(mySwiper.slides.length - 1);
+    });
+    var shuffleSwiper = function(card_ids){
+        var slides = mySwiper.slides;
+        mySwiper.removeAllSlides();
+        for(var i = 0; i < card_ids.length; i++){
+            for(var j = 0; j < slides.length; j++){
+                card_id = $(slides[j]).data('card-id');
+                if(card_ids[i] == card_id){
+                    mySwiper.appendSlide(slides[j]);
+                    break;
+                }
+            }
+        }
+    };
+    /* End Swiper */
+
 	deck_slider.bind("load", function(slider, card_ids) {
 		MODULE.loadCardMedia(card_ids);
 	});
@@ -142,12 +184,14 @@ function initModule() {
 
 		if ($("#shuffle_cards .control-text").text() == shuffleText){
 			deck_slider.shuffle();
+            shuffleSwiper(deck_slider.card_ids);
 			deck_slider.goToFirst();
 			$("#shuffle_cards .control-text").text(resetText);
 			$("#shuffle").removeClass('fa-random').addClass('fa-refresh');
 
 		} else {
 			deck_slider.reset();
+            shuffleSwiper(deck_slider.card_ids);
 			deck_slider.goToFirst();
 			$("#shuffle_cards .control-text").text(shuffleText);
 			$("#shuffle").removeClass('fa-refresh').addClass('fa-random');

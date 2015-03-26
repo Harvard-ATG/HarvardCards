@@ -776,7 +776,7 @@ div.deckNav{
 		text-align: center;
 		font-size: 1em;
 		left: 0;
-		z-index: 1;
+		z-index: 100;
 		font-family: Arial,Helvetica,san-serif;
 		font-size: 1em;
 		color: #fff;
@@ -1075,8 +1075,7 @@ ol.help > li > ol > li > ol {
 	}
 
 	#navigation
-	, a#addCard 
-	, .addCards{ display: none; }
+	, a#addCard { display: none; }
 
 	#content{
 		width: 100%;
@@ -1180,10 +1179,6 @@ ol.help > li > ol > li > ol {
 		width: 98%;
 	}
 
-	#navigation
-	, a#addCard
-	, .addCards { display: none; }
-
 	#content{
 		width: 100%;
 		padding: 0%;
@@ -1246,9 +1241,6 @@ ol.help > li > ol > li > ol {
 		display: block;
 	}
 
-	#navigation
-	, a#addCard
-	, .addCards { display: none; }
 
 	#content{
 		width: 100%;
@@ -1687,3 +1679,4 @@ fieldset {
 	.hidden-mobile { display: none !important; }
 }
 
+/********** swipe ************/
