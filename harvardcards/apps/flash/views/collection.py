@@ -93,7 +93,8 @@ def custom_create(request):
     upload_error = ''
     course_name = ''
     role_bucket = services.get_or_update_role_bucket(request)
-    course_collections = LTIService(request).getCourseCollections()
+    lti_req = LTIService(request)
+    course_collections = lti_req.getCourseCollections()
     collection_list = queries.getCollectionList(role_bucket, collection_ids=course_collections)
     if request.method == 'POST':
         d = {'user': request.user}
@@ -109,9 +110,10 @@ def custom_create(request):
                 upload_error = 'Course name needed.'
         else:
             try:
-                deck = services.handle_custom_file(request.FILES['file'], course_name, request.user)
+                is_teacher = lti_req.isTeacher()
+                deck = services.handle_custom_file(request.FILES['file'], course_name, request.user, is_teacher)
 
-                LTIService(request).associateCourse(deck.collection.id)
+                lti_req.associateCourse(deck.collection.id)
                 log.info('Custom deck %(d)s successfully added to the new collection %(c)s.'
                          %{'c': str(deck.collection.id), 'd':str(deck.id)}, extra=d)
                 return redirect(deck)

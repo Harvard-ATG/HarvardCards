@@ -246,7 +246,7 @@ def handle_uploaded_deck_file(deck, uploaded_file):
 
     add_cards_to_deck(deck, parsed_cards)
 
-def handle_custom_file(uploaded_file, course_name, user):
+def handle_custom_file(uploaded_file, course_name, user, is_teacher):
     """Handles an uploaded custom deck file."""
     cached_file_contents = uploaded_file.read()
     mappings = None
@@ -274,7 +274,7 @@ def handle_custom_file(uploaded_file, course_name, user):
         field.save()
         card_template_field = CardTemplates_Fields(card_template=card_template, field=field)
         card_template_field.save()
-    collection = Collection(title=course_name, card_template=card_template)
+    collection = Collection(title=course_name, card_template=card_template, published=not is_teacher)
     collection.save()
     user_collection = Users_Collections(user=user, date_joined=date.today(), collection=collection, role=Users_Collections.ADMINISTRATOR)
     user_collection.save()
