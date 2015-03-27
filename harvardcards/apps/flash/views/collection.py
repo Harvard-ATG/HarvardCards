@@ -36,10 +36,8 @@ def index(request, collection_id=None):
     lti_req = LTIService(request)
     course_collections = lti_req.getCourseCollections()
 
-    is_teacher = False
-    if lti_req.isLTILaunch():
-        if lti_req.hasTeachingStaffRole():
-            is_teacher = True
+    is_teacher = lti_req.isTeacher()
+
     copy_collections = queries.getCopyCollectionList(request.user)
     collection_filters = dict(collection_ids=course_collections, can_filter=not queries.is_superuser_or_staff(request.user))
     collection_list = queries.getCollectionList(role_bucket, **collection_filters)
@@ -148,10 +146,7 @@ def create(request):
 
     if request.method == 'POST':
         lti_req = LTIService(request)
-        published = True
-        if lti_req.isLTILaunch():
-            if lti_req.hasTeachingStaffRole():
-                published = False
+        published = not lti_req.isTeacher()
         request.POST = request.POST.copy()
         request.POST['published'] = published
         collection_form = CollectionForm(request.POST)

@@ -18,6 +18,13 @@ class LTIService:
         if self.isLTILaunch() and not self.courseExists():
             self.course = self.createCourse()
 
+    def isTeacher(self):
+        is_teacher = False
+        if self.isLTILaunch():
+            if self.hasTeachingStaffRole():
+                is_teacher = True
+        return is_teacher
+
     def getCourse(self, course_id=None):
         if course_id is None:
             if self.course is not None:
