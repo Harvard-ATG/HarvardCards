@@ -7,7 +7,10 @@
     {% if collection.id in user_collection_role.ADMINISTRATOR %}
         <ul class="adminMenu adminMenuRight">
             {% if private and is_teacher and not collection.published %}
-            <li><a class="adminMenuBtn hidden-mobile" href=""><i class="fa fa-upload"></i> Publish</a></li>
+            <li><a class="adminMenuBtn hidden-mobile" href="{% url 'collectionPublish' collection.id %}?collection_id={{collection.id}}"><i class="fa fa-upload"></i> Publish</a></li>
+            {% endif %}
+            {% if not private and is_teacher and collection.published %}
+            <li><a class="adminMenuBtn hidden-mobile" href="{% url 'collectionPublish' collection.id %}?collection_id={{collection.id}}"><i class="fa fa-upload"></i> Unpublish</a></li>
             {% endif %}
             <li><a class="adminMenuBtn hidden-mobile" href="{% url 'collectionEdit' collection.id %}?collection_id={{collection.id}}"><i class="fa fa-pencil"></i> Edit</a></li>
             <li><a class="adminMenuBtn hidden-mobile" href="{% url 'collectionDelete' collection.id %}?collection_id={{collection.id}}" data-confirm="Are you sure you want to delete: {{collection.title|escape}}?"><i class="fa fa-times-circle"></i> Delete</a></li>

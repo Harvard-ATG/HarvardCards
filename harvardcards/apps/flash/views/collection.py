@@ -236,6 +236,15 @@ def edit(request, collection_id=None):
 
     return render(request, 'collections/edit.html', context)
 
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR], 'collection')
+def toggle_publish(request, collection_id=None):
+    collection = Collection.objects.get(id=collection_id)
+    collection.published = not collection.published
+    collection.save()
+    return redirect(collection)
+
+
+
 @login_required
 @require_http_methods(["POST"])
 def copy_collection(request):
