@@ -274,7 +274,6 @@ def handle_custom_file(uploaded_file, course_name, user):
         field.save()
         card_template_field = CardTemplates_Fields(card_template=card_template, field=field)
         card_template_field.save()
-
     collection = Collection(title=course_name, card_template=card_template)
     collection.save()
     user_collection = Users_Collections(user=user, date_joined=date.today(), collection=collection, role=Users_Collections.ADMINISTRATOR)

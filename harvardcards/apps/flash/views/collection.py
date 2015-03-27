@@ -33,7 +33,13 @@ def index(request, collection_id=None):
         return collection
 
     role_bucket = services.get_or_update_role_bucket(request)
-    course_collections = LTIService(request).getCourseCollections()
+    lti_req = LTIService(request)
+    course_collections = lti_req.getCourseCollections()
+
+    is_teacher = False
+    if lti_req.isLTILaunch():
+        if lti_req.hasTeachingStaffRole():
+            is_teacher = True
     copy_collections = queries.getCopyCollectionList(request.user)
     collection_filters = dict(collection_ids=course_collections, can_filter=not queries.is_superuser_or_staff(request.user))
     collection_list = queries.getCollectionList(role_bucket, **collection_filters)
@@ -41,12 +47,12 @@ def index(request, collection_id=None):
 
     active_collection = None
     display_collections = collection_list
-
     display_collections_1 = {'Private': [], 'Public': []}
     course_ids = queries.get_course_collection_ids()
     for collection in display_collections:
         id = collection['id']
-        if id in course_ids:
+        published = collection['published']
+        if id in course_ids and published:
             display_collections_1['Public'].append(collection)
         else:
             display_collections_1['Private'].append(collection)
@@ -57,6 +63,7 @@ def index(request, collection_id=None):
         "copy_collections": copy_collections,
         "active_collection": active_collection,
         "user_collection_role": role_bucket,
+        "is_teacher": is_teacher
     }
 
     if collection_id:
@@ -140,12 +147,19 @@ def create(request):
     collection_list = queries.getCollectionList(role_bucket, collection_ids=course_collections)
 
     if request.method == 'POST':
+        lti_req = LTIService(request)
+        published = True
+        if lti_req.isLTILaunch():
+            if lti_req.hasTeachingStaffRole():
+                published = False
+        request.POST = request.POST.copy()
+        request.POST['published'] = published
         collection_form = CollectionForm(request.POST)
+
         card_template_id = collection_form.data['card_template']
         if collection_form.is_valid():
             collection = collection_form.save()
-            LTIService(request).associateCourse(collection.id)
-
+            lti_req.associateCourse(collection.id)
             services.add_user_to_collection(user=request.user, collection=collection, role=Users_Collections.ADMINISTRATOR)
             #update role_bucket to add admin permission to the user for this newly created collection
             services.get_or_update_role_bucket(request, collection.id, Users_Collections.role_map[Users_Collections.ADMINISTRATOR])

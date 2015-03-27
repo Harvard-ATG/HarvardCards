@@ -42,7 +42,7 @@ class Collection(models.Model):
     description = models.TextField(blank=True)
     users = models.ManyToManyField(User, through='Users_Collections')
     card_template = models.ForeignKey(CardTemplate)
-    private = models.BooleanField(default=True)
+    published = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = 'Collection'
