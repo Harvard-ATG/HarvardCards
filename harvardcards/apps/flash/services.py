@@ -246,7 +246,7 @@ def handle_uploaded_deck_file(deck, uploaded_file):
 
     add_cards_to_deck(deck, parsed_cards)
 
-def handle_custom_file(uploaded_file, course_name, user, is_teacher):
+def handle_custom_file(uploaded_file, course_name, user, is_teacher=False):
     """Handles an uploaded custom deck file."""
     cached_file_contents = uploaded_file.read()
     mappings = None
