@@ -57,7 +57,7 @@
             <ul class="accordion" style="margin-top: .5em">
             {% for collection in display_collections.Private %}
                 <li>
-                {% include "_collection_view.html" with collection=collection user_collection_role=user_collection_role %}
+                {% include "_collection_view.html" with is_teacher=is_teacher collection=collection user_collection_role=user_collection_role %}
                 </li>
             {% endfor %}
             </ul>
@@ -66,7 +66,7 @@
         {% else %}
         <ul class="accordion" style="margin-top: .5em">
             <li>
-            {% include "_collection_view.html" with collection=display_collections.0 user_collection_role=user_collection_role %}
+            {% include "_collection_view.html" with is_teacher=is_teacher collection=display_collections.0 user_collection_role=user_collection_role %}
             </li>
         </ul>
         {% endif %}

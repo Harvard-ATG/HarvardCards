@@ -57,9 +57,7 @@ def getCollectionList(role_bucket, **kwargs):
 
     collection_list = []
     for collection in collections:
-        has_access = True
-        has_access = has_access and not collection.private
-        has_access = has_access or has_role_in_bucket(role_bucket, collection_roles, collection.id)
+        has_access = has_role_in_bucket(role_bucket, collection_roles, collection.id)
         log.debug("collection id: [%s] has access: [%s]" % (collection.id, has_access))
         if has_access:
             collection_decks = []
@@ -74,12 +72,14 @@ def getCollectionList(role_bucket, **kwargs):
                 collection_list.append({
                     'id': collection.id,
                     'title':collection.title,
+                    'published': collection.published,
                     'decks': collection_decks
                 })
             else:
                 collection_list.append({
                     'id': collection.id,
                     'title':collection.title,
+                    'published': collection.published,
                     'decks': []
                 })
 

@@ -33,7 +33,11 @@ def index(request, collection_id=None):
         return collection
 
     role_bucket = services.get_or_update_role_bucket(request)
-    course_collections = LTIService(request).getCourseCollections()
+    lti_req = LTIService(request)
+    course_collections = lti_req.getCourseCollections()
+
+    is_teacher = lti_req.isTeacher()
+
     copy_collections = queries.getCopyCollectionList(request.user)
     collection_filters = dict(collection_ids=course_collections, can_filter=not queries.is_superuser_or_staff(request.user))
     collection_list = queries.getCollectionList(role_bucket, **collection_filters)
@@ -41,12 +45,12 @@ def index(request, collection_id=None):
 
     active_collection = None
     display_collections = collection_list
-
     display_collections_1 = {'Private': [], 'Public': []}
     course_ids = queries.get_course_collection_ids()
     for collection in display_collections:
         id = collection['id']
-        if id in course_ids:
+        published = collection['published']
+        if id in course_ids and published:
             display_collections_1['Public'].append(collection)
         else:
             display_collections_1['Private'].append(collection)
@@ -57,6 +61,7 @@ def index(request, collection_id=None):
         "copy_collections": copy_collections,
         "active_collection": active_collection,
         "user_collection_role": role_bucket,
+        "is_teacher": is_teacher
     }
 
     if collection_id:
@@ -88,7 +93,8 @@ def custom_create(request):
     upload_error = ''
     course_name = ''
     role_bucket = services.get_or_update_role_bucket(request)
-    course_collections = LTIService(request).getCourseCollections()
+    lti_req = LTIService(request)
+    course_collections = lti_req.getCourseCollections()
     collection_list = queries.getCollectionList(role_bucket, collection_ids=course_collections)
     if request.method == 'POST':
         d = {'user': request.user}
@@ -104,9 +110,10 @@ def custom_create(request):
                 upload_error = 'Course name needed.'
         else:
             try:
-                deck = services.handle_custom_file(request.FILES['file'], course_name, request.user)
+                is_teacher = lti_req.isTeacher()
+                deck = services.handle_custom_file(request.FILES['file'], course_name, request.user, is_teacher)
 
-                LTIService(request).associateCourse(deck.collection.id)
+                lti_req.associateCourse(deck.collection.id)
                 log.info('Custom deck %(d)s successfully added to the new collection %(c)s.'
                          %{'c': str(deck.collection.id), 'd':str(deck.id)}, extra=d)
                 return redirect(deck)
@@ -140,12 +147,16 @@ def create(request):
     collection_list = queries.getCollectionList(role_bucket, collection_ids=course_collections)
 
     if request.method == 'POST':
+        lti_req = LTIService(request)
+        published = not lti_req.isTeacher()
+        request.POST = request.POST.copy()
+        request.POST['published'] = published
         collection_form = CollectionForm(request.POST)
+
         card_template_id = collection_form.data['card_template']
         if collection_form.is_valid():
             collection = collection_form.save()
-            LTIService(request).associateCourse(collection.id)
-
+            lti_req.associateCourse(collection.id)
             services.add_user_to_collection(user=request.user, collection=collection, role=Users_Collections.ADMINISTRATOR)
             #update role_bucket to add admin permission to the user for this newly created collection
             services.get_or_update_role_bucket(request, collection.id, Users_Collections.role_map[Users_Collections.ADMINISTRATOR])
@@ -221,6 +232,15 @@ def edit(request, collection_id=None):
     }
 
     return render(request, 'collections/edit.html', context)
+
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR], 'collection')
+def toggle_publish(request, collection_id=None):
+    collection = Collection.objects.get(id=collection_id)
+    collection.published = not collection.published
+    collection.save()
+    return redirect(collection)
+
+
 
 @login_required
 @require_http_methods(["POST"])

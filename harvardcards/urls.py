@@ -21,6 +21,8 @@ urlpatterns = patterns('',
     url(r'^collection/(?P<collection_id>\d+)/add-deck$', 'harvardcards.apps.flash.views.collection.add_deck', name='collectionAddDeck'),
     url(r'^collection/custom/upload', 'harvardcards.apps.flash.views.collection.custom_create', name='customDeckUpload'),
     url(r'^collection/(?P<collection_id>\d+)/edit$', 'harvardcards.apps.flash.views.collection.edit', name='collectionEdit'),
+    url(r'^collection/(?P<collection_id>\d+)/publish$', 'harvardcards.apps.flash.views.collection.toggle_publish', name='collectionPublish'),
+
     url(r'^collection/(?P<collection_id>\d+)/all_cards$', 'harvardcards.apps.flash.views.deck.all_cards', name='allCards'),
     url(r'^collection/(?P<collection_id>\d+)/delete-card', 'harvardcards.apps.flash.views.deck.delete_card_collection', name='collectionDeleteCard'),
     url(r'^collection/(?P<collection_id>\d+)/edit-card', 'harvardcards.apps.flash.views.deck.edit_card_collection', name='collectionEditCard'),
