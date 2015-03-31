@@ -146,13 +146,13 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 
 	// Handles slider event triggered before the slide.
 	DeckSlider.prototype.onBeforeSlide = function(slider, fromIndex, toIndex) {
-		var card_id = this.card_ids[fromIndex];
+        var card_id = this.card_ids[fromIndex];
 		this.trigger("beforeslide", this, {fromIndex:fromIndex, toIndex:toIndex, card_id:card_id});
 	};
 
 	// Handles slider event triggered after the slide.
 	DeckSlider.prototype.onSlide = function(slider, index) {
-		var card_id = this.card_ids[index];
+        var card_id = this.card_ids[index];
 		this.selectCard(card_id);
 		this.triggerLoad(index);
 		this.trigger("slide", this, {index:index, card_id:card_id});
@@ -160,7 +160,7 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 
 	// Handles a click on a card element.
 	DeckSlider.prototype.onClickCard = function(e) {
-		var card_id, currentTarget = e.currentTarget;
+        var card_id, currentTarget = e.currentTarget;
 		if(this.isCard(currentTarget)) {
 			card_id = this.getCardId(currentTarget);
 			this.goToCard(card_id);
@@ -295,6 +295,8 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
 	DeckSlider.prototype._play = function(doneCallback) {
 		return $.proxy(function() {
 			var isNext = this.goToNext();
+            // forcing a click to have something easy to listen for
+            $(this.currentCardEl).click();
 			var pause = !isNext || this.isLastItem();
 			if(pause) {
 				this.pause();

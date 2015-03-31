@@ -3,12 +3,12 @@ This module contains common queries that return a result and DO NOT change the
 observable state of the system (are free of side effects).
 """
 
-from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Decks_Cards, Canvas_Course, Canvas_Course_Map
+from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Decks_Cards, Course, Course_Map
 
 import logging
 log = logging.getLogger(__name__)
 def get_course_collection_ids():
-    return Canvas_Course_Map.objects.all().values_list('collection_id', flat=True)
+    return Course_Map.objects.all().values_list('collection_id', flat=True)
 
 def is_superuser_or_staff(user):
     """ Checks if the user is superuser or staff. Returns True or False """
@@ -57,9 +57,7 @@ def getCollectionList(role_bucket, **kwargs):
 
     collection_list = []
     for collection in collections:
-        has_access = True
-        has_access = has_access and not collection.private
-        has_access = has_access or has_role_in_bucket(role_bucket, collection_roles, collection.id)
+        has_access = has_role_in_bucket(role_bucket, collection_roles, collection.id)
         log.debug("collection id: [%s] has access: [%s]" % (collection.id, has_access))
         if has_access:
             collection_decks = []
@@ -74,12 +72,14 @@ def getCollectionList(role_bucket, **kwargs):
                 collection_list.append({
                     'id': collection.id,
                     'title':collection.title,
+                    'published': collection.published,
                     'decks': collection_decks
                 })
             else:
                 collection_list.append({
                     'id': collection.id,
                     'title':collection.title,
+                    'published': collection.published,
                     'decks': []
                 })
 
@@ -179,13 +179,13 @@ def can_copy_collection(user, collection_id):
 
 def getCourseNameCollectionMap():
     '''Returns a dictionary that maps collection IDs to canvas course short names.'''
-    canvas_to_course_name = dict([
-        (c.canvas_course_id, c.course_name_short) 
-        for c in Canvas_Course.objects.all()
+    id_to_course_name = dict([
+        (c.course_id, c.course_name_short)
+        for c in Course.objects.all()
     ])
     collection_to_course_name = dict([
-        (cm.collection_id, canvas_to_course_name.get(cm.canvas_course_id, '')) 
-        for cm in Canvas_Course_Map.objects.all()
+        (cm.collection_id, id_to_course_name.get(cm.course_id, ''))
+        for cm in Course_Map.objects.all()
     ])
     return collection_to_course_name
 

@@ -10,7 +10,7 @@ import json
 class CollectionForm(forms.ModelForm):
     class Meta:
         model = Collection
-        fields = ['title', 'card_template'] #'private'
+        fields = ['title', 'card_template', 'published'] #'private'
     def __init__(self, *args, **kwargs):
         card_template_query_set = None
         if 'query_set' in kwargs:

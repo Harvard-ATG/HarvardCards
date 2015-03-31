@@ -24,7 +24,7 @@ DATABASES = {
 # Uncomment the MIDDLEWARE_CLASSES and INSTALLED_APPS lines
 # to enable the django debug toolbar.
 DEBUG_TOOLBAR_CONFIG = {
-    'SHOW_TOOLBAR_CALLBACK': "%s.true" % __name__,
+    'SHOW_TOOLBAR_CALLBACK': lambda request: True,
     'ENABLE_STACKTRACES': True,
 }
 

@@ -42,7 +42,7 @@ class Collection(models.Model):
     description = models.TextField(blank=True)
     users = models.ManyToManyField(User, through='Users_Collections')
     card_template = models.ForeignKey(CardTemplate)
-    private = models.BooleanField(default=True)
+    published = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = 'Collection'
@@ -216,40 +216,44 @@ class Users_Collections(models.Model):
             return True
         return bool(self.objects.filter(user=user.id, role=role, collection=collection.id))
 
-class Canvas_Course(models.Model):
+class Course(models.Model):
     """
     Course information. 
     """
-    canvas_course_id = models.CharField(max_length=255, unique=True, blank=False)
+    canvas_course_id = models.CharField(max_length=255, blank=True, null=True)
+    product = models.CharField(max_length=255, blank=True, null=True)
+    course_id = models.CharField(max_length=255, unique=True, blank=False)
+    entity =  models.CharField(max_length=255, blank=False)
+    context_id = models.CharField(max_length=255, blank=False)
     course_name_short = models.CharField(max_length=1024)
     course_name = models.CharField(max_length=2048)
 
     class Meta:
-        verbose_name = 'Canvas Course'
-        verbose_name_plural = 'Canvas Courses '
-        ordering = ['canvas_course_id','course_name_short','course_name']
+        verbose_name = 'Course'
+        verbose_name_plural = 'Courses '
+        ordering = ['course_id','course_name_short','course_name']
 
     def __unicode__(self):
-        return "Canvas Course %s - %s" % (self.canvas_course_id, self.course_name_short)
+        return "Course %s - %s" % (self.course_id, self.course_name_short)
 
 
-class Canvas_Course_Map(models.Model):
+class Course_Map(models.Model):
     """
     The purpose of this model is to setup a many-to-many mapping between 
     Canvas courses and collections.
     """
-    canvas_course_id = models.CharField(max_length=255, blank=False)
+    course = models.ForeignKey(Course)
     collection = models.ForeignKey(Collection)
     subscribe = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     
     class Meta:
-        verbose_name = 'Canvas Course Map'
-        verbose_name_plural = 'Canvas Course Maps'
-        ordering = ['canvas_course_id','collection__id','subscribe']
+        verbose_name = 'Course Map'
+        verbose_name_plural = 'Course Maps'
+        ordering = ['course','collection__id','subscribe']
 
     def __unicode__(self):
-        return "Canvas course id: " + str(self.canvas_course_id) + " Collection id: " + str(self.collection.id)
+        return "course: " + str(self.course) + " Collection id: " + str(self.collection.id)
 
 class Analytics(models.Model):
     stmt_id = models.CharField(max_length=36, blank=False)
