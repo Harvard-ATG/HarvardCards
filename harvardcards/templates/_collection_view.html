@@ -62,11 +62,18 @@
 
             <form id="form-{{collection.id}}" action="{% url 'collectionAddDeck' collection.id %}?collection_id={{collection.id}}" method="post">
                 {% csrf_token %}
+
                 <div class="courseHeader">
                     <label for="id_title" style="visibility:hidden;text-indent:-300px;position:absolute;">Title:</label>
                     <input id="deck_title" name="deck_title" type="text" autofocus placeholder="Enter deck name here">
                     <!-- this outputs the text form filed with the django templates {{ collection_form.title }} -->
                 </div>
+
+                <select name="action" style="width: 100%">
+                    <option value="1">Add Deck Only</option>
+                    <option value="2">Add Deck and Cards</option>
+                    <option value="3">Upload Deck Cards</option>
+                </select>
 
             </form>
             <input style="margin-top: .5em" class="adminMenuBtn" form="form-{{collection.id}}" type="submit" value="Add Deck"/>

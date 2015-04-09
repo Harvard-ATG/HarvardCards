@@ -368,10 +368,11 @@ def add_user_to_shared_collection(request, secret_share_key=''):
 def add_deck(request, collection_id=None):
     """Adds a deck."""
     deck_title = 'Untitled Deck'
+    action = 1
     if request.method == 'POST':
         deck_title_sub = request.POST.get('deck_title', deck_title)
         deck_title = deck_title_sub if deck_title_sub else deck_title
-
+        action = int(request.POST.get('action', action))
     deck = services.create_deck(collection_id=collection_id, deck_title=deck_title)
     log.info('Deck %(d)s added to the collection %(c)s.' %{'d': deck.id, 'c': str(collection_id)}, extra={'user': request.user})
     analytics.track(
@@ -380,7 +381,15 @@ def add_deck(request, collection_id=None):
         object=analytics.OBJECTS.deck,
         context={"collection_id": collection_id, "deck_id": deck.id}
     )
-    return redirect(deck)
+
+    if action not in [2, 3]:
+        return redirect(deck)
+    if action == 2:
+        response = redirect('deckCreateCard', deck.id)
+    if action == 3:
+        response = redirect('deckUpload', deck.id)
+    response['Location'] += '?deck_id='+str(deck.id)
+    return response
 
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR], 'collection') 
 def delete(request, collection_id=None):
