@@ -21,7 +21,7 @@ define(['jquery', 'jqueryui'], function($, $ui) {
                 closeOnEscape: true,
                 buttons:[{
                             click: $.noop,
-                            text: "Create Deck",
+                            text: "Submit",
                             type: "Submit",
                             form: this.form_name
                         },
