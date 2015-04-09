@@ -18,6 +18,9 @@ class LTIService:
         if self.isLTILaunch() and not self.courseExists():
             self.course = self.createCourse()
 
+    def getResourceLinkId(self):
+        return self.getLTILaunchParam('resource_link_id', None)
+
     def isTeacher(self):
         is_teacher = False
         if self.isLTILaunch():

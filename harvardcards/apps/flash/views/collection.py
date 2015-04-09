@@ -36,6 +36,9 @@ def index(request, collection_id=None):
     lti_req = LTIService(request)
     course_collections = lti_req.getCourseCollections()
 
+    context_id = lti_req.getContextId()
+
+
     is_teacher = lti_req.isTeacher()
 
     copy_collections = queries.getCopyCollectionList(request.user)
@@ -364,7 +367,12 @@ def add_user_to_shared_collection(request, secret_share_key=''):
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'collection')
 def add_deck(request, collection_id=None):
     """Adds a deck."""
-    deck = services.create_deck(collection_id=collection_id, deck_title='Untitled Deck')
+    deck_title = 'Untitled Deck'
+    if request.method == 'POST':
+        deck_title_sub = request.POST.get('deck_title', deck_title)
+        deck_title = deck_title_sub if deck_title_sub else deck_title
+
+    deck = services.create_deck(collection_id=collection_id, deck_title=deck_title)
     log.info('Deck %(d)s added to the collection %(c)s.' %{'d': deck.id, 'c': str(collection_id)}, extra={'user': request.user})
     analytics.track(
         actor=request.user, 
