@@ -26,7 +26,9 @@
 
             {% include "decks/_deck_card_form.html" with card_fields=card_fields %}
             <input class="adminMenuBtn saveBtn" id="submit_form" type="submit" value="Submit" />
+            {% if not card_id %}
             <input class="adminMenuBtn saveBtn" id="add_another" value="Submit and Add Another" />
+            {% endif %}
             {% if is_all_cards == 1 %}
             <a href="{% url 'allCards' deck.collection.id %}?card_id={{card_id}}" class="adminMenuBtn cancelBtn">Cancel</a>
             {% else %}
