@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 import datetime
+from django.core.urlresolvers import reverse
 
 class Field(models.Model):
     label = models.CharField(max_length=200, blank=True)
@@ -98,8 +99,11 @@ class Deck(models.Model):
         return repr(dict(title=self.title, collection=self.collection.id, id=self.id))
 
     def get_absolute_url(self):
-        from django.core.urlresolvers import reverse
         return reverse('deckIndex', args=[str(self.id)])
+
+    def get_add_card_url(self):
+        return reverse('deckCreateCard', args=[str(self.id)])
+
 
 class Decks_Cards(models.Model):
     deck = models.ForeignKey(Deck)
