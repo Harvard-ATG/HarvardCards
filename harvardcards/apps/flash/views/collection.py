@@ -367,9 +367,10 @@ def add_deck(request, collection_id=None):
     deck_title = 'Untitled Deck'
     action = 1
     if request.method == 'POST':
-        deck_title_sub = request.POST.get('deck_title', deck_title)
-        deck_title = deck_title_sub if deck_title_sub else deck_title
+        deck_title_submitted = request.POST.get('deck_title', deck_title)
+        deck_title = deck_title_submitted if deck_title_submitted != "" else deck_title
         action = int(request.POST.get('action', action))
+
     deck = services.create_deck(collection_id=collection_id, deck_title=deck_title)
     log.info('Deck %(d)s added to the collection %(c)s.' %{'d': deck.id, 'c': str(collection_id)}, extra={'user': request.user})
     analytics.track(
@@ -379,14 +380,13 @@ def add_deck(request, collection_id=None):
         context={"collection_id": collection_id, "deck_id": deck.id}
     )
 
-    if action not in [2, 3]:
+    actions = {2: 'deckCreateCard', 3: 'deckUpload'}
+    if action  in actions.keys():
+        response = redirect(actions[action], deck.id)
+        response['Location'] += '?deck_id='+str(deck.id)
+        return response
+    else:
         return redirect(deck)
-    if action == 2:
-        response = redirect('deckCreateCard', deck.id)
-    if action == 3:
-        response = redirect('deckUpload', deck.id)
-    response['Location'] += '?deck_id='+str(deck.id)
-    return response
 
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR], 'collection') 
 def delete(request, collection_id=None):
