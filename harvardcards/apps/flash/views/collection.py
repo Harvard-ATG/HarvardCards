@@ -36,9 +36,6 @@ def index(request, collection_id=None):
     lti_req = LTIService(request)
     course_collections = lti_req.getCourseCollections()
 
-    context_id = lti_req.getContextId()
-
-
     is_teacher = lti_req.isTeacher()
 
     copy_collections = queries.getCopyCollectionList(request.user)
