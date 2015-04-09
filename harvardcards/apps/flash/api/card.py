@@ -39,16 +39,18 @@ def edit(request):
         deck = card_edit_form.get_deck()
         result['success'] = True
         is_all_cards = request.GET.get('is_all_cards', 0)
-        if int(is_all_cards):
-            base_url = deck.collection.get_all_cards_url()
-        else:
-            base_url = deck.get_absolute_url()
+
 
         if add_another:
             base_url = deck.get_add_card_url()
             goto_url = "{0}?deck_id={1}".format(base_url, deck.id)
         else:
-            card_url = "{0}?card_id={1}".format(base_url, card.id)
+            if int(is_all_cards):
+                base_url = deck.collection.get_all_cards_url()
+            else:
+                base_url = deck.get_absolute_url()
+            goto_url = "{0}?card_id={1}".format(base_url, card.id)
+
         result['data'] = {
             "card_id": card.id,
             "card_url": goto_url
