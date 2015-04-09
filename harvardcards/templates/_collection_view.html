@@ -58,7 +58,7 @@
 <div id="addAdeckDialog-{{collection.id}}" style="display:none;" title="Add A Deck">
     <ul class="addADeckContent">
         <li>
-            <h2>Add a New Deck to Collection {{collection.title}}</h2>
+            <h2>Add a New Deck to the Collection {{collection.title}}</h2>
 
             <form id="form-{{collection.id}}" action="{% url 'collectionAddDeck' collection.id %}?collection_id={{collection.id}}" method="post">
                 {% csrf_token %}
