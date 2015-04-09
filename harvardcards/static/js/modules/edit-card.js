@@ -1,5 +1,11 @@
 define(['jquery', 'views/CardForm'], function($, CardForm) {
 
+    $('#add_another').click(
+        function(){
+            $('#add_another_val').val('1');
+            $('#submit_form').click();
+        }
+    )
     function setup_file_url_switch() {
         $('select[data-switch]').each(function(idx, el) {
             var url_selector = $(el).data("switch-url");

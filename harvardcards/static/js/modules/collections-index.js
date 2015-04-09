@@ -1,4 +1,4 @@
-define(['jquery','views/CollectionListView','views/CollectionCreateModal'], function($,CollectionListView, CollectionCreateModal) {
+define(['jquery','views/CollectionListView','views/CollectionCreateModal', 'views/DeckCreateModal'], function($,CollectionListView, CollectionCreateModal, DeckCreateModal) {
     document.getElementById('collection_type').onchange = function(){
         var currentVal = this.value;
         if (currentVal == 2){
@@ -28,6 +28,22 @@ define(['jquery','views/CollectionListView','views/CollectionCreateModal'], func
 
 			collection_list_view.init();
 			collection_create_modal.init();
+
+            var deck_modals = [];
+            var collections = $('[data-collection-id]')
+            for (var i = 0; i < collections.length; ++i) {
+                var collection = collections[i]
+                var collection_id = $(collection).data('collection-id')
+
+                deck_modals[i] = new DeckCreateModal({
+                    btnSelector: "#addDeck-"+collection_id,
+                    dialogSelector: "#addAdeckDialog-"+collection_id,
+                    form_name: "form-"+collection_id
+                });
+
+                deck_modals[i].init();
+            }
+
 		}
 	};
 });

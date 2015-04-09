@@ -364,7 +364,14 @@ def add_user_to_shared_collection(request, secret_share_key=''):
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'collection')
 def add_deck(request, collection_id=None):
     """Adds a deck."""
-    deck = services.create_deck(collection_id=collection_id, deck_title='Untitled Deck')
+    deck_title = 'Untitled Deck'
+    action = 1
+    if request.method == 'POST':
+        deck_title_submitted = request.POST.get('deck_title', deck_title)
+        deck_title = deck_title_submitted if deck_title_submitted != "" else deck_title
+        action = int(request.POST.get('action', action))
+
+    deck = services.create_deck(collection_id=collection_id, deck_title=deck_title)
     log.info('Deck %(d)s added to the collection %(c)s.' %{'d': deck.id, 'c': str(collection_id)}, extra={'user': request.user})
     analytics.track(
         actor=request.user, 
@@ -372,7 +379,14 @@ def add_deck(request, collection_id=None):
         object=analytics.OBJECTS.deck,
         context={"collection_id": collection_id, "deck_id": deck.id}
     )
-    return redirect(deck)
+
+    actions = {2: 'deckCreateCard', 3: 'deckUpload'}
+    if action  in actions.keys():
+        response = redirect(actions[action], deck.id)
+        response['Location'] += '?deck_id='+str(deck.id)
+        return response
+    else:
+        return redirect(deck)
 
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR], 'collection') 
 def delete(request, collection_id=None):

@@ -17,7 +17,7 @@ def edit(request):
     result = {"success":False}
     card_id = request.POST.get('card_id', '')
     deck_id = request.POST.get('deck_id', '')
-
+    add_another =  int(request.POST.get('add_another_val', 0))
     # fetch the fields being edited; new cards must be created from the card template
     if card_id == '':
         deck = Deck.objects.get(id=deck_id)
@@ -39,14 +39,21 @@ def edit(request):
         deck = card_edit_form.get_deck()
         result['success'] = True
         is_all_cards = request.GET.get('is_all_cards', 0)
-        if int(is_all_cards):
-            base_url = deck.collection.get_all_cards_url()
+
+
+        if add_another:
+            base_url = deck.get_add_card_url()
+            goto_url = "{0}?deck_id={1}".format(base_url, deck.id)
         else:
-            base_url = deck.get_absolute_url()
+            if int(is_all_cards):
+                base_url = deck.collection.get_all_cards_url()
+            else:
+                base_url = deck.get_absolute_url()
+            goto_url = "{0}?card_id={1}".format(base_url, card.id)
 
         result['data'] = {
             "card_id": card.id,
-            "card_url": "{0}?card_id={1}".format(base_url, card.id)
+            "card_url": goto_url
         }
     else:
         card_edit_form.get_card().delete()
