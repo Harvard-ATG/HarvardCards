@@ -86,6 +86,7 @@ function initModule() {
         direction: 'horizontal',
         nextButton: '.swiper-btn-next',
         prevButton: '.swiper-btn-prev',
+        initialSlide: deck_slider.getCurrentCardIndex() - 1,
         keyboardControl: true,
         loop: false,
         onSlideChangeStart: function(swiper){
