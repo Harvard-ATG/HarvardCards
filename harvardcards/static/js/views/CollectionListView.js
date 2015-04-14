@@ -14,7 +14,7 @@ define(['jquery'], function($) {
             this.allCollapsed = true;
 
             this.getHeaderEls().click(function(evt) {
-                if($(evt.target).hasClass('courseHeaderClickable')) {
+                if(!$(evt.target).hasClass('adminMenuBtn')) {
                     self.toggleCollapse(this);
                 }
             });
