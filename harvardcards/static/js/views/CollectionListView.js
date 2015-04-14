@@ -13,8 +13,10 @@ define(['jquery'], function($) {
 
             this.allCollapsed = true;
 
-            this.getHeaderEls().click(function() {
-                self.toggleCollapse(this);
+            this.getHeaderEls().click(function(evt) {
+                if($(evt.target).hasClass('courseHeaderClickable')) {
+                    self.toggleCollapse(this);
+                }
             });
 
             this.getExpandCollapseAllBtn().click(function() {
