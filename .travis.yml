@@ -4,7 +4,7 @@ python:
 
 # set environment variables
 env:
-    - DJANGO_SETTINGS_MODULE="harvardcards.settings.dev"
+    - DJANGO_SETTINGS_MODULE="harvardcards.settings.dev-mysql"
 
 # command to install dependencies
 install: "pip install -r requirements.txt --use-mirrors"
