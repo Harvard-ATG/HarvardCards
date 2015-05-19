@@ -1,22 +1,20 @@
 from harvardcards.settings.common import *
-import os
 
 DEBUG = True
 SECRET_KEY = '#5g0vp545jp644!hha1)fb7v1hd!*t#b@fv&amp;1(mrnt5)$q%w0g'
 LTI_OAUTH_CREDENTIALS = {"flashkey":"flashsecret"}
-if 'heroku' not in os.environ.get('SERVER_NAME'):
 
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'flash.db',    # Or path to database file if using sqlite3.
-            # The following settings are not used with sqlite3:
-            'USER': '',
-            'PASSWORD': '',
-            'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-            'PORT': '',                      # Set to empty string for default.
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'flash.db',    # Or path to database file if using sqlite3.
+        # The following settings are not used with sqlite3:
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'PORT': '',                      # Set to empty string for default.
     }
+}
 
 #########################################
 # Configuration for the django-debug-toolbar 
