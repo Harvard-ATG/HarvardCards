@@ -30,6 +30,7 @@ Tip: If you're familiar with python's [virtualenv](https://pypi.python.org/pypi/
 Notes:
 
 * Requires postgres to be installed on your system. If you do not have postgres installed, comment out *psycopg2* module in the requirements.txt. This is mainly for heroku deployment.
+* The [Pillow](https://pypi.python.org/pypi/Pillow/) module, used for image manipulation, requires external libraries to be installed on your system such as libjpeg, etc. The Pillow documentation describes methods to install the libraries you need.
 
 ### Vagrant Quickstart
 
