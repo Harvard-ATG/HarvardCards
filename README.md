@@ -27,6 +27,10 @@ You should now be able to access the application at: ```http://localhost:8080```
 
 Tip: If you're familiar with python's [virtualenv](https://pypi.python.org/pypi/virtualenv), it's recommended to setup a virtualenv for the application first. See the [documentation](http://virtualenv.readthedocs.org/en/latest/virtualenv.html#installation) for how to install and activate it.
 
+Notes:
+
+* Requires postgres to be installed on your system. If you do not have postgres installed, comment out *psycopg2* module in the requirements.txt. This is mainly for heroku deployment.
+
 ### Vagrant Quickstart
 
 Make sure you have [Vagrant](http://www.vagrantup.com/) and [VirtualBox](https://www.virtualbox.org/) installed on your computer. Note that this has only been tested on unix-based machines.
