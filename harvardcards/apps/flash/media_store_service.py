@@ -7,14 +7,16 @@ from django.conf import settings
 from django.core.files.uploadedfile import UploadedFile
 from harvardcards.apps.flash.models import MediaStore
 
-
 MEDIA_ROOT = settings.MEDIA_ROOT
+#MEDIA_STORE = settings.MEDIA_STORE 
+MEDIA_STORE = "FILE" # S3|FILE
 
 class MediaStoreService:
-    """Class to manage reading and writings files to the local media store."""
+    """Class to manage media file storage."""
 
     def __init__(self, *args, **kwargs):
         file = kwargs.get('file', None)
+        file_type = kwargs.get('file_type', None)
 
         if isinstance(file, basestring):
             if os.path.exists(file):
@@ -35,60 +37,31 @@ class MediaStoreService:
 
         self._file_md5hash = None
         self.file = file
-        self._createBaseDirs()
+        self.file_type = file_type
 
-    def save(self, type=None):
-        """Saves the media store."""
+        if MEDIA_STORE == "FILE":
+            self.store = MediaStoreFile(self)
+        elif MEDIA_STORE == "S3":
+            self.store = MediaStoreS3(self)
 
-        if self.fileRecordExists():
-            store = self.lookupFileRecord()
-        else:
-            self.writeFile()
-            self.process(type)
-            self.link(type)
-            store = self.createFileRecord()
-            store.save()
+    def save(self):
+        self.store.save()
 
-        return store
+    def createRecord(self):
+        return MediaStore(
+            file_name=self.storeFileName(),
+            file_size=self.file.size,
+            file_type=self.file.content_type,
+            file_md5hash=self.getFileHash()
+        )
 
-    def process(self, type=None):
-        if type == 'I':
-            self._processResizeImage()
+    def recordExists(self):
+        return MediaStore.objects.filter(file_md5hash=self.getFileHash()).exists()
 
-    def link(self, type=None):
-        file_name = self.storeFileName()
+    def lookupRecord(self):
+        return MediaStore.objects.filter(file_md5hash=self.getFileHash())[0]
 
-        # link to the original media file
-        original_source_path = os.path.join('..', '..', self.storeFilePath('original'))
-        original_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeDir(), 'original', file_name))
-        if not os.path.lexists(original_link_path):
-            os.symlink(original_source_path, original_link_path)
-
-        if type == 'I':
-            # link to the large thumbnail file
-            large_source_path = os.path.join('..', '..', self.storeFilePath('thumb-large'))
-            large_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeDir(), 'thumb-large', file_name))
-            if not os.path.lexists(large_link_path):
-                os.symlink(large_source_path, large_link_path)
-
-            # link to the small thumbnail file
-            small_source_path = os.path.join('..', '..', self.storeFilePath('thumb-small'))
-            small_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeDir(), 'thumb-small', file_name))
-            if not os.path.lexists(small_link_path):
-                os.symlink(small_source_path, small_link_path)
-
-
-    def writeFile(self):
-        file = self.file
-        file_name = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeFilePath('original')))
-        with open(file_name, 'wb+') as dest:
-            if file.multiple_chunks:
-                for c in file.chunks():
-                    dest.write(c)
-            else:
-                dest.write(file.read())
-
-    def fileHash(self):
+    def getFileHash(self):
         if self._file_md5hash:
             return self._file_md5hash
 
@@ -103,32 +76,88 @@ class MediaStoreService:
 
         return self._file_md5hash
 
-    def createFileRecord(self):
-        return MediaStore(
-            file_name=self.storeFileName(),
-            file_size=self.file.size,
-            file_type=self.file.content_type,
-            file_md5hash=self.fileHash()
-        )
-
-    def fileRecordExists(self):
-        return MediaStore.objects.filter(file_md5hash=self.fileHash()).exists()
-
-    def lookupFileRecord(self):
-        return MediaStore.objects.filter(file_md5hash=self.fileHash())[0]
-
     def storeDir(self):
         return 'store'
 
     def storeFileDir(self):
-        return os.path.join(self.storeDir(), self.fileHash())
+        return os.path.join(self.storeDir(), self.getFileHash())
 
     def storeFileName(self):
         file_extension = os.path.splitext(self.file.name)[1]
-        return self.fileHash() + file_extension.lower()
+        return self.getFileHash() + file_extension.lower()
 
     def storeFilePath(self, path):
         return os.path.join(self.storeFileDir(), path, self.storeFileName())
+
+
+class MediaStoreFile:
+    """Class to manage reading and writings files to the local media store."""
+
+    def __init__(self, mediaService):
+        self.mediaService = mediaService
+        self._createBaseDirs()
+
+    def storeDir(self):
+        return self.mediaService.storeDir()
+
+    def storeFileDir(self):
+        return self.mediaService.storeFileDir()
+
+    def storeFileName(self):
+        return self.mediaService.storeFileName()
+
+    def storeFilePath(self, path):
+        return self.mediaService.storeFilePath(path)
+
+    def save(self):
+        """Saves the media store."""
+        file_type = self.mediaService.file_type
+        if self.mediaService.recordExists():
+            record = self.mediaService.lookupRecord()
+        else:
+            self.writeFile()
+            self.process(file_type)
+            self.link(file_type)
+            record = self.mediaService.createRecord()
+            record.save()
+        return record
+
+    def process(self, file_type=None):
+        if file_type == 'I':
+            self._processResizeImage()
+
+    def link(self, file_type=None):
+        file_name = self.storeFileName()
+
+        # link to the original media file
+        original_source_path = os.path.join('..', '..', self.storeFilePath('original'))
+        original_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeDir(), 'original', file_name))
+        if not os.path.lexists(original_link_path):
+            os.symlink(original_source_path, original_link_path)
+
+        if file_type == 'I':
+            # link to the large thumbnail file
+            large_source_path = os.path.join('..', '..', self.storeFilePath('thumb-large'))
+            large_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeDir(), 'thumb-large', file_name))
+            if not os.path.lexists(large_link_path):
+                os.symlink(large_source_path, large_link_path)
+
+            # link to the small thumbnail file
+            small_source_path = os.path.join('..', '..', self.storeFilePath('thumb-small'))
+            small_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeDir(), 'thumb-small', file_name))
+            if not os.path.lexists(small_link_path):
+                os.symlink(small_source_path, small_link_path)
+
+
+    def writeFile(self):
+        file = self.mediaService.file
+        file_name = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeFilePath('original')))
+        with open(file_name, 'wb+') as dest:
+            if file.multiple_chunks:
+                for c in file.chunks():
+                    dest.write(c)
+            else:
+                dest.write(file.read())
 
     def _createBaseDirs(self):
         file_paths = [

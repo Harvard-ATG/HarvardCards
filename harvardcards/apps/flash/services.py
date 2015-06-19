@@ -80,8 +80,8 @@ def valid_audio_file_type(file_path):
 
 def handle_uploaded_media_file(file, type=None):
     """Handles an uploaded file and returns the path to the file object."""
-    store_service = MediaStoreService(file=file)
-    store_service.save(type)
+    store_service = MediaStoreService(file=file, file_type=type)
+    store_service.save()
     return store_service.storeFileName()
 
 def fetch_image_from_url(file_url):
