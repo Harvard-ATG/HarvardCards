@@ -1,15 +1,19 @@
 import os
 import hashlib
 import mimetypes
+import tempfile
 
 from PIL import Image, ImageFile
+from boto.s3.connection import S3Connection
+from boto.s3.key import Key
+
 from django.conf import settings
 from django.core.files.uploadedfile import UploadedFile
 from harvardcards.apps.flash.models import MediaStore
 
 MEDIA_ROOT = settings.MEDIA_ROOT
-#MEDIA_STORE = settings.MEDIA_STORE 
-MEDIA_STORE = "FILE" # S3|FILE
+#MEDIA_STORE_BACKEND = settings.MEDIA_STORE_BACKEND
+MEDIA_STORE_BACKEND = "s3" # s3|file
 
 class MediaStoreService:
     """Class to manage media file storage."""
@@ -39,9 +43,9 @@ class MediaStoreService:
         self.file = file
         self.file_type = file_type
 
-        if MEDIA_STORE == "FILE":
+        if MEDIA_STORE_BACKEND.lower() == "file":
             self.store = MediaStoreFile(self)
-        elif MEDIA_STORE == "S3":
+        elif MEDIA_STORE_BACKEND.lower() == "s3":
             self.store = MediaStoreS3(self)
 
     def save(self):
@@ -89,13 +93,51 @@ class MediaStoreService:
     def storeFilePath(self, path):
         return os.path.join(self.storeFileDir(), path, self.storeFileName())
 
+    def resizeImageLarge(self, input_file, output_file):
+        print "input=%s output=%s" % (input_file, output_file)
+        img = Image.open(input_file)
+        width, height = img.size
+
+        # create large thumbnail
+        new_height = 600;
+        max_width = 1000;
+        if height > new_height:
+            new_width = width*new_height/float(height);
+            img_anti = img.resize((int(new_width), int(new_height)), Image.ANTIALIAS)
+            img_anti.save(output_file)
+        else:
+            if width > max_width:
+                new_height = height*max_width/float(width)
+                img_anti = img.resize((int(new_width), int(new_height)), Image.ANTIALIAS)
+                img_anti.save(output_file)
+            else:
+                img.save(output_file)
+
+    def resizeImageSmall(self, input_file, output_file):
+        img = Image.open(input_file)
+        width, height = img.size
+
+        # create small thumbnail
+        t_height = 150
+        t_width = width*t_height/float(height)
+        img_thumb = img.resize((int(t_width), int(t_height)), Image.ANTIALIAS)
+        img_thumb.save(output_file)
+
+    def writeFileTo(self, file_name):
+        file = self.file
+        with open(file_name, 'wb+') as dest:
+            if file.multiple_chunks:
+                for c in file.chunks():
+                    dest.write(c)
+            else:
+                dest.write(file.read())
 
 class MediaStoreFile:
-    """Class to manage reading and writings files to the local media store."""
+    """Class to manage reading and writings files to the media store."""
 
     def __init__(self, mediaService):
         self.mediaService = mediaService
-        self._createBaseDirs()
+        self.createBaseDirs()
 
     def storeDir(self):
         return self.mediaService.storeDir()
@@ -124,7 +166,7 @@ class MediaStoreFile:
 
     def process(self, file_type=None):
         if file_type == 'I':
-            self._processResizeImage()
+            self.processResizeImage()
 
     def link(self, file_type=None):
         file_name = self.storeFileName()
@@ -148,18 +190,11 @@ class MediaStoreFile:
             if not os.path.lexists(small_link_path):
                 os.symlink(small_source_path, small_link_path)
 
-
     def writeFile(self):
-        file = self.mediaService.file
         file_name = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeFilePath('original')))
-        with open(file_name, 'wb+') as dest:
-            if file.multiple_chunks:
-                for c in file.chunks():
-                    dest.write(c)
-            else:
-                dest.write(file.read())
+        self.mediaService.writeFileTo(file_name)
 
-    def _createBaseDirs(self):
+    def createBaseDirs(self):
         file_paths = [
             MEDIA_ROOT,
             os.path.join(MEDIA_ROOT, self.storeDir()),
@@ -175,7 +210,7 @@ class MediaStoreFile:
             if not os.path.exists(p):
                 os.mkdir(p)
 
-    def _processResizeImage(self):
+    def processResizeImage(self):
         """
         Resizes an uploaded image. Saves both the original, thumbnail, and resized versions.
         """
@@ -184,29 +219,8 @@ class MediaStoreFile:
         thumb_large_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeFilePath('thumb-large')))
         thumb_small_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeFilePath('thumb-small')))
 
-        img = Image.open(original_path)
-
-        # create large thumbnail
-        width, height = img.size
-        new_height = 600;
-        max_width = 1000;
-        if height > new_height:
-            new_width = width*new_height/float(height);
-            img_anti = img.resize((int(new_width), int(new_height)), Image.ANTIALIAS)
-            img_anti.save(thumb_large_path)
-        else:
-            if width > max_width:
-                new_height = height*max_width/float(width)
-                img_anti = img.resize((int(new_width), int(new_height)), Image.ANTIALIAS)
-                img_anti.save(thumb_large_path)
-            else:
-                img.save(thumb_large_path)
-
-        # create small thumbnail
-        t_height = 150
-        t_width = width*t_height/float(height)
-        img_thumb = img.resize((int(t_width), int(t_height)), Image.ANTIALIAS)
-        img_thumb.save(thumb_small_path)
+        self.mediaService.resizeImageLarge(original_path, thumb_large_path)
+        self.mediaService.resizeImageSmall(original_path, thumb_small_path)
 
     @classmethod
     def getAbsPathToStore(cls):
@@ -216,3 +230,71 @@ class MediaStoreFile:
     def getAbsPathToOriginal(cls, file_name):
         return os.path.abspath(os.path.join(MEDIA_ROOT, 'store', 'original', file_name))
 
+class MediaStoreS3:
+    """Class to manage reading and writings files to Amazon S3."""
+
+    def __init__(self, mediaService):
+        self.mediaService = mediaService
+        self.conn = S3Connection(settings.AWS_ACCESS_KEY_ID, settings.AWS_ACCESS_SECRET_KEY)
+        self.bucket = self.conn.get_bucket(settings.AWS_S3_BUCKET)
+        self.thumb_file_large = None
+        self.thumb_file_small = None
+        self.original_file = None
+
+    def storeDir(self):
+        return self.mediaService.storeDir()
+
+    def storeFileDir(self):
+        return self.mediaService.storeFileDir()
+
+    def storeFileName(self):
+        return self.mediaService.storeFileName()
+
+    def storeFilePath(self, path):
+        return self.mediaService.storeFilePath(path)
+
+    def save(self):
+        """Saves the media store."""
+        file_type = self.mediaService.file_type
+        if self.mediaService.recordExists():
+            record = self.mediaService.lookupRecord()
+        else:
+            self.process(file_type)
+            self.saveToBucket()
+            record = self.mediaService.createRecord()
+            record.save()
+        return record
+
+    def process(self, file_type):
+        if file_type == "I":
+            self.processResizeImage()
+
+    def processResizeImage(self):
+        ext = os.path.splitext(self.mediaService.file.name)[1]
+        self.original_file = tempfile.NamedTemporaryFile('r+', -1, ext)
+        self.thumb_file_large = tempfile.NamedTemporaryFile('r+', -1, ext)
+        self.thumb_file_small = tempfile.NamedTemporaryFile('r+', -1, ext)
+
+        self.mediaService.writeFileTo(self.original_file.name)
+        self.original_file.seek(0)
+
+        self.mediaService.resizeImageLarge(self.original_file.name, self.thumb_file_large)
+        self.thumb_file_large.seek(0)
+
+        self.mediaService.resizeImageSmall(self.original_file.name, self.thumb_file_small)
+        self.thumb_file_small.seek(0)
+
+    def saveToBucket(self):
+        original = Key(self.bucket)
+        original.key = self.storeFilePath('original')
+        original.set_contents_from_string(self.original_file.read())
+
+        thumb_large = Key(self.bucket)
+        thumb_large.key = self.storeFilePath('thumb-large')
+        thumb_large.set_contents_from_string(self.thumb_file_large.read())
+
+        thumb_small = Key(self.bucket)
+        thumb_small.key = self.storeFilePath('thumb-small')
+        thumb_small.set_contents_from_string(self.thumb_file_small.read())
+
+        print original.generate_url(expires_in=0, query_auth=False)

@@ -7,10 +7,10 @@
 		{% if field.type == 'T' %}
 			<span class="cardFieldValue">{{ field.value}}</span>
 		{% elif field.type == 'I' %}
-			<div class="cardFieldMedia cardFieldImage" data-src="{{MEDIA_URL}}store/thumb-large/{{field.value}}" data-alt="{{field.label}}" data-type="{{field.type}}" ></div>
+		<div class="cardFieldMedia cardFieldImage" data-src="{% get_media_url "store/thumb-large" field.value %}" data-alt="{{field.label}}" data-type="{{field.type}}" ></div>
 			<div class="controls">
 				<div>
-					<a href="{{MEDIA_URL}}store/original/{{field.value}}" target="_blank">
+					<a href="{% get_media_url "store/original" field.value %}" target="_blank">
 						<i class="fa fa-external-link"></i>
 						<span class="control-text">View Full Size Image</span>
 					</a>
@@ -20,13 +20,13 @@
 			{% if  field.value|slice:":4" == "http" or STATIC_URL in field.value %}
 			<div class="cardFieldMedia cardFieldVideo" data-src="{{field.value}}" data-label="{{field.label}}" data-type="{{field.type}}"></div>
 			{% else %}
-				<div class="cardFieldMedia cardFieldVideo" data-src="{{MEDIA_URL}}store/original/{{field.value}}" data-label="{{field.label}}" data-type="{{field.type}}"></div>
+			<div class="cardFieldMedia cardFieldVideo" data-src="{% get_media_url "store/original" field.value %}" data-label="{{field.label}}" data-type="{{field.type}}"></div>
 			{% endif %}
 		{% elif field.type == 'A' %}
 			{% if  field.value|slice:":4" == "http" or STATIC_URL in field.value %}
 				<div class="cardFieldMedia cardFieldAudio" data-src="{{field.value}}" data-label="{{field.label}}" data-type="{{field.type}}"></div>
 			{% else %}
-				<div class="cardFieldMedia cardFieldAudio" data-src="{{MEDIA_URL}}store/original/{{field.value}}" data-label="{{field.label}}" data-type="{{field.type}}"></div>
+				<div class="cardFieldMedia cardFieldAudio" data-src="{% get_media_url "store/original" field.value %}" data-label="{{field.label}}" data-type="{{field.type}}"></div>
 			{% endif %}
 		{% else %}
 			<b>ERROR FIELD TYPE NOT SUPPORTED: {{field.type}}</b>

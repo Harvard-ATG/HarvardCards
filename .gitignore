@@ -1,4 +1,5 @@
 .svn
+*.env
 *.pyc
 flash.db
 django-server.log
