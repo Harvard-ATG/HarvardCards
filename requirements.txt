@@ -34,7 +34,8 @@ django-debug-toolbar==0.11
 
 # For image manipulation
 Pillow==2.2.2
-matplotlib==1.4.3
+matplotlib==1.3.1
+numpy==1.9.2
 
 # For audio manipulation
 mutagen==1.25.1
@@ -45,3 +46,6 @@ django-braces>=1.3
 # For LTI
 django-cached-authentication-middleware>=0.2.0
 git+https://github.com/Harvard-ATG/django-auth-lti@master#egg=django-auth-lti
+
+# For amazon S3
+boto==2.38.0
