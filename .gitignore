@@ -12,3 +12,4 @@ django-server.log
 /config/django_secret.txt
 /config/lti_oauth_credentials.txt
 /NO_SYNC_DB.flag
+/pyenv
