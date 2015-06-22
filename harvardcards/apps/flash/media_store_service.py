@@ -58,6 +58,8 @@ class MediaStoreService:
             self.store = MediaStoreFile(self)
         elif MEDIA_STORE_BACKEND.lower() == "s3":
             self.store = MediaStoreS3(self)
+        else:
+            raise Exception("Unknown media store backend")
 
     def save(self):
         self.store.save()
@@ -142,6 +144,25 @@ class MediaStoreService:
                     dest.write(c)
             else:
                 dest.write(file.read())
+                
+    @classmethod
+    def readFileContents(cls, file_name):
+        if MEDIA_STORE_BACKEND.lower() == "file":
+            file_path = MediaStoreFile.getAbsPathToOriginal(file_name)
+            file_contents = None
+            if os.path.exists(file_path):
+                with open(file_path, 'r') as f:
+                    file_contents = f.read()
+            return file_contents
+        elif MEDIA_STORE_BACKEND.lower() == "s3":
+            file_path = MediaStoreS3.getAbsPathToOriginal(file_name)
+            conn = MediaStoreS3.connect()
+            k = MediaStoreS3.getKey(conn)
+            k.key = file_path
+            file_contents = k.get_contents_as_string()
+        else:
+            raise Exception("Unknown media store backend")
+        return file_contents
 
 class MediaStoreFile:
     """Class to manage reading and writings files to the media store."""
@@ -233,12 +254,12 @@ class MediaStoreFile:
         self.mediaService.resizeImageLarge(original_path, thumb_large_path)
         self.mediaService.resizeImageSmall(original_path, thumb_small_path)
 
-    @classmethod
-    def getAbsPathToStore(cls):
+    @staticmethod
+    def getAbsPathToStore():
         return os.path.abspath(os.path.join(MEDIA_ROOT, 'store'))
 
-    @classmethod
-    def getAbsPathToOriginal(cls, file_name):
+    @staticmethod
+    def getAbsPathToOriginal(file_name):
         return os.path.abspath(os.path.join(MEDIA_ROOT, 'store', CONST_ORIGINAL, file_name))
 
 class MediaStoreS3:
@@ -246,11 +267,32 @@ class MediaStoreS3:
 
     def __init__(self, mediaService):
         self.mediaService = mediaService
-        self.conn = S3Connection(AWS_ACCESS_KEY_ID, AWS_ACCESS_SECRET_KEY)
-        self.bucket = self.conn.get_bucket(AWS_S3_BUCKET)
+        self.conn = MediaStoreS3.connect()
+        self.bucket = MediaStoreS3.getBucket(self.conn)
         self.thumb_file_large = None
         self.thumb_file_small = None
         self.original_file = None
+        
+    @staticmethod
+    def connect():
+        return S3Connection(AWS_ACCESS_KEY_ID, AWS_ACCESS_SECRET_KEY)
+    
+    @staticmethod
+    def getBucket(connection):
+        return connection.get_bucket(AWS_S3_BUCKET)
+    
+    @classmethod
+    def getKey(cls, connection):
+        bucket = cls.getBucket(connection)
+        return Key(bucket)
+    
+    @staticmethod
+    def getAbsPathToOriginal(file_name):
+        return "/".join(['store', CONST_ORIGINAL, file_name])
+
+    @staticmethod
+    def getAbsPathToStore():
+        return 'store'
 
     def storeDir(self):
         return self.mediaService.storeDir()

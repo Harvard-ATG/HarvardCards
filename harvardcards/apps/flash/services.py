@@ -140,9 +140,9 @@ def create_zip_deck_file(deck):
 
     # add each media object ot the zip file 
     for file_name in field_set:
-        file_path = MediaStoreService.getAbsPathToOriginal(file_name)
-        if os.path.exists(file_path):
-            zfile.write(file_path, arcname=file_name)
+        file_contents = MediaStoreService.readFileContents(file_name)
+        if file_contents is not None:
+            zfile.writestr(file_name, file_contents)
 
     zfile.close()
 
