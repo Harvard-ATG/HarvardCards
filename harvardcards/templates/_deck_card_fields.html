@@ -1,3 +1,4 @@
+{% load media_store_tags %}
 <div class="showRevealWrapper">
 	{% if field.show_label %}
 		<span class="cardFieldLabel">{{ field.label }}:</span>
@@ -26,7 +27,7 @@
 			{% if  field.value|slice:":4" == "http" or STATIC_URL in field.value %}
 				<div class="cardFieldMedia cardFieldAudio" data-src="{{field.value}}" data-label="{{field.label}}" data-type="{{field.type}}"></div>
 			{% else %}
-				<div class="cardFieldMedia cardFieldAudio" data-src="{{field.value|as_media_url:"store/original"}" data-label="{{field.label}}" data-type="{{field.type}}"></div>
+				<div class="cardFieldMedia cardFieldAudio" data-src="{{field.value|as_media_url:"store/original"}}" data-label="{{field.label}}" data-type="{{field.type}}"></div>
 			{% endif %}
 		{% else %}
 			<b>ERROR FIELD TYPE NOT SUPPORTED: {{field.type}}</b>

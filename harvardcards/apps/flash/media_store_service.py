@@ -276,25 +276,29 @@ class MediaStoreS3:
         self.thumb_file_small = tempfile.NamedTemporaryFile('r+', -1, ext)
 
         self.mediaService.writeFileTo(self.original_file.name)
-        self.original_file.seek(0)
-
         self.mediaService.resizeImageLarge(self.original_file.name, self.thumb_file_large)
-        self.thumb_file_large.seek(0)
-
         self.mediaService.resizeImageSmall(self.original_file.name, self.thumb_file_small)
-        self.thumb_file_small.seek(0)
 
     def saveToBucket(self):
-        original = Key(self.bucket)
-        original.key = self.storeFilePath('original')
-        original.set_contents_from_string(self.original_file.read())
+        media_items = [
+            {'category':'original', 'file':self.original_file},
+            {'category':'thumb-large', 'file':self.thumb_file_large},
+            {'category':'thumb-small', 'file':self.thumb_file_small},
+        ]
+        
+        for item in media_items:
+            item['file'].seek(0)
+            item_contents = item['file'].read()
 
-        thumb_large = Key(self.bucket)
-        thumb_large.key = self.storeFilePath('thumb-large')
-        thumb_large.set_contents_from_string(self.thumb_file_large.read())
+            k = Key(self.bucket)
+            k.key = self.storeFilePath(item['category'])
+            k.set_contents_from_string(item_contents)
+            
+            j = Key(self.bucket)
+            j.key = "%s/%s/%s" % (self.storeDir(), item['category'], self.storeFileName())
+            j.set_contents_from_string(item_contents)
+            
+            print [i.generate_url(expires_in=0, query_auth=False) for i in (k,j)]
 
-        thumb_small = Key(self.bucket)
-        thumb_small.key = self.storeFilePath('thumb-small')
-        thumb_small.set_contents_from_string(self.thumb_file_small.read())
 
-        print original.generate_url(expires_in=0, query_auth=False)
+
