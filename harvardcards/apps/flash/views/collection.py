@@ -95,7 +95,8 @@ def custom_create(request):
     role_bucket = services.get_or_update_role_bucket(request)
     lti_req = LTIService(request)
     course_collections = lti_req.getCourseCollections()
-    collection_list = queries.getCollectionList(role_bucket, collection_ids=course_collections)
+    collection_filters = dict(collection_ids=course_collections, can_filter=not queries.is_superuser_or_staff(request.user))
+    collection_list = queries.getCollectionList(role_bucket, **collection_filters)
     if request.method == 'POST':
         d = {'user': request.user}
         log.info('The user is uploading a custom deck.', extra=d)
@@ -144,7 +145,8 @@ def create(request):
     """Creates a collection."""
     role_bucket = services.get_or_update_role_bucket(request)
     course_collections = LTIService(request).getCourseCollections()
-    collection_list = queries.getCollectionList(role_bucket, collection_ids=course_collections)
+    collection_filters = dict(collection_ids=course_collections, can_filter=not queries.is_superuser_or_staff(request.user))
+    collection_list = queries.getCollectionList(role_bucket, **collection_filters)
 
     if request.method == 'POST':
         lti_req = LTIService(request)
@@ -200,7 +202,8 @@ def edit(request, collection_id=None):
 
     role_bucket = services.get_or_update_role_bucket(request)
     course_collections = LTIService(request).getCourseCollections()
-    collection_list = queries.getCollectionList(role_bucket, collection_ids=course_collections)
+    collection_filters = dict(collection_ids=course_collections, can_filter=not queries.is_superuser_or_staff(request.user))
+    collection_list = queries.getCollectionList(role_bucket, **collection_filters)
 
     if request.method == 'POST':
         collection_form = CollectionForm(request.POST, instance=collection)
@@ -223,6 +226,8 @@ def edit(request, collection_id=None):
         if c['id'] == collection.id:
             collection_decks = c['decks']
             break
+
+    print collection_decks
         
     context = {
         "collection_form": collection_form, 
