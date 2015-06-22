@@ -17,5 +17,5 @@ before_script:
 # command(s) to run tests
 script: 
     - python manage.py syncdb --noinput
-    - python manage.py migrate --noinput
+#    - python manage.py migrate --noinput
     - nosetests

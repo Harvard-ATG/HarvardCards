@@ -338,7 +338,9 @@ class MediaStoreS3:
             {'category':CONST_THUMB_SMALL, 'file':self.thumb_file_small},
         ]
         
-        for item in media_items:
+        filtered_media_items = [x for x in media_items if x['file'] is not None]
+        
+        for item in filtered_media_items:
             item['file'].seek(0)
             item_contents = item['file'].read()
 
