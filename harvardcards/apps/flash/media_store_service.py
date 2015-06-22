@@ -145,15 +145,14 @@ class MediaStoreService:
             else:
                 dest.write(file.read())
                 
-    @classmethod
-    def readFileContents(cls, file_name):
+    @staticmethod
+    def readFileContents(file_name):
         if MEDIA_STORE_BACKEND.lower() == "file":
             file_path = MediaStoreFile.getAbsPathToOriginal(file_name)
             file_contents = None
             if os.path.exists(file_path):
                 with open(file_path, 'r') as f:
                     file_contents = f.read()
-            return file_contents
         elif MEDIA_STORE_BACKEND.lower() == "s3":
             file_path = MediaStoreS3.getAbsPathToOriginal(file_name)
             conn = MediaStoreS3.connect()
