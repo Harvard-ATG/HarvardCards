@@ -61,22 +61,23 @@ def check_delete_card(card_id, deck_ids):
 
 def valid_image_file_type(file_path):
     """Returns true if the given file is a valid image type."""
+    valid_types = ['rgb', 'gif', 'png', 'bmp', 'gif', 'jpeg']
     try:
         img = Image.open(file_path)
         img_type = (img.format).lower()
-        if img_type not in ['rgb', 'gif', 'png', 'bmp', 'gif', 'jpeg']:
-            return False
-    except:
-        return False
-    return True
+        if img_type not in valid_types:
+            return [False, "Image must be one of: %s" % ", ".join(valid_types)]
+    except Exception as e:
+        return [False, str(e)]
+    return [True, '']
 
 def valid_audio_file_type(file_path):
     """Returns true if the given file is a valid audio type."""
     try:
         audio = MP3(file_path)
-    except:
-        return False
-    return True
+    except Exception as e:
+        return [False, str(e)]
+    return [True, '']
 
 def handle_uploaded_media_file(file, type=None):
     """Handles an uploaded file and returns the path to the file object."""
@@ -90,12 +91,15 @@ def fetch_image_from_url(file_url):
 
     parser = ImageFile.Parser()
     file_size = 0
+    max_file_size = 20 * 1024 * 1024 # 20 megabytes
     read_size = 1024
     while True:
         s = inStream.read(read_size)
         file_size += len(s)
         if not s:
             break
+        if file_size > max_file_size:
+            raise Exception("file size exceeded max size: %s bytes" % max_file_size)
         parser.feed(s)
 
     inImage = parser.close()
@@ -110,6 +114,29 @@ def fetch_image_from_url(file_url):
     file_object = File(img_temp, 'img_temp.png')
     uploaded_file = UploadedFile(file=file_object, name=file_object.name, content_type='image/png', size=file_size, charset=None)
 
+    return uploaded_file
+
+def fetch_audio_from_url(file_url):
+    """Returns an UploadedFile object after retrieving the file at the given URL."""
+    inStream = urllib2.urlopen(file_url)
+    file_object = tempfile.NamedTemporaryFile(mode='r+', suffix='.mp3')
+    file_size = 0
+    max_file_size = 10 * 1024 * 1024 # 10 megabytes
+    read_size = 1024
+    
+    while True:
+        s = inStream.read(read_size)
+        file_size += len(s)
+        if not s:
+            break
+        if file_size > max_file_size:
+            raise Exception("file size exceeded max size: %s bytes" % max_file_size)
+        file_object.write(s)
+
+    file_object.seek(0)
+    
+    uploaded_file = UploadedFile(file=file_object, name=file_object.name, content_type='audio/mp3', size=file_size, charset=None) 
+    
     return uploaded_file
 
 def create_zip_deck_file(deck):
@@ -204,15 +231,16 @@ def get_mappings_from_zip(deck, file_contents, file_names, zfile, path_to_excel,
     for file in files:
         zfile.extract(file['absolute'], temp_dir_path)
         temp_file_path = os.path.join(temp_dir_path, file['absolute'])
-
-        if valid_image_file_type(temp_file_path):
+        
+        is_valid_image, errstr = valid_image_file_type(temp_file_path)
+        if is_valid_image:
             store_file_name = handle_uploaded_media_file(temp_file_path, 'I')
             mappings['Image'][file['relative']] = store_file_name
-
-        elif valid_audio_file_type(temp_file_path):
-            store_file_name = handle_uploaded_media_file(temp_file_path, 'A')
-            mappings['Audio'][file['relative']] = store_file_name
-
+        else:
+            is_valid_audio, errstr = valid_audio_file_type(temp_file_path)
+            if is_valid_audio:
+                store_file_name = handle_uploaded_media_file(temp_file_path, 'A')
+                mappings['Audio'][file['relative']] = store_file_name
 
     if len(files):
         shutil.rmtree(temp_dir_path)

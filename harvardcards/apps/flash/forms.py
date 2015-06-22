@@ -4,8 +4,11 @@ from . import services
 from django import forms
 from django.forms.util import ErrorList
 from django.db import transaction
-import logging, datetime
+import logging
+import datetime
 import json
+import tempfile
+import os
 
 class CollectionForm(forms.ModelForm):
     class Meta:
@@ -109,7 +112,7 @@ class CardEditForm(forms.Form):
         for card_field in self.card_fields:
             field_name = self.field_prefix + str(card_field.id)
             self.fields[field_name] = forms.CharField(required=False)
-            if card_field.field_type == 'I' and field_name in self.data:
+            if card_field.field_type in ('I','A') and field_name in self.data:
                 del self.data[field_name] # REMOVE from data because handled separately from normal fields
 
         # initialize model objects
@@ -167,14 +170,34 @@ class CardEditForm(forms.Form):
             if not field_id.isdigit():
                 continue
             if self.files[field_name].size > 0:
-                path = services.handle_uploaded_media_file(self.files[field_name], 'I')
+                path = services.handle_uploaded_media_file(self.files[field_name], self._get_field_type(field_name))
                 field_list.append({"field_id":int(field_id), "value": path})
 
         if len(field_list) > 0:
             services.update_card_fields(self.card, field_list)
+            
+    def _get_field_type(self, find_field_name):
+        for card_field in self.card_fields:
+            field_name = self.field_prefix + str(card_field.id)
+            if find_field_name == field_name:
+                return card_field.field_type
+        return None
 
     def _check_file_errors(self):
-        for f in self.files:
-            is_valid_type = services.valid_image_file_type(self.files[f])
-            if not is_valid_type:
-                self.errors[f] = "File image type is not supported. Must be: .jpg, .png, or .gif"
+        for field_name in self.files:
+            field_type = self._get_field_type(field_name)
+            if "I" == field_type:
+                is_valid_type, errstr = services.valid_image_file_type(self.files[field_name])
+                if not is_valid_type:
+                    self.errors[field_name] = "Invalid image file. Must be a valid image type (i.e jpg, png, gif, etc). Error: %s" % errstr
+            elif "A" == field_type:
+                with tempfile.NamedTemporaryFile(mode='r+', suffix='.mp3') as tf:
+                    file_contents = self.files[field_name].read()
+                    tf.write(file_contents)
+                    tf.seek(0)
+                    is_valid_type, errstr = services.valid_audio_file_type(tf.name)
+                    errstr = ""
+                    if not is_valid_type:
+                        self.errors[field_name] = "Invalid audio file. Must be a valid mp3. Error: %s" % errstr
+
+

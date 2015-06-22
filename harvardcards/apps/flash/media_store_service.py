@@ -107,7 +107,6 @@ class MediaStoreService:
         return os.path.join(self.storeFileDir(), path, self.storeFileName())
 
     def resizeImageLarge(self, input_file, output_file):
-        print "input=%s output=%s" % (input_file, output_file)
         img = Image.open(input_file)
         width, height = img.size
 
@@ -318,16 +317,18 @@ class MediaStoreS3:
         return record
 
     def process(self, file_type):
+        ext = os.path.splitext(self.mediaService.file.name)[1]
+        self.original_file = tempfile.NamedTemporaryFile('r+', -1, ext)
+        self.mediaService.writeFileTo(self.original_file.name)
+
         if file_type == "I":
             self.processResizeImage()
 
     def processResizeImage(self):
         ext = os.path.splitext(self.mediaService.file.name)[1]
-        self.original_file = tempfile.NamedTemporaryFile('r+', -1, ext)
         self.thumb_file_large = tempfile.NamedTemporaryFile('r+', -1, ext)
         self.thumb_file_small = tempfile.NamedTemporaryFile('r+', -1, ext)
 
-        self.mediaService.writeFileTo(self.original_file.name)
         self.mediaService.resizeImageLarge(self.original_file.name, self.thumb_file_large)
         self.mediaService.resizeImageSmall(self.original_file.name, self.thumb_file_small)
 
@@ -339,7 +340,7 @@ class MediaStoreS3:
         ]
         
         filtered_media_items = [x for x in media_items if x['file'] is not None]
-        
+
         for item in filtered_media_items:
             item['file'].seek(0)
             item_contents = item['file'].read()
