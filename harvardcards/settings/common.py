@@ -222,6 +222,6 @@ LOGOUT_URL = '/logout/'
 OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
 
 MEDIA_STORE_BACKEND = os.environ.get("MEDIA_STORE_BACKEND", "file")
-AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
-AWS_ACCESS_SECRET_KEY = os.environ.get("AWS_ACCESS_SECRET_KEY")
-AWS_S3_BUCKET  = os.environ.get("AWS_S3_BUCKET")
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", None)
+AWS_ACCESS_SECRET_KEY = os.environ.get("AWS_ACCESS_SECRET_KEY", None)
+AWS_S3_BUCKET  = os.environ.get("AWS_S3_BUCKET", None)
