@@ -351,7 +351,7 @@ class MediaStoreS3:
             j.key = "%s/%s/%s" % (self.storeDir(), item['category'], self.storeFileName())
             j.set_contents_from_string(item_contents)
             
-            print [i.generate_url(expires_in=0, query_auth=False) for i in (k,j)]
+            #print [i.generate_url(expires_in=0, query_auth=False) for i in (k,j)]
 
 
 
