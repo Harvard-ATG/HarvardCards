@@ -79,9 +79,9 @@ def valid_audio_file_type(file_path):
         return [False, str(e)]
     return [True, '']
 
-def handle_uploaded_media_file(file, type=None):
+def handle_uploaded_media_file(file, file_type=None):
     """Handles an uploaded file and returns the path to the file object."""
-    store_service = MediaStoreService(file=file, file_type=type)
+    store_service = MediaStoreService(file=file, file_type=file_type)
     store_service.save()
     return store_service.storeFileName()
 

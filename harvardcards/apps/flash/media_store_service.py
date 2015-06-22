@@ -37,12 +37,12 @@ class MediaStoreService:
             if os.path.exists(file):
                 file_object = open(file, 'r')
                 file_name = os.path.split(file)[1]
-                file_type = mimetypes.guess_type(file_name)[0]
+                content_type = mimetypes.guess_type(file_name)[0]
                 file_size = os.path.getsize(file)
                 file = UploadedFile(
                     file=file_object, 
                     name=file_name, 
-                    content_type=file_type, 
+                    content_type=content_type, 
                     size=file_size, 
                     charset=None
                 )
