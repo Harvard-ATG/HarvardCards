@@ -30,6 +30,9 @@ def edit(request):
         if k.endswith('_image_url') and v:
             field_name = k.replace('_image_url', '')
             request.FILES[field_name] = services.fetch_image_from_url(v)
+        elif k.endswith('_audio_url') and v:
+            field_name = k.replace('_audio_url', '')
+            request.FILES[field_name] = services.fetch_audio_from_url(v)
 
     # attempted to validate and save the form data
     card_edit_form = CardEditForm(request.POST, request.FILES, card_fields=card_fields)

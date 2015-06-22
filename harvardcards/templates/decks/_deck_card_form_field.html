@@ -1,3 +1,4 @@
+{% load media_store_tags %}
 {% if field.type == 'T' %}
     <i class="fa fa-font fa-2x pull-left"></i>
 {% elif field.type == 'I' %}
@@ -12,9 +13,9 @@
         {% if field.value == '' %}
             <label for="{{field.label}}">{{field.label}}</label>
         {% else %}
-            <img src="{{MEDIA_URL}}store/thumb-large/{{field.value}}" alt="{{field.label}}" class="cardFieldImage"/>
+			<img src="{{field.value|as_original_media_url}}" alt="{{field.label}}" class="cardFieldImage"/>
             <div>
-                <a href="{{MEDIA_URL}}store/original/{{field.value}}" target="_blank">
+				<a href="{{field.value|as_original_media_url}}" target="_blank">
                     <i class="fa fa-external-link"></i>
                     <span class="control-text">View Full Size Image</span>
                 </a>
@@ -36,8 +37,15 @@
         <label for="{{field.label}}">{{field.label}}</label>
         <input name="field_{{field.id}}" class="formEle form" type="text" placeholder="Enter URL to video file (*.mp4)" value="{{field.value}}" />
     {% elif field.type == 'A' %}
-        <label for="{{field.label}}">{{field.label}}</label>
-        <input name="field_{{field.id}}" class="formEle form" type="text" placeholder="Enter URL to audio file (*.mp3, *.ogg)" value="{{field.value}}" />
+        <fieldset>
+            <label>File Type</label>
+            <select name="field_{{field.id}}_source" data-switch="yes" data-switch-url="field_{{field.id}}_audio_url" data-switch-file="field_{{field.id}}">
+                <option value="F">File</option>
+                <option value="U">URL</option>
+            </select>
+        </fieldset>
+        <input name="field_{{field.id}}_audio_url"  type="text" placeholder="Enter {{field.label}} URL" style="display:none" />
+        <input name="field_{{field.id}}"  type="file" placeholder="Enter {{field.label}}" style="display:block"/>
     {% else %}
         <b>ERROR - FIELD TYPE NOT SUPPORTED: {{field.type}}</b>
     {% endif %}

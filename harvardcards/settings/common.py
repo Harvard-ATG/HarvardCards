@@ -1,8 +1,13 @@
 # Common settings for all environments
 import logging
 import sys
+import os
 from os import path
 from glob import glob
+from dotenv import load_dotenv
+
+dotenv_path = path.join(path.dirname(__file__), '.env')
+load_dotenv(dotenv_path)
 
 # Django settings for harvardcards project.
 DEBUG = True
@@ -141,7 +146,7 @@ INSTALLED_APPS = [
     # 'django.contrib.admindocs',
     'harvardcards.apps.flash',
     #'harvardcards.apps.jasmine',
-    'south'
+    #'south'
 ]
 
 FIXTURE_DIRS = (
@@ -215,3 +220,8 @@ LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_URL = '/logout/'
 OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
+
+MEDIA_STORE_BACKEND = os.environ.get("MEDIA_STORE_BACKEND", "file")
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", None)
+AWS_ACCESS_SECRET_KEY = os.environ.get("AWS_ACCESS_SECRET_KEY", None)
+AWS_S3_BUCKET  = os.environ.get("AWS_S3_BUCKET", None)

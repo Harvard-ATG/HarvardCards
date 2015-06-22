@@ -1,19 +1,20 @@
+{% load media_store_tags %}
 {% if field.value %}
     {% if field.type == 'T' %}
         {{ field.value}}
     {% elif field.type == 'I' %}
-        <img src="{{MEDIA_URL}}store/thumb-small/{{field.value}}" alt="{{field.label}}" class="cardFieldImage" />
+		<img src="{{field.value|as_small_media_url}}" alt="{{field.label}}" class="cardFieldImage" />
     {% elif field.type == 'V' %}
 		{% if  field.value|slice:":4" == "http" or STATIC_URL in field.value %}
 			<div class="cardFieldMedia cardFieldVideo" data-src="{{field.value}}" data-label="{{field.label}}" data-type="{{field.type}}"></div>
 		{% else %}
-			<div class="cardFieldMedia cardFieldVideo" data-src="{{MEDIA_URL}}store/original/{{field.value}}" data-label="{{field.label}}" data-type="{{field.type}}"></div>
+			<div class="cardFieldMedia cardFieldVideo" data-src="{{field.value|as_original_media_url}}" data-label="{{field.label}}" data-type="{{field.type}}"></div>
 		{% endif %}
     {% elif field.type == 'A' %}
 		{% if  field.value|slice:":4" == "http" or STATIC_URL in field.value %}
 			<div class="cardFieldMedia cardFieldAudio" data-src="{{field.value}}" data-label="{{field.label}}" data-type="{{field.type}}"></div>
 		{% else %}
-			<div class="cardFieldMedia cardFieldAudio" data-src="{{MEDIA_URL}}store/original/{{field.value}}" data-label="{{field.label}}" data-type="{{field.type}}"></div>
+			<div class="cardFieldMedia cardFieldAudio" data-src=" {{field.value|as_original_media_url}} " data-label="{{field.label}}" data-type="{{field.type}}"></div>
 		{% endif %}
     {% else %}
         <b>ERROR FIELD TYPE NOT SUPPORTED: {{field.type}}</b>
