@@ -11,9 +11,20 @@ from django.conf import settings
 from django.core.files.uploadedfile import UploadedFile
 from harvardcards.apps.flash.models import MediaStore
 
+# Expect values that will come from django settings 
 MEDIA_ROOT = settings.MEDIA_ROOT
-#MEDIA_STORE_BACKEND = settings.MEDIA_STORE_BACKEND
-MEDIA_STORE_BACKEND = "s3" # s3|file
+MEDIA_STORE_BACKEND = settings.MEDIA_STORE_BACKEND
+AWS_S3_BUCKET = settings.AWS_S3_BUCKET
+AWS_ACCESS_KEY_ID = settings.AWS_ACCESS_KEY_ID
+AWS_ACCESS_SECRET_KEY = settings.AWS_ACCESS_SECRET_KEY
+
+# Constants
+CONST_ORIGINAL = "original"
+CONST_THUMB_LARGE = "thumb-large"
+CONST_THUMB_SMALL = "thumb-small"
+
+def get_s3_url(item_path):
+    return "http://s3.amazonaws.com/%s/%s" % (AWS_S3_BUCKET, item_path)
 
 class MediaStoreService:
     """Class to manage media file storage."""
@@ -172,39 +183,39 @@ class MediaStoreFile:
         file_name = self.storeFileName()
 
         # link to the original media file
-        original_source_path = os.path.join('..', '..', self.storeFilePath('original'))
-        original_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeDir(), 'original', file_name))
+        original_source_path = os.path.join('..', '..', self.storeFilePath(CONST_ORIGINAL))
+        original_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeDir(), CONST_ORIGINAL, file_name))
         if not os.path.lexists(original_link_path):
             os.symlink(original_source_path, original_link_path)
 
         if file_type == 'I':
             # link to the large thumbnail file
-            large_source_path = os.path.join('..', '..', self.storeFilePath('thumb-large'))
-            large_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeDir(), 'thumb-large', file_name))
+            large_source_path = os.path.join('..', '..', self.storeFilePath(CONST_THUMB_LARGE))
+            large_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeDir(), CONST_THUMB_LARGE, file_name))
             if not os.path.lexists(large_link_path):
                 os.symlink(large_source_path, large_link_path)
 
             # link to the small thumbnail file
-            small_source_path = os.path.join('..', '..', self.storeFilePath('thumb-small'))
-            small_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeDir(), 'thumb-small', file_name))
+            small_source_path = os.path.join('..', '..', self.storeFilePath(CONST_THUMB_SMALL))
+            small_link_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeDir(), CONST_THUMB_SMALL, file_name))
             if not os.path.lexists(small_link_path):
                 os.symlink(small_source_path, small_link_path)
 
     def writeFile(self):
-        file_name = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeFilePath('original')))
+        file_name = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeFilePath(CONST_ORIGINAL)))
         self.mediaService.writeFileTo(file_name)
 
     def createBaseDirs(self):
         file_paths = [
             MEDIA_ROOT,
             os.path.join(MEDIA_ROOT, self.storeDir()),
-            os.path.join(MEDIA_ROOT, self.storeDir(), 'original'),
-            os.path.join(MEDIA_ROOT, self.storeDir(), 'thumb-large'),
-            os.path.join(MEDIA_ROOT, self.storeDir(), 'thumb-small'),
+            os.path.join(MEDIA_ROOT, self.storeDir(), CONST_ORIGINAL),
+            os.path.join(MEDIA_ROOT, self.storeDir(), CONST_THUMB_LARGE),
+            os.path.join(MEDIA_ROOT, self.storeDir(), CONST_THUMB_SMALL),
             os.path.join(MEDIA_ROOT, self.storeFileDir()),
-            os.path.join(MEDIA_ROOT, self.storeFileDir(), 'original'),
-            os.path.join(MEDIA_ROOT, self.storeFileDir(), 'thumb-large'),
-            os.path.join(MEDIA_ROOT, self.storeFileDir(), 'thumb-small'),
+            os.path.join(MEDIA_ROOT, self.storeFileDir(), CONST_ORIGINAL),
+            os.path.join(MEDIA_ROOT, self.storeFileDir(), CONST_THUMB_LARGE),
+            os.path.join(MEDIA_ROOT, self.storeFileDir(), CONST_THUMB_SMALL),
         ]
         for p in file_paths:
             if not os.path.exists(p):
@@ -215,9 +226,9 @@ class MediaStoreFile:
         Resizes an uploaded image. Saves both the original, thumbnail, and resized versions.
         """
 
-        original_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeFilePath('original')))
-        thumb_large_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeFilePath('thumb-large')))
-        thumb_small_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeFilePath('thumb-small')))
+        original_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeFilePath(CONST_ORIGINAL)))
+        thumb_large_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeFilePath(CONST_THUMB_LARGE)))
+        thumb_small_path = os.path.abspath(os.path.join(MEDIA_ROOT, self.storeFilePath(CONST_THUMB_SMALL)))
 
         self.mediaService.resizeImageLarge(original_path, thumb_large_path)
         self.mediaService.resizeImageSmall(original_path, thumb_small_path)
@@ -228,15 +239,15 @@ class MediaStoreFile:
 
     @classmethod
     def getAbsPathToOriginal(cls, file_name):
-        return os.path.abspath(os.path.join(MEDIA_ROOT, 'store', 'original', file_name))
+        return os.path.abspath(os.path.join(MEDIA_ROOT, 'store', CONST_ORIGINAL, file_name))
 
 class MediaStoreS3:
     """Class to manage reading and writings files to Amazon S3."""
 
     def __init__(self, mediaService):
         self.mediaService = mediaService
-        self.conn = S3Connection(settings.AWS_ACCESS_KEY_ID, settings.AWS_ACCESS_SECRET_KEY)
-        self.bucket = self.conn.get_bucket(settings.AWS_S3_BUCKET)
+        self.conn = S3Connection(AWS_ACCESS_KEY_ID, AWS_ACCESS_SECRET_KEY)
+        self.bucket = self.conn.get_bucket(AWS_S3_BUCKET)
         self.thumb_file_large = None
         self.thumb_file_small = None
         self.original_file = None
@@ -281,9 +292,9 @@ class MediaStoreS3:
 
     def saveToBucket(self):
         media_items = [
-            {'category':'original', 'file':self.original_file},
-            {'category':'thumb-large', 'file':self.thumb_file_large},
-            {'category':'thumb-small', 'file':self.thumb_file_small},
+            {'category':CONST_ORIGINAL, 'file':self.original_file},
+            {'category':CONST_THUMB_LARGE, 'file':self.thumb_file_large},
+            {'category':CONST_THUMB_SMALL, 'file':self.thumb_file_small},
         ]
         
         for item in media_items:

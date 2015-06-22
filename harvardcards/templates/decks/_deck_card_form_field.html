@@ -13,9 +13,9 @@
         {% if field.value == '' %}
             <label for="{{field.label}}">{{field.label}}</label>
         {% else %}
-			<img src="{{field.value|as_media_url:"store/original"}}" alt="{{field.label}}" class="cardFieldImage"/>
+			<img src="{{field.value|as_original_media_url}}" alt="{{field.label}}" class="cardFieldImage"/>
             <div>
-				<a href="{{field.value|as_media_url:"store/original"}}" target="_blank">
+				<a href="{{field.value|as_original_media_url}}" target="_blank">
                     <i class="fa fa-external-link"></i>
                     <span class="control-text">View Full Size Image</span>
                 </a>
