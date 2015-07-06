@@ -200,6 +200,8 @@ LOGGING = {
     }
 }
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 # This dictionary defines application-level feature toggles. 
 # Usage:
 #       from django.conf import settings
