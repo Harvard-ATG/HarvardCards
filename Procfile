@@ -1,1 +1,1 @@
-web: gunicorn harvardcards.wsgi
+web: gunicorn --config=gunicorn.conf harvardcards.wsgi
