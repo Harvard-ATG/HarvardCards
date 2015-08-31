@@ -1,9 +1,13 @@
+import dj_database_url
+import os
+import json
 from harvardcards.settings.common import *
+
 ALLOWED_HOSTS = ['*']
 
-DEBUG = True
-SECRET_KEY = '#5g0vp545jp644!hha1)fb7v1hd!*t#b@fv&amp;1(mrnt5)$q%w0g'
-LTI_OAUTH_CREDENTIALS = {"flashkey":"flashsecret"}
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+LTI_OAUTH_CREDENTIALS = json.loads(os.environ.get('LTI_OAUTH_CREDENTIALS'))
 
 DATABASES = {
     'default': {
@@ -16,8 +20,8 @@ DATABASES = {
         'PORT': '',                      # Set to empty string for default.
     }
 }
-import dj_database_url
 DATABASES['default'] =  dj_database_url.config()
+
 #########################################
 # Configuration for the django-debug-toolbar
 #
