@@ -24,7 +24,7 @@ CONST_THUMB_LARGE = "thumb-large"
 CONST_THUMB_SMALL = "thumb-small"
 
 def get_s3_url(item_path):
-    return "http://s3.amazonaws.com/%s/%s" % (AWS_S3_BUCKET, item_path)
+    return "//s3.amazonaws.com/%s/%s" % (AWS_S3_BUCKET, item_path)
 
 class MediaStoreService:
     """Class to manage media file storage."""
