@@ -77,6 +77,7 @@ class Card(models.Model):
     sort_order = models.IntegerField(default=1)
     fields = models.ManyToManyField(Field, through='Cards_Fields')
     color = models.CharField(max_length=12, choices=COLOR_CHOICES, default=DEFAULT_COLOR)
+    clone_ref_id = models.CharField(max_length=50, null=True)
 
     def __unicode__(self):
         return "Card: " + str(self.id) + "; Collection: " + str(self.collection.title)
@@ -86,6 +87,7 @@ class Deck(models.Model):
     collection = models.ForeignKey(Collection)
     cards = models.ManyToManyField(Card, through='Decks_Cards')
     sort_order = models.IntegerField(default=1)
+    clone_ref_id = models.CharField(max_length=50, null=True)
 
     class Meta:
         verbose_name = 'Deck'
@@ -109,6 +111,7 @@ class Decks_Cards(models.Model):
     deck = models.ForeignKey(Deck)
     card = models.ForeignKey(Card)
     sort_order = models.IntegerField(default=1)
+    clone_ref_id = models.CharField(max_length=50, null=True)
 
     class Meta:
         verbose_name = 'Deck Cards'
@@ -122,6 +125,7 @@ class Cards_Fields(models.Model):
     card = models.ForeignKey(Card)
     field = models.ForeignKey(Field)
     value = models.CharField(max_length=500)
+    clone_ref_id = models.CharField(max_length=50, null=True)
 
     class Meta:
         verbose_name = 'Card Fields'
