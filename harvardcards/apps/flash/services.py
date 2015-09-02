@@ -439,7 +439,14 @@ def copy_collection(user, collection_id):
     clone = Clone.objects.create(model='Collection', model_id=collection_id, cloned_by=user, status='Q')
     clone.status = 'P'
     clone.save()
+    
+    clone_ref = {'id': 0, 'fmt': str(clone.id) + ":%s", 'map': {}}
+    clone_ref_map = clone_ref['map']
 
+    def next_clone_ref_id():
+        clone_ref['id'] += 1
+        return clone_ref['fmt'] % clone_ref['id']
+ 
     ## Clone: COLLECTION
     collection = Collection.objects.get(pk=collection_id)
     old_collection_id = collection.id
@@ -452,39 +459,89 @@ def copy_collection(user, collection_id):
     ## Clone: DECK
     decks = Deck.objects.filter(collection=old_collection_id)
     deck_map = {}
+    deck_copies = []
+    deck_ref_ids = []
     for deck in decks:
         old_deck_id = deck.id
+
         deck.id = None
         deck.collection = new_collection
-        deck.save()
-        new_deck = deck
-        deck_map[old_deck_id] = new_deck
-        Cloned.objects.create(clone=clone, model='Deck', old_model_id=old_deck_id, new_model_id=new_deck.id)
+        deck.clone_ref_id = next_clone_ref_id()
+        deck_copies.append(deck)
+        
+        deck_ref_ids.append(deck.clone_ref_id)
+        clone_ref_map[deck.clone_ref_id] = {
+            "model": "Deck",
+            "old_model_id": old_deck_id
+        }
+    
+    # bulk create the deck copies and lookup the new IDs
+    Deck.objects.bulk_create(deck_copies)
+    for deck in Deck.objects.filter(clone_ref_id__in=deck_ref_ids):
+        old_deck_id = clone_ref_map[deck.clone_ref_id]['old_model_id']
+        clone_ref_map[deck.clone_ref_id]['new_model_id'] = deck.id
+        deck_map[old_deck_id] = deck
 
     ## Clone: DECKS_CARDS and CARD
     card_map = {}
     if deck_map.keys():
+        # find all the cards that need to be copied
         decks_cards = Decks_Cards.objects.filter(deck__in=deck_map.keys()).select_related('deck','card')
+        card_copies = []
+        card_ref_ids = []
         for decks_cards_item in decks_cards:
             card = decks_cards_item.card
             old_card_id = card.id
+            
             card.id = None
             card.collection = new_collection
-            card.save()
-            new_card = card
-            card_map[old_card_id] = new_card
-            Cloned.objects.create(clone=clone, model='Card', old_model_id=old_card_id, new_model_id=new_card.id)
+            card.clone_ref_id = next_clone_ref_id()
+            card_copies.append(card)
+            
+            card_ref_ids.append(card.clone_ref_id)
+            clone_ref_map[card.clone_ref_id] = {
+                "model": "Card",
+                "old_model_id": old_card_id,
+            }
+        
+        # bulk create the card copies and lookup the new IDs
+        Card.objects.bulk_create(card_copies)
+        for card in Card.objects.filter(clone_ref_id__in=card_ref_ids):
+            old_card_id = clone_ref_map[card.clone_ref_id]['old_model_id']
+            clone_ref_map[card.clone_ref_id]['new_model_id'] = card.id
+            card_map[old_card_id] = card
 
+        # find all the decks_cards that need to be copied
+        decks_cards = Decks_Cards.objects.filter(deck__in=deck_map.keys()).select_related('deck','card')
+        decks_cards_copies = []
+        decks_cards_ref_ids = []
+        for decks_cards_item in decks_cards:
+            card = decks_cards_item.card
+            old_card_id = card.id
             old_decks_cards_id = decks_cards_item.id
             old_deck_id = decks_cards_item.deck.id
-            decks_cards_item.deck = deck_map[old_deck_id]
-            decks_cards_item.card = new_card
+            
             decks_cards_item.id = None
-            decks_cards_item.save()
-            new_decks_cards_item = decks_cards_item
-            Cloned.objects.create(clone=clone, model='Decks_Cards', old_model_id=old_decks_cards_id, new_model_id=new_decks_cards_item.id)
+            decks_cards_item.deck = deck_map[old_deck_id]
+            decks_cards_item.card = card_map[old_card_id]
+            decks_cards_item.clone_ref_id = next_clone_ref_id()
+            decks_cards_copies.append(decks_cards_item)
+            
+            decks_cards_ref_ids.append(decks_cards_item.clone_ref_id)
+            clone_ref_map[decks_cards_item.clone_ref_id] = {
+                "model": "Card",
+                "old_model_id": old_card_id,
+            }
+
+        # bulk create the card copies and lookup the new IDs
+        Decks_Cards.objects.bulk_create(decks_cards_copies)
+        for decks_cards_item in Decks_Cards.objects.filter(clone_ref_id__in=decks_cards_ref_ids):
+            old_decks_cards_id = clone_ref_map[decks_cards_item.clone_ref_id]['old_model_id']
+            clone_ref_map[decks_cards_item.clone_ref_id]['new_model_id'] = decks_cards_item.id
 
     ## Clone: CARDS_FIELDS
+    cards_fields_copies = []
+    cards_fields_ref_ids = []
     if card_map.keys():
         cards_fields = Cards_Fields.objects.filter(card__in=card_map.keys()).select_related('card')
         for cards_fields_item in cards_fields:
@@ -492,10 +549,37 @@ def copy_collection(user, collection_id):
             old_card_id = cards_fields_item.card.id
             cards_fields_item.card = card_map[old_card_id]
             cards_fields_item.id = None
-            cards_fields_item.save()
-            new_cards_fields = cards_fields_item
-            Cloned.objects.create(clone=clone, model='Cards_Fields', old_model_id=old_cards_fields_id, new_model_id=new_cards_fields.id)
+            cards_fields_item.clone_ref_id = next_clone_ref_id()
+            cards_fields_copies.append(cards_fields_item)
+            
+            cards_fields_ref_ids.append(cards_fields_item.clone_ref_id)
+            clone_ref_map[cards_fields_item.clone_ref_id] = {
+                "model": "Cards_Fields",
+                "old_model_id": old_card_id,
+            }
+    
+    # bulk create the cards_fields and lookup the new IDs
+    Cards_Fields.objects.bulk_create(cards_fields_copies)
+    for cards_fields_item in Cards_Fields.objects.filter(clone_ref_id__in=cards_fields_ref_ids):
+        old_cards_fields_id = clone_ref_map[cards_fields_item.clone_ref_id]['old_model_id']
+        clone_ref_map[cards_fields_item.clone_ref_id]['new_model_id'] = cards_fields_item.id
+        
+    ## Save the audited list of cloned objects
+    cloned_objects = []
+    sorted_clone_ref_ids = sorted(clone_ref_map.keys(), key=lambda x: int(x.split(':')[1]))
+    for clone_ref_id in sorted_clone_ref_ids:
+        clone_ref = clone_ref_map[clone_ref_id]
+        cloned_obj = Cloned(
+            clone=clone,
+            model=clone_ref['model'],
+            old_model_id=clone_ref['old_model_id'],
+            new_model_id=clone_ref['new_model_id'])
+        cloned_objects.append(cloned_obj)
+    
+    # bulk create the cloned objects
+    Cloned.objects.bulk_create(cloned_objects)
 
+    # set status to done
     clone.status = 'D'
     clone.save()
 

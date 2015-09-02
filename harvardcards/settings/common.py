@@ -146,7 +146,7 @@ INSTALLED_APPS = [
     # 'django.contrib.admindocs',
     'harvardcards.apps.flash',
     #'harvardcards.apps.jasmine',
-    #'south'
+    'south'
 ]
 
 FIXTURE_DIRS = (
