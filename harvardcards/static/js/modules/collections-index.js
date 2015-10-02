@@ -1,4 +1,4 @@
-define(['jquery','views/CollectionListView','views/CollectionCreateModal', 'views/DeckCreateModal'], function($,CollectionListView, CollectionCreateModal, DeckCreateModal) {
+define(['jquery','views/CollectionListView','views/CollectionCreateModal', 'views/DeckCreateModal', 'utils/utils'], function($,CollectionListView, CollectionCreateModal, DeckCreateModal, utils) {
     document.getElementById('collection_type').onchange = function(){
         var currentVal = this.value;
         if (currentVal == 2){
@@ -44,6 +44,7 @@ define(['jquery','views/CollectionListView','views/CollectionCreateModal', 'view
                 deck_modals[i].init();
             }
 
+			utils.setupConfirm();
 		}
 	};
 });
