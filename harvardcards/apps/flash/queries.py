@@ -7,6 +7,7 @@ from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, 
 
 import logging
 log = logging.getLogger(__name__)
+
 def get_course_collection_ids():
     return Course_Map.objects.all().values_list('collection_id', flat=True)
 
@@ -36,9 +37,49 @@ def getCollectionRoleList():
         Users_Collections.LEARNER]
     return role_list
 
+def groupCollectionsByList(collection_list):
+    """groups collections into 'course' vs 'private' collections"""
+
+    group_of = {
+        "size": 0,
+        "course": {
+            "size": 0,
+            "collections": [],
+        },
+        "private": {
+            "size": 0,
+            "collections": [],
+        },
+    }
+    
+    course_collection_map = {}
+    course_collections = Course_Map.objects.all()
+    for course_collection in course_collections:
+        collection_id = course_collection.collection.id
+        if collection_id not in course_collection_map:
+            course_collection_map[collection_id] = course_collection
+
+    for collection in collection_list:
+        if collection['id'] in course_collection_map:
+            bucket = 'course'
+        else:
+            bucket = 'private'
+        group_of[bucket]['collections'].append(collection)
+        group_of[bucket]['size'] += 1
+        group_of['size'] += 1
+    
+    return group_of
+
 def getCollectionList(role_bucket, **kwargs):
     """gets the list of collections that the user has permission to access"""
     log.debug("getCollectionList()")
+
+    def add_all_card_deck(collection):
+        decks = collection['decks']
+        num_cards = sum(map(lambda d: d['num_cards'], decks))
+        if num_cards:
+            collection['decks'] = [{'title': 'All Cards', 'id':-collection['id'], 'num_cards': num_cards}] + collection['decks']
+        return collection
 
     can_filter = kwargs.get('can_filter', True)
     collection_ids = kwargs.get('collection_ids', [])
@@ -69,19 +110,21 @@ def getCollectionList(role_bucket, **kwargs):
                         'title': deck.title,
                         'num_cards': deck.cards__count
                     })
-                collection_list.append({
+                collection_item = {
                     'id': collection.id,
                     'title':collection.title,
                     'published': collection.published,
                     'decks': collection_decks
-                })
+                }
             else:
-                collection_list.append({
+                collection_item = {
                     'id': collection.id,
                     'title':collection.title,
                     'published': collection.published,
                     'decks': []
-                })
+                }
+            collection_item = add_all_card_deck(collection_item)
+            collection_list.append(collection_item)
 
     return collection_list
 
