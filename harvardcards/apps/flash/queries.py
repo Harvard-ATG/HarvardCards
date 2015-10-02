@@ -116,6 +116,11 @@ def getCollectionList(role_bucket, **kwargs):
     for collection in collections:
         has_access = has_role_in_bucket(role_bucket, collection_roles, collection.id)
         log.debug("collection id: [%s] has access: [%s]" % (collection.id, has_access))
+
+        if collection.id in role_bucket[Users_Collections.role_map[Users_Collections.LEARNER]]:
+            has_access = has_access and collection.published
+            log.debug("checking access based on whether collection is published: %s" % has_access)
+        
         if has_access:
             collection_decks = []
             log.debug("decks for collection id [%s]: %s" % (collection.id, decks_by_collection.get(collection.id, None)))
