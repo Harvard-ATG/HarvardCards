@@ -1,4 +1,4 @@
-<div class="courseHeader courseHeaderClickable" data-collection-id="{{ collection.id }}">
+<div class="courseHeader courseHeaderClickable {% if collection.published %}courseHeaderPublished{% else %}courseHeaderUnpublished{% endif %}" data-collection-id="{{ collection.id }}">
     <i class="plusminus fa {% if current_collection_id == collection.id %}fa-minus-circle{% else %}fa-plus-circle{% endif %} fa-lg"></i>
     {% spaceless %}
         <h2 class="courseTitle">{{ collection.title }}</h2>
@@ -9,7 +9,7 @@
             {% if is_teacher %}
             <li>
                 <a class="adminMenuBtn hidden-mobile" href="{% url 'collectionPublish' collection.id %}?collection_id={{collection.id}}" title="{% if collection.published %}Unpublish{% else %}Publish{% endif %} Collection">
-                {% if collection.published %}<i class="fa fa-check-circle"></i> Published{% else %}<i class="fa fa-exclamation-circle"></i> Not Published{% endif %}
+                {% if collection.published %}<i class="fa fa-cloud-download"></i> Unpublish{% else %}<i class="fa fa-cloud-upload"></i> Publish{% endif %}
                 </a>
             </li>
             {% endif %}

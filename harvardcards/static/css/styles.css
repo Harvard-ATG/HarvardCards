@@ -375,6 +375,12 @@ ul.addACourseContent div {
     cursor: pointer;
     background-color: lightgrey;
 }
+.courseHeaderPublished {
+	background-color: lightgrey !important;
+}
+.courseHeaderUnpublished {
+	background-color: darkgray !important;
+}
 .courseHeaderClickable > .plusminus,
 .courseHeaderClickable > .adminMenuRight {
     margin-left: .5em;

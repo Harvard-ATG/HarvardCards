@@ -21,7 +21,7 @@
         {% endif %}
     {% endif %}
 
-    {% if display_collections.size > 0 %}
+    {% if display_collections.num_collections > 0 %}
         <ul class="adminMenu adminMenuRight">
             <li>
                 <div class="form-input">
@@ -51,28 +51,21 @@
 				</ul>
 			</div>
 		{% else %}
-	
-			<div id="course_coll">
-				<div class="courseHeader"><h3>Course Collections ({{display_collections.course.size}})</h3></div>
-				<ul class="accordion" style="margin-top: .5em">
-				{% for collection in display_collections.course.collections %}
-					<li>
-					{% include "_collection_view.html" with is_teacher=is_teacher collection=collection user_collection_role=user_collection_role current_collection_id=active_collection.id %}
-					</li>
-				{% endfor %}
-				</ul>
-			</div>
-	
-			<div id="private_coll">
-				<div class="courseHeader"><h3>Private Collections ({{display_collections.private.size}})</h3></div>
-				<ul class="accordion" style="margin-top: .5em">
-				{% for collection in display_collections.private.collections %}
-					<li>
-					{% include "_collection_view.html" with is_teacher=is_teacher collection=collection user_collection_role=user_collection_role current_collection_id=active_collection.id %}
-					</li>
-				{% endfor %}
-				</ul>
-			</div>
+			{% for display_group in display_collections.groups %}
+				<div id="course_coll">
+					<div class="courseHeader"><h3>{{display_group.label}} ({{display_group.num_collections}})</h3></div>
+					{% if is_teacher %}
+						<div>There are {{display_group.num_published}} published collections and {{display_group.num_unpublished}} unpublished collections.</div>
+					{% endif %}
+					<ul class="accordion" style="margin-top: .5em">
+					{% for collection in display_group.collections %}
+						<li>
+						{% include "_collection_view.html" with is_teacher=is_teacher collection=collection user_collection_role=user_collection_role current_collection_id=active_collection.id %}
+						</li>
+					{% endfor %}
+					</ul>
+				</div>			
+			{% endfor %}
 		{% endif %}
 	{% else%}
 		<div>No collections to display.</div>

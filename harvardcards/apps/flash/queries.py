@@ -41,15 +41,22 @@ def groupCollectionsByList(collection_list):
     """groups collections into 'course' vs 'private' collections"""
 
     group_of = {
-        "size": 0,
+        "num_collections": 0,
         "course": {
-            "size": 0,
+            "label": "Course Collections",
             "collections": [],
+            "num_collections": 0,
+            "num_published": 0,
+            "num_unpublished": 0,
         },
         "private": {
-            "size": 0,
+            "label": "Private Collections",
             "collections": [],
+            "num_collections": 0,
+            "num_published": 0,
+            "num_unpublished": 0,
         },
+        "groups": []
     }
     
     course_collection_map = {}
@@ -61,12 +68,21 @@ def groupCollectionsByList(collection_list):
 
     for collection in collection_list:
         if collection['id'] in course_collection_map:
-            bucket = 'course'
+            group_key = 'course'
         else:
-            bucket = 'private'
-        group_of[bucket]['collections'].append(collection)
-        group_of[bucket]['size'] += 1
-        group_of['size'] += 1
+            group_key = 'private'
+
+        if collection['published']:
+            publish_key = 'num_published'
+        else:
+            publish_key = 'num_unpublished'
+
+        group_of[group_key]['collections'].append(collection)
+        group_of[group_key]['num_collections'] += 1
+        group_of[group_key][publish_key] += 1
+        group_of['num_collections'] += 1
+        
+    group_of['groups'] = [group_of['course'], group_of['private']]
     
     return group_of
 
