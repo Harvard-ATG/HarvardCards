@@ -226,8 +226,7 @@ def toggle_publish(request, collection_id=None):
     collection = Collection.objects.get(id=collection_id)
     collection.published = not collection.published
     collection.save()
-    return redirect(collection)
-
+    return redirect('collectionIndex')
 
 
 @login_required
