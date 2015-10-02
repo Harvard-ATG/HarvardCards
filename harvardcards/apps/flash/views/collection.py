@@ -33,7 +33,7 @@ def index(request, collection_id=None):
     lti_req = LTIService(request)
     course_collections = lti_req.getCourseCollections()
 
-    is_teacher = lti_req.isTeacher()
+    is_teacher = lti_req.isTeacher() or queries.is_superuser_or_staff(request.user)
 
     copy_collections = queries.getCopyCollectionList(request.user)
     collection_filters = dict(collection_ids=course_collections, can_filter=not queries.is_superuser_or_staff(request.user))
