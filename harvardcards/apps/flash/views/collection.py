@@ -22,8 +22,8 @@ import logging
 log = logging.getLogger(__name__)
 
 def index(request, collection_id=None):
-    """Displays a set of collections to the user depending on whether 
-    or not the collections are private or public and whether or not the 
+    """Displays a set of collections to the user depending on whether
+    or not the collections are private or public and whether or not the
     user has permission."""
     def add_all_card_deck(collection):
         decks = collection['decks']
@@ -61,7 +61,8 @@ def index(request, collection_id=None):
         "copy_collections": copy_collections,
         "active_collection": active_collection,
         "user_collection_role": role_bucket,
-        "is_teacher": is_teacher
+        "is_teacher": is_teacher,
+        "collection_id": int(collection_id)
     }
 
     if collection_id:
@@ -77,8 +78,8 @@ def index(request, collection_id=None):
         context['display_collections'] = display_collections
 
     analytics.track(
-        actor=request.user, 
-        verb=analytics.VERBS.viewed, 
+        actor=request.user,
+        verb=analytics.VERBS.viewed,
         object=analytics.OBJECTS.collection,
         context={"collection_id": collection_id}
     )
@@ -131,8 +132,8 @@ def custom_create(request):
     }
 
     analytics.track(
-        actor=request.user, 
-        verb=analytics.VERBS.created, 
+        actor=request.user,
+        verb=analytics.VERBS.created,
         object=analytics.OBJECTS.collection,
         context={"custom": True}
     )
@@ -164,8 +165,8 @@ def create(request):
             services.get_or_update_role_bucket(request, collection.id, Users_Collections.role_map[Users_Collections.ADMINISTRATOR])
             log.info('Collection %s created.' %collection.id, extra={'user': request.user})
             analytics.track(
-                actor=request.user, 
-                verb=analytics.VERBS.created, 
+                actor=request.user,
+                verb=analytics.VERBS.created,
                 object=analytics.OBJECTS.collection,
                 context={"custom": False}
             )
@@ -212,8 +213,8 @@ def edit(request, collection_id=None):
             response = redirect(collection)
             response['Location'] += '?instructor=edit'
             analytics.track(
-                actor=request.user, 
-                verb=analytics.VERBS.modified, 
+                actor=request.user,
+                verb=analytics.VERBS.modified,
                 object=analytics.OBJECTS.collection,
                 context={"collection_id": collection_id}
             )
@@ -228,9 +229,9 @@ def edit(request, collection_id=None):
             break
 
     print collection_decks
-        
+
     context = {
-        "collection_form": collection_form, 
+        "collection_form": collection_form,
         "nav_collections": collection_list,
         "collection": collection,
         "collection_decks": collection_decks,
@@ -282,7 +283,7 @@ def share_collection(request, collection_id=None):
             'share_form': collection_share_form,
             'nav_collections': collection_list,
             'collection': collection,
-             } 
+             }
 
     if request.POST:
         collection_share_form = CollectionShareForm(request.POST)
@@ -315,8 +316,8 @@ def share_collection(request, collection_id=None):
             context['secret_share_key'] = secret_share_key
             log.info('URL generated to share collection %s.' %collection_id, extra={'user': request.user})
             analytics.track(
-                actor=request.user, 
-                verb=analytics.VERBS.shared, 
+                actor=request.user,
+                verb=analytics.VERBS.shared,
                 object=analytics.OBJECTS.collection,
                 context={"collection_id": collection_id}
             )
@@ -344,8 +345,8 @@ def add_user_to_shared_collection(request, secret_share_key=''):
     if not collection_id.isdigit():
         return HttpResponseBadRequest('Invalid share URL [C]')
     if not Users_Collections.is_valid_role(role):
-        return HttpResponseBadRequest('Invalid share URL [R]') 
-    
+        return HttpResponseBadRequest('Invalid share URL [R]')
+
     try:
         expired_in = datetime.datetime.strptime(expired_in,"%Y-%m-%d")
         current_time = datetime.datetime.now()
@@ -379,8 +380,8 @@ def add_deck(request, collection_id=None):
     deck = services.create_deck(collection_id=collection_id, deck_title=deck_title)
     log.info('Deck %(d)s added to the collection %(c)s.' %{'d': deck.id, 'c': str(collection_id)}, extra={'user': request.user})
     analytics.track(
-        actor=request.user, 
-        verb=analytics.VERBS.created, 
+        actor=request.user,
+        verb=analytics.VERBS.created,
         object=analytics.OBJECTS.deck,
         context={"collection_id": collection_id, "deck_id": deck.id}
     )
@@ -393,7 +394,7 @@ def add_deck(request, collection_id=None):
     else:
         return redirect(deck)
 
-@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR], 'collection') 
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR], 'collection')
 def delete(request, collection_id=None):
     """Deletes a collection."""
 
@@ -402,8 +403,8 @@ def delete(request, collection_id=None):
     response['Location'] += '?instructor=edit'
     log.info('Collection %(c)s deleted.' %{'c': str(collection_id)}, extra={'user': request.user})
     analytics.track(
-        actor=request.user, 
-        verb=analytics.VERBS.deleted, 
+        actor=request.user,
+        verb=analytics.VERBS.deleted,
         object=analytics.OBJECTS.collection,
         context={"collection_id": collection_id}
     )
@@ -425,8 +426,8 @@ def download_template(request, collection_id=None):
             %{'c': str(collection_id)}, extra={'user': request.user})
 
     analytics.track(
-        actor=request.user, 
-        verb=analytics.VERBS.downloaded, 
+        actor=request.user,
+        verb=analytics.VERBS.downloaded,
         object=analytics.OBJECTS.template,
         context={"collection_id": collection_id, "custom": False}
     )
@@ -447,8 +448,8 @@ def download_custom_template(request, collection_id=None):
     log.info('Custom template downloaded.', extra={'user': request.user})
 
     analytics.track(
-        actor=request.user, 
-        verb=analytics.VERBS.downloaded, 
+        actor=request.user,
+        verb=analytics.VERBS.downloaded,
         object=analytics.OBJECTS.template,
         context={"collection_id": collection_id, "custom": True}
     )

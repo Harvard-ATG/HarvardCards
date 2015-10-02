@@ -20,7 +20,7 @@
         </ul>
     {% endif %}
 </div>
-<div class="courseBody hide">
+<div class="courseBody {% if collection_id != collection.id %} hide {% endif %}">
     {% if collection.id in user_collection_role.ADMINISTRATOR %}
     <div class="deck add hidden-mobile">
         <a href="{% url 'collectionAddDeck' collection.id %}?collection_id={{collection.id}}" id="addDeck-{{collection.id}}">Add a Deck</a>
@@ -31,7 +31,7 @@
         {% if not collection.id in user_collection_role.ADMINISTRATOR %}
             No decks have been added to this collection yet.
         {% endif %}
-    {% else %} 
+    {% else %}
         {% for deck in collection.decks %}
             <li class="deck">
                 <dl>
