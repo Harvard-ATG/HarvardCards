@@ -25,6 +25,10 @@ def index(request, collection_id=None):
     """Displays a set of collections to the user depending on whether
     or not the collections are private or public and whether or not the
     user has permission."""
+
+    if collection_id is not None:
+        collection_id = int(collection_id)
+
     def add_all_card_deck(collection):
         decks = collection['decks']
         num_cards = sum(map(lambda d: d['num_cards'], decks))
@@ -62,7 +66,7 @@ def index(request, collection_id=None):
         "active_collection": active_collection,
         "user_collection_role": role_bucket,
         "is_teacher": is_teacher,
-        "collection_id": int(collection_id)
+        "collection_id": collection_id
     }
 
     if collection_id:
