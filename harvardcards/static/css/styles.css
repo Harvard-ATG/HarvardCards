@@ -282,7 +282,7 @@ h1, h2, h3, h4
 	}
 
     #navigation .collectionNavItem {
-        margin-left: 5%;    
+        margin-left: 5%;
     }
 
 		#navigation nav ul ul a:hover
@@ -347,7 +347,7 @@ ul.addACourseContent div {
 	border: 2px dashed #838383;
 	text-transform:uppercase;
 	margin: 0 auto 0.25em;
-	padding: 0.59em 5%;
+	padding: 0.59em 0%;
 	width: 90%;
 }
 	.btn-dashed:hover{
@@ -355,13 +355,13 @@ ul.addACourseContent div {
 		border:2px solid #999797;
 		color: #a51c30;
 	}
-	
+
 /********** new Add Card and Upload Cards (end) ***********/
 
 /********** hp course ROW (start) ***********/
-.courseWrapper{ 
-	display: inline-block; 
-	width: 100%; 
+.courseWrapper{
+	display: inline-block;
+	width: 100%;
 	margin-bottom: 1em;
 }
 .courseHeader{
@@ -518,7 +518,7 @@ ul.addACourseContent div {
 			a.viewReview:hover{
 				color: #a51c30;
 			}
-			
+
 		.openDeckMenu{
 			width: 100%;
 			z-index: 1;
@@ -829,7 +829,7 @@ div.deckNav{
 /*full card (end) */
 
 /* cards UI view (start) */
-.card-field{ 
+.card-field{
 	display: inline-block;
 	width: 90%;
 	padding: 0.5em 5%;
@@ -931,14 +931,14 @@ a#mobileMenu{
 	.fullcardBtns .fa{
 		margin-right: 5%;
 	}
-	
+
 	.mobileFirst{
 		float:left;
 	}
 	.mobile{
 	}
 	.mobile{
-		
+
 	}
 	.mobileLast{
 		float:right;
@@ -1064,6 +1064,10 @@ ol.help > li > ol > li > ol {
 */
 	/*body{ background-color: blue; background-image:none; }*/
 
+  .breadcrumbs {
+    font-size: 1.4em;
+  }
+
 	.section{
 		padding: 0 1%;
 		width: 98%;
@@ -1134,6 +1138,7 @@ ol.help > li > ol > li > ol {
 	  }
 		.slider > ul > li
 		, li.deck {
+      display: inline;
 		  /*float: left;
 		  width: 400px;
 		  height: 300px;
@@ -1164,16 +1169,21 @@ ol.help > li > ol > li > ol {
 	#singleCardHolder ul li.hide{
 		visibility: visible;
 	}
-	
+
 	#singleCardHolder ul li.show{
 		visibility: visible;
-	}	
+	}
 }
 @media screen and (min-width: 480px){
 /*
 * iPhone landscape
 */
 	/*body{ background-color: yellow; background-image:none; }*/
+
+  .breadcrumbs {
+    font-size: 1.6em;
+  }
+
 	.section{
 		padding: 0 1%;
 		width: 98%;
@@ -1231,6 +1241,10 @@ ol.help > li > ol > li > ol {
 * iPad Portrait
 */
 	/*body{ background-color: orange; background-image:none;}*/
+
+  .breadcrumbs {
+    font-size: 1.8em;
+  }
 
 	.section{
 		padding: 0 1%;
@@ -1323,7 +1337,7 @@ ol.help > li > ol > li > ol {
 	#cardSlider
 	, #cardSliderNotAdmin{
 		margin: 0;
-		width: 90.046296296296%;
+    width: 75.647090735224%
 	}
 
 	.footerNav ul li a{
@@ -1341,26 +1355,26 @@ ol.help > li > ol > li > ol {
 	,.footerNav ul ul li a.active {
 		background-position: 3% 0.65em;
 	}
-	
+
 	/* in desktop mode - hide show cars on the main
 	   content area instead of sliding */
 	#singleCardHolder ul li.hide{
 		display: none;
 	}
-	
+
 	#singleCardHolder ul li.show{
 		display: block;
 	}
-	
+
 	/*hiddent the slider navigation menu for small screen size */
 	.fullcardBtns{
 		display: none;
 	}
-	
+
 	#cardSlider
 	, #cardSliderNotAdmin{
 		display: inline-block;
-		
+
 	}
 }
 @media screen and (min-width: 1024px){
@@ -1368,6 +1382,10 @@ ol.help > li > ol > li > ol {
  * this break point is for normal size desktop view so it's all fluid
 */
 	/*body{ background-color: gray; background-image:none;}*/
+
+  .breadcrumbs {
+    font-size: 2.1em;
+  }
 
 	.section{
 		padding: 0 1%;
