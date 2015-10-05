@@ -38,48 +38,84 @@ def getCollectionRoleList():
     return role_list
 
 def groupCollectionsByList(collection_list):
-    """groups collections into 'course' vs 'private' collections"""
+    """
+    Groups collections into Course vs Private collections and then creates sub-groups
+    of course collections by course.
+    
+    Course collections include any that are associated with a course.
+    Private collections include any that are NOT associated with any course (just an  owner).
+    
+    Collections can either by published/unpublished and this affects whether they are available
+    to non-owners.
+    
+    This function constructs a data structure that is intended to be passed to a template/view
+    for rendering. 
+    """
 
     group_of = {
         "num_collections": 0,
         "course": {
             "label": "Course Collections",
-            "collections": [],
+            "groups": [],
             "num_collections": 0,
             "num_published": 0,
             "num_unpublished": 0,
         },
         "private": {
             "label": "Private Collections",
-            "collections": [],
+            "groups": [{"name":"", "collections": []}],
             "num_collections": 0,
             "num_published": 0,
             "num_unpublished": 0,
         },
-        "groups": []
+        "groups": [] # this should contain the "course" and "private" groups
     }
     
-    course_collection_map = {}
+    course_collection_of = {}
+    course_name_of = {}
     course_collections = Course_Map.objects.all()
     for course_collection in course_collections:
         collection_id = course_collection.collection.id
-        if collection_id not in course_collection_map:
-            course_collection_map[collection_id] = course_collection
+        if course_collection.course.id not in course_name_of:
+            course_name_of[course_collection.course.id] = course_collection.course.course_name
+        if collection_id not in course_collection_of:
+            course_collection_of[collection_id] = course_collection
 
+    course_group = {}
     for collection in collection_list:
-        if collection['id'] in course_collection_map:
-            group_key = 'course'
-        else:
-            group_key = 'private'
-
         if collection['published']:
             publish_key = 'num_published'
         else:
             publish_key = 'num_unpublished'
 
-        group_of[group_key]['collections'].append(collection)
-        group_of[group_key]['num_collections'] += 1
-        group_of[group_key][publish_key] += 1
+        if collection['id'] in course_collection_of:
+            group_key = 'course'
+            course_key = course_collection_of[collection['id']].course.id
+            if course_key not in course_group:
+                course_group[course_key] = {
+                    "collections": [],
+                    "num_collections": 0,
+                    "num_published": 0,
+                    "num_unpublished": 0,
+                }
+            course_group[course_key]['collections'].append(collection)
+            course_group[course_key]['num_collections'] += 1
+            course_group[course_key][publish_key] += 1
+            group_of[group_key]['num_collections'] += 1
+            group_of[group_key][publish_key] += 1
+        else:
+            group_key = 'private'
+            group_of[group_key]['groups'][0]['collections'].append(collection)
+            group_of[group_key]['num_collections'] += 1
+            group_of[group_key][publish_key] += 1
+
+        course_groups = []
+        for course_id, group in sorted(course_group.items(), key=lambda k: course_name_of[k[0]]):
+            course_group_item = {"name": course_name_of[course_id]}
+            course_group_item.update(group)
+            course_groups.append(course_group_item)
+
+        group_of['course']['groups'] = course_groups
         group_of['num_collections'] += 1
         
     group_of['groups'] = [group_of['course'], group_of['private']]

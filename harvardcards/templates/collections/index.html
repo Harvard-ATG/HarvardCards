@@ -54,21 +54,28 @@
 			{% for display_group in display_collections.groups %}
 				<div id="course_coll">
 					<div class="courseHeader"><h3>{{display_group.label}} ({{display_group.num_collections}})</h3></div>
-					{% if is_teacher %}
-						<div>There are {{display_group.num_published}} published collections and {{display_group.num_unpublished}} unpublished collections.</div>
-					{% endif %}
-					<ul class="accordion" style="margin-top: .5em">
-					{% for collection in display_group.collections %}
-						<li>
-						{% include "_collection_view.html" with is_teacher=is_teacher collection=collection user_collection_role=user_collection_role current_collection_id=active_collection.id %}
-						</li>
+					{% for group in display_group.groups %}
+						{% if group.name != "" %}
+							<h2>{{ group.name }}</h2>
+						{% endif %}
+						{% if is_teacher and group.num_collections > 0%}
+							<div>
+								<i title="Published collections to make them available">Published: {{group.num_published}}</i>&nbsp;<i title="Unpublished collections to make them unavailable">Unpublished: {{group.num_unpublished}}</i>
+							</div>
+						{% endif %}
+						<ul class="accordion" style="margin-top: .5em">
+							{% for collection in group.collections %}
+							<li>
+							{% include "_collection_view.html" with is_teacher=is_teacher collection=collection user_collection_role=user_collection_role current_collection_id=active_collection.id %}
+							</li>
+							{% endfor %}
+						</ul>
 					{% endfor %}
-					</ul>
 				</div>			
 			{% endfor %}
 		{% endif %}
 	{% else%}
-		<div>No collections to display.</div>
+		<h2 style="margin: 1em 0;">No collections to display</h2>
 	{% endif %}
 </div>
 
