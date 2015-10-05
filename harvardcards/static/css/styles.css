@@ -1181,7 +1181,7 @@ ol.help > li > ol > li > ol {
 	/*body{ background-color: yellow; background-image:none; }*/
 
   .breadcrumbs {
-    font-size: 2.1em;
+    font-size: 1.6em;
   }
 
 	.section{
@@ -1241,6 +1241,10 @@ ol.help > li > ol > li > ol {
 * iPad Portrait
 */
 	/*body{ background-color: orange; background-image:none;}*/
+
+  .breadcrumbs {
+    font-size: 1.8em;
+  }
 
 	.section{
 		padding: 0 1%;
@@ -1378,6 +1382,10 @@ ol.help > li > ol > li > ol {
  * this break point is for normal size desktop view so it's all fluid
 */
 	/*body{ background-color: gray; background-image:none;}*/
+
+  .breadcrumbs {
+    font-size: 2.1em;
+  }
 
 	.section{
 		padding: 0 1%;
