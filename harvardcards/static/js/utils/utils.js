@@ -10,6 +10,11 @@ define(['jquery'], function($) {
 					});
 				}
 			});
+		},
+		setupMaskOnFormSubmit: function($form) {
+			$form.on('submit', function(evt) {
+				$("#bodymask").show();
+			});
 		}
 	};
 });
