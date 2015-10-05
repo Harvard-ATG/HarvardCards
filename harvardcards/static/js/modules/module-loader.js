@@ -1,4 +1,4 @@
-define(['jquery', 'lodash', 'mixins/debug-mixin'], function($, _, DebugMixin) {
+define(['jquery', 'jqueryui', 'lodash', 'mixins/debug-mixin'], function($, $ui, _, DebugMixin) {
 
 	/**
 	 * The ModuleLoader is responsible for finding and loading modules
@@ -84,6 +84,7 @@ define(['jquery', 'lodash', 'mixins/debug-mixin'], function($, _, DebugMixin) {
 			var loader = new ModuleLoader(rootEl);
 			loader.loadAll();
 		});
+		$(document).tooltip();
 	};
 
 	return ModuleLoader;

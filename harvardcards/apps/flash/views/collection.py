@@ -29,44 +29,24 @@ def index(request, collection_id=None):
     if collection_id is not None:
         collection_id = int(collection_id)
 
-    def add_all_card_deck(collection):
-        decks = collection['decks']
-        num_cards = sum(map(lambda d: d['num_cards'], decks))
-        if num_cards:
-            collection['decks'] = [{'title': 'All Cards', 'id':-collection['id'], 'num_cards': num_cards}] + collection['decks']
-        return collection
-
     role_bucket = services.get_or_update_role_bucket(request)
     lti_req = LTIService(request)
     course_collections = lti_req.getCourseCollections()
 
-    is_teacher = lti_req.isTeacher()
+    is_teacher = lti_req.isTeacher() or queries.is_superuser_or_staff(request.user)
 
     copy_collections = queries.getCopyCollectionList(request.user)
     collection_filters = dict(collection_ids=course_collections, can_filter=not queries.is_superuser_or_staff(request.user))
     collection_list = queries.getCollectionList(role_bucket, **collection_filters)
-    collection_list = map(lambda c: add_all_card_deck(c), collection_list)
-
-    active_collection = None
-    display_collections = collection_list
-    display_collections_1 = {'Private': [], 'Public': []}
-    course_ids = queries.get_course_collection_ids()
-    for collection in display_collections:
-        id = collection['id']
-        published = collection['published']
-        if id in course_ids and published:
-            display_collections_1['Public'].append(collection)
-        else:
-            display_collections_1['Private'].append(collection)
+    display_collections = queries.groupCollectionsByList(collection_list)
 
     context = {
         "nav_collections": collection_list,
-        "display_collections": display_collections_1,
+        "display_collections": display_collections,
         "copy_collections": copy_collections,
-        "active_collection": active_collection,
+        "active_collection": None,
         "user_collection_role": role_bucket,
         "is_teacher": is_teacher,
-        "collection_id": collection_id
     }
 
     if collection_id:
@@ -74,12 +54,10 @@ def index(request, collection_id=None):
             cur_collection = Collection.objects.get(id=collection_id)
         except Collection.DoesNotExist:
             raise Http404
-        display_collections = [c for c in collection_list if c['id'] == cur_collection.id]
-        if len(display_collections) == 0:
+        filtered_collection_list = [c for c in collection_list if c['id'] == cur_collection.id]
+        if len(filtered_collection_list) == 0:
             raise Http404
-        else:
-            active_collection = display_collections[0]
-        context['display_collections'] = display_collections
+        context['active_collection'] = filtered_collection_list[0]
 
     analytics.track(
         actor=request.user,
@@ -248,8 +226,7 @@ def toggle_publish(request, collection_id=None):
     collection = Collection.objects.get(id=collection_id)
     collection.published = not collection.published
     collection.save()
-    return redirect(collection)
-
+    return redirect('collectionIndex')
 
 
 @login_required

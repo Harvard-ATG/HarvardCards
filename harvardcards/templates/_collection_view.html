@@ -1,5 +1,5 @@
-<div class="courseHeader courseHeaderClickable" data-collection-id="{{ collection.id }}">
-    <i class="plusminus fa fa-plus-circle fa-lg"></i>
+<div class="courseHeader courseHeaderClickable {% if collection.published %}courseHeaderPublished{% else %}courseHeaderUnpublished{% endif %}" data-collection-id="{{ collection.id }}">
+    <i class="plusminus fa {% if current_collection_id == collection.id %}fa-minus-circle{% else %}fa-plus-circle{% endif %} fa-lg"></i>
     {% spaceless %}
         <h2 class="courseTitle">{{ collection.title }}</h2>
         <h3>{% if collection.decks|length == 1 %}1 Deck{% else %}{{collection.decks|length}} Decks{% endif %}</h3>
@@ -8,19 +8,19 @@
         <ul class="adminMenu adminMenuRight">
             {% if is_teacher %}
             <li>
-                <a class="adminMenuBtn hidden-mobile" href="{% url 'collectionPublish' collection.id %}?collection_id={{collection.id}}"><i class="fa fa-upload"></i>
-                {% if collection.published %} Unpublish {% else %} Publish {% endif %}
+                <a class="adminMenuBtn hidden-mobile" href="{% url 'collectionPublish' collection.id %}?collection_id={{collection.id}}" title="{% if collection.published %}Unpublish{% else %}Publish{% endif %} Collection">
+                {% if collection.published %}<i class="fa fa-cloud-download"></i> Unpublish{% else %}<i class="fa fa-cloud-upload"></i> Publish{% endif %}
                 </a>
             </li>
             {% endif %}
 
-            <li><a class="adminMenuBtn hidden-mobile" href="{% url 'collectionEdit' collection.id %}?collection_id={{collection.id}}"><i class="fa fa-pencil"></i> Edit</a></li>
-            <li><a class="adminMenuBtn hidden-mobile" href="{% url 'collectionDelete' collection.id %}?collection_id={{collection.id}}" data-confirm="Are you sure you want to delete: {{collection.title|escape}}?"><i class="fa fa-times-circle"></i> Delete</a></li>
+            <li><a class="adminMenuBtn hidden-mobile" href="{% url 'collectionEdit' collection.id %}?collection_id={{collection.id}}" title="Edit Collection"><i class="fa fa-pencil"></i> Edit</a></li>
+            <li><a class="adminMenuBtn hidden-mobile" href="{% url 'collectionDelete' collection.id %}?collection_id={{collection.id}}" data-confirm="Are you sure you want to delete: {{collection.title|escape}}?" title="Delete Collection"><i class="fa fa-times-circle"></i> Delete</a></li>
             <!-- <li><a class="adminMenuBtn hidden-mobile" href="{% url 'collectionShare' collection.id %}?collection_id={{collection.id}}"><i class="fa fa-share"></i> Share</a></li> -->
         </ul>
     {% endif %}
 </div>
-<div class="courseBody {% if collection_id != collection.id %} hide {% endif %}">
+<div class="courseBody {% if current_collection_id != collection.id %}hide{% endif %}">
     {% if collection.id in user_collection_role.ADMINISTRATOR %}
     <div class="deck add hidden-mobile">
         <a href="{% url 'collectionAddDeck' collection.id %}?collection_id={{collection.id}}" id="addDeck-{{collection.id}}">Add a Deck</a>

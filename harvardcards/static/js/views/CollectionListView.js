@@ -27,6 +27,10 @@ define(['jquery'], function($) {
                 self.togglePlusMinusCls(el);
             });
 
+            
+            // Commenting this out because it's resulting in weird/unpredictable behavior
+            // in conjunction with the template logic for hiding/showing collecitons.
+            /*
             this.getHeaderEls().each(function(index, el) {
                 var collection_id = $(el).data('collection-id');
                 var collection_state = localStorage.getItem('show-collection-id'+collection_id);
@@ -37,6 +41,7 @@ define(['jquery'], function($) {
                     self.toggleCollapse(el, false);
                 }
             });
+            */
 
             self.initialized = true;
         },

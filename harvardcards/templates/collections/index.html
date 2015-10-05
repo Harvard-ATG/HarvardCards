@@ -13,6 +13,7 @@
 {% block main_content %}
 <div id="content" data-module="collections-index">
     {% if not active_collection %}
+		{% comment %}Only show  the "Add Collection" on the index screen{% endcomment %}
         {% if user.is_authenticated %}
             <div class="hidden-mobile">
                 <a href="{% url 'collectionCreate' %}" id="addAcourse">Add Collection</a>
@@ -20,7 +21,9 @@
         {% endif %}
     {% endif %}
 
-    {% if display_collections|length > 0 %}
+    {% if display_collections.num_collections == 0 %}
+        <h2 style="margin: 1em 0;">No collections to display</h2>
+    {% else %}
         <ul class="adminMenu adminMenuRight">
             <li>
                 <div class="form-input">
@@ -40,36 +43,38 @@
             </li>
         </ul>
         <div class="clear"></div>
-        {% if display_collections|length > 1 %}
-        <div id="course_coll">
-            <div class="courseHeader"><h3>Course Collections</h3></div>
-            <ul class="accordion" style="margin-top: .5em">
-            {% for collection in display_collections.Public %}
-                <li>
-                {% include "_collection_view.html" with collection=collection user_collection_role=user_collection_role current_collection_id=collection_id %}
-                </li>
-            {% endfor %}
-            </ul>
-        </div>
-        <div id="private_coll">
-            <div class="courseHeader"><h3>Private Collections</h3></div>
-            <ul class="accordion" style="margin-top: .5em">
-            {% for collection in display_collections.Private %}
-                <li>
-                {% include "_collection_view.html" with is_teacher=is_teacher collection=collection user_collection_role=user_collection_role current_collection_id=collection_id %}
-                </li>
-            {% endfor %}
-            </ul>
-        </div>
-
+        {% if active_collection %}
+            <div id="course_coll">
+                <ul class="accordion" style="margin-top: .5em">
+                    <li>
+                    {% include "_collection_view.html" with is_teacher=is_teacher collection=active_collection user_collection_role=user_collection_role current_collection_id=active_collection.id %}
+                    </li>
+                </ul>
+            </div>
         {% else %}
-        <ul class="accordion" style="margin-top: .5em">
-            <li>
-            {% include "_collection_view.html" with is_teacher=is_teacher collection=display_collections.0 user_collection_role=user_collection_role current_collection_id=collection_id %}
-            </li>
-        </ul>
-        {% endif %}
+            {% for display_group in display_collections.groups %}
+            <div id="course_coll">
+                <div class="courseHeader"><h3>{{display_group.label}} ({{display_group.num_collections}})</h3></div>
+                {% for group in display_group.groups %}
+                    {% if group.name != "" %}
+                        <h2>{{ group.name }}</h2>
+                    {% endif %}
 
+                    {% if is_teacher and group.num_collections > 0%}
+                    <div>
+                        <i title="Published collections to make them available">Published: {{group.num_published}}</i>&nbsp;<i title="Unpublished collections to make them unavailable">Unpublished: {{group.num_unpublished}}</i>
+                    </div>
+                    {% endif %}
+
+                    <ul class="accordion" style="margin-top: .5em">
+                    {% for collection in group.collections %}
+                        <li>{% include "_collection_view.html" with is_teacher=is_teacher collection=collection user_collection_role=user_collection_role current_collection_id=active_collection.id %}</li>
+                    {% endfor %}
+                    </ul>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        {% endif %}
     {% endif %}
 </div>
 
