@@ -4,7 +4,7 @@ define(['jquery', 'jquery.flot', 'jquery.flot.time'], function($) {
     GRAPH_DATA.registrationGraph.options = {
         "series": {
             "lines": {"show": true, "lineWidth": 1},
-            "points": {"show": true},
+            "points": {"show": false},
             "label": "Number of Registered Users Over Time",
             "color": "#A51C30"
         },
@@ -46,7 +46,7 @@ define(['jquery', 'jquery.flot', 'jquery.flot.time'], function($) {
     var module = {
         initModule: function(el) {
             $.each(GRAPH_DATA, function(k, v) {
-                console.log(k, " => ", v);
+                //console.log(k, " => ", v);
                 $.plot("#"+k, [v.data], v.options);
             });
         }
