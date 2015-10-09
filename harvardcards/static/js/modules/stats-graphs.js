@@ -5,7 +5,8 @@ define(['jquery', 'jquery.flot', 'jquery.flot.time'], function($) {
         "series": {
             "lines": {"show": true, "lineWidth": 1},
             "points": {"show": true},
-            "label": "Number of Registered Users Over Time"
+            "label": "Number of Registered Users Over Time",
+            "color": "#A51C30"
         },
         "xaxis": {
             "mode": "time"
@@ -22,8 +23,9 @@ define(['jquery', 'jquery.flot', 'jquery.flot.time'], function($) {
             "bars": {
                 "show": true,
                 "barWidth": 0.6,
-                "align": "center"
+                "align": "center"                
             },
+            "color": "#A51C30",
             "label": "Histogram of Number of Viewable Collections Per User"
         },
         "xaxis": {
