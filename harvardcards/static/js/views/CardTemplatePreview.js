@@ -39,6 +39,14 @@ define(['jquery'], function($) {
     // Updates the preview 
     CardTemplatePreview.prototype.render = function(html) {
         this.previewEl.html(html);
+        this.afterRender();
+    };
+    
+    // Logic that should happen after the preview has been rendered.
+    CardTemplatePreview.prototype.afterRender = function() {
+        if (MathJax) {
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.previewEl.id]);
+        }
     };
 
     // Resets the preview to the default text

@@ -29,6 +29,8 @@
 			{% else %}
 				<div class="cardFieldMedia cardFieldAudio" data-src="{{field.value|as_original_media_url}}" data-label="{{field.label}}" data-type="{{field.type}}"></div>
 			{% endif %}
+		{% elif field.type == 'M' %}
+			<span class="cardFieldValue">{{ field.value}}</span>
 		{% else %}
 			<b>ERROR FIELD TYPE NOT SUPPORTED: {{field.type}}</b>
 		{% endif %}

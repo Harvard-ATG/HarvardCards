@@ -7,6 +7,8 @@
     <i class="fa fa-film fa-2x pull-left"></i>
 {% elif field.type == 'A' %}
     <i class="fa fa-microphone fa-2x pull-left"></i>
+{% elif field.type == 'M' %}
+    <i class="fa fa-code fa-2x pull-left"></i>
 {% endif %}
 <fieldset>
     {% if field.type == 'I' %}
@@ -46,7 +48,11 @@
         </fieldset>
         <input name="field_{{field.id}}_audio_url"  type="text" placeholder="Enter {{field.label}} URL" style="display:none" />
         <input name="field_{{field.id}}"  type="file" placeholder="Enter {{field.label}}" style="display:block"/>
-    {% else %}
+    {% elif field.type == 'M' %}
+		<label for="{{field.label}}">{{field.label}}</label>
+        <input name="field_{{field.id}}" data-math="true" class="formEle form" type="text" placeholder="Enter {{field.label|lower}}" value="{{field.value}}" />
+		<div id="math_field_{{field.id}}"></div>
+	{% else %}
         <b>ERROR - FIELD TYPE NOT SUPPORTED: {{field.type}}</b>
     {% endif %}
     <div class="field-error field-error-field_{{field.id}}" style="display:none"></div>

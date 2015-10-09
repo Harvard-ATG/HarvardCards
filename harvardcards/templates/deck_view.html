@@ -13,6 +13,10 @@
     {% include "_deck_nav.html" with nav_collections=nav_collections active_collection=collection active_deck=deck is_quiz_mode=is_quiz_mode %}
 {% endblock %}
 
+{% block javascript %}
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+{% endblock %}
+
 {% block main_content %}
 <div id="content" data-module="deck-view">
     <div class="courseWrapper" id = "wrapper">

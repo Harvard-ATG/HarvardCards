@@ -8,6 +8,10 @@
 	{% include "_collection_nav.html" with nav_collections=nav_collections %}
 {% endblock %}
 
+{% block javascript %}
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+{% endblock %}
+
 {% block main_content %}
 <div id="content" data-module="collections-create">
     <div class="courseWrapper">

@@ -1,0 +1,38 @@
+[
+    {
+        "pk": 1,
+        "model": "flash.CardTemplate",
+        "fields": {
+            "title": "Default",
+            "description": "Default flashcards with a term on the front and a definition on the back.",
+            "owner":null
+        }
+    },
+    {
+        "pk": 2,
+        "model": "flash.CardTemplate",
+        "fields": {
+            "title": "Art History",
+            "description": "Art History flashcard template.",
+            "owner":null
+        }
+    },
+    {
+        "pk": 3,
+        "model": "flash.CardTemplate",
+        "fields": {
+            "title": "Language with Audio",
+            "description": "Language flashcards with audio component.",
+            "owner":null
+        }
+    },
+    {
+        "pk": 4,
+        "model": "flash.CardTemplate",
+        "fields": {
+            "title": "Mathematics",
+            "description": "Flashcards for mathematics.",
+            "owner":null
+        }
+    }
+]

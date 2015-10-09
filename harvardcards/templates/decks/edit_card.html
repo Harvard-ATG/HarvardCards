@@ -9,6 +9,9 @@
 <li><i class="fa fa-angle-right"></i><span><a href="{% url 'deckIndex' deck.id %}">{{deck.title}}</a></li>
 {% endblock %}
 
+{% block javascript %}
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+{% endblock %}
 
 {% block main_content %}
 <div id="content" data-module="edit-card">
