@@ -10,6 +10,8 @@ requirejs.config({
         'jquery.mobile'       : 'lib/jquery.mobile-1.4.4', //=> http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js
         'jquery.mousewheel'   : 'lib/jquery.mousewheel', //=> //cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.6/jquery.mousewheel.min
         'jquery.scrollTo'     : 'lib/jquery.scrollTo', //=> //cdnjs.cloudflare.com/ajax/libs/jquery-scrollTo/1.4.11/jquery.scrollTo.min.js
+		'jquery.flot'         : 'lib/flot/jquery.flot.min',
+		'jquery.flot.time'    : 'lib/flot/jquery.flot.time.min',
         'jqueryui'            : 'lib/jquery-ui.min', //=> http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui
         'lodash'              : 'lib/lodash', //=> //cdnjs.cloudflare.com/ajax/libs/lodash.js/1.3.1/lodash'
         'microevent'          : 'lib/microevent', //=> https://raw.githubusercontent.com/jeromeetienne/microevent.js/master/microevent.js
@@ -36,6 +38,13 @@ requirejs.config({
 		'jquery.scrollTo': {
 			deps: ['jquery'],
 			exports: 'jQuery.fn.scrollTo'
+		},
+		'jquery.flot': {
+			deps: ['jquery'],
+			exports: 'jQuery.fn.flot'
+		},
+		'jquery.flot.time': {
+			deps: ['jquery.flot']
 		},
         'lodash' : '_'
     },

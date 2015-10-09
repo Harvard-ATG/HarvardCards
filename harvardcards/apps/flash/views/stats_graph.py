@@ -1,65 +1,43 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import user_passes_test
-
 from harvardcards.apps.flash.models import Collection, Users_Collections, User
+import json
+import calendar
+import datetime
 
-from matplotlib import pylab
-from pylab import *
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from matplotlib.figure import Figure
-
-def initialize_graph():
-    close('all')
-    fig=Figure(facecolor='#f3f3f1')
-    ax=fig.add_subplot(111)
-    ax.tick_params(axis="both", which="both", bottom="on", top="off",pad=5,
-                    labelbottom="on", left="on", right="off", labelleft="on", direction='out')
-    return [fig, ax]
-
-
-@user_passes_test(lambda u: u.is_superuser or u.is_staff)
-def graph_collections(request):
+def get_graph_collections():
     objects = Users_Collections.objects.all().values()
     objects = map(lambda o: o['user_id'], objects)
     users = User.objects.all().values_list('id', flat=True)
-    x = map(lambda u: objects.count(u), users)
+    object_counts = map(lambda u: objects.count(u), users)
 
+    raw_data = []
+    for num_collections in sorted([x for x in set(object_counts)]):
+        num_users = sum([1 for x in object_counts if x == num_collections])
+        raw_data.append([num_collections, num_users])
 
-    [fig, ax] = initialize_graph()
-    ax.patch.set_facecolor('#f5f5f5')
-    n, bins, patches = ax.hist(x, facecolor='#A51C30', alpha=0.75)
-    ax.set_ylim((0, max(n)+4))
-    ax.set_xlabel('Number of Collections')
-    ax.set_ylabel('Number of Users')
-    ax.set_title('Histogram of Number of Viewable Collections Per User')
+    return raw_data
 
-    canvas=FigureCanvas(fig)
-    response=HttpResponse(content_type='image/png')
-    canvas.print_png(response)
-    return response
-
-@user_passes_test(lambda u: u.is_superuser or u.is_staff)
-def graph_users(request):
+def get_graph_users():
     regs =  User.objects.all().values_list('date_joined', flat=True)
     min_date, max_date = min(regs).date(), max(regs).date()
     num_days = (max_date - min_date).days + 1
     date_list = [min_date + datetime.timedelta(days=x) for x in range(0, num_days)]
     x = map(lambda d: len(filter(lambda r: r.date() <= d, regs)), date_list)
 
-    [fig, ax] = initialize_graph()
-    ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter('%m/%d/%Y'))
-    ax.xaxis.set_major_locator(matplotlib.dates.DayLocator(interval=len(x)/5))
-    ax.patch.set_facecolor('#f5f5f5')
-    ax.plot(date_list, x, color='#A51C30', linewidth=2)
-    ax.set_ylabel('Number of Users')
-    ax.set_title('Number of Registered Users Over Time')
+    raw_data = []
+    for idx, reg_date in enumerate(date_list):
+        raw_data.append([calendar.timegm(reg_date.timetuple())*1000, x[idx]]) 
 
-    canvas=FigureCanvas(fig)
-    response=HttpResponse(content_type='image/png')
-    canvas.print_png(response)
-    return response
+    return raw_data
 
 @user_passes_test(lambda u: u.is_superuser or u.is_staff)
 def graphs(request):
-    return render(request, 'stats_graphs.html')
+    context = {}
+    context["graphs"] = {
+        "userExperienceGraph": {"data": get_graph_collections()},
+        "registrationGraph": {"data": get_graph_users()}
+    }
+    context['graphs'] = json.dumps(context['graphs'])
+    return render(request, 'stats_graphs.html', context)
