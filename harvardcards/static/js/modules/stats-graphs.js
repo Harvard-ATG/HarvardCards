@@ -32,7 +32,6 @@ define(['jquery', 'jquery.flot', 'jquery.flot.time'], function($) {
             "mode": "categories",
             "label": "Number of Collections",
             "tickLength": 0,
-            "tickSize": 1,
             "tickDecimals": 0,
             "min": 0
         },
@@ -40,7 +39,6 @@ define(['jquery', 'jquery.flot', 'jquery.flot.time'], function($) {
             "mode": "categories",
             "label": "Number of Users",
             "tickLength": 0,
-            "tickSize": 1,
             "tickDecimals": 0
         }
     };
