@@ -54,8 +54,6 @@ urlpatterns = patterns('',
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 
     # admin graphs
-    url(r'graph_collections/$', 'harvardcards.apps.flash.views.stats_graph.graph_collections', name='graph_collections'),
-    url(r'graph_users/$', 'harvardcards.apps.flash.views.stats_graph.graph_users', name='graph_users'),
     url(r'stats_graphs$', 'harvardcards.apps.flash.views.stats_graph.graphs', name='stats_graphs'),
                        
     # help file

@@ -37,8 +37,6 @@ django-debug-toolbar==0.11
 
 # For image manipulation
 Pillow==2.2.2
-matplotlib==1.3.1
-numpy==1.9.2
 
 # For audio manipulation
 mutagen==1.25.1
