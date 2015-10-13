@@ -177,6 +177,19 @@ h1, h2, h3, h4
 #cardForm .formMessage.success { background-color: rgba(0,255,0,0.3); }
 #cardForm .formMessage.info { background-color: rgba(0,0,255,0.3); }
 
+#cardForm .field-help,
+ #deckForm .field-help,
+ #customForm .field-help{
+    color: #777;
+	margin: 0 0 1em 0;
+	font-size: 0.9em;
+	font-style: italic;
+}
+#cardForm .math-delim,
+ #deckForm .math-delim,
+ #customForm .math-delim{
+    color: red;
+}
 /* form (end) */
 
 #fc_headerWrapper{
@@ -675,6 +688,9 @@ ul#cards{
         }
 		ul#cards li:hover,ul#cards li.clicked{
 			border: solid 0.375em #4d4d4d;
+		}
+		ul#cards li .MathJax_Display {
+			margin: 0;
 		}
         .card-color-default, .card-color-white { background-color: #fff; color: #a51c30; }
         .card-color-blue { background-color: #AFE6F1; color: #000; }
