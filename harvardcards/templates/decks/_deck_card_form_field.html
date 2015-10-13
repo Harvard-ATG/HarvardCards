@@ -15,9 +15,9 @@
         {% if field.value == '' %}
             <label for="{{field.label}}">{{field.label}}</label>
         {% else %}
-			<img src="{{field.value|as_original_media_url}}" alt="{{field.label}}" class="cardFieldImage"/>
+            <img src="{{field.value|as_original_media_url}}" alt="{{field.label}}" class="cardFieldImage"/>
             <div>
-				<a href="{{field.value|as_original_media_url}}" target="_blank">
+                <a href="{{field.value|as_original_media_url}}" target="_blank">
                     <i class="fa fa-external-link"></i>
                     <span class="control-text">View Full Size Image</span>
                 </a>
@@ -49,14 +49,14 @@
         <input name="field_{{field.id}}_audio_url"  type="text" placeholder="Enter {{field.label}} URL" style="display:none" />
         <input name="field_{{field.id}}"  type="file" placeholder="Enter {{field.label}}" style="display:block"/>
     {% elif field.type == 'M' %}
-		<label for="{{field.label}}">{{field.label}}</label>
+        <label for="{{field.label}}">{{field.label}}</label>
         <input name="field_{{field.id}}" data-math-preview="math_field_{{field.id}}" class="formEle form" type="text" placeholder="Enter {{field.label|lower}}" value="{{field.value}}" />
-		<div class="field-help help-content" width="100%">
-			Enter <a href="https://en.wikibooks.org/wiki/LaTeX/Mathematics" target="_blank">LaTeX</a> equation
-			inline with <span class="math-delim">\(</span>...<span class="math-delim">\)</span>
-			or displayed with <span class="math-delim">\[</span>...<span class="math-delim">\]</span>.</div>
-		<div id="math_field_{{field.id}}" class="math_field"></div>
-	{% else %}
+        <div class="field-help help-content" width="100%">
+            Enter <a href="https://en.wikibooks.org/wiki/LaTeX/Mathematics" target="_blank">LaTeX</a> equation
+            inline with <span class="math-delim">\(</span>...<span class="math-delim">\)</span>
+            or displayed with <span class="math-delim">\[</span>...<span class="math-delim">\]</span>.</div>
+        <div id="math_field_{{field.id}}" class="math_field"></div>
+    {% else %}
         <b>ERROR - FIELD TYPE NOT SUPPORTED: {{field.type}}</b>
     {% endif %}
     <div class="field-error field-error-field_{{field.id}}" style="display:none"></div>
