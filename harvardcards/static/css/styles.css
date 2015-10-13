@@ -1155,7 +1155,7 @@ ol.help > li > ol > li > ol {
 	  }
 		.slider > ul > li
 		, li.deck {
-      display: inline;
+          /*display: inline;*/
 		  /*float: left;
 		  width: 400px;
 		  height: 300px;
