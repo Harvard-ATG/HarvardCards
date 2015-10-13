@@ -140,7 +140,7 @@
             "show_label": false,
             "display": true,
             "sort_order": 1,
-            "example_value": "\\[ \\sum_{k=1}^n k^2 \\]"
+            "example_value": "\\( \\sum_{k=1}^n k^2 \\)"
         }
     },
     {
@@ -152,7 +152,7 @@
             "show_label": false,
             "display": false,
             "sort_order": 2,
-            "example_value": "\\[ \\frac{1}{2} n (n+1) \\]"
+            "example_value": "\\( \\frac{1}{2} n (n+1) \\)"
         }
     }
 ]
