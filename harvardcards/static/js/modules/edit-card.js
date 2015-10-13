@@ -1,4 +1,4 @@
-define(['jquery', 'views/CardForm'], function($, CardForm) {
+define(['jquery', 'mathjax', 'views/CardForm'], function($, MathJax, CardForm) {
 
     $('#add_another').click(
         function(){

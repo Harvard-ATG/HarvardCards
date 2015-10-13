@@ -1,4 +1,4 @@
-define(['jquery'], function($) {
+define(['jquery', 'mathjax'], function($, MathJax) {
 
     // Constructor 
     var CardTemplatePreview = function(options) {

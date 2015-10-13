@@ -1,5 +1,5 @@
 define(['jquery','views/CollectionListView','views/CollectionCreateModal', 'views/DeckCreateModal', 'utils/utils'], function($,CollectionListView, CollectionCreateModal, DeckCreateModal, utils) {
-    document.getElementById('collection_type').onchange = function(){
+    $("#collection_type").on("change", function(){
         var currentVal = this.value;
         if (currentVal == 2){
             $('#course_coll').show();
@@ -13,7 +13,7 @@ define(['jquery','views/CollectionListView','views/CollectionCreateModal', 'view
             $('#course_coll').show();
             $('#private_coll').show();
         }
-    }
+    });
     return {
 		initModule: function(){
 		    var collection_list_view = new CollectionListView({
