@@ -16,6 +16,7 @@ define(['jquery', 'jqueryui'], function($, $ui) {
             $(this.dialogSelector).dialog({
                 modal: true,
                 width: '60%',
+                title: 'Add Collection',
                 position: { my: "top", at: "top+20px", of: window },
                 closeOnEscape: true,
                 buttons: {
