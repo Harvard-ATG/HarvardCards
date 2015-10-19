@@ -196,10 +196,10 @@ def create_custom_template_file():
     output = StringIO.StringIO()
     workbook = xlwt.Workbook(encoding='utf8')
     worksheet = workbook.add_sheet('sheet1')
-    rows = [['Image', 'Artist','Date', 'Title', 'Materials', 'Location', 'Audio'],
-            ['Front', 'Front', 'Front', 'Back', 'Back', 'Back', 'Front'],
-            ['Image', 'Text', 'Text', 'Text', 'Text', 'Text', 'Audio'],
-            ['','Some artist','','','','','sound.mp3'],
+    rows = [['Image', 'Artist','Date', 'Title', 'Materials', 'Location', 'Audio', 'Equation'],
+            ['Front', 'Front', 'Front', 'Back', 'Back', 'Back', 'Front', 'Back'],
+            ['Image', 'Text', 'Text', 'Text', 'Text', 'Text', 'Audio', 'Math'],
+            ['','Some artist','','','','','sound.mp3', '\(x=\frac{1+y}{1+2z^2}\)'],
             ['pisa_tower.jpeg', '','','','','','']]
 
     for i in range(len(rows)):
