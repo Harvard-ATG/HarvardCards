@@ -15,6 +15,21 @@ class UserAdminCustom(UserAdmin):
     num_collections.admin_order_field = 'num_collections'
     num_collections.short_description = 'Number of Collections'
 
+class FieldAdmin(admin.ModelAdmin):
+    model = Field
+    list_display = ('label', 'field_type', 'show_label', 'display', 'sort_order', 'example_value')
+
+class FieldsInline(admin.StackedInline):
+    model = Field
+
+class CardTemplatesFieldsInline(admin.StackedInline):
+    model = CardTemplates_Fields
+    inlines = (FieldsInline,)
+
+class CardTemplateAdmin(admin.ModelAdmin):
+    model = CardTemplate
+    inlines = (CardTemplatesFieldsInline,)
+
 class CardsInLine(admin.StackedInline):
     verbose_name = "Card's fields"
     model = Cards_Fields
@@ -76,13 +91,13 @@ class CourseAdmin(admin.ModelAdmin):
 admin.site.unregister(User)
 admin.site.register(User, UserAdminCustom)
 admin.site.register(Collection, CollectionAdmin)
-admin.site.register(Field)
+admin.site.register(Field, FieldAdmin)
 admin.site.register(Card, CardAdmin)
 admin.site.register(Users_Collections)
 admin.site.register(Deck, DeckAdmin)
 admin.site.register(Decks_Cards)
 admin.site.register(Cards_Fields)
-admin.site.register(CardTemplate)
+admin.site.register(CardTemplate, CardTemplateAdmin)
 admin.site.register(CardTemplates_Fields)
 admin.site.register(Course_Map)
 admin.site.register(Course, CourseAdmin)

@@ -24,7 +24,10 @@ class Field(models.Model):
         ordering = ["sort_order"]
 
     def __unicode__(self):
-        return self.label
+        show = "labeled" if self.show_label else "unlabeled"
+        display = "front" if self.display else "back"
+        return "%s [%s-%s-%s-%s]" % (self.label, self.field_type, display, show, self.sort_order)
+
     def get_field_type(self):
         return self.field_type
 
