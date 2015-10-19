@@ -8,7 +8,8 @@ define([
 	'models/Deck', 
 	'views/CardForm', 
 	'utils/utils',
-    'swiper'
+    'swiper',
+	'mathjax'
 ], function(
 	$, 
 	DeckSlider, 
@@ -19,7 +20,8 @@ define([
 	Deck, 
 	CardForm, 
 	utils,
-    Swiper
+    Swiper,
+	MathJax
 ) {
 
 function initModule() {

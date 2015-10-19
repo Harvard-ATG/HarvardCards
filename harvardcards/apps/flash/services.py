@@ -162,7 +162,7 @@ def create_zip_deck_file(deck):
     field_set = set()
     for c in card_list:
         for f in c['fields']:
-            if f['type'] != 'T':
+            if f['type'] not in ('T', 'M'):
                 field_set.add(f['value'])
 
     # add each media object ot the zip file 

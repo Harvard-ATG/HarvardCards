@@ -1,0 +1,106 @@
+[
+    {
+        "pk": 1,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 1,
+            "field": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 1,
+            "field": 2
+        }
+    },
+    {
+        "pk": 3,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 2,
+            "field": 3
+        }
+    },
+    {
+        "pk": 4,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 2,
+            "field": 4
+        }
+    },
+    {
+        "pk": 5,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 2,
+            "field": 5
+        }
+    },
+    {
+        "pk": 6,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 2,
+            "field": 6
+        }
+    },
+    {
+        "pk": 7,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 2,
+            "field": 7
+        }
+    },
+    {
+        "pk": 8,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 2,
+            "field": 8
+        }
+    },
+    {
+        "pk": 9,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 3,
+            "field": 9 
+        }
+    },
+    {
+        "pk": 10,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 3,
+            "field":10 
+        }
+    },
+    {
+        "pk": 11,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 3,
+            "field": 11
+        }
+    },
+    {
+        "pk": 12,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 4,
+            "field": 12
+        }
+    },
+    {
+        "pk": 13,
+        "model": "flash.CardTemplates_Fields",
+        "fields": {
+            "card_template": 4,
+            "field":13 
+        }
+    }
+]

@@ -9,7 +9,8 @@ class Field(models.Model):
         ('T', 'Text'),
         ('I', 'Image'),
         ('A', 'Audio'),
-        ('V', 'Video')        
+        ('V', 'Video'),
+        ('M', 'Math'),
     )
     field_type = models.CharField(max_length=1, choices=FIELD_TYPES)
     show_label = models.BooleanField()

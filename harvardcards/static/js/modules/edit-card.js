@@ -1,4 +1,4 @@
-define(['jquery', 'views/CardForm'], function($, CardForm) {
+define(['jquery', 'mathjax', 'views/CardForm'], function($, MathJax, CardForm) {
 
     $('#add_another').click(
         function(){
@@ -18,6 +18,27 @@ define(['jquery', 'views/CardForm'], function($, CardForm) {
         });
     }
 
+    function setup_math_preview() {
+        $('input[data-math-preview]').each(function(index) {
+            var math_preview_id = $(this).data('math-preview');
+            var $math_preview = $("#" + math_preview_id);
+            $math_preview.html($(this).val())
+            update_math(math_preview_id)
+        }).on('change', function(evt) {
+            var $target = $(evt.target);
+            var math_preview_id = $target.data('math-preview');
+            var $math_preview = $("#"+math_preview_id);
+            $math_preview.html($target.val())
+            update_math(math_preview_id);
+        });
+    }
+    
+    function update_math(element_id) {
+        if (MathJax && element_id) {
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, element_id]);
+        }
+    }
+    
     return {
         initModule: function(el) {
             var cardform = new CardForm({
@@ -25,8 +46,10 @@ define(['jquery', 'views/CardForm'], function($, CardForm) {
                 "formMessageEl": "#cardForm .formMessage"
             });
             cardform.init();
-
+            
             setup_file_url_switch();
+            
+            setup_math_preview();
         }
     };
 });

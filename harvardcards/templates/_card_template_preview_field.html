@@ -11,7 +11,7 @@
 	<div class="card-field">		
 	    {% if field.type != 'I' %}
 	    	<!-- not need to show a title for 'image', only show for other fields -->
-	    	<div class="card-term {% if field.show_label %}field-label-show{% endif %} ">{{field.label}}:</div>
+			<div class="card-term {% if field.show_label %}field-label-show{% endif %} ">{{field.label}}:</div>
 	    {% endif %}
 	    <div class="card-definition">
 	        {% if field.type == 'T' %}
@@ -43,6 +43,12 @@
 	            {% else %}
 	                audio
 	            {% endif %}
+			{% elif field.type == 'M' %}
+	            {% if field.example_value %}
+	                {{field.example_value}}
+	            {% else %}
+	                math
+	            {% endif %}				
 	        {% endif %}
 	    </div>
 	</div>

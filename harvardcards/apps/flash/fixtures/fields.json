@@ -104,7 +104,7 @@
             "label": "Word", 
             "display": true,
             "sort_order": 1,
-			"example_value": "Danke schon"
+            "example_value": "Danke schon"
         }
     },
     {
@@ -116,7 +116,7 @@
             "label": "Audio", 
             "display": true,
             "sort_order": 2,
-			"example_value": "/static/audio/example_danke_schon.ogg"
+            "example_value": "/static/audio/example_danke_schon.ogg"
         }
     },
     {
@@ -128,122 +128,31 @@
             "label": "Definition", 
             "display": false,
             "sort_order": 3,
-			"example_value": "Thank you very much"
+            "example_value": "Thank you very much"
         }
     },
     {
-        "pk": 1,
-        "model": "flash.CardTemplate",
+        "pk": 12,
+        "model": "flash.field",
         "fields": {
-            "title": "Default",
-            "description": "Default flashcards with a term on the front and a definition on the back.",
-			"owner":null
+            "field_type": "M",
+			"label": "Term",
+            "show_label": false,
+            "display": true,
+            "sort_order": 1,
+            "example_value": "\\( \\sum_{k=1}^n k^2 \\)"
         }
     },
     {
-        "pk": 2,
-        "model": "flash.CardTemplate",
+        "pk": 13,
+        "model": "flash.field",
         "fields": {
-            "title": "Art History",
-            "description": "Art History flashcard template.",
-			"owner":null
-        }
-    },
-    {
-        "pk": 3,
-        "model": "flash.CardTemplate",
-        "fields": {
-            "title": "Language with Audio",
-            "description": "Language flashcards with audio component.",
-			"owner":null
-        }
-    },
-    {
-        "pk": 1,
-        "model": "flash.CardTemplates_Fields",
-        "fields": {
-            "card_template": 1,
-            "field": 1
-        }
-    },
-    {
-        "pk": 2,
-        "model": "flash.CardTemplates_Fields",
-        "fields": {
-            "card_template": 1,
-            "field": 2
-        }
-    },
-    {
-        "pk": 3,
-        "model": "flash.CardTemplates_Fields",
-        "fields": {
-            "card_template": 2,
-            "field": 3
-        }
-    },
-    {
-        "pk": 4,
-        "model": "flash.CardTemplates_Fields",
-        "fields": {
-            "card_template": 2,
-            "field": 4
-        }
-    },
-    {
-        "pk": 5,
-        "model": "flash.CardTemplates_Fields",
-        "fields": {
-            "card_template": 2,
-            "field": 5
-        }
-    },
-    {
-        "pk": 6,
-        "model": "flash.CardTemplates_Fields",
-        "fields": {
-            "card_template": 2,
-            "field": 6
-        }
-    },
-    {
-        "pk": 7,
-        "model": "flash.CardTemplates_Fields",
-        "fields": {
-            "card_template": 2,
-            "field": 7
-        }
-    },
-    {
-        "pk": 8,
-        "model": "flash.CardTemplates_Fields",
-        "fields": {
-            "card_template": 2,
-            "field": 8
-        }
-    },
-    {
-        "pk": 9,
-        "model": "flash.CardTemplates_Fields",
-        "fields": {
-            "card_template": 3,
-            "field": 9 
-        }
-    },
-    {
-        "pk": 10,
-        "model": "flash.CardTemplates_Fields",
-        "fields": {
-            "card_template": 3,
-            "field":10 
-        }
-    },
-    {
-        "pk": 11,
-        "model": "flash.CardTemplates_Fields",
-        "fields": {
-            "card_template": 3,
-            "field": 11
+            "field_type": "M",
+			"label": "Definition",
+            "show_label": false,
+            "display": false,
+            "sort_order": 2,
+            "example_value": "\\( \\frac{1}{2} n (n+1) \\)"
         }
     }
 ]
