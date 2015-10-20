@@ -4,15 +4,11 @@ This module conatins helper functions and utilities.
 
 from flash.models import Collection, Deck
 from flash import queries
-from harvardcards.settings.common import MEDIA_ROOT
 import string
 import random
 import os
 
-# For treating strings like files
 import StringIO
-
-# For excel reading/writing
 import xlrd, xlwt
 
 def parse_deck_template_file(card_template, file_contents, mappings=None, custom=False):

@@ -35,9 +35,6 @@
 					{% if user.is_authenticated %}
 						<li><span class="{% if user.is_staff %}user-staff{% endif %}{% if user.is_superuser %}user-super{% endif %}">{{ user.email }}</span></li>
                         <li><a href="{% url 'logout' %}">Sign out</a></li>
-					{% else %}
-						<li><span>Guest</span></li>
-						<li><span><a href="{% url 'login' %}">Login</a></span></li>
 					{% endif %}
 				</ul>
 			</div><!-- section (end) -->

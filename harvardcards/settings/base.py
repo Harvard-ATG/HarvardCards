@@ -3,11 +3,6 @@ import logging
 import sys
 import os
 from os import path
-from glob import glob
-from dotenv import load_dotenv
-
-dotenv_path = path.join(path.dirname(__file__), '.env')
-load_dotenv(dotenv_path)
 
 # Django settings for harvardcards project.
 DEBUG = True
@@ -46,15 +41,9 @@ USE_TZ = True
 # Example: "/home/ubuntu/harvardcards"
 ROOT_DIR = reduce(lambda l,r: path.dirname(l), range(3), path.realpath(__file__))
 
-# Example: "/home/ubuntu/harvardcards/harvardcards"
-PROJECT_ROOT = path.join(ROOT_DIR, 'harvardcards')
-
-# Example: "/home/ubuntu/harvardcards/harvardcards/apps"
-APPS_ROOT = path.join(PROJECT_ROOT, 'apps')
-
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = path.join(APPS_ROOT, 'flash', 'uploads')
+MEDIA_ROOT = path.join(ROOT_DIR, 'flash', 'uploads')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -65,7 +54,7 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = path.join(ROOT_DIR, 'staticfiles')
+STATIC_ROOT = path.join(ROOT_DIR, 'http_static')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -76,11 +65,12 @@ STATICFILES_DIRS = [
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-	path.join(PROJECT_ROOT, 'static'),
+	path.join(ROOT_DIR, 'static'),
 ]
 
 STATICFILES_DIRS.extend([ 
-	f for f in glob(path.join(APPS_ROOT, '*', 'static')) if path.isdir(f)
+    path.join(ROOT_DIR, 'flash', 'static'),
+    path.join(ROOT_DIR, 'jasmine', 'static'),
 ])
 
 # List of finder classes that know how to find static files in
@@ -116,11 +106,12 @@ TEMPLATE_DIRS = [
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    path.join(PROJECT_ROOT, 'templates'),
+    path.join(ROOT_DIR, 'templates'),
 ]
 
 TEMPLATE_DIRS.extend([
-    f for f in glob(path.join(APPS_ROOT, '*', 'templates')) if path.isdir(f)
+    path.join(ROOT_DIR, 'flash', 'templates'),
+    path.join(ROOT_DIR, 'jasmine', 'templates'),
 ])
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -144,13 +135,13 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    'harvardcards.apps.flash',
-    #'harvardcards.apps.jasmine',
+    'flash',
+    #'jasmine',
     'south'
 ]
 
 FIXTURE_DIRS = (
-    'harvardcards.apps.flash.fixtures'
+    'flash.fixtures'
 )
 
 AUTHENTICATION_BACKENDS = (
@@ -173,57 +164,25 @@ LOGGING = {
         },
     },
     'handlers': {
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': path.join(ROOT_DIR, 'logs', 'app.log'),
-            'formatter': 'verbose'
-        },
         'console': {
-            'level' : 'INFO',
+            'level' : 'DEBUG',
             'class': 'logging.StreamHandler',
             'stream': sys.stdout,
             'formatter': 'simple'
         },
     },
     'loggers': {
-        'django.request': {
-            'handlers': ['file'],
-            'level': 'INFO',
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'), 
             'propagate': True,
         },
-        'harvardcards': {
-            'handlers': ['file'],
-            'level': 'INFO',
+        'flash': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
             'propagate': True,
         },
     }
 }
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-# This dictionary defines application-level feature toggles. 
-# Usage:
-#       from django.conf import settings
-#       if settings.FEATURE_TOGGLE['X_ENABLED']:
-#           do_something()
-#       
-FEATURE_TOGGLE = {
-        # "X_ENABLED" => True|False
-}
-
-if DEBUG:
-    LOGGING['loggers']['harvardcards']['level'] = 'DEBUG'
-    LOGGING['loggers']['harvardcards']['handlers'] += ['console']
-
-OPENID_CREATE_USERS = True
-OPENID_UPDATE_DETAILS_FROM_SREG = True
-LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_URL = '/logout/'
-OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
-
-MEDIA_STORE_BACKEND = os.environ.get("MEDIA_STORE_BACKEND", "file")
-AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", None)
-AWS_ACCESS_SECRET_KEY = os.environ.get("AWS_ACCESS_SECRET_KEY", None)
-AWS_S3_BUCKET  = os.environ.get("AWS_S3_BUCKET", None)
