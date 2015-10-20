@@ -39,11 +39,11 @@ USE_TZ = True
 
 ### SET PATH INFORMATION ###############################################
 # Example: "/home/ubuntu/harvardcards"
-ROOT_DIR = reduce(lambda l,r: path.dirname(l), range(3), path.realpath(__file__))
+ROOT_DIR = path.dirname(path.dirname(path.dirname(path.abspath(__file__))))
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = path.join(ROOT_DIR, 'flash', 'uploads')
+MEDIA_ROOT = path.join(ROOT_DIR, 'uploads')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -54,7 +54,7 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = path.join(ROOT_DIR, 'http_static')
+STATIC_ROOT = path.join(ROOT_DIR, 'staticfiles')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -69,7 +69,6 @@ STATICFILES_DIRS = [
 ]
 
 STATICFILES_DIRS.extend([ 
-    path.join(ROOT_DIR, 'flash', 'static'),
     path.join(ROOT_DIR, 'jasmine', 'static'),
 ])
 
