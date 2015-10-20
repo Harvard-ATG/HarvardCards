@@ -3,12 +3,12 @@ python:
   - "2.7"
 env:
     - DJANGO_SETTINGS_MODULE="harvardcards.settings.local"
-    - DB=postgres
 install: 
     - pip install -r harvardcards/requirements/local.txt --use-mirrors
 before_script: 
     - psql -c 'DROP DATABASE IF EXISTS flash;' -U postgres
-    - psql -c 'CREATE USER flash WITH PASSWORD ''password'';' -U postgres
+    - psql -c "CREATE USER flash WITH PASSWORD 'password';" -U postgres
+    - psql -c 'ALTER USER flash CREATEDB;' -U postgres
     - psql -c 'CREATE DATABASE flash;' -U postgres
     - psql -c 'GRANT ALL PRIVILEGES ON DATABASE flash TO flash;' -U postgres
 script: 

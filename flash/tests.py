@@ -10,6 +10,7 @@ from django.test.client import RequestFactory, Client
 from django.contrib.auth.models import User
 from django.http.request import HttpRequest
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.conf import settings
 
 from django_auth_lti import const
 
@@ -18,7 +19,6 @@ from flash.forms import CollectionForm, FieldForm, DeckForm
 from flash.views.collection import *
 from flash import services, queries, analytics
 from flash.lti_service import LTIService
-from harvardcards.settings.common import MEDIA_ROOT
 
 import os
 import unittest
@@ -269,9 +269,9 @@ class QueriesTest(TestCase):
             CardTemplates_Fields.objects.create(card_template=card_template, field=f)
 
         card_list = [
-            [{"field_id":field1.id,"value":"a"},{"field_id":field2.id,"value":os.path.join(MEDIA_ROOT, 'tests', 'a.jpg')}],
-            [{"field_id":field1.id,"value":"bb"},{"field_id":field2.id,"value":os.path.join(MEDIA_ROOT, 'tests', 'bb.jpg')}],
-            [{"field_id":field1.id,"value":"ccc"},{"field_id":field2.id,"value":os.path.join(MEDIA_ROOT, 'tests', 'ccc.png')}],
+            [{"field_id":field1.id,"value":"a"},{"field_id":field2.id,"value":os.path.join(settings.MEDIA_ROOT, 'tests', 'a.jpg')}],
+            [{"field_id":field1.id,"value":"bb"},{"field_id":field2.id,"value":os.path.join(settings.MEDIA_ROOT, 'tests', 'bb.jpg')}],
+            [{"field_id":field1.id,"value":"ccc"},{"field_id":field2.id,"value":os.path.join(settings.MEDIA_ROOT, 'tests', 'ccc.png')}],
         ]
         deck_title = "my_deck_title"
         deck = services.create_deck_with_cards(collection.id, deck_title, card_list)
