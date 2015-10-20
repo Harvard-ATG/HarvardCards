@@ -15,22 +15,22 @@ To  install the application locally you can:
 Requires [python 2.7.x](http://python.org/download/releases/) and [pip](http://www.pip-installer.org/) to install.
 
 ```sh
-$ git clone git@github.com:Harvard-ATG/HarvardCards.git HarvardCards
-$ cd HarvardCards
-$ pip install -r requirements.txt
+$ git clone git@github.com:Harvard-ATG/HarvardCards.git harvardcards
+$ cd harvardcards
+$ pip install -r harvardcards/requirements/local.txt
 $ ./manage.py syncdb
 $ ./manage.py migrate
-$ ./manage.py runserver 0.0.0.0:8080
+$ ./manage.py runserver
 ```
 
-You should now be able to access the application at: ```http://localhost:8080```
+You should now be able to access the application at: ```http://localhost:8000```
 
 Tip: If you're familiar with python's [virtualenv](https://pypi.python.org/pypi/virtualenv), it's recommended to setup a virtualenv for the application first. See the [documentation](http://virtualenv.readthedocs.org/en/latest/virtualenv.html#installation) for how to install and activate it.
 
 Notes:
 
-* Requires postgres to be installed on your system. If you do not have postgres installed, comment out *psycopg2* module in the requirements.txt. This is mainly for heroku deployment.
-* The [Pillow](https://pypi.python.org/pypi/Pillow/) module, used for image manipulation, requires external libraries to be installed on your system such as libjpeg, etc. The Pillow documentation describes methods to install the libraries you need.
+* Requires postgres to be installed on your system. See ```harvardcards/settings/local.py``` for the configuration settings.
+* Requires external image manipulation libraries to be installed on your system. See [Pillow](https://pypi.python.org/pypi/Pillow/) documentation.
 
 ### Vagrant Quickstart
 
