@@ -9,7 +9,7 @@ from boto.s3.key import Key
 
 from django.conf import settings
 from django.core.files.uploadedfile import UploadedFile
-from harvardcards.apps.flash.models import MediaStore
+from flash.models import MediaStore
 
 # Expect values that will come from django settings 
 MEDIA_ROOT = settings.MEDIA_ROOT

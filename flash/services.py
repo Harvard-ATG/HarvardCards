@@ -21,10 +21,10 @@ from django.core.exceptions import ValidationError, PermissionDenied
 from django.core.files.uploadedfile import UploadedFile
 from django.core.files import File
 
-from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Cards_Fields, Field, Users_Collections, CardTemplate, CardTemplates_Fields, Clone, Cloned
-from harvardcards.apps.flash.media_store_service import MediaStoreService
-from harvardcards.apps.flash import utils
-from harvardcards.apps.flash import queries
+from flash.models import Collection, Deck, Card, Decks_Cards, Cards_Fields, Field, Users_Collections, CardTemplate, CardTemplates_Fields, Clone, Cloned
+from flash.media_store_service import MediaStoreService
+from flash import utils
+from flash import queries
 
 
 def delete_collection(collection_id):

@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 import json
 
-from harvardcards.apps.flash import analytics
+from flash import analytics
 
 import logging
 log = logging.getLogger(__name__)

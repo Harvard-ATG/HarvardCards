@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFou
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods, require_GET, require_POST
 
-from harvardcards.apps.flash.models import CardTemplate
+from flash.models import CardTemplate
 
 @require_GET
 def preview(request):

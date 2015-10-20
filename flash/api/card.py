@@ -1,10 +1,10 @@
 from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse
 
-from harvardcards.apps.flash.models import Collection, Deck, Card, Cards_Fields, Field, Users_Collections
-from harvardcards.apps.flash.forms import CardEditForm
-from harvardcards.apps.flash import services, queries, utils, analytics
-from harvardcards.apps.flash.decorators import check_role
+from flash.models import Collection, Deck, Card, Cards_Fields, Field, Users_Collections
+from flash.forms import CardEditForm
+from flash import services, queries, utils, analytics
+from flash.decorators import check_role
 
 import json
 import urllib2

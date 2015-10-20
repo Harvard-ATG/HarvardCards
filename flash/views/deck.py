@@ -4,11 +4,11 @@ from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
 from django.forms import widgets
 
-from harvardcards.apps.flash.models import Collection, Deck, Card, Decks_Cards, Users_Collections
-from harvardcards.apps.flash.forms import DeckImportForm
-from harvardcards.apps.flash.decorators import check_role
-from harvardcards.apps.flash.lti_service import LTIService
-from harvardcards.apps.flash import services, queries, analytics
+from flash.models import Collection, Deck, Card, Decks_Cards, Users_Collections
+from flash.forms import DeckImportForm
+from flash.decorators import check_role
+from flash.lti_service import LTIService
+from flash import services, queries, analytics
 
 import logging
 log = logging.getLogger(__name__)

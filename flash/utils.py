@@ -2,8 +2,8 @@
 This module conatins helper functions and utilities.
 """
 
-from harvardcards.apps.flash.models import Collection, Deck
-from harvardcards.apps.flash import queries
+from flash.models import Collection, Deck
+from flash import queries
 from harvardcards.settings.common import MEDIA_ROOT
 import string
 import random

@@ -4,8 +4,8 @@ files (images, audio, etc) to the new MediaStore model."""
 from django.core.management.base import BaseCommand, CommandError
 
 from harvardcards.settings.common import MEDIA_ROOT 
-from harvardcards.apps.flash.services import handle_uploaded_media_file
-from harvardcards.apps.flash.models import Cards_Fields
+from flash.services import handle_uploaded_media_file
+from flash.models import Cards_Fields
 
 import os
 import re

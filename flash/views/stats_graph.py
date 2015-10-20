@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import user_passes_test
-from harvardcards.apps.flash.models import Collection, Users_Collections, User
+from flash.models import Collection, Users_Collections, User
 import json
 import calendar
 import datetime

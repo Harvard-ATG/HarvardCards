@@ -1,8 +1,8 @@
 from functools import wraps
 
 from django.core.exceptions import PermissionDenied
-from harvardcards.apps.flash.models import Deck
-from harvardcards.apps.flash.services import has_role_with_request
+from flash.models import Deck
+from flash.services import has_role_with_request
 
 def check_role(roles, entity_type):
     """

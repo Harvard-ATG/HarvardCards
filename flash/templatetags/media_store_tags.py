@@ -1,7 +1,7 @@
 from django import template
 from django.template.defaultfilters import stringfilter
 from django.conf import settings
-from harvardcards.apps.flash.media_store_service import get_s3_url, CONST_ORIGINAL, CONST_THUMB_LARGE, CONST_THUMB_SMALL
+from flash.media_store_service import get_s3_url, CONST_ORIGINAL, CONST_THUMB_LARGE, CONST_THUMB_SMALL
 
 register = template.Library()
 

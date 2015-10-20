@@ -3,7 +3,7 @@ This module contains common queries that return a result and DO NOT change the
 observable state of the system (are free of side effects).
 """
 
-from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Decks_Cards, Course, Course_Map
+from flash.models import Collection, Users_Collections, Deck, Decks_Cards, Course, Course_Map
 
 import logging
 log = logging.getLogger(__name__)

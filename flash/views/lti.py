@@ -6,8 +6,8 @@ from django.core.urlresolvers import reverse
 from ims_lti_py.tool_config import ToolConfig
 from braces.views import CsrfExemptMixin, LoginRequiredMixin
 
-from harvardcards.apps.flash import analytics
-from harvardcards.apps.flash.lti_service import LTIService
+from flash import analytics
+from flash.lti_service import LTIService
 import json
 import logging
 

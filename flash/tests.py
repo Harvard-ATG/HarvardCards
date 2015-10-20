@@ -13,11 +13,11 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 
 from django_auth_lti import const
 
-from harvardcards.apps.flash.models import Collection, Deck, Field, CardTemplate, CardTemplates_Fields, Card, Course_Map, Course, Users_Collections, Analytics
-from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm
-from harvardcards.apps.flash.views.collection import *
-from harvardcards.apps.flash import services, queries, analytics
-from harvardcards.apps.flash.lti_service import LTIService
+from flash.models import Collection, Deck, Field, CardTemplate, CardTemplates_Fields, Card, Course_Map, Course, Users_Collections, Analytics
+from flash.forms import CollectionForm, FieldForm, DeckForm
+from flash.views.collection import *
+from flash import services, queries, analytics
+from flash.lti_service import LTIService
 from harvardcards.settings.common import MEDIA_ROOT
 
 import os

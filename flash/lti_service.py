@@ -1,4 +1,4 @@
-from harvardcards.apps.flash.models import Collection, Users_Collections, Course_Map, Course
+from flash.models import Collection, Users_Collections, Course_Map, Course
 
 from django_auth_lti import const
 

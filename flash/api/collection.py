@@ -3,9 +3,9 @@ from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse
 from django.shortcuts import redirect
 
-from harvardcards.apps.flash.models import Collection, Users_Collections
-from harvardcards.apps.flash import queries
-from harvardcards.apps.flash.decorators import check_role
+from flash.models import Collection, Users_Collections
+from flash import queries
+from flash.decorators import check_role
 
 import json
 

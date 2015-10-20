@@ -11,12 +11,12 @@ from django.views.decorators.http import require_http_methods
 from django.db.models import Q
 from django.forms.formsets import formset_factory
 
-from harvardcards.apps.flash.models import Collection, Users_Collections, Deck, Field, CardTemplate, Course_Map
-from harvardcards.apps.flash.forms import CollectionForm, FieldForm, DeckForm, CollectionShareForm
-from harvardcards.apps.flash.decorators import check_role
-from harvardcards.apps.flash.lti_service import LTIService
-from harvardcards.apps.flash.views import card_template
-from harvardcards.apps.flash import services, queries, utils, analytics
+from flash.models import Collection, Users_Collections, Deck, Field, CardTemplate, Course_Map
+from flash.forms import CollectionForm, FieldForm, DeckForm, CollectionShareForm
+from flash.decorators import check_role
+from flash.lti_service import LTIService
+from flash.views import card_template
+from flash import services, queries, utils, analytics
 
 import logging
 log = logging.getLogger(__name__)
