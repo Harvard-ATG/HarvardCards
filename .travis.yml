@@ -1,3 +1,4 @@
+sudo: false # use new travis infrastructure
 language: python
 python:
   - "2.7"
