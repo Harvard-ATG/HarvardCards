@@ -58,7 +58,7 @@ def template_matches_file(card_template, file_contents):
 
     for col_index in range(sheet.ncols):
         val = sheet.cell(0, col_index).value
-        if val != str(fields[col_index]):
+        if val != str(fields[col_index].label):
             return False
     return True
 
@@ -75,7 +75,7 @@ def correct_custom_format(file_contents):
         if val not in ['Front', 'Back']:
             return False
         val = sheet.cell(2, col_index).value
-        if val not in ['Audio', 'Image', 'Text', 'Video']:
+        if val not in ['Audio', 'Image', 'Text', 'Video', 'Math']:
             return False
     return True
 
@@ -107,7 +107,7 @@ def get_file_names(card_template, file_contents, custom=False):
     col_index_to_parse = []
     for field in fields:
         if field.get_field_type() in ['A','I']:
-            columns_to_parse.append(str(field))
+            columns_to_parse.append(str(field.label))
     workbook = xlrd.open_workbook(file_contents=file_contents)
     sheet = workbook.sheet_by_index(0)
 
