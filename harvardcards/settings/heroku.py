@@ -17,6 +17,8 @@ DATABASES = {
     'default': dj_database_url.config(default='postgres://flash:password@127.0.0.1:5432/flash')
 }
 
+STATIC_ROOT = 'staticfiles'
+
 MEDIA_STORE_BACKEND = os.environ.get("MEDIA_STORE_BACKEND")
 AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", None)
 AWS_ACCESS_SECRET_KEY = os.environ.get("AWS_ACCESS_SECRET_KEY", None)
