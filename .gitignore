@@ -7,10 +7,12 @@ django-server.log
 .vagrant
 /modules/flashcard-exporter/cache/*
 /uploads/*
-/logs/*
 !/logs/empty
 /config/my.cnf
 /config/django_secret.txt
 /config/lti_oauth_credentials.txt
 /NO_SYNC_DB.flag
+/http_static/*
+!/http_static/empty
 /pyenv
+

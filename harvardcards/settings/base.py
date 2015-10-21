@@ -54,7 +54,7 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = path.join(ROOT_DIR, 'staticfiles')
+STATIC_ROOT = path.join(ROOT_DIR, 'http_static')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -66,11 +66,8 @@ STATICFILES_DIRS = [
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 	path.join(ROOT_DIR, 'static'),
-]
-
-STATICFILES_DIRS.extend([ 
     path.join(ROOT_DIR, 'jasmine', 'static'),
-])
+]
 
 # List of finder classes that know how to find static files in
 # various locations.
