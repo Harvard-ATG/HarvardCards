@@ -5,8 +5,8 @@ flash.db
 django-server.log
 .idea
 .vagrant
-/harvardcards/modules/flashcard-exporter/cache/*
-/harvardcards/apps/flash/uploads/*
+/modules/flashcard-exporter/cache/*
+/uploads/*
 /logs/*
 !/logs/empty
 /config/my.cnf
