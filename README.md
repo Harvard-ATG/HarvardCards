@@ -42,6 +42,6 @@ $ vagrant box add precise32 http://files.vagrantup.com/precise32.box
 $ vagrant up
 ```
 
-You should now be able to access the application at: ```http://localhost:8080```
+You should now be able to access the application at: ```http://localhost:8000```
 
-You should be able to login as "admin" (which is also the password) at: ```http://localhost:8080/admin```
+You should be able to login as "admin" (which is also the password) at: ```http://localhost:8000/admin```
