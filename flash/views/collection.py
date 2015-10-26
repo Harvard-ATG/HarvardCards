@@ -34,6 +34,10 @@ def index(request, collection_id=None):
     course_collections = lti_req.getCourseCollections()
 
     is_teacher = lti_req.isTeacher() or queries.is_superuser_or_staff(request.user)
+    collection_admin_perms = []
+    for r in (Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR):
+        role_name = Users_Collections.role_map[r]
+        collection_admin_perms.extend(role_bucket[role_name])
 
     copy_collections = queries.getCopyCollectionList(request.user)
     collection_filters = dict(collection_ids=course_collections, can_filter=not queries.is_superuser_or_staff(request.user))
@@ -46,6 +50,7 @@ def index(request, collection_id=None):
         "copy_collections": copy_collections,
         "active_collection": None,
         "user_collection_role": role_bucket,
+        "collection_admin_perms": collection_admin_perms,
         "is_teacher": is_teacher,
     }
 
