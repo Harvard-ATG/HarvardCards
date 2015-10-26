@@ -20,7 +20,7 @@ def deck_view_helper(request, current_collection, deck_cards):
     collection_list = queries.getCollectionList(role_bucket, collection_ids=canvas_course_collections)
 
     is_quiz_mode = request.GET.get('mode') == 'quiz'
-    is_deck_admin = current_collection.id in role_bucket['ADMINISTRATOR']
+    is_deck_admin = current_collection.id in (set(role_bucket['ADMINISTRATOR']) | set(role_bucket['INSTRUCTOR']))
     card_id = request.GET.get('card_id', '')
     cards = []
     for dcard in deck_cards:

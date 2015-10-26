@@ -199,7 +199,11 @@ class LTIService:
         log.debug("Subscribing user %s to all course collections: %s => %s" % (self.request.user.id, course_id, unsubscribed_collection_ids))
         for collection_id in unsubscribed_collection_ids:
             collection = Collection.objects.get(id=collection_id)
-            uc_values = dict(user=self.request.user, collection=collection, role=Users_Collections.LEARNER, date_joined=datetime.date.today())
+            if self.isTeacher():
+                role = Users_Collections.ADMINISTRATOR
+            else:
+                role = Users_Collections.LEARNER
+            uc_values = dict(user=self.request.user, collection=collection, role=role, date_joined=datetime.date.today())
             Users_Collections.objects.get_or_create(**uc_values)
 
         return True

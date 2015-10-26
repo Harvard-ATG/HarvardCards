@@ -4,15 +4,13 @@
         <h2 class="courseTitle">{{ collection.title }}</h2>
         <h3>{% if collection.decks|length == 1 %}1 Deck{% else %}{{collection.decks|length}} Decks{% endif %}</h3>
     {% endspaceless %}
-    {% if collection.id in user_collection_role.ADMINISTRATOR %}
+	{% if collection.id in collection_admin_perms %}
         <ul class="adminMenu adminMenuRight">
-            {% if is_teacher %}
             <li>
                 <a class="adminMenuBtn hidden-mobile" href="{% url 'collectionPublish' collection.id %}?collection_id={{collection.id}}" title="{% if collection.published %}Unpublish{% else %}Publish{% endif %} Collection">
                 {% if collection.published %}<i class="fa fa-cloud-download"></i> Unpublish{% else %}<i class="fa fa-cloud-upload"></i> Publish{% endif %}
                 </a>
             </li>
-            {% endif %}
 
             <li><a class="adminMenuBtn hidden-mobile" href="{% url 'collectionEdit' collection.id %}?collection_id={{collection.id}}" title="Edit Collection"><i class="fa fa-pencil"></i> Edit</a></li>
             <li><a class="adminMenuBtn hidden-mobile" href="{% url 'collectionDelete' collection.id %}?collection_id={{collection.id}}" data-confirm="Are you sure you want to delete: {{collection.title|escape}}?" title="Delete Collection"><i class="fa fa-times-circle"></i> Delete</a></li>
@@ -21,14 +19,14 @@
     {% endif %}
 </div>
 <div class="courseBody {% if current_collection_id != collection.id %}hide{% endif %}">
-    {% if collection.id in user_collection_role.ADMINISTRATOR %}
+    {% if collection.id in collection_admin_perms %}
     <div class="deck add hidden-mobile">
         <a href="{% url 'collectionAddDeck' collection.id %}?collection_id={{collection.id}}" id="addDeck-{{collection.id}}">Add a Deck</a>
     </div>
     {% endif %}
     <ul>
     {% if collection.decks|length == 0 %}
-        {% if not collection.id in user_collection_role.ADMINISTRATOR %}
+        {% if not collection.id in collection_admin_perms %}
             No decks have been added to this collection yet.
         {% endif %}
     {% else %}
