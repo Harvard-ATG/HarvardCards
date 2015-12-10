@@ -131,8 +131,7 @@ INSTALLED_APPS = [
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'flash',
-    #'jasmine',
-    'south'
+    #'jasmine'
 ]
 
 FIXTURE_DIRS = (
@@ -169,7 +168,7 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['console'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'), 
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
             'propagate': True,
         },
         'flash': {
@@ -179,5 +178,3 @@ LOGGING = {
         },
     }
 }
-
-
