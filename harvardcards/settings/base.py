@@ -70,6 +70,11 @@ STATICFILES_DIRS = [
 TEMPLATES = [
 	{
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+		'DIRS': [
+			path.join(ROOT_DIR, 'templates'),
+			path.join(ROOT_DIR, 'flash', 'templates'),
+			path.join(ROOT_DIR, 'jasmine', 'templates'),
+		],
 		'OPTIONS': {
 			'debug': True,
             'context_processors': [
@@ -81,11 +86,6 @@ TEMPLATES = [
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages"
             ],
-			'DIRS': [
-				path.join(ROOT_DIR, 'templates'),
-			    path.join(ROOT_DIR, 'flash', 'templates'),
-			    path.join(ROOT_DIR, 'jasmine', 'templates'),
-			],
 			'loaders': [
 			    'django.template.loaders.filesystem.Loader',
 			    'django.template.loaders.app_directories.Loader',
