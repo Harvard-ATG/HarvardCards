@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import render, redirect
-from django.core.context_processors import csrf
+from django.template.context_processors import csrf
 from django.forms import widgets
 
 from flash.models import Collection, Deck, Card, Decks_Cards, Users_Collections
@@ -52,7 +52,7 @@ def index(request, deck_id=None):
     current_collection = deck.collection
     [cards, collection_list, is_quiz_mode, is_deck_admin, card_id] = deck_view_helper(request, current_collection, deck_cards)
 
-    context = {  
+    context = {
         "collection": current_collection,
         "nav_collections": collection_list,
         "deck": deck,
@@ -121,7 +121,7 @@ def delete(request, deck_id=None):
 
     return response
 
-@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')  
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')
 def upload_deck(request, deck_id=None):
     '''
     Imports a deck of cards from an excel spreadsheet.
@@ -164,7 +164,7 @@ def upload_deck(request, deck_id=None):
 
     context = {
             "deck": deck,
-            "deck_form": deck_form, 
+            "deck_form": deck_form,
             "nav_collections": collection_list,
             "collection": current_collection,
             "upload_error": upload_error
@@ -186,15 +186,15 @@ def download_deck(request, deck_id=None):
     response['Content-Disposition'] = 'attachment; filename=deck.zip'
 
     analytics.track(
-        actor=request.user, 
-        verb=analytics.VERBS.downloaded, 
+        actor=request.user,
+        verb=analytics.VERBS.downloaded,
         object=analytics.OBJECTS.deck,
         context={"deck_id": deck_id}
     )
 
     return response
 
-@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')  
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')
 def create_edit_card(request, deck_id=None):
     """Create a new card or edit an existing one from the collection card template."""
 
@@ -216,7 +216,7 @@ def create_edit_card(request, deck_id=None):
 
     if card_id:
         field_list = [{
-            "id":cfield.field.id, 
+            "id":cfield.field.id,
             "type": cfield.field.field_type,
             "label": cfield.field.label,
             "bucket": "show" if cfield.field.display else "reveal",
@@ -225,7 +225,7 @@ def create_edit_card(request, deck_id=None):
         } for cfield in card.cards_fields_set.all()]
     else:
         field_list = [{
-            "id": field.id, 
+            "id": field.id,
             "type": field.field_type,
             "bucket": "show" if field.display else "reveal",
             "label": field.label,
@@ -275,7 +275,7 @@ def log_analytics_delete(success, entity_type, entity_id, card_id, user):
     )
 
 
-@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')  
+@check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')
 def delete_card(request, deck_id=None):
     """Deletes a card."""
     deck = Deck.objects.get(id=deck_id)
