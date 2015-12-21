@@ -2,7 +2,7 @@ from models import Collection, Field, Deck, Decks_Cards, Card, Cards_Fields, Use
 from django.forms.extras.widgets import SelectDateWidget
 from . import services
 from django import forms
-from django.forms.util import ErrorList
+from django.forms.utils import ErrorList
 from django.db import transaction
 import logging
 import datetime
@@ -34,7 +34,7 @@ class CollectionForm(forms.ModelForm):
         field = 'deck_order'
         deck_data = []
         errstr = ''
-        errors = ErrorList() 
+        errors = ErrorList()
 
         if field in self.data:
             deck_order = json.loads(self.data[field])
@@ -49,7 +49,7 @@ class CollectionForm(forms.ModelForm):
                     errstr = "deck %s has invalid sort value: %s" % (d['deck_id'], d['sort_order'])
                     errors.append(errstr)
             else:
-                errstr = "deck_id and sort_order required" 
+                errstr = "deck_id and sort_order required"
                 errors.append(errstr)
                 break
 
@@ -64,7 +64,7 @@ class CollectionForm(forms.ModelForm):
         self.clean_deck_order()
         return super(CollectionForm, self).clean()
 
-    @transaction.commit_on_success
+    @transaction.atomic
     def save_deck_order(self, deck_order):
         """Saves the new ordering."""
         for d in deck_order:
@@ -175,7 +175,7 @@ class CardEditForm(forms.Form):
 
         if len(field_list) > 0:
             services.update_card_fields(self.card, field_list)
-            
+
     def _get_field_type(self, find_field_name):
         for card_field in self.card_fields:
             field_name = self.field_prefix + str(card_field.id)
@@ -199,5 +199,3 @@ class CardEditForm(forms.Form):
                     errstr = ""
                     if not is_valid_type:
                         self.errors[field_name] = "Invalid audio file. Must be a valid mp3. Error: %s" % errstr
-
-
