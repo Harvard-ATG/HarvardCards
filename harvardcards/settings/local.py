@@ -6,12 +6,12 @@ from .base import *
 
 dotenv.read_dotenv(os.path.join(ROOT_DIR, '.env'))
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = []
 
 DEBUG = True
 SECRET_KEY = '#5g0vp545jp644!hha1)fb7v1hd!*t#b@fv&amp;1(mrnt5)$q%w0g'
 DATABASES = {
-    'default': dj_database_url.config(default='postgres://flash:password@127.0.0.1:5432/flash')
+    'default': dj_database_url.config(default='postgres://flash:flash@127.0.0.1:5432/flash')
 }
 #DATABASES = {
 #    'default': {

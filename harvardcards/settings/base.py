@@ -134,7 +134,7 @@ INSTALLED_APPS = [
 ]
 
 FIXTURE_DIRS = (
-    'flash.fixtures'
+    'flash.fixtures',
 )
 
 AUTHENTICATION_BACKENDS = (

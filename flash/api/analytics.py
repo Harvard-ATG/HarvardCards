@@ -42,4 +42,4 @@ def track(request):
 
         results.append(result)
 
-    return HttpResponse(json.dumps({"statements": results}), mimetype="application/json")
+    return HttpResponse(json.dumps({"statements": results}), content_type="application/json")

@@ -155,7 +155,7 @@ function initModule() {
 	        return false;
 	});
 
-	$('.reveal').click(function() {
+	$('#singleCardHolder').on('click', '.reveal', null, function() {
 		MODULE.revealCard($(this), $(this).parent().next());
 		return false;
 	});

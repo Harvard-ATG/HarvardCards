@@ -4,4 +4,4 @@ import json
 
 def root(request):
     result = {"name": "Harvard Cards", "version": "1.0"}
-    return HttpResponse(json.dumps(result), mimetype="application/json")
+    return HttpResponse(json.dumps(result), content_type="application/json")
