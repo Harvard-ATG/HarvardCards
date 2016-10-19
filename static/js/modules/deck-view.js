@@ -82,14 +82,6 @@ function initModule() {
 
     });
 
-    $('.reveal').mousedown(function(evt) {
-        console.log("click hide/reveal");
-        MODULE.revealCard($(this), $(this).parent().next());
-        evt.preventDefault();
-        evt.stopPropagation();
-        return false;
-    });
-
     /* Swiper */
     var mySwiper = new Swiper ('.swiper-container', {
         // Optional parameters
@@ -161,6 +153,14 @@ function initModule() {
 	$('#card_create').click(function(){
 	        $('#cardForm').submit();
 	        return false;
+	});
+
+	$('#allCards').on('click', '.reveal', null, function(evt) {
+			console.log("click hide/reveal");
+			MODULE.revealCard($(this), $(this).parent().next());
+			evt.preventDefault();
+			evt.stopPropagation();
+			return false;
 	});
 
 	$('#full_screen').click(function() {
