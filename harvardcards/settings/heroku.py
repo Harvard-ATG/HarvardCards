@@ -27,3 +27,5 @@ AWS_S3_BUCKET  = os.environ.get("AWS_S3_BUCKET", None)
 LIT_OAUTH_CREDENTIALS = {}
 if os.environ.get('LTI_OAUTH_CREDENTIALS', None):
     LTI_OAUTH_CREDENTIALS = json.loads(os.environ.get('LTI_OAUTH_CREDENTIALS'))
+
+JS_BUILD_VERSION = os.environ.get("JS_BUILD_VERSION", "")

@@ -177,3 +177,5 @@ LOGGING = {
         },
     }
 }
+
+JS_BUILD_VERSION = ''

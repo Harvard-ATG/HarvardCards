@@ -1,3 +1,4 @@
+{% load base_tags %}
 <script>
 requirejs.config({
     baseUrl: "{{ STATIC_URL }}js",
@@ -59,8 +60,6 @@ requirejs.config({
             apiRoot: "{% url 'apiRoot' %}"
         }
     },
-    {% if debug %}
-    'urlArgs': ('t='+(new Date().getTime()))
-    {% endif %}
+    'urlArgs': 'v={% requirejs_version %}'
 });
 </script>

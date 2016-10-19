@@ -31,3 +31,5 @@ AWS_ACCESS_SECRET_KEY = os.environ.get("AWS_ACCESS_SECRET_KEY", None)
 AWS_S3_BUCKET  = os.environ.get("AWS_S3_BUCKET", None)
 
 LTI_OAUTH_CREDENTIALS = {"flashkey":"flashsecret"}
+
+JS_BUILD_VERSION = os.environ.get("JS_BUILD_VERSION", "")
