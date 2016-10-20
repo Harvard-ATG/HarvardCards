@@ -123,7 +123,7 @@ def fetch_audio_from_url(file_url):
     file_size = 0
     max_file_size = 10 * 1024 * 1024 # 10 megabytes
     read_size = 1024
-    
+
     while True:
         s = inStream.read(read_size)
         file_size += len(s)
@@ -134,9 +134,9 @@ def fetch_audio_from_url(file_url):
         file_object.write(s)
 
     file_object.seek(0)
-    
-    uploaded_file = UploadedFile(file=file_object, name=file_object.name, content_type='audio/mp3', size=file_size, charset=None) 
-    
+
+    uploaded_file = UploadedFile(file=file_object, name=file_object.name, content_type='audio/mp3', size=file_size, charset=None)
+
     return uploaded_file
 
 def create_zip_deck_file(deck):
@@ -145,7 +145,7 @@ def create_zip_deck_file(deck):
     # create the string buffer to hold the contents of the zip file
     s = StringIO()
 
-    # create the zipfile object 
+    # create the zipfile object
     zfile = zipfile.ZipFile(s, "w")
 
     # write the deck XLS file to the zip
@@ -157,7 +157,7 @@ def create_zip_deck_file(deck):
     shutil.rmtree(temp_dirpath) # must delete temp dir when we're done
 
     # lookup the unique field values in the deck of cards,
-    # where the field values are the media object names 
+    # where the field values are the media object names
     card_list = queries.getDeckCardsList(deck.id)
     field_set = set()
     for c in card_list:
@@ -165,7 +165,7 @@ def create_zip_deck_file(deck):
             if f['type'] not in ('T', 'M'):
                 field_set.add(f['value'])
 
-    # add each media object ot the zip file 
+    # add each media object ot the zip file
     for file_name in field_set:
         file_contents = MediaStoreService.readFileContents(file_name)
         if file_contents is not None:
@@ -216,7 +216,7 @@ def get_mappings_from_zip(deck, file_contents, file_names, zfile, path_to_excel,
     files_to_upload = utils.get_file_names(deck.collection.card_template, file_contents, custom=custom)
     for f in files_to_upload:
         file_map = {
-            "absolute": os.path.join(path_to_excel, f), 
+            "absolute": os.path.join(path_to_excel, f),
             "relative": f
         }
         if file_map['absolute'] in file_names:
@@ -231,7 +231,7 @@ def get_mappings_from_zip(deck, file_contents, file_names, zfile, path_to_excel,
     for file in files:
         zfile.extract(file['absolute'], temp_dir_path)
         temp_file_path = os.path.join(temp_dir_path, file['absolute'])
-        
+
         is_valid_image, errstr = valid_image_file_type(temp_file_path)
         if is_valid_image:
             store_file_name = handle_uploaded_media_file(temp_file_path, 'I')
@@ -316,7 +316,7 @@ def handle_custom_file(uploaded_file, course_name, user, is_teacher=False):
     return deck
 
 
-@transaction.commit_on_success
+@transaction.atomic
 def update_card_fields(card, field_items):
     field_ids = [f['field_id'] for f in field_items]
     field_map = dict((f['field_id'],f) for f in field_items)
@@ -338,7 +338,7 @@ def update_card_fields(card, field_items):
             Cards_Fields.objects.create(card=card, field=field_object, value=field_value)
     return card
 
-@transaction.commit_on_success
+@transaction.atomic
 def add_cards_to_deck(deck, card_list):
     """Adds a batch of cards with fields to a deck."""
     fields = Field.objects.all()
@@ -361,7 +361,7 @@ def add_cards_to_deck(deck, card_list):
             Cards_Fields.objects.create(card=card, field=field_object, value=field_value)
     return deck
 
-@transaction.commit_on_success
+@transaction.atomic
 def create_deck_with_cards(collection_id, deck_title, card_list):
     """Creates and populates a new deck with cards."""
     collection = Collection.objects.get(id=collection_id)
@@ -369,7 +369,7 @@ def create_deck_with_cards(collection_id, deck_title, card_list):
     add_cards_to_deck(deck, card_list)
     return deck
 
-@transaction.commit_on_success
+@transaction.atomic
 def create_card_in_deck(deck):
     fields = Field.objects.all()
     card_sort_order = deck.collection.card_set.count() + 1
@@ -410,7 +410,7 @@ def get_or_update_role_bucket(request, collection_id = None, role = None):
     else:
         role_bucket = Users_Collections.get_role_buckets(request.user)
         request.session['role_bucket'] = role_bucket
-   
+
     return role_bucket
 
 def add_user_to_collection(user=None, collection=None, role=None):
@@ -439,14 +439,14 @@ def copy_collection(user, collection_id):
     clone = Clone.objects.create(model='Collection', model_id=collection_id, cloned_by=user, status='Q')
     clone.status = 'P'
     clone.save()
-    
+
     clone_ref = {'id': 0, 'fmt': str(clone.id) + ":%s", 'map': {}}
     clone_ref_map = clone_ref['map']
 
     def next_clone_ref_id():
         clone_ref['id'] += 1
         return clone_ref['fmt'] % clone_ref['id']
- 
+
     ## Clone: COLLECTION
     collection = Collection.objects.get(pk=collection_id)
     old_collection_id = collection.id
@@ -468,13 +468,13 @@ def copy_collection(user, collection_id):
         deck.collection = new_collection
         deck.clone_ref_id = next_clone_ref_id()
         deck_copies.append(deck)
-        
+
         deck_ref_ids.append(deck.clone_ref_id)
         clone_ref_map[deck.clone_ref_id] = {
             "model": "Deck",
             "old_model_id": old_deck_id
         }
-    
+
     # bulk create the deck copies and lookup the new IDs
     Deck.objects.bulk_create(deck_copies)
     for deck in Deck.objects.filter(clone_ref_id__in=deck_ref_ids):
@@ -492,18 +492,18 @@ def copy_collection(user, collection_id):
         for decks_cards_item in decks_cards:
             card = decks_cards_item.card
             old_card_id = card.id
-            
+
             card.id = None
             card.collection = new_collection
             card.clone_ref_id = next_clone_ref_id()
             card_copies.append(card)
-            
+
             card_ref_ids.append(card.clone_ref_id)
             clone_ref_map[card.clone_ref_id] = {
                 "model": "Card",
                 "old_model_id": old_card_id,
             }
-        
+
         # bulk create the card copies and lookup the new IDs
         Card.objects.bulk_create(card_copies)
         for card in Card.objects.filter(clone_ref_id__in=card_ref_ids):
@@ -520,13 +520,13 @@ def copy_collection(user, collection_id):
             old_card_id = card.id
             old_decks_cards_id = decks_cards_item.id
             old_deck_id = decks_cards_item.deck.id
-            
+
             decks_cards_item.id = None
             decks_cards_item.deck = deck_map[old_deck_id]
             decks_cards_item.card = card_map[old_card_id]
             decks_cards_item.clone_ref_id = next_clone_ref_id()
             decks_cards_copies.append(decks_cards_item)
-            
+
             decks_cards_ref_ids.append(decks_cards_item.clone_ref_id)
             clone_ref_map[decks_cards_item.clone_ref_id] = {
                 "model": "Card",
@@ -551,19 +551,19 @@ def copy_collection(user, collection_id):
             cards_fields_item.id = None
             cards_fields_item.clone_ref_id = next_clone_ref_id()
             cards_fields_copies.append(cards_fields_item)
-            
+
             cards_fields_ref_ids.append(cards_fields_item.clone_ref_id)
             clone_ref_map[cards_fields_item.clone_ref_id] = {
                 "model": "Cards_Fields",
                 "old_model_id": old_card_id,
             }
-    
+
     # bulk create the cards_fields and lookup the new IDs
     Cards_Fields.objects.bulk_create(cards_fields_copies)
     for cards_fields_item in Cards_Fields.objects.filter(clone_ref_id__in=cards_fields_ref_ids):
         old_cards_fields_id = clone_ref_map[cards_fields_item.clone_ref_id]['old_model_id']
         clone_ref_map[cards_fields_item.clone_ref_id]['new_model_id'] = cards_fields_item.id
-        
+
     ## Save the audited list of cloned objects
     cloned_objects = []
     sorted_clone_ref_ids = sorted(clone_ref_map.keys(), key=lambda x: int(x.split(':')[1]))
@@ -575,7 +575,7 @@ def copy_collection(user, collection_id):
             old_model_id=clone_ref['old_model_id'],
             new_model_id=clone_ref['new_model_id'])
         cloned_objects.append(cloned_obj)
-    
+
     # bulk create the cloned objects
     Cloned.objects.bulk_create(cloned_objects)
 
@@ -584,5 +584,3 @@ def copy_collection(user, collection_id):
     clone.save()
 
     return new_collection
-
-

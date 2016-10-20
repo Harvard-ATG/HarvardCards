@@ -3,7 +3,7 @@ import json
 
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, HttpRequest, Http404
 from django.shortcuts import render, redirect
-from django.core.context_processors import csrf
+from django.template.context_processors import csrf
 from django.core.exceptions import ViewDoesNotExist, PermissionDenied
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required

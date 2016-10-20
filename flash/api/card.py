@@ -69,7 +69,7 @@ def edit(request):
         context={"deck_id": deck_id, "card_id": card_id},
     )
 
-    return HttpResponse(json.dumps(result), mimetype="application/json")
+    return HttpResponse(json.dumps(result), content_type="application/json")
 
 
 @require_http_methods(["POST"])
@@ -81,4 +81,4 @@ def delete(request):
 
     result = {}
     result['success'] = services.delete_card(card_id)
-    return HttpResponse(json.dumps(result), mimetype="application/json")
+    return HttpResponse(json.dumps(result), content_type="application/json")

@@ -24,7 +24,7 @@ def delete(request):
         result['success'] = services.delete_deck(deck_id)
         redirect_response = redirect('collectionIndex', collection_id)
         result['location'] = redirect_response['Location']
-    return HttpResponse(json.dumps(result), mimetype="application/json")
+    return HttpResponse(json.dumps(result), content_type="application/json")
 
 @require_http_methods(["POST"])
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR, Users_Collections.TEACHING_ASSISTANT, Users_Collections.CONTENT_DEVELOPER], 'deck')
@@ -45,4 +45,4 @@ def rename(request):
             deck = deck_form.save()
         else:
             result['errors'] = {'title': deck_form['title'].errors}
-    return HttpResponse(json.dumps(result), mimetype="application/json")
+    return HttpResponse(json.dumps(result), content_type="application/json")

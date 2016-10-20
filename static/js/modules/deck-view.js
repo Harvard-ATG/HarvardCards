@@ -92,9 +92,9 @@ function initModule() {
         keyboardControl: true,
         loop: false,
         onSlideChangeStart: function(swiper){
-            deck_slider.selectCard($(swiper.slides[swiper.activeIndex]).data('card-id'));
-        	card_counter.update();
-
+          console.log("Swiper::onSlideChangeStart", swiper);
+          deck_slider.selectCard($(swiper.slides[swiper.activeIndex]).data('card-id'));
+          card_counter.update();
         }
     });
     $('.card-image').click(function(event){
@@ -155,9 +155,12 @@ function initModule() {
 	        return false;
 	});
 
-	$('.reveal').click(function() {
-		MODULE.revealCard($(this), $(this).parent().next());
-		return false;
+	$('#allCards').on('click', '.reveal', null, function(evt) {
+			console.log("click hide/reveal");
+			MODULE.revealCard($(this), $(this).parent().next());
+			evt.preventDefault();
+			evt.stopPropagation();
+			return false;
 	});
 
 	$('#full_screen').click(function() {
@@ -296,6 +299,7 @@ function initModule() {
 			}
 		},
 		revealCard: function(buttonEl, revealContentEl, state) {
+			console.log("Module::revealCard()", buttonEl, revealContentEl, state);
 			var $button_el = $(buttonEl);
 			var $reveal_content_el = $(revealContentEl);
 			var button_text = ['Reveal', 'Hide'];
@@ -316,7 +320,7 @@ function initModule() {
 
 			$reveal_content_el.removeClass(css_cls[0]).addClass(css_cls[1]);
 			$button_el.text(button_text[0]);
-
+			
 			return state;
 		},
 		loadCardMedia: function(card_ids) {
