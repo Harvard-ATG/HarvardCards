@@ -19,8 +19,9 @@ class init {
 	}
 
 	# install some system dependencies
+	$packages = ["python", "python-dev", "python-pip", "python-setuptools", "python-mysqldb", "mysql-server", "mysql-client", "libxml2-dev", "libxslt1-dev", "postgresql", "postgresql-contrib", "python-psycopg2"]
 	package {
-		["python", "python-dev", "python-pip", "python-setuptools", "python-mysqldb", "mysql-server", "mysql-client", "libxml2-dev", "libxslt1-dev"]:
+		$packages:	
 		ensure => installed,
 		require => Exec['update-apt']
 	}
@@ -51,17 +52,13 @@ class djangoapp {
 		ensure => installed,
 		require => Exec['update-apt']
 	}
-  exec { "distribute":
-		command => "sudo easy_install -U distribute",
-    require => Exec['update-apt']
-	}
 
 	# install project dependencies
 	exec { "pip-install-requirements":
 		command => "sudo /usr/bin/pip install -r $PROJ_DIR/requirements.txt",
 		tries => 2,
 		timeout => 600,
-		require => [Package['python-pip', 'python-dev', 'libpng-dev', 'g++'], Exec['distribute']],
+		require => [Package['python-pip', 'python-dev', 'libpng-dev', 'g++']],
 		logoutput => true,
 	}
 
@@ -70,7 +67,7 @@ class djangoapp {
 		command => "mysql -u root -e \"CREATE DATABASE IF NOT EXISTS $DB_NAME CHARACTER SET utf8 COLLATE utf8_general_ci; GRANT ALL ON $DB_NAME.* TO '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS'; FLUSH PRIVILEGES;\"",
 		cwd => "$PROJ_DIR",
 		logoutput => true,
-    require => Package["mysql-server", "mysql-client"]
+		require => Package["mysql-server", "mysql-client"]
 	}
 
 	# setup mysql config file
@@ -109,14 +106,15 @@ class djangoapp {
 		require => Exec['django-migrate']
 	}
 
-	# start server?
-	exec { "django-runserver":
-		environment => $DJANGO_ENV,
-		command => "python manage.py runserver 0.0.0.0:8000 >django-server.log 2>&1 &",
-		cwd => "$PROJ_DIR",
-		require => Exec['django-syncdb'],
-		logoutput => true,	
-	}
+# 	# start server?
+#	exec { "django-runserver":
+#		environment => $DJANGO_ENV,
+#		command => "python manage.py runserver 0.0.0.0:8000 >django-server.log 2>&1 &",
+#		cwd => "$PROJ_DIR",
+#		require => Exec['django-syncdb'],
+#		logoutput => true,	
+#	}
+
 }
 
 include djangoapp

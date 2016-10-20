@@ -15,4 +15,4 @@ django-server.log
 /http_static/*
 !/http_static/empty
 /pyenv
-
+/harvardcards/settings/secure.py

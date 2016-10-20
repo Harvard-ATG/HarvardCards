@@ -19,7 +19,7 @@ def delete(request, collection_id=None):
         result['success'] = services.delete_collection(collection_id)
         redirect_response = redirect('index')
         result['location'] = redirect_response['Location']
-    return HttpResponse(json.dumps(result), mimetype="application/json")
+    return HttpResponse(json.dumps(result), content_type="application/json")
 
 @require_http_methods(["GET"])
 @check_role([Users_Collections.ADMINISTRATOR, Users_Collections.INSTRUCTOR], 'collection')
@@ -30,4 +30,4 @@ def fields(request, collection_id=None):
     if collection_id is not None:
         result['fields'] = queries.getFieldList(collection_id)
         result['success'] = True;
-    return HttpResponse(json.dumps(result), mimetype="application/json")
+    return HttpResponse(json.dumps(result), content_type="application/json")
