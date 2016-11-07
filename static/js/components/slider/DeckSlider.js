@@ -287,21 +287,21 @@ define(['jquery', 'microevent', 'components/slider/Slider'], function($, MicroEv
     }
 
 	// Plays the slider (i.e. auto-advance to the next card).
-	DeckSlider.prototype.play = function(doneCallback) {
-		this._playIntervalId = window.setInterval(this._play(doneCallback), this.playbackDelay);
+	DeckSlider.prototype.play = function(onNextCallback, doneCallback, delay) {
+		var playbackDelay = delay || this.playbackDelay;
+		this._playIntervalId = window.setInterval(this._play(onNextCallback, doneCallback), playbackDelay);
 	};
 
 	// Helper method (private) to play the slider.
-	DeckSlider.prototype._play = function(doneCallback) {
+	DeckSlider.prototype._play = function(onNextCallback, doneCallback) {
 		return $.proxy(function() {
 			var isNext = this.goToNext();
-            // forcing a click to have something easy to listen for
-            $(this.currentCardEl).click();
 			var pause = !isNext || this.isLastItem();
+			onNextCallback();
 			if(pause) {
 				this.pause();
 				doneCallback();
-			}
+			} 
 		}, this);
 	};
 
