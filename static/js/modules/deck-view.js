@@ -47,9 +47,6 @@ function initModule() {
 
 		$controls.removeClass("card-active").hide();
 		//$card.removeClass('card-active').hide();
-
-		deck_slider._slideDirection = (data.toIndex >= data.fromIndex ? "right" : "left");
-		deck_slider._slideCurrent = (data.toIndex == data.fromIndex);
 	});
 
     deck_slider.bind("slide", function(slider, data) {
@@ -58,11 +55,6 @@ function initModule() {
 		var $card = $cardDetail.find(".card[data-card-id="+card_id+"]");
 		var playAudio = MODULE.makeAudioPlayer($card);
 		var mode = $card.data("mode");
-
-		var slideOpts = {
-			direction: deck_slider._slideDirection,
-			complete: playAudio
-		};
 
         // send tracking
 		Analytics.trackCard(card_id, mode);
@@ -74,12 +66,8 @@ function initModule() {
 		// show the card
 		$card.addClass('card-active');
 
-
-        if(deck_slider._slideCurrent) {
-			$card.show();
-			playAudio();
-		}
-
+		$card.show();
+		playAudio();
     });
 
     /* Swiper */
@@ -210,7 +198,9 @@ function initModule() {
 	    var pauseText = 'Pause';
 	    if ($("#play_cards .control-text").text() == playText){
 			deck_slider.play(function() {
-				$("#play_cards").click();
+				mySwiper.slideNext();
+			}, function() {
+				$("#play_cards").click(); // done!
 			});
 	        $("#play_cards .control-text").text(pauseText);
 			$("#play").removeClass('fa-play').addClass('fa-pause');
