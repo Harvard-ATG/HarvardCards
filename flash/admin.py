@@ -63,6 +63,11 @@ class CollectionAdmin(admin.ModelAdmin):
     list_display = ('title', 'description', 'card_template')
     inlines = (UsersInLine,)
 
+class UsersCollectionsAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'collection', 'role', 'date_joined')
+    search_fields = ('user__email', 'collection__title', 'role')
+    ordering = ('-date_joined',)
+
 class AnalyticsAdmin(admin.ModelAdmin):
     list_display = ('id', 'stmt_stored', 'stmt_actor_user', 'stmt_actor_desc', 'stmt_verb', 'stmt_object', 'stmt_context')
     search_fields=('stmt_actor_user__username', 'stmt_verb', 'stmt_object')
