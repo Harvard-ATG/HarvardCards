@@ -96,6 +96,7 @@ class CourseAdmin(admin.ModelAdmin):
 admin.site.unregister(User)
 admin.site.register(User, UserAdminCustom)
 admin.site.register(Collection, CollectionAdmin)
+admin.site.register(Users_Collections, UsersCollectionsAdmin)
 admin.site.register(Field, FieldAdmin)
 admin.site.register(Card, CardAdmin)
 admin.site.register(Users_Collections)
