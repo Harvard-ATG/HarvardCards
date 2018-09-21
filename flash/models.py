@@ -179,7 +179,7 @@ class Users_Collections(models.Model):
         verbose_name_plural = 'Users Collections'
 
     def __unicode__(self):
-        return "User: " + str(self.user.email) + " Collection: " + str(self.collection.title) + " Role: " + str(self.role)
+        return "User: " + str(self.user.pk) + " Collection: " + str(self.collection.pk) + " Role: " + str(self.role)
 
     @classmethod
     def is_valid_role(self, role):
