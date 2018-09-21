@@ -64,8 +64,8 @@ class CollectionAdmin(admin.ModelAdmin):
     inlines = (UsersInLine,)
 
 class UsersCollectionsAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'collection', 'role', 'date_joined')
-    search_fields = ('user__email', 'collection__title', 'role')
+    list_display = ('id', 'user', 'user__email', 'collection', 'role', 'date_joined')
+    search_fields = ('user', 'user__email', 'collection__title')
     ordering = ('-date_joined',)
 
 class AnalyticsAdmin(admin.ModelAdmin):
